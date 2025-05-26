@@ -1,0 +1,8 @@
+analyzer:
+  errors:
+    constant_identifier_names: ignore
+    non_constant_identifier_names: ignore
+    unnecessary_overrides: ignore
+include: package:flutter_lints/flutter.yaml
+linter:
+  rules:
