@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 
-import '../../../config.dart';
-import '../../../model/advanced_search_model.dart';
-import '../../../model/category_model.dart';
-import '../../../model/department_model.dart';
-import '../../../service/api_client.dart';
-import '../../../translations/locale_keys.dart';
-import '../../../utils/easy_loding.dart';
+import '../../../../config.dart';
+import '../../../../model/advanced_search_model.dart';
+import '../../../../model/category_model.dart';
+import '../../../../model/department_model.dart';
+import '../../../../service/api_client.dart';
+import '../../../../translations/locale_keys.dart';
+import '../../../../utils/easy_loding.dart';
 import 'advanced_search_fields.dart';
 
 class AdvancedSearchController extends GetxController {
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
-  final GlobalKey<FormState> formKey2 = GlobalKey<FormState>();
   final isLoading = true.obs;
   final ApiClient apiClient = ApiClient();
   final category1 = <CategoryModel>[].obs;

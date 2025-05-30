@@ -71,7 +71,7 @@ class SigninController extends GetxController with GetSingleTickerProviderStateM
             await storageManage.write(Config.localStroageloginInfo, loginModel.data?.toJson());
             await storageManage.write(Config.localStroagehasLogin, true);
             signInController.success();
-            await Future.delayed(const Duration(seconds: 1), () => Get.offAndToNamed(Routes.PRODUCTS));
+            await Future.delayed(const Duration(seconds: 1), () => Get.offAndToNamed(Routes.DASHBOARD));
             break;
           case 201:
             CustomAlert.iosAlert(LocaleKeys.userLogined.tr);

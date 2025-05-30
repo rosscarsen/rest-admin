@@ -165,4 +165,9 @@ Map<String, String> get enUS => {
   LocaleKeys.reportCenter: "Report Center",
   LocaleKeys.systemMaintenance: "System Maintenance",
   LocaleKeys.takeaway: "Takeaway",
+  LocaleKeys.salesView: "Sales View",
+  LocaleKeys.language: "Language",
+  LocaleKeys.simplifiedChinese: "Simplified Chinese",
+  LocaleKeys.traditionalChinese: "Traditional Chinese",
+  LocaleKeys.english: "English",
 };

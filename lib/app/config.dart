@@ -23,6 +23,9 @@ class Config {
   //退出登录
   static String logout = "/Login/logout";
 
+  /// 销售概述
+  static String chartData = "/dashboard/chartData";
+
   /// 主档
   // 图片上传
   static String uploadProductImage = "/Master/uploadImage";

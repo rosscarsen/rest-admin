@@ -37,7 +37,7 @@ class FormHelper {
     int xs = 12,
     int? sm = 6,
     int? md = 4,
-    int? lg = 3,
+    int? lg = 4,
     int? xl = 3,
     Widget? prefixIcon,
     TextInputType? keyboardType,
@@ -49,8 +49,10 @@ class FormHelper {
     int? maxLines = 1,
     String? initialValue,
     void Function(String?)? onChanged,
+    void Function(String?)? onSubmitted,
     bool enabled = true,
     bool isVisible = true, // 控制可见性的状态
+    TextEditingController? controller,
   }) {
     return ResponsiveGridCol(
       xs: xs,
@@ -63,6 +65,8 @@ class FormHelper {
         child: Builder(
           builder: (context) {
             return FormBuilderTextField(
+              controller: controller,
+              onSubmitted: onSubmitted,
               style: Theme.of(context).textTheme.bodyLarge,
               autovalidateMode: AutovalidateMode.onUserInteraction,
               enabled: enabled,
@@ -111,7 +115,7 @@ class FormHelper {
     int xs = 12,
     int? sm = 6,
     int? md = 4,
-    int? lg = 3,
+    int? lg = 4,
     int? xl = 3,
     bool enabled = true,
     Widget? prefixIcon,
@@ -192,18 +196,21 @@ class FormHelper {
     int xs = 12,
     int? sm = 6,
     int? md = 4,
-    int? lg = 3,
+    int? lg = 4,
     int? xl = 3,
     bool enabled = true,
+    bool canClear = true,
     FormFieldValidator<String?>? validator,
     DateTime? initialValue,
     void Function(String?)? onSaved,
+    void Function(String?)? onChanged,
     DateTime? firstDate,
     DateTime? lastDate,
     DateInputType inputType = DateInputType.date,
     DateFormat? dateFormat,
     Widget? prefixIcon,
   }) {
+    // 有效的日期格式
     final effectiveDateFormat =
         dateFormat ??
         {
@@ -211,7 +218,7 @@ class FormHelper {
           DateInputType.date: DateFormat('yyyy-MM-dd'),
           DateInputType.dateAndTime: DateFormat('yyyy-MM-dd HH:mm'),
         }[inputType]!;
-
+    // 根据输入类型确定日期选择模式
     final mode = {
       DateInputType.time: DateTimeFieldPickerMode.time,
       DateInputType.date: DateTimeFieldPickerMode.date,
@@ -231,11 +238,16 @@ class FormHelper {
           enabled: enabled,
           validator: validator,
           onSaved: onSaved,
+          onChanged: onChanged,
+          initialValue: initialValue != null ? effectiveDateFormat.format(initialValue) : null,
           builder: (field) {
             return Builder(
               builder: (context) {
                 return DateTimeFormField(
+                  clearIconData: Icons.cancel,
+
                   initialValue: field.value != null ? effectiveDateFormat.parse(field.value!) : null,
+                  canClear: canClear,
                   enabled: enabled,
                   style: Theme.of(context).textTheme.bodyLarge,
                   decoration: InputDecoration(
@@ -307,7 +319,7 @@ class FormHelper {
     int xs = 12,
     int? sm = 6,
     int? md = 4,
-    int? lg = 3,
+    int? lg = 4,
     int? xl = 3,
     bool enabled = true,
     bool? initialValue,
@@ -339,7 +351,7 @@ class FormHelper {
     int xs = 12,
     int? sm = 6,
     int? md = 4,
-    int? lg = 3,
+    int? lg = 4,
     int? xl = 3,
     bool enabled = true,
     bool? initialValue,
@@ -413,7 +425,7 @@ class FormHelper {
     int xs = 12,
     int? sm = 6,
     int? md = 4,
-    int? lg = 3,
+    int? lg = 4,
     int? xl = 3,
     double? initialValue,
     bool enabled = true,

@@ -165,4 +165,9 @@ abstract class LocaleKeys {
   static const String reportCenter = "reportCenter";
   static const String systemMaintenance = "systemMaintenance";
   static const String takeaway = "takeaway";
+  static const String salesView = "salesView";
+  static const String language = "Language";
+  static const String simplifiedChinese = "simplifiedChinese";
+  static const String english = "English";
+  static const String traditionalChinese = "traditionalChinese";
 }

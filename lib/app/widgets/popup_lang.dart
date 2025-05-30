@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 import '../config.dart';
+import '../routes/app_pages.dart';
 import '../utils/stroage_manage.dart';
 
 class PopupLang extends StatefulWidget {
@@ -17,7 +18,7 @@ class _PopupLangState extends State<PopupLang> {
   Widget build(BuildContext context) {
     final StorageManage storageManage = StorageManage();
     return PopupMenuButton(
-      icon: Icon(Icons.settings),
+      icon: Icon(FontAwesomeIcons.language),
       itemBuilder: (BuildContext context) {
         final String currentLanguage = storageManage.read(Config.localStroagelanguage);
         return <PopupMenuEntry<String>>[
@@ -27,8 +28,8 @@ class _PopupLangState extends State<PopupLang> {
           ),
           PopupMenuDivider(),
           PopupMenuItem(
-            value: "zh_TW",
-            child: Text("中文繁體", style: TextStyle(color: currentLanguage == "zh_TW" ? Colors.green : null)),
+            value: "zh_HK",
+            child: Text("中文繁體", style: TextStyle(color: currentLanguage == "zh_HK" ? Colors.green : null)),
           ),
           PopupMenuDivider(),
           PopupMenuItem(
@@ -40,12 +41,14 @@ class _PopupLangState extends State<PopupLang> {
       onSelected: (String value) {
         final locale = switch (value) {
           "zh_CN" => const Locale("zh", "CN"),
-          "zh_TW" => const Locale("zh", "TW"),
+          "zh_HK" => const Locale("zh", "HK"),
           _ => const Locale("en", "US"),
         };
-        Get.updateLocale(locale);
-        Intl.defaultLocale = value; // 更新默认语言
         storageManage.write(Config.localStroagelanguage, value);
+        Get.updateLocale(locale);
+        if (Get.currentRoute != Routes.SIGNIN) {
+          Get.offAndToNamed(Routes.REFRESH_TEMP, arguments: Get.currentRoute);
+        }
       },
     );
   }

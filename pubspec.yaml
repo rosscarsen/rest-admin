@@ -46,6 +46,9 @@ dependencies:
   share_plus: ^11.0.0
   flutter_file_saver: ^0.9.0
   flutter_admin_scaffold: ^1.4.0
+  font_awesome_flutter: ^10.8.0
+  fl_chart: ^1.0.0
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

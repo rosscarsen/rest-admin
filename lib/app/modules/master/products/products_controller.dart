@@ -5,16 +5,16 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../config.dart';
-import '../../dataSource/masterSource/product/products_data_source.dart';
-import '../../excel/custom_execl.dart';
-import '../../model/product_export_model.dart';
-import '../../model/products_model.dart';
-import '../../service/api_client.dart';
-import '../../translations/locale_keys.dart';
-import '../../utils/custom_alert.dart';
-import '../../utils/easy_loding.dart';
-import '../../utils/functions.dart';
+import '../../../config.dart';
+import '../../../dataSource/masterSource/product/products_data_source.dart';
+import '../../../excel/custom_execl.dart';
+import '../../../model/product_export_model.dart';
+import '../../../model/products_model.dart';
+import '../../../service/api_client.dart';
+import '../../../translations/locale_keys.dart';
+import '../../../utils/custom_alert.dart';
+import '../../../utils/easy_loding.dart';
+import '../../../utils/functions.dart';
 
 class ProductsController extends GetxController {
   final DataGridController dataGridController = DataGridController();

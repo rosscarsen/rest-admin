@@ -1,165 +1,187 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+import 'package:intl/intl.dart';
+import 'package:responsive_grid/responsive_grid.dart';
 
+import '../../config.dart';
+import '../../routes/app_pages.dart';
+import '../../translations/locale_keys.dart';
+import '../../utils/form_help.dart';
+import '../../utils/progresshub.dart';
+import '../../utils/stroage_manage.dart';
+import '../../widgets/custom_scaffold.dart';
 import 'dashboard_controller.dart';
 
 class DashboardView extends GetView<DashboardController> {
   const DashboardView({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('DashboardView')),
-      body: SelectionArea(
-        child: SfDataGridTheme(
-          data: SfDataGridThemeData(
-            gridLineColor: Colors.grey, // 统一表格线颜色
-            currentCellStyle: DataGridCurrentCellStyle(
-              borderColor: Colors.transparent, // 避免选中单元格边框影响
-              borderWidth: 0,
-            ),
-          ),
-          child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              return Column(
+    final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
+    return CustomScaffold(
+      route: Routes.DASHBOARD,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.refresh),
+          onPressed: () {
+            final StorageManage storageManage = StorageManage();
+            storageManage.erase();
+          },
+          //onPressed: controller.hasPermission.value ? () => controller.getChartData() : null,
+        ),
+      ],
+      body: Padding(
+        padding: EdgeInsets.all(Config.defaultPadding),
+        child: Column(
+          children: [
+            FormBuilder(
+              key: formKey,
+              child: ResponsiveGridRow(
                 children: [
-                  Expanded(
-                    child: SfDataGrid(
-                      isScrollbarAlwaysShown: false,
-                      controller: controller.dataGridController,
-                      footerFrozenColumnsCount: 1,
-                      frozenColumnsCount: 1,
-                      gridLinesVisibility: GridLinesVisibility.both,
-                      headerGridLinesVisibility: GridLinesVisibility.both,
-                      columnWidthMode: ColumnWidthMode.auto,
-                      allowSorting: true,
-                      showCheckboxColumn: true,
-                      selectionMode: SelectionMode.multiple,
-                      onCellTap: (details) {
-                        //print(details.rowColumnIndex);
-                      },
-
-                      source: controller.employeeDataSource,
-                      /* onQueryRowHeight: (details) {
-                    return details.getIntrinsicRowHeight(details.rowIndex);
-                  }, */
-                      columns: <GridColumn>[
-                        GridColumn(
-                          columnName: 'id',
-                          label: Container(
-                            padding: EdgeInsets.all(8.0),
-                            alignment: Alignment.center,
-                            child: Text('user or password error'.tr, textAlign: TextAlign.center),
-                          ),
-                        ),
-                        GridColumn(
-                          columnName: 'name',
-                          label: Container(
-                            padding: EdgeInsets.all(8.0),
-                            alignment: Alignment.center,
-                            child: Text('Name'),
-                          ),
-                        ),
-                        GridColumn(
-                          columnName: 'designation',
-                          label: Container(
-                            padding: EdgeInsets.all(8.0),
-                            alignment: Alignment.center,
-                            child: Text('Designation', overflow: TextOverflow.ellipsis),
-                          ),
-                        ),
-                        GridColumn(
-                          columnName: 'salary',
-                          label: Container(
-                            padding: EdgeInsets.all(8.0),
-                            alignment: Alignment.center,
-                            child: Text('Salary'),
-                          ),
-                        ),
-                        GridColumn(
-                          allowSorting: false,
-                          columnName: 'photo',
-                          width: 130,
-                          label: Container(
-                            padding: EdgeInsets.all(8.0),
-                            alignment: Alignment.center,
-                            child: Text('操作'),
-                          ),
-                        ),
-                        GridColumn(
-                          allowSorting: false,
-                          columnName: 'actions',
-                          columnWidthMode: ColumnWidthMode.fitByCellValue,
-                          label: Container(
-                            padding: EdgeInsets.all(8.0),
-                            alignment: Alignment.center,
-                            child: Text('操作'),
-                          ),
-                        ),
-                      ],
-                    ).paddingAll(5),
+                  FormHelper.dateInput(
+                    name: "startDate",
+                    labelText: LocaleKeys.startDate.tr,
+                    initialValue: DateTime.now().subtract(const Duration(days: 7)),
+                    enabled: false,
                   ),
-
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border(top: BorderSide(color: Colors.grey, width: 1)),
-                    ),
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                      children: [
-                        Obx(() {
-                          return SfDataPagerTheme(
-                            data: SfDataPagerThemeData(
-                              itemTextStyle: TextStyle(fontSize: 16, color: const Color.fromARGB(255, 65, 65, 65)),
-                              selectedItemTextStyle: TextStyle(fontSize: 16, color: Colors.white),
-                              selectedItemColor: Theme.of(context).primaryColor,
-                            ),
-                            child: SfDataPager(
-                              controller: controller.dataPagerController,
-                              initialPageIndex: 1,
-                              visibleItemsCount: 5,
-                              direction: Axis.horizontal,
-                              pageCount: (controller.employees.value.length / 5).ceilToDouble(),
-                              delegate: controller.employeeDataSource,
-                              onPageNavigationEnd: (int pageIndex) {
-                                //print("用户点击的页码: ${pageIndex + 1}");
-                              },
-                            ),
-                          );
-                        }),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                controller.getSelectedContent();
-                              },
-                              child: Text('Get Selected Content'),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                controller.deleteAll();
-                              },
-                              child: Text('Delete All'),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                controller.refreshDataSource();
-                              },
-                              child: Text('refresh'),
-                            ),
-                          ],
+                  FormHelper.dateInput(
+                    name: "endDate",
+                    labelText: LocaleKeys.endDate.tr,
+                    initialValue: DateTime.now().subtract(const Duration(days: 1)),
+                    canClear: false,
+                    onChanged: (String? value) {
+                      if (value != null) {
+                        final formatter = DateFormat('yyyy-MM-dd');
+                        final endDate = DateTime.parse(value);
+                        final startDate = endDate.subtract(Duration(days: 6));
+                        formKey.currentState?.fields['startDate']?.didChange(formatter.format(startDate));
+                      } else {
+                        formKey.currentState?.fields['startDate']?.didChange(null);
+                      }
+                    },
+                  ),
+                  ResponsiveGridCol(
+                    xs: 12,
+                    sm: 6,
+                    md: 3,
+                    lg: 3,
+                    xl: 4,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(minHeight: 44),
+                      child: Align(
+                        alignment: context.isPhoneOrLess ? Alignment.centerRight : Alignment.centerLeft,
+                        child: Padding(
+                          padding: context.isPhoneOrLess
+                              ? EdgeInsets.zero
+                              : EdgeInsets.only(left: Config.defaultPadding),
+                          child: ElevatedButton(
+                            child: Text(LocaleKeys.search.tr),
+                            onPressed: () {
+                              formKey.currentState?.saveAndValidate();
+                              controller.search.addAll(formKey.currentState!.value);
+                              controller.getChartData();
+                            },
+                          ),
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ],
-              );
-            },
-          ),
+              ),
+            ),
+            _buildContent(),
+          ],
         ),
+      ),
+      title: LocaleKeys.salesView.tr,
+    );
+  }
+
+  // 构建内容
+  Widget _buildContent() {
+    return Expanded(child: Obx(() => ProgressHUD(child: controller.isLoading.value ? null : _buildChart())));
+  }
+
+  // 构建图表
+  Widget _buildChart() {
+    /* final apiResult = controller.apiResult;
+    final salePlayRatio = apiResult.value.salePlayRatio;
+    final sevenSale = apiResult.value.sevenSale;
+    final threeRatio = apiResult.value.threeRatio;
+    final monthEverySale = apiResult.value.monthEverySale;
+    final topSaleQty = apiResult.value.topSaleQty;
+    final topSaleAmount = apiResult.value.topSaleAmount; */
+    return SingleChildScrollView(
+      child: ResponsiveGridRow(
+        children: [
+          ResponsiveGridCol(
+            xs: 12,
+            sm: 4,
+            md: 4,
+            lg: 4,
+            xl: 4,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: 200),
+              child: Container(color: Colors.red),
+            ),
+          ),
+          ResponsiveGridCol(
+            xs: 12,
+            sm: 4,
+            md: 4,
+            lg: 4,
+            xl: 4,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: 200),
+              child: Container(color: Colors.blue),
+            ),
+          ),
+          ResponsiveGridCol(
+            xs: 12,
+            sm: 4,
+            md: 4,
+            lg: 4,
+            xl: 4,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: 200),
+              child: Container(color: Colors.green),
+            ),
+          ),
+          ResponsiveGridCol(
+            xs: 12,
+            sm: 12,
+            md: 12,
+            lg: 12,
+            xl: 12,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: 200),
+              child: Container(color: Colors.amber),
+            ),
+          ),
+          ResponsiveGridCol(
+            xs: 12,
+            sm: 6,
+            md: 6,
+            lg: 6,
+            xl: 6,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: 200),
+              child: Container(color: Colors.blue),
+            ),
+          ),
+          ResponsiveGridCol(
+            xs: 12,
+            sm: 6,
+            md: 6,
+            lg: 6,
+            xl: 6,
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: 200),
+              child: Container(color: Colors.grey),
+            ),
+          ),
+        ],
       ),
     );
   }

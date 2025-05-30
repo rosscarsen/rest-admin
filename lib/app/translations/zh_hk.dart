@@ -1,6 +1,6 @@
 import 'locale_keys.dart';
 
-Map<String, String> zhTW = {
+Map<String, String> zhHK = {
   LocaleKeys.all: "全部",
   LocaleKeys.product: "食品",
   LocaleKeys.code: "編號",
@@ -165,4 +165,9 @@ Map<String, String> zhTW = {
   LocaleKeys.reportCenter: "報表中心",
   LocaleKeys.systemMaintenance: "系統維護",
   LocaleKeys.takeaway: "外賣",
+  LocaleKeys.salesView: "銷售概覽",
+  LocaleKeys.language: "語言",
+  LocaleKeys.simplifiedChinese: "中文簡體",
+  LocaleKeys.traditionalChinese: "中文繁体",
+  LocaleKeys.english: "英文",
 };

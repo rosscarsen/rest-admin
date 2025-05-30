@@ -165,4 +165,9 @@ Map<String, String> get zhCN => {
   LocaleKeys.reportCenter: "报表中心",
   LocaleKeys.systemMaintenance: "系统维护",
   LocaleKeys.takeaway: "外卖",
+  LocaleKeys.salesView: "销售概览",
+  LocaleKeys.language: "语言",
+  LocaleKeys.simplifiedChinese: "中文简体",
+  LocaleKeys.traditionalChinese: "中文繁体",
+  LocaleKeys.english: "英文",
 };

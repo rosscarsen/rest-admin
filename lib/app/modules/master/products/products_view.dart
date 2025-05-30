@@ -1,23 +1,51 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_grid/responsive_grid.dart';
+import 'package:rest_admin/app/widgets/custom_scaffold.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../config.dart';
-import '../../routes/app_pages.dart';
-import '../../translations/locale_keys.dart';
-import '../../utils/constants.dart';
-import '../../utils/progresshub.dart';
-import '../../widgets/custom_cell.dart';
-import '../../widgets/data_pager.dart';
+import '../../../config.dart';
+import '../../../routes/app_pages.dart';
+import '../../../translations/locale_keys.dart';
+import '../../../utils/constants.dart';
+import '../../../utils/progresshub.dart';
+import '../../../widgets/custom_cell.dart';
+import '../../../widgets/data_pager.dart';
 import 'products_controller.dart';
 
 class ProductsView extends GetView<ProductsController> {
   const ProductsView({super.key});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CustomScaffold(
+      route: Routes.PRODUCTS,
+      body: Obx(() {
+        return Column(
+          spacing: Config.defaultGap,
+          children: <Widget>[
+            _buildToolBar(context),
+            Expanded(child: ProgressHUD(child: controller.isLoading.value ? null : _buildDataGrid(context))),
+            DataPager(
+              totalPages: controller.totalPages,
+              currentPage: controller.currentPage,
+              onPageChanged: (int pageNumber) {
+                controller.currentPage.value = pageNumber;
+                controller.updateDataGridSource();
+              },
+            ),
+          ],
+        ).paddingAll(Config.defaultPadding);
+      }),
+      title: LocaleKeys.product.tr,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.refresh),
+          onPressed: controller.hasPermission.value ? () => controller.reloadData() : null,
+        ),
+      ],
+    );
+    /* Scaffold(
       appBar: AppBar(
         title: Text(LocaleKeys.product.tr),
         actions: [
@@ -44,7 +72,7 @@ class ProductsView extends GetView<ProductsController> {
           ],
         ).paddingAll(Config.defaultPadding);
       }),
-    );
+    ); */
   }
 
   //toolbar

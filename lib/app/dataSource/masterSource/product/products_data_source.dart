@@ -5,7 +5,7 @@ import 'package:popup_menu/popup_menu.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../model/products_model.dart';
-import '../../../modules/products/products_controller.dart';
+import '../../../modules/master/products/products_controller.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/easy_loding.dart';

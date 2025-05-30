@@ -20,7 +20,7 @@ Future<void> main() async {
   await StorageManage.init();
   final StorageManage storageManage = StorageManage();
   //初始语言
-  String localeString = await storageManage.read(Config.localStroagelanguage) ?? "zh_TW";
+  String localeString = await storageManage.read(Config.localStroagelanguage) ?? "zh_HK";
   List<String> localeParts = localeString.split('_');
   final Locale initialLocale = Locale(localeParts[0], localeParts.length > 1 ? localeParts[1] : '');
 
@@ -28,7 +28,7 @@ Future<void> main() async {
       (storageManage.read(Config.localStroagehasLogin) ?? false) &&
       (storageManage.read(Config.localStroageloginInfo) != null);
 
-  final String initialRoute = hasLogin ? Routes.PRODUCTS : Routes.SIGNIN;
+  final String initialRoute = hasLogin ? Routes.DASHBOARD : Routes.SIGNIN;
   storageManage.write(Config.localStroagelanguage, localeString);
 
   if (!kIsWeb && Platform.isAndroid) {
@@ -52,11 +52,11 @@ class MyApp extends StatelessWidget {
       translations: AppTranslations(),
       locale: initialLocale,
       fallbackLocale: initialLocale,
-
+      //defaultTransition: Transition.noTransition,
       // 设置支持的语言
       supportedLocales: const [
         Locale.fromSubtags(languageCode: "zh", scriptCode: "CN"),
-        Locale.fromSubtags(languageCode: "zh", scriptCode: "TW"),
+        Locale.fromSubtags(languageCode: "zh", scriptCode: "HK"),
         Locale.fromSubtags(languageCode: "en", scriptCode: "US"),
       ],
       //localizationsDelegates: const [...GlobalMaterialLocalizations.delegates, FormBuilderLocalizations.delegate],
