@@ -9,7 +9,6 @@ import '../../routes/app_pages.dart';
 import '../../translations/locale_keys.dart';
 import '../../utils/form_help.dart';
 import '../../utils/progresshub.dart';
-import '../../utils/stroage_manage.dart';
 import '../../widgets/custom_scaffold.dart';
 import 'dashboard_controller.dart';
 
@@ -24,11 +23,11 @@ class DashboardView extends GetView<DashboardController> {
       actions: [
         IconButton(
           icon: const Icon(Icons.refresh),
-          onPressed: () {
+          /* onPressed: () {
             final StorageManage storageManage = StorageManage();
             storageManage.erase();
-          },
-          //onPressed: controller.hasPermission.value ? () => controller.getChartData() : null,
+          }, */
+          onPressed: controller.hasPermission.value ? () => controller.getChartData() : null,
         ),
       ],
       body: Padding(

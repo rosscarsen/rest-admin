@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../config.dart';
 import '../routes/app_pages.dart';
 import '../translations/locale_keys.dart';
+import '../utils/custom_alert.dart';
 import '../utils/stroage_manage.dart';
 
 class CustomScaffold extends StatelessWidget {
@@ -84,10 +85,16 @@ class CustomScaffold extends StatelessWidget {
               ),
             ],
           ),
+
+          AdminMenuItem(
+            title: LocaleKeys.logout.tr,
+            route: Routes.SIGNIN,
+            icon: FontAwesomeIcons.arrowRightFromBracket,
+          ),
         ],
         selectedRoute: route,
         onSelected: (item) {
-          // debugPrint('sideBar: onTap(): title = ${item.title}, route = ${item.route}');
+          debugPrint('sideBar: onTap(): title = ${item.title}, route = ${item.route}, route = $route');
 
           if (item.route != null && item.route != route) {
             if (item.route.toString().contains("locale")) {
@@ -99,6 +106,16 @@ class CustomScaffold extends StatelessWidget {
               final StorageManage storageManage = StorageManage();
               storageManage.write(Config.localStroagelanguage, locale.toString());
               Get.updateLocale(locale);
+            } else if (item.route == Routes.SIGNIN) {
+              CustomAlert.iosAlert(
+                LocaleKeys.confirmLoginOut.tr,
+                showCancel: true,
+                onConfirm: () async {
+                  final storageManage = StorageManage();
+                  await storageManage.remove(Config.localStroagehasLogin);
+                  Get.offAllNamed(item.route!);
+                },
+              );
             } else {
               Get.offAndToNamed(item.route!);
             }
@@ -116,8 +133,18 @@ class CustomScaffold extends StatelessWidget {
           height: 50,
           width: double.infinity,
           color: const Color(0xff444444),
-          child: const Center(
-            child: Text('footer', style: TextStyle(color: Colors.white)),
+          child: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Center(
+              child: FittedBox(
+                child: Text(
+                  '© 2023-${DateTime.now().year} [Pericles]. All rights reserved',
+                  style: const TextStyle(color: Colors.white),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                ),
+              ),
+            ),
           ),
         ),
       ),
