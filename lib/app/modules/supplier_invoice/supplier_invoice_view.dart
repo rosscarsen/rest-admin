@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:rest_admin/app/routes/app_pages.dart';
-import 'package:rest_admin/app/translations/locale_keys.dart';
-import 'package:rest_admin/app/widgets/custom_scaffold.dart';
 
+import '../../routes/app_pages.dart';
+import '../../translations/locale_keys.dart';
+import '../../widgets/custom_scaffold.dart';
 import 'supplier_invoice_controller.dart';
 
 class SupplierInvoiceView extends GetView<SupplierInvoiceController> {
@@ -14,7 +13,7 @@ class SupplierInvoiceView extends GetView<SupplierInvoiceController> {
     return CustomScaffold(
       route: Routes.SUPPLIER_INVOICE,
       body: const Center(child: Text('SupplierInvoiceView is working', style: TextStyle(fontSize: 20))),
-      title: LocaleKeys.supplierInvoice,
+      title: LocaleKeys.supplierInvoice.tr,
     );
   }
 }

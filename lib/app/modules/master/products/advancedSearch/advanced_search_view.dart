@@ -9,7 +9,6 @@ import '../../../../routes/app_pages.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/form_help.dart';
-import '../../../../widgets/popup_lang.dart';
 import 'advanced_search_controller.dart';
 import 'advanced_search_fields.dart';
 
@@ -18,7 +17,7 @@ class AdvancedSearchView extends GetView<AdvancedSearchController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(LocaleKeys.advancedSearch.tr), centerTitle: true, actions: [PopupLang()]),
+      appBar: AppBar(title: Text(LocaleKeys.advancedSearch.tr), centerTitle: true),
 
       body: Obx(() {
         return Padding(

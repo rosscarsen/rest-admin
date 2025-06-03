@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../config.dart';
-import '../routes/app_pages.dart';
 import '../utils/stroage_manage.dart';
 
 class PopupLang extends StatefulWidget {
@@ -46,9 +45,9 @@ class _PopupLangState extends State<PopupLang> {
         };
         storageManage.write(Config.localStroagelanguage, value);
         Get.updateLocale(locale);
-        if (Get.currentRoute != Routes.SIGNIN) {
+        /* if (Get.currentRoute != Routes.SIGNIN) {
           Get.offAndToNamed(Routes.REFRESH_TEMP, arguments: Get.currentRoute);
-        }
+        } */
       },
     );
   }

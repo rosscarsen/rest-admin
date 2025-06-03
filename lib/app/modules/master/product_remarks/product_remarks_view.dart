@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:rest_admin/app/routes/app_pages.dart';
-import 'package:rest_admin/app/translations/locale_keys.dart';
-import 'package:rest_admin/app/widgets/custom_scaffold.dart';
 
+import '../../../routes/app_pages.dart';
+import '../../../translations/locale_keys.dart';
+import '../../../widgets/custom_scaffold.dart';
 import 'product_remarks_controller.dart';
 
 class ProductRemarksView extends GetView<ProductRemarksController> {

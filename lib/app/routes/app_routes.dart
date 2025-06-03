@@ -3,12 +3,11 @@ part of 'app_pages.dart';
 
 abstract class Routes {
   Routes._();
-  static const HOME = _Paths.HOME;
+
   static const SIGNIN = _Paths.SIGNIN;
   static const DASHBOARD = _Paths.DASHBOARD;
   static const PRODUCTS = _Paths.MASTER + _Paths.PRODUCTS;
-  static const ADVANCED_SEARCH =
-      _Paths.MASTER + _Paths.PRODUCTS + _Paths.ADVANCED_SEARCH;
+  static const ADVANCED_SEARCH = _Paths.MASTER + _Paths.PRODUCTS + _Paths.ADVANCED_SEARCH;
   static const OPEN = _Paths.OPEN;
   static const OPEN_PRODUCT = _Paths.OPEN + _Paths.OPEN_PRODUCT;
   static const OPEN_SUPLLIER = _Paths.OPEN + _Paths.OPEN_SUPLLIER;
@@ -23,7 +22,6 @@ abstract class Routes {
 
 abstract class _Paths {
   _Paths._();
-  static const HOME = '/home';
   static const SIGNIN = '/signin';
   static const DASHBOARD = '/dashboard';
   static const PRODUCTS = '/products';

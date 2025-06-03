@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_grid/responsive_grid.dart';
-import 'package:rest_admin/app/widgets/custom_scaffold.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
@@ -11,6 +10,7 @@ import '../../../translations/locale_keys.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/progresshub.dart';
 import '../../../widgets/custom_cell.dart';
+import '../../../widgets/custom_scaffold.dart';
 import '../../../widgets/data_pager.dart';
 import 'products_controller.dart';
 
@@ -368,7 +368,7 @@ class ProductsView extends GetView<ProductsController> {
             ),
             GridColumn(
               columnName: 'picture',
-              width: 60,
+              width: 70,
               label: CustomCell(data: LocaleKeys.picture.tr),
             ),
             GridColumn(

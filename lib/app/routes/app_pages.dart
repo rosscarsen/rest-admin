@@ -3,8 +3,6 @@ import 'package:get/get.dart';
 import '../Middlewares/auth_middleware.dart';
 import '../modules/dashboard/dashboard_binding.dart';
 import '../modules/dashboard/dashboard_view.dart';
-import '../modules/home/home_binding.dart';
-import '../modules/home/home_view.dart';
 import '../modules/master/category/category_binding.dart';
 import '../modules/master/category/category_view.dart';
 import '../modules/master/master_binding.dart';
@@ -38,7 +36,6 @@ class AppPages {
   AppPages._();
 
   static final routes = [
-    GetPage(name: _Paths.HOME, page: () => const HomeView(), binding: HomeBinding(), middlewares: [AuthMiddleware()]),
     GetPage(name: _Paths.SIGNIN, page: () => const SigninView(), binding: SigninBinding()),
     GetPage(
       name: _Paths.DASHBOARD,

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:rest_admin/app/routes/app_pages.dart';
-import 'package:rest_admin/app/translations/locale_keys.dart';
-import 'package:rest_admin/app/widgets/custom_scaffold.dart';
 
+import '../../../routes/app_pages.dart';
+import '../../../translations/locale_keys.dart';
+import '../../../widgets/custom_scaffold.dart';
 import 'category_controller.dart';
 
 class CategoryView extends GetView<CategoryController> {
@@ -13,7 +12,7 @@ class CategoryView extends GetView<CategoryController> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       route: Routes.CATEGORY,
-      body: const Center(child: Text('CategoryView is working', style: TextStyle(fontSize: 20))),
+      body: Center(child: Text(LocaleKeys.category.tr, style: TextStyle(fontSize: 20))),
       title: LocaleKeys.category.tr,
     );
   }

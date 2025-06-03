@@ -32,6 +32,7 @@ Future<void> main() async {
   storageManage.write(Config.localStroagelanguage, localeString);
 
   if (!kIsWeb && Platform.isAndroid) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent));
   }
 
@@ -52,14 +53,10 @@ class MyApp extends StatelessWidget {
       translations: AppTranslations(),
       locale: initialLocale,
       fallbackLocale: initialLocale,
+
       //defaultTransition: Transition.noTransition,
-      // 设置支持的语言
-      supportedLocales: const [
-        Locale.fromSubtags(languageCode: "zh", scriptCode: "CN"),
-        Locale.fromSubtags(languageCode: "zh", scriptCode: "HK"),
-        Locale.fromSubtags(languageCode: "en", scriptCode: "US"),
-      ],
-      //localizationsDelegates: const [...GlobalMaterialLocalizations.delegates, FormBuilderLocalizations.delegate],
+      supportedLocales: const [Locale('zh', 'CN'), Locale('zh', 'HK'), Locale('en', 'US')],
+
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
       localeResolutionCallback: (locale, supportedLocales) =>
           supportedLocales.contains(locale) ? locale : initialLocale,

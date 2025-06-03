@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-successMessages(String msg) {
+void successMessages(String msg) {
   EasyLoading.instance
     ..indicatorType = EasyLoadingIndicatorType.fadingCircle
     ..loadingStyle = EasyLoadingStyle.custom
@@ -19,7 +19,7 @@ successMessages(String msg) {
   EasyLoading.showSuccess(msg, maskType: EasyLoadingMaskType.custom);
 }
 
-errorMessages(String msg) {
+void errorMessages(String msg) {
   EasyLoading.instance
     ..indicatorType = EasyLoadingIndicatorType.fadingCircle
     ..loadingStyle = EasyLoadingStyle.custom
@@ -37,7 +37,7 @@ errorMessages(String msg) {
   EasyLoading.showError(msg, maskType: EasyLoadingMaskType.custom);
 }
 
-showLoding(String msg) {
+void showLoding(String msg) {
   EasyLoading.instance
     ..indicatorType = EasyLoadingIndicatorType.fadingCircle
     ..loadingStyle = EasyLoadingStyle.custom
@@ -54,7 +54,7 @@ showLoding(String msg) {
   EasyLoading.show(status: msg, maskType: EasyLoadingMaskType.custom);
 }
 
-showToast(String msg, {int duration = 2}) {
+void showToast(String msg, {int duration = 2}) {
   EasyLoading.instance
     ..indicatorType = EasyLoadingIndicatorType.fadingCircle
     ..loadingStyle = EasyLoadingStyle.custom
@@ -72,7 +72,7 @@ showToast(String msg, {int duration = 2}) {
   EasyLoading.showToast(msg, maskType: EasyLoadingMaskType.custom);
 }
 
-dismissLoding() {
+void dismissLoding() {
   if (EasyLoading.isShow) {
     EasyLoading.dismiss();
   }
@@ -83,6 +83,9 @@ class CustomAnimation extends EasyLoadingAnimation {
 
   @override
   Widget buildWidget(Widget child, AnimationController controller, AlignmentGeometry alignment) {
-    return Opacity(opacity: controller.value, child: RotationTransition(turns: controller, child: child));
+    return Opacity(
+      opacity: controller.value,
+      child: RotationTransition(turns: controller, child: child),
+    );
   }
 }

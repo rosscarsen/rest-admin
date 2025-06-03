@@ -3,9 +3,10 @@ import 'package:flutter_admin_scaffold/admin_scaffold.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
+import '../config.dart';
 import '../routes/app_pages.dart';
 import '../translations/locale_keys.dart';
-import 'popup_lang.dart';
+import '../utils/stroage_manage.dart';
 
 class CustomScaffold extends StatelessWidget {
   const CustomScaffold({super.key, required this.route, required this.body, this.actions, required this.title});
@@ -18,13 +19,14 @@ class CustomScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AdminScaffold(
+      key: ObjectKey(Get.locale),
       backgroundColor: Colors.white,
       leadingIcon: Icon(Icons.menu),
       appBar: AppBar(
-        title: Text(title.tr),
+        title: Text(title),
         backgroundColor: Theme.of(context).primaryColor,
         foregroundColor: Colors.white,
-        actions: [PopupLang(), if (actions != null) ...actions!],
+        actions: actions,
       ),
       sideBar: SideBar(
         backgroundColor: const Color(0xFFEEEEEE),
@@ -59,12 +61,47 @@ class CustomScaffold extends StatelessWidget {
             icon: FontAwesomeIcons.supple,
             route: Routes.SUPPLIER_INVOICE,
           ),
+          //语言
+          AdminMenuItem(
+            title: LocaleKeys.language.tr,
+            icon: FontAwesomeIcons.language,
+            children: [
+              AdminMenuItem(
+                title: LocaleKeys.simplifiedChinese.tr,
+                route: "locale_zh_CN",
+                icon: Get.locale.toString() == "zh_CN" ? FontAwesomeIcons.check : null,
+              ),
+
+              AdminMenuItem(
+                title: LocaleKeys.traditionalChinese.tr,
+                route: "locale_zh_HK",
+                icon: Get.locale.toString() == "zh_HK" ? FontAwesomeIcons.check : null,
+              ),
+              AdminMenuItem(
+                title: LocaleKeys.english.tr,
+                route: "locale_en_US",
+                icon: Get.locale.toString() == "en_US" ? FontAwesomeIcons.check : null,
+              ),
+            ],
+          ),
         ],
         selectedRoute: route,
         onSelected: (item) {
-          debugPrint('sideBar: onTap(): title = ${item.title}, route = ${item.route}');
+          // debugPrint('sideBar: onTap(): title = ${item.title}, route = ${item.route}');
+
           if (item.route != null && item.route != route) {
-            Get.offAndToNamed(item.route!);
+            if (item.route.toString().contains("locale")) {
+              final locale = switch (item.route) {
+                "locale_zh_CN" => const Locale("zh", "CN"),
+                "locale_zh_HK" => const Locale("zh", "HK"),
+                _ => const Locale("en", "US"),
+              };
+              final StorageManage storageManage = StorageManage();
+              storageManage.write(Config.localStroagelanguage, locale.toString());
+              Get.updateLocale(locale);
+            } else {
+              Get.offAndToNamed(item.route!);
+            }
           }
         },
         /*  header: Container(

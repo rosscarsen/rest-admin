@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import '../translations/locale_keys.dart';
 
 class CustomAlert {
-  static iosAlert(String message, {void Function()? onConfirm, bool showCancel = false, String? confirmText}) {
+  static void iosAlert(String message, {void Function()? onConfirm, bool showCancel = false, String? confirmText}) {
     showCupertinoDialog(
       context: Get.context!,
       builder: (context) {

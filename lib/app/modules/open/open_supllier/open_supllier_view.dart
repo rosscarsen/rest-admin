@@ -84,6 +84,7 @@ class OpenSupllierView extends GetView<OpenSupllierController> {
             GridColumn(
               columnName: 'select',
               label: CustomCell(data: LocaleKeys.select.tr),
+              width: 85,
             ),
             GridColumn(
               columnName: "code",
