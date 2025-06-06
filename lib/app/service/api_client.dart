@@ -53,8 +53,8 @@ class ApiClient {
                 DioException(
                   requestOptions: options,
                   response: Response(requestOptions: options, statusCode: _loginInvalidCode),
-                  error: LocaleKeys.logginInvalid.tr,
-                  message: LocaleKeys.logginInvalid.tr,
+                  error: LocaleKeys.loginInvalid.tr,
+                  message: LocaleKeys.loginInvalid.tr,
                 ),
               );
             }
@@ -136,7 +136,7 @@ class ApiClient {
   // 定义一个私有方法 _handleResponse，用于处理 HTTP 响应
   String? _handleResponse(Response response) {
     if (response.statusCode != 200) {
-      dismissLoding();
+      dismissLoading();
       errorMessages(_serviceError);
       return null;
     }
@@ -145,13 +145,13 @@ class ApiClient {
     final Map<String, dynamic> dataMap = jsonDecode(dataJson) ?? {};
 
     if (dataMap.isNotEmpty && dataMap["status"].toString() == _noPermission.toString()) {
-      dismissLoding();
+      dismissLoading();
       showToast(LocaleKeys.noPermission.tr);
       return Config.noPermission;
     }
 
     if (dataJson.isEmpty || dataJson == "null" || dataJson == "[]") {
-      dismissLoding();
+      dismissLoading();
       errorMessages(_dataException);
       return null;
     }
@@ -162,13 +162,13 @@ class ApiClient {
   void _handleError(Object e) {
     if (e is DioException && e.response?.statusCode == _loginInvalidCode) {
       CustomAlert.iosAlert(
-        LocaleKeys.logginInvalid.tr,
+        LocaleKeys.loginInvalid.tr,
         onConfirm: () {
           Get.offAllNamed(Routes.SIGNIN);
         },
       );
     } else {
-      dismissLoding();
+      dismissLoading();
       errorMessages(e is DioException ? e.error?.toString() ?? _unknownError : _serviceError);
     }
   }

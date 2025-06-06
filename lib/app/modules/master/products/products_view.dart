@@ -153,7 +153,7 @@ class ProductsView extends GetView<ProductsController> {
                   ),
                   //批量删除套餐
                   ElevatedButton(
-                    onPressed: controller.hasPermission.value ? () => controller.deleteeSelectedSetMeal() : null,
+                    onPressed: controller.hasPermission.value ? () => controller.deleteSelectedSetMeal() : null,
                     child: Text(LocaleKeys.batchDeleteSetMeal.tr),
                   ),
                   //打印条码

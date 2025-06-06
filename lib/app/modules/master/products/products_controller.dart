@@ -7,7 +7,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
 import '../../../dataSource/masterSource/product/products_data_source.dart';
-import '../../../excel/custom_execl.dart';
+import '../../../excel/custom_excel.dart';
 import '../../../model/product_export_model.dart';
 import '../../../model/products_model.dart';
 import '../../../service/api_client.dart';
@@ -143,7 +143,7 @@ class ProductsController extends GetxController {
   }
 
   // 批量删除套餐
-  void deleteeSelectedSetMeal() {
+  void deleteSelectedSetMeal() {
     final selectedRows = dataGridController.selectedRows;
     if (selectedRows.isEmpty) {
       showToast(LocaleKeys.pleaseSelectOneDataOrMoreToDelete.tr);
@@ -158,7 +158,7 @@ class ProductsController extends GetxController {
       LocaleKeys.deleteConfirmMsg.tr,
       onConfirm: () async {
         try {
-          showLoding(LocaleKeys.deleting.tr);
+          showLoading(LocaleKeys.deleting.tr);
           final String? result = await apiClient.post(
             Config.batchDeleteSetMeal,
             data: {"productIDs": jsonEncode(selectedIDS)},
@@ -184,7 +184,7 @@ class ProductsController extends GetxController {
         } catch (e) {
           errorMessages(LocaleKeys.deleteFailed.tr);
         } finally {
-          dismissLoding();
+          dismissLoading();
         }
       },
     );
@@ -197,7 +197,7 @@ class ProductsController extends GetxController {
       LocaleKeys.deleteConfirmMsg.tr,
       onConfirm: () async {
         try {
-          showLoding(LocaleKeys.deleting.tr);
+          showLoading(LocaleKeys.deleting.tr);
           final String? result = await apiClient.post(
             Config.batchDeleteProduct,
             data: {"ids": jsonEncode(selectedIDS)},
@@ -226,7 +226,7 @@ class ProductsController extends GetxController {
         } catch (e) {
           errorMessages(LocaleKeys.deleteFailed.tr);
         } finally {
-          dismissLoding();
+          dismissLoading();
         }
       },
     );
@@ -237,7 +237,7 @@ class ProductsController extends GetxController {
     XFile? ret = await Functions.imagePicker(context);
     if (ret == null) return;
     try {
-      showLoding(LocaleKeys.uploading.tr);
+      showLoading(LocaleKeys.uploading.tr);
       final String? result = await apiClient.uploadImage(
         image: ret,
         uploadUrl: Config.uploadProductImage,
@@ -275,13 +275,13 @@ class ProductsController extends GetxController {
           errorMessages(LocaleKeys.unknownError.tr);
       }
     } finally {
-      dismissLoding();
+      dismissLoading();
     }
   }
 
   //导出产品
   Future<void> exportProduct() async {
-    showLoding(LocaleKeys.gettingData.tr);
+    showLoading(LocaleKeys.gettingData.tr);
     Map<String, dynamic> query = {};
     query.addAll(sort);
     if (advancedSearch.isNotEmpty) {
@@ -301,10 +301,10 @@ class ProductsController extends GetxController {
       showToast(LocaleKeys.noPermission.tr);
       return;
     }
-    dismissLoding();
+    dismissLoading();
     final productExportModel = productExportModelFromJson(jsonString!);
     if (productExportModel.result?.isNotEmpty ?? false) {
-      await CustomExecl.exportProduct(productExportModel.result!);
+      await CustomExcel.exportProduct(productExportModel.result!);
     } else {
       showToast(LocaleKeys.noRecordFound.tr);
     }

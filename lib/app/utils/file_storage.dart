@@ -32,7 +32,7 @@ class FileStorage {
       final ret = await file.writeAsBytes(bytes);
       if (ret.existsSync()) {
         CustomAlert.iosAlert(
-          LocaleKeys.thisFilehasBeenSavedTo.tr.trArgs([file.path]),
+          LocaleKeys.thisFileHasBeenSavedTo.tr.trArgs([file.path]),
           confirmText: LocaleKeys.copy.tr,
           onConfirm: () {
             Clipboard.setData(ClipboardData(text: file.path));

@@ -35,7 +35,7 @@ abstract class LocaleKeys {
   static const String close = "close";
   static const String save = "save";
   static const String systemMessage = "systemMessage";
-  static const String userLogined = "userLogined";
+  static const String userLoggedIn = "userLoggedIn"; //userLoggedIn
   static const String companyError = "companyError";
   static const String loginLimit = "loginLimit";
   static const String userOrPasswordError = "userOrPasswordError";
@@ -83,14 +83,14 @@ abstract class LocaleKeys {
   static const String uploadSuccess = "uploadSuccess";
   static const String uploadFailed = "uploadFailed";
   static const String compressConverting = "compressConverting";
-  static const String compressConverFailed = "compressConverFailed";
+  static const String compressConversionFailed = "compressConversionFailed";
   static const String noRecordFound = "noRecordFound";
   static const String ftpInfoNotIsSet = "ftpInfoNotIsSet";
   static const String ftpConnectFailed = "ftpConnectFailed";
   static const String ftpLoginFailed = "ftpLoginFailed";
   static const String fileNotFound = "fileNotFound";
   static const String unknownError = "unknownError";
-  static const String logginInvalid = "logginInvalid";
+  static const String loginInvalid = "loginInvalid";
   static const String serviceError = "serviceError";
   static const String dataException = "dataException";
   static const String keyWord = "keyWord";
@@ -135,7 +135,7 @@ abstract class LocaleKeys {
   static const String selectProductBarcode = "selectProductBarcode";
   static const String unknown = "unknown";
   static const String gettingData = "gettingData";
-  static const String thisFilehasBeenSavedTo = "thisFilehasBeenSavedTo";
+  static const String thisFileHasBeenSavedTo = "thisFileHasBeenSavedTo";
   static const String print = "print";
   static const String share = "share";
   static const String download = "download";
@@ -153,7 +153,7 @@ abstract class LocaleKeys {
   static const String standardCost = "standardCost";
   static const String maxStock = "maxStock";
   static const String minStock = "minStock";
-  static const String multipleCatogory = "multipleCatogory";
+  static const String multipleCategory = "multipleCategory";
   static const String picturePath = "picturePath";
   static const String noServiceCharge = "noServiceCharge";
   static const String logging = "logging";

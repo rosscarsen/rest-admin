@@ -37,7 +37,7 @@ void errorMessages(String msg) {
   EasyLoading.showError(msg, maskType: EasyLoadingMaskType.custom);
 }
 
-void showLoding(String msg) {
+void showLoading(String msg) {
   EasyLoading.instance
     ..indicatorType = EasyLoadingIndicatorType.fadingCircle
     ..loadingStyle = EasyLoadingStyle.custom
@@ -72,7 +72,7 @@ void showToast(String msg, {int duration = 2}) {
   EasyLoading.showToast(msg, maskType: EasyLoadingMaskType.custom);
 }
 
-void dismissLoding() {
+void dismissLoading() {
   if (EasyLoading.isShow) {
     EasyLoading.dismiss();
   }

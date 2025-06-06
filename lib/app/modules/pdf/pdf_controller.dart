@@ -62,7 +62,7 @@ class PdfController extends GetxController {
     parameters.remove("type");
     try {
       isLoading.value = true;
-      showLoding(LocaleKeys.gettingData.tr);
+      showLoading(LocaleKeys.gettingData.tr);
 
       final String? result = await apiClient.post(Config.printBarcode, queryParameters: parameters);
       if (result?.isEmpty ?? true) return;
@@ -75,7 +75,7 @@ class PdfController extends GetxController {
         errorMessages(printBarcodeModel.msg ?? LocaleKeys.getDataException.tr);
       }
     } finally {
-      dismissLoding();
+      dismissLoading();
       isLoading.value = false;
     }
   }

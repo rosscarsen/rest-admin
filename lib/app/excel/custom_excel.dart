@@ -7,7 +7,7 @@ import '../model/product_export_model.dart';
 import '../translations/locale_keys.dart';
 import '../utils/file_storage.dart';
 
-class CustomExecl {
+class CustomExcel {
   static final CellStyle _headStyle = CellStyle(
     bold: true,
     textWrapping: TextWrapping.WrapText,
@@ -97,7 +97,7 @@ class CustomExecl {
       LocaleKeys.nonStock.tr,
       LocaleKeys.nonEnable.tr,
       LocaleKeys.prePaid.tr,
-      LocaleKeys.multipleCatogory.tr,
+      LocaleKeys.multipleCategory.tr,
     ];
     for (int col = 0; col < headers.length; col++) {
       var headerCell = sheet.cell(CellIndex.indexByColumnRow(columnIndex: col, rowIndex: 0));
