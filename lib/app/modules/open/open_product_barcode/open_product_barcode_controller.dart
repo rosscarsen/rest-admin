@@ -7,7 +7,7 @@ import '../../../dataSource/openSource/open_prodcut_barcode_source.dart';
 import '../../../model/product_barcode_model.dart';
 import '../../../service/api_client.dart';
 import '../../../translations/locale_keys.dart';
-import '../../../utils/easy_loding.dart';
+import '../../../utils/easy_loading.dart';
 
 class OpenProductBarcodeController extends GetxController {
   final DataGridController dataGridController = DataGridController();

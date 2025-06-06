@@ -5,11 +5,11 @@ class Config {
   ///默认间隙
   static double defaultGap = 10;
   //本地登录信息
-  static String localStroageloginInfo = "localStroageLoginInfo";
+  static String localStorageLoginInfo = "localStorageLoginInfo";
   //登录标识
-  static String localStroagehasLogin = "localStroageHasLogin";
+  static String localStorageHasLogin = "localStorageHasLogin";
   //本地语言
-  static String localStroagelanguage = "localStroageLanguage";
+  static String localStorageLanguage = "localStorageLanguage";
   //没有权限标识
   static String noPermission = "__NO_PERMISSION__";
 

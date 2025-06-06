@@ -11,7 +11,7 @@ import 'package:intl/intl_standalone.dart' if (dart.library.html) 'package:intl/
 import 'app/config.dart';
 import 'app/routes/app_pages.dart';
 import 'app/translations/app_translations.dart';
-import 'app/utils/stroage_manage.dart';
+import 'app/utils/storage_manage.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,16 +20,16 @@ Future<void> main() async {
   await StorageManage.init();
   final StorageManage storageManage = StorageManage();
   //初始语言
-  String localeString = await storageManage.read(Config.localStroagelanguage) ?? "zh_HK";
+  String localeString = await storageManage.read(Config.localStorageLanguage) ?? "zh_HK";
   List<String> localeParts = localeString.split('_');
   final Locale initialLocale = Locale(localeParts[0], localeParts.length > 1 ? localeParts[1] : '');
 
   final hasLogin =
-      (storageManage.read(Config.localStroagehasLogin) ?? false) &&
-      (storageManage.read(Config.localStroageloginInfo) != null);
+      (storageManage.read(Config.localStorageHasLogin) ?? false) &&
+      (storageManage.read(Config.localStorageLoginInfo) != null);
 
   final String initialRoute = hasLogin ? Routes.DASHBOARD : Routes.SIGNIN;
-  storageManage.write(Config.localStroagelanguage, localeString);
+  storageManage.write(Config.localStorageLanguage, localeString);
 
   if (!kIsWeb && Platform.isAndroid) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);

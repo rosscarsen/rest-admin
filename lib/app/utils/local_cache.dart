@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import '../config.dart';
 import '../model/login_model.dart';
-import 'stroage_manage.dart';
+import 'storage_manage.dart';
 
 class LocalCache {
   static Map<String, dynamic> cacheInfo() {
     final StorageManage storageManage = StorageManage();
-    Map<String, dynamic> loginInfo = storageManage.read(Config.localStroageloginInfo) ?? {};
-    bool isLogin = storageManage.read(Config.localStroagehasLogin) ?? false;
+    Map<String, dynamic> loginInfo = storageManage.read(Config.localStorageLoginInfo) ?? {};
+    bool isLogin = storageManage.read(Config.localStorageHasLogin) ?? false;
 
     if (!isLogin || loginInfo.isEmpty) return {};
 

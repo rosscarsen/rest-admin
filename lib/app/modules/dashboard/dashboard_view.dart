@@ -1,3 +1,4 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
@@ -5,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 
 import '../../config.dart';
+import '../../model/chart_model.dart';
 import '../../routes/app_pages.dart';
 import '../../translations/locale_keys.dart';
 import '../../utils/form_help.dart';
@@ -104,9 +106,9 @@ class DashboardView extends GetView<DashboardController> {
 
   // 构建图表
   Widget _buildChart() {
-    /* final apiResult = controller.apiResult;
+    final apiResult = controller.apiResult;
     final salePlayRatio = apiResult.value.salePlayRatio;
-    final sevenSale = apiResult.value.sevenSale;
+    /*  final sevenSale = apiResult.value.sevenSale;
     final threeRatio = apiResult.value.threeRatio;
     final monthEverySale = apiResult.value.monthEverySale;
     final topSaleQty = apiResult.value.topSaleQty;
@@ -121,8 +123,8 @@ class DashboardView extends GetView<DashboardController> {
             lg: 4,
             xl: 4,
             child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: 200),
-              child: Container(color: Colors.red),
+              constraints: BoxConstraints(minHeight: 260, minWidth: 260),
+              child: CustomPieChart(pieChartData: salePlayRatio),
             ),
           ),
           ResponsiveGridCol(
@@ -182,6 +184,162 @@ class DashboardView extends GetView<DashboardController> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class CustomPieChart extends StatefulWidget {
+  const CustomPieChart({super.key, required this.pieChartData});
+  final List<SalePlayRatio>? pieChartData;
+
+  @override
+  State<StatefulWidget> createState() => PieChart2State();
+}
+
+class PieChart2State extends State<CustomPieChart> {
+  int touchedIndex = -1;
+
+  @override
+  Widget build(BuildContext context) {
+    final List<SalePlayRatio>? pieChartData = widget.pieChartData;
+
+    return pieChartData?.isEmpty ?? true
+        ? Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.thumb_down_alt_outlined, size: 30),
+                SizedBox(height: 8),
+                Text(LocaleKeys.noRecordFound.tr, style: TextStyle(fontSize: 16)),
+              ],
+            ),
+          )
+        : AspectRatio(
+            aspectRatio: 1.0,
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: PieChart(
+                /*  PieChartData(sections: pieChartData.map(toElement)), */
+                PieChartData(
+                  pieTouchData: PieTouchData(
+                    touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                      setState(() {
+                        if (!event.isInterestedForInteractions ||
+                            pieTouchResponse == null ||
+                            pieTouchResponse.touchedSection == null) {
+                          touchedIndex = -1;
+                          return;
+                        }
+                        touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
+                      });
+                    },
+                  ),
+                  borderData: FlBorderData(show: false),
+                  sectionsSpace: 0,
+                  centerSpaceRadius: 0,
+                  sections: showingSections(),
+                ),
+              ),
+            ),
+          );
+  }
+
+  List<PieChartSectionData> showingSections() {
+    return List.generate(4, (i) {
+      final isTouched = i == touchedIndex;
+      final fontSize = isTouched ? 25.0 : 16.0;
+      final radius = isTouched ? 90.0 : 80.0;
+      const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
+      switch (i) {
+        case 0:
+          return PieChartSectionData(
+            color: Colors.black,
+            value: 40,
+            title: '40%',
+            radius: radius,
+            titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              shadows: shadows,
+            ),
+          );
+        case 1:
+          return PieChartSectionData(
+            color: Colors.blue,
+            value: 30,
+            title: '30%',
+            radius: radius,
+            titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              shadows: shadows,
+            ),
+          );
+        case 2:
+          return PieChartSectionData(
+            color: Colors.cyan,
+            value: 15,
+            title: '15%',
+            radius: radius,
+            titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              shadows: shadows,
+            ),
+          );
+        case 3:
+          return PieChartSectionData(
+            color: Colors.deepOrangeAccent,
+            value: 15,
+            title: '15%',
+            radius: radius,
+            titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              shadows: shadows,
+            ),
+          );
+        default:
+          throw Error();
+      }
+    });
+  }
+}
+
+class Indicator extends StatelessWidget {
+  const Indicator({
+    super.key,
+    required this.color,
+    required this.text,
+    required this.isSquare,
+    this.size = 16,
+    this.textColor,
+  });
+  final Color color;
+  final String text;
+  final bool isSquare;
+  final double size;
+  final Color? textColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(shape: isSquare ? BoxShape.rectangle : BoxShape.circle, color: color),
+        ),
+        const SizedBox(width: 4),
+        Text(
+          text,
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: textColor),
+        ),
+      ],
     );
   }
 }

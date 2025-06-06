@@ -7,7 +7,7 @@ import '../config.dart';
 import '../routes/app_pages.dart';
 import '../translations/locale_keys.dart';
 import '../utils/custom_alert.dart';
-import '../utils/stroage_manage.dart';
+import '../utils/storage_manage.dart';
 
 class CustomScaffold extends StatelessWidget {
   const CustomScaffold({super.key, required this.route, required this.body, this.actions, required this.title});
@@ -104,7 +104,7 @@ class CustomScaffold extends StatelessWidget {
                 _ => const Locale("en", "US"),
               };
               final StorageManage storageManage = StorageManage();
-              storageManage.write(Config.localStroagelanguage, locale.toString());
+              storageManage.write(Config.localStorageLanguage, locale.toString());
               Get.updateLocale(locale);
             } else if (item.route == Routes.SIGNIN) {
               CustomAlert.iosAlert(
@@ -112,7 +112,7 @@ class CustomScaffold extends StatelessWidget {
                 showCancel: true,
                 onConfirm: () async {
                   final storageManage = StorageManage();
-                  await storageManage.remove(Config.localStroagehasLogin);
+                  await storageManage.remove(Config.localStorageHasLogin);
                   Get.offAllNamed(item.route!);
                 },
               );

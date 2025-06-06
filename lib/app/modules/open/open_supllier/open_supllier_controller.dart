@@ -7,7 +7,7 @@ import '../../../dataSource/openSource/open_supplier_data_source.dart';
 import '../../../model/supplier_model.dart';
 import '../../../service/api_client.dart';
 import '../../../translations/locale_keys.dart';
-import '../../../utils/easy_loding.dart';
+import '../../../utils/easy_loading.dart';
 
 class OpenSupllierController extends GetxController {
   final DataGridController dataGridController = DataGridController();

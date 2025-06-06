@@ -8,7 +8,7 @@ import '../../../../model/category_model.dart';
 import '../../../../model/department_model.dart';
 import '../../../../service/api_client.dart';
 import '../../../../translations/locale_keys.dart';
-import '../../../../utils/easy_loding.dart';
+import '../../../../utils/easy_loading.dart';
 import 'advanced_search_fields.dart';
 
 class AdvancedSearchController extends GetxController {

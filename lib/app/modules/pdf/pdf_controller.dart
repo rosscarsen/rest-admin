@@ -9,7 +9,7 @@ import '../../config.dart';
 import '../../model/print_barcode_model.dart';
 import '../../service/api_client.dart';
 import '../../translations/locale_keys.dart';
-import '../../utils/easy_loding.dart';
+import '../../utils/easy_loading.dart';
 
 class PdfController extends GetxController {
   final isLoading = true.obs;

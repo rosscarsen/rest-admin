@@ -5,7 +5,7 @@ import '../../config.dart';
 import '../../model/chart_model.dart';
 import '../../service/api_client.dart';
 import '../../translations/locale_keys.dart';
-import '../../utils/easy_loding.dart';
+import '../../utils/easy_loading.dart';
 
 class DashboardController extends GetxController {
   static DashboardController get to => Get.find();
@@ -22,6 +22,7 @@ class DashboardController extends GetxController {
 
   Future<void> getChartData() async {
     isLoading(true);
+    apiResult.value = ApiResult();
     try {
       final formatter = DateFormat('yyyy-MM-dd');
       search.putIfAbsent("startDate", () => formatter.format(DateTime.now().subtract(Duration(days: 7))));

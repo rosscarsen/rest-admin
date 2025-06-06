@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 import '../config.dart';
-import '../utils/stroage_manage.dart';
+import '../utils/storage_manage.dart';
 
 class PopupLang extends StatefulWidget {
   const PopupLang({super.key});
@@ -19,7 +19,7 @@ class _PopupLangState extends State<PopupLang> {
     return PopupMenuButton(
       icon: Icon(FontAwesomeIcons.language),
       itemBuilder: (BuildContext context) {
-        final String currentLanguage = storageManage.read(Config.localStroagelanguage);
+        final String currentLanguage = storageManage.read(Config.localStorageLanguage);
         return <PopupMenuEntry<String>>[
           PopupMenuItem(
             value: "zh_CN",
@@ -43,7 +43,7 @@ class _PopupLangState extends State<PopupLang> {
           "zh_HK" => const Locale("zh", "HK"),
           _ => const Locale("en", "US"),
         };
-        storageManage.write(Config.localStroagelanguage, value);
+        storageManage.write(Config.localStorageLanguage, value);
         Get.updateLocale(locale);
         /* if (Get.currentRoute != Routes.SIGNIN) {
           Get.offAndToNamed(Routes.REFRESH_TEMP, arguments: Get.currentRoute);

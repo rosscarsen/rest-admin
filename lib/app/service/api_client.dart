@@ -12,7 +12,7 @@ import '../config.dart';
 import '../routes/app_pages.dart';
 import '../translations/locale_keys.dart';
 import '../utils/custom_alert.dart';
-import '../utils/easy_loding.dart';
+import '../utils/easy_loading.dart';
 import '../utils/local_cache.dart';
 
 class ApiClient {

@@ -8,7 +8,7 @@ import '../../../model/products_model.dart';
 import '../../../modules/master/products/products_controller.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/constants.dart';
-import '../../../utils/easy_loding.dart';
+import '../../../utils/easy_loading.dart';
 import '../../../widgets/custom_cell.dart';
 
 class ProductsDataSource extends DataGridSource with WidgetsBindingObserver {

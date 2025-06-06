@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import '../config.dart';
 import '../routes/app_pages.dart';
-import '../utils/stroage_manage.dart';
+import '../utils/storage_manage.dart';
 
 class AuthService extends GetxService {
   static AuthService get to => Get.find();
@@ -23,8 +23,8 @@ class AuthService extends GetxService {
 
   Future<void> _checkAuthStatus() async {
     hasLogin.value =
-        (storageManage.read(Config.localStroagehasLogin) ?? false) &&
-        (storageManage.read(Config.localStroageloginInfo) != null);
+        (storageManage.read(Config.localStorageHasLogin) ?? false) &&
+        (storageManage.read(Config.localStorageLoginInfo) != null);
 
     if (!hasLogin.value && Get.currentRoute != Routes.SIGNIN) {
       Get.offAllNamed(Routes.SIGNIN);

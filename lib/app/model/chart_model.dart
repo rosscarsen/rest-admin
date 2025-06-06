@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // To parse this JSON data, do
 //
 //     final chartModel = chartModelFromJson(jsonString);
@@ -68,6 +69,11 @@ class ApiResult {
     "topSaleQty": topSaleQty == null ? [] : List<dynamic>.from(topSaleQty!.map((x) => x.toJson())),
     "topSaleAmount": topSaleAmount == null ? [] : List<dynamic>.from(topSaleAmount!.map((x) => x.toJson())),
   };
+
+  @override
+  String toString() {
+    return 'ApiResult(salePlayRatio: $salePlayRatio, sevenSale: $sevenSale, threeRatio: $threeRatio, monthEverySale: $monthEverySale, topSaleQty: $topSaleQty, topSaleAmount: $topSaleAmount)';
+  }
 }
 
 class MonthEverySale {
@@ -89,6 +95,9 @@ class MonthEverySale {
     "totalAmount": totalAmount,
     "formatDate": formatDate,
   };
+
+  @override
+  String toString() => 'MonthEverySale(dayLabel: $dayLabel, totalAmount: $totalAmount, formatDate: $formatDate)';
 }
 
 class SalePlayRatio {
@@ -101,6 +110,9 @@ class SalePlayRatio {
       SalePlayRatio(mPayType: json["mPayType"], totalAmount: json["totalAmount"]);
 
   Map<String, dynamic> toJson() => {"mPayType": mPayType, "totalAmount": totalAmount};
+
+  @override
+  String toString() => 'SalePlayRatio(mPayType: $mPayType, totalAmount: $totalAmount)';
 }
 
 class SevenSale {
@@ -119,6 +131,9 @@ class SevenSale {
         "${invoiceDate!.year.toString().padLeft(4, '0')}-${invoiceDate!.month.toString().padLeft(2, '0')}-${invoiceDate!.day.toString().padLeft(2, '0')}",
     "totalAmount": totalAmount,
   };
+
+  @override
+  String toString() => 'SevenSale(invoiceDate: $invoiceDate, totalAmount: $totalAmount)';
 }
 
 class ThreeRatio {
@@ -145,6 +160,9 @@ class ThreeRatio {
     "weekResult": weekResult == null ? [] : List<dynamic>.from(weekResult!.map((x) => x.toJson())),
     "monthResult": monthResult == null ? [] : List<dynamic>.from(monthResult!.map((x) => x.toJson())),
   };
+
+  @override
+  String toString() => 'ThreeRatio(dayResult: $dayResult, weekResult: $weekResult, monthResult: $monthResult)';
 }
 
 class DayResult {
@@ -166,6 +184,9 @@ class DayResult {
     "totalAmount": totalAmount,
     "growthRate": growthRate,
   };
+
+  @override
+  String toString() => 'DayResult(invoiceDate: $invoiceDate, totalAmount: $totalAmount, growthRate: $growthRate)';
 }
 
 class MonthResult {
@@ -179,6 +200,9 @@ class MonthResult {
       MonthResult(invoiceMonth: json["invoiceMonth"], totalAmount: json["totalAmount"], growthRate: json["growthRate"]);
 
   Map<String, dynamic> toJson() => {"invoiceMonth": invoiceMonth, "totalAmount": totalAmount, "growthRate": growthRate};
+
+  @override
+  String toString() => 'MonthResult(invoiceMonth: $invoiceMonth, totalAmount: $totalAmount, growthRate: $growthRate)';
 }
 
 class WeekResult {
@@ -221,6 +245,11 @@ class TopSaleAmount {
     "mPrice": mPrice,
     "qty": qty,
   };
+
+  @override
+  String toString() {
+    return 'TopSaleAmount(mCode: $mCode, mDesc1: $mDesc1, mAmount: $mAmount, mSQty: $mSQty, mPrice: $mPrice, qty: $qty)';
+  }
 }
 
 class TopSaleQty {
@@ -241,4 +270,9 @@ class TopSaleQty {
   );
 
   Map<String, dynamic> toJson() => {"mCode": mCode, "mDesc1": mDesc1, "mQty": mQty, "mSQty": mSQty, "mPrice": mPrice};
+
+  @override
+  String toString() {
+    return 'TopSaleQty(mCode: $mCode, mDesc1: $mDesc1, mQty: $mQty, mSQty: $mSQty, mPrice: $mPrice)';
+  }
 }

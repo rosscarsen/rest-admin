@@ -9,7 +9,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../translations/locale_keys.dart';
 import 'custom_alert.dart';
-import 'easy_loding.dart';
+import 'easy_loading.dart';
 
 // 将文件保存在设备中
 class FileStorage {

@@ -13,7 +13,7 @@ import '../../../model/products_model.dart';
 import '../../../service/api_client.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/custom_alert.dart';
-import '../../../utils/easy_loding.dart';
+import '../../../utils/easy_loading.dart';
 import '../../../utils/functions.dart';
 
 class ProductsController extends GetxController {
