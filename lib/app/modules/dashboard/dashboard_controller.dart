@@ -8,6 +8,7 @@ import '../../model/chart_model.dart';
 import '../../service/api_client.dart';
 import '../../translations/locale_keys.dart';
 import '../../utils/easy_loading.dart';
+import '../../utils/logger.dart';
 
 class DashboardController extends GetxController {
   static DashboardController get to => Get.find();
@@ -30,7 +31,7 @@ class DashboardController extends GetxController {
       final formatter = DateFormat('yyyy-MM-dd');
       search.putIfAbsent("startDate", () => formatter.format(DateTime.now().subtract(Duration(days: 7))));
       search.putIfAbsent("endDate", () => formatter.format(DateTime.now().subtract(Duration(days: 1))));
-      //logger.i(search);
+      logger.i(search);
       final String? jsonString = await apiClient.post(Config.chartData, data: search);
 
       if (jsonString?.isEmpty ?? true) return;

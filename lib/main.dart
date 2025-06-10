@@ -68,7 +68,6 @@ class MyApp extends StatelessWidget {
           foregroundColor: Colors.white,
           centerTitle: true,
         ),
-        textTheme: TextTheme(),
         inputDecorationTheme: InputDecorationTheme(
           border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(8.0))),
           enabledBorder: OutlineInputBorder(

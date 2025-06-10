@@ -364,37 +364,6 @@ class DashboardView extends GetView<DashboardController> {
     );
   }
 
-  // 通用构建表格组件（内部已处理横纵滚动 & 宽度占满）
-  Widget _buildDataTable({required List<DataColumn> columns, required List<DataRow> rows}) {
-    final ScrollController horizontalController = ScrollController();
-    final ScrollController verticalController = ScrollController();
-
-    return Scrollbar(
-      thumbVisibility: true,
-      controller: horizontalController,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        controller: horizontalController,
-        child: Scrollbar(
-          thumbVisibility: true,
-          controller: verticalController,
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                controller: verticalController,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minWidth: constraints.maxWidth),
-                  child: DataTable(columns: columns, rows: rows),
-                ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-
   // top5销售数量
   Widget _buildTopSaleQty(List<TopSaleQty>? topSaleQty) {
     if (topSaleQty == null || topSaleQty.isEmpty) {
