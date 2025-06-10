@@ -37,4 +37,6 @@ class AppColors {
   static Color openColor = Colors.indigo.shade300;
   static Color disableColor = Colors.grey.shade600;
   static Color enableColor = Colors.grey.shade800;
+
+  static Color customTextColor = Color(0XFF2F2F2F);
 }

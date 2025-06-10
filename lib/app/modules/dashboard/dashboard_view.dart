@@ -1,4 +1,3 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
@@ -12,6 +11,10 @@ import '../../translations/locale_keys.dart';
 import '../../utils/form_help.dart';
 import '../../utils/progresshub.dart';
 import '../../widgets/custom_scaffold.dart';
+import 'custom_bar_chart.dart';
+import 'custom_line_chart.dart';
+import 'custom_pie_chart.dart';
+import 'custom_three_ratio.dart';
 import 'dashboard_controller.dart';
 
 class DashboardView extends GetView<DashboardController> {
@@ -19,25 +22,16 @@ class DashboardView extends GetView<DashboardController> {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
     return CustomScaffold(
       route: Routes.DASHBOARD,
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.refresh),
-          /* onPressed: () {
-            final StorageManage storageManage = StorageManage();
-            storageManage.erase();
-          }, */
-          onPressed: controller.hasPermission.value ? () => controller.getChartData() : null,
-        ),
-      ],
+
       body: Padding(
         padding: EdgeInsets.all(Config.defaultPadding),
         child: Column(
           children: [
+            // 搜索框
             FormBuilder(
-              key: formKey,
+              key: controller.formKey,
               child: ResponsiveGridRow(
                 children: [
                   FormHelper.dateInput(
@@ -45,6 +39,7 @@ class DashboardView extends GetView<DashboardController> {
                     labelText: LocaleKeys.startDate.tr,
                     initialValue: DateTime.now().subtract(const Duration(days: 7)),
                     enabled: false,
+                    canClear: false,
                   ),
                   FormHelper.dateInput(
                     name: "endDate",
@@ -56,9 +51,15 @@ class DashboardView extends GetView<DashboardController> {
                         final formatter = DateFormat('yyyy-MM-dd');
                         final endDate = DateTime.parse(value);
                         final startDate = endDate.subtract(Duration(days: 6));
-                        formKey.currentState?.fields['startDate']?.didChange(formatter.format(startDate));
+                        controller.formKey.currentState?.fields['startDate']?.didChange(formatter.format(startDate));
+                        // 触发搜索
+                        controller.search.addAll({
+                          "startDate": formatter.format(startDate),
+                          "endDate": formatter.format(endDate),
+                        });
+                        controller.getChartData();
                       } else {
-                        formKey.currentState?.fields['startDate']?.didChange(null);
+                        controller.formKey.currentState?.fields['startDate']?.didChange(null);
                       }
                     },
                   ),
@@ -79,8 +80,8 @@ class DashboardView extends GetView<DashboardController> {
                           child: ElevatedButton(
                             child: Text(LocaleKeys.search.tr),
                             onPressed: () {
-                              formKey.currentState?.saveAndValidate();
-                              controller.search.addAll(formKey.currentState!.value);
+                              controller.formKey.currentState?.saveAndValidate();
+                              controller.search.addAll(controller.formKey.currentState!.value);
                               controller.getChartData();
                             },
                           ),
@@ -91,6 +92,8 @@ class DashboardView extends GetView<DashboardController> {
                 ],
               ),
             ),
+
+            // 内容
             _buildContent(),
           ],
         ),
@@ -101,245 +104,401 @@ class DashboardView extends GetView<DashboardController> {
 
   // 构建内容
   Widget _buildContent() {
-    return Expanded(child: Obx(() => ProgressHUD(child: controller.isLoading.value ? null : _buildChart())));
+    return Expanded(
+      child: Obx(
+        () => ProgressHUD(
+          child: controller.isLoading.value
+              ? null
+              : SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 4.0),
+                        child: Text(
+                          LocaleKeys.saleViewMsg.tr,
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey[600]),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                      _buildChart(),
+                    ],
+                  ),
+                ),
+        ),
+      ),
+    );
   }
 
   // 构建图表
   Widget _buildChart() {
+    const kHeaderBlue = Color(0xFF1e5b96);
+    const kHeaderTextStyle = TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16);
     final apiResult = controller.apiResult;
     final salePlayRatio = apiResult.value.salePlayRatio;
-    /*  final sevenSale = apiResult.value.sevenSale;
+    final sevenSale = apiResult.value.sevenSale;
     final threeRatio = apiResult.value.threeRatio;
     final monthEverySale = apiResult.value.monthEverySale;
     final topSaleQty = apiResult.value.topSaleQty;
-    final topSaleAmount = apiResult.value.topSaleAmount; */
-    return SingleChildScrollView(
-      child: ResponsiveGridRow(
-        children: [
-          ResponsiveGridCol(
-            xs: 12,
-            sm: 4,
-            md: 4,
-            lg: 4,
-            xl: 4,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: 260, minWidth: 260),
-              child: CustomPieChart(pieChartData: salePlayRatio),
-            ),
-          ),
-          ResponsiveGridCol(
-            xs: 12,
-            sm: 4,
-            md: 4,
-            lg: 4,
-            xl: 4,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: 200),
-              child: Container(color: Colors.blue),
-            ),
-          ),
-          ResponsiveGridCol(
-            xs: 12,
-            sm: 4,
-            md: 4,
-            lg: 4,
-            xl: 4,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: 200),
-              child: Container(color: Colors.green),
-            ),
-          ),
-          ResponsiveGridCol(
-            xs: 12,
-            sm: 12,
-            md: 12,
-            lg: 12,
-            xl: 12,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: 200),
-              child: Container(color: Colors.amber),
-            ),
-          ),
-          ResponsiveGridCol(
-            xs: 12,
-            sm: 6,
-            md: 6,
-            lg: 6,
-            xl: 6,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: 200),
-              child: Container(color: Colors.blue),
-            ),
-          ),
-          ResponsiveGridCol(
-            xs: 12,
-            sm: 6,
-            md: 6,
-            lg: 6,
-            xl: 6,
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: 200),
-              child: Container(color: Colors.grey),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class CustomPieChart extends StatefulWidget {
-  const CustomPieChart({super.key, required this.pieChartData});
-  final List<SalePlayRatio>? pieChartData;
-
-  @override
-  State<StatefulWidget> createState() => PieChart2State();
-}
-
-class PieChart2State extends State<CustomPieChart> {
-  int touchedIndex = -1;
-
-  @override
-  Widget build(BuildContext context) {
-    final List<SalePlayRatio>? pieChartData = widget.pieChartData;
-
-    return pieChartData?.isEmpty ?? true
-        ? Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.thumb_down_alt_outlined, size: 30),
-                SizedBox(height: 8),
-                Text(LocaleKeys.noRecordFound.tr, style: TextStyle(fontSize: 16)),
-              ],
-            ),
-          )
-        : AspectRatio(
-            aspectRatio: 1.0,
-            child: AspectRatio(
-              aspectRatio: 1,
-              child: PieChart(
-                /*  PieChartData(sections: pieChartData.map(toElement)), */
-                PieChartData(
-                  pieTouchData: PieTouchData(
-                    touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                      setState(() {
-                        if (!event.isInterestedForInteractions ||
-                            pieTouchResponse == null ||
-                            pieTouchResponse.touchedSection == null) {
-                          touchedIndex = -1;
-                          return;
-                        }
-                        touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
-                      });
-                    },
+    final topSaleAmount = apiResult.value.topSaleAmount;
+    return ResponsiveGridRow(
+      children: [
+        // 饼图
+        ResponsiveGridCol(
+          xs: 12,
+          sm: 4,
+          md: 4,
+          lg: 4,
+          xl: 4,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Container(
+              clipBehavior: Clip.antiAlias,
+              height: 380,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey.shade300),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    color: kHeaderBlue,
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      "${LocaleKeys.sameDayPaymentMethodSalesRatio.tr}(*)",
+                      style: kHeaderTextStyle,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
-                  borderData: FlBorderData(show: false),
-                  sectionsSpace: 0,
-                  centerSpaceRadius: 0,
-                  sections: showingSections(),
-                ),
+                  // _buildPieChart(salePlayRatio),
+                  Expanded(child: CustomPieChart(pieChartData: salePlayRatio)),
+                ],
               ),
             ),
-          );
-  }
-
-  List<PieChartSectionData> showingSections() {
-    return List.generate(4, (i) {
-      final isTouched = i == touchedIndex;
-      final fontSize = isTouched ? 25.0 : 16.0;
-      final radius = isTouched ? 90.0 : 80.0;
-      const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
-      switch (i) {
-        case 0:
-          return PieChartSectionData(
-            color: Colors.black,
-            value: 40,
-            title: '40%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              shadows: shadows,
-            ),
-          );
-        case 1:
-          return PieChartSectionData(
-            color: Colors.blue,
-            value: 30,
-            title: '30%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              shadows: shadows,
-            ),
-          );
-        case 2:
-          return PieChartSectionData(
-            color: Colors.cyan,
-            value: 15,
-            title: '15%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              shadows: shadows,
-            ),
-          );
-        case 3:
-          return PieChartSectionData(
-            color: Colors.deepOrangeAccent,
-            value: 15,
-            title: '15%',
-            radius: radius,
-            titleStyle: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              shadows: shadows,
-            ),
-          );
-        default:
-          throw Error();
-      }
-    });
-  }
-}
-
-class Indicator extends StatelessWidget {
-  const Indicator({
-    super.key,
-    required this.color,
-    required this.text,
-    required this.isSquare,
-    this.size = 16,
-    this.textColor,
-  });
-  final Color color;
-  final String text;
-  final bool isSquare;
-  final double size;
-  final Color? textColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(shape: isSquare ? BoxShape.rectangle : BoxShape.circle, color: color),
+          ),
         ),
-        const SizedBox(width: 4),
-        Text(
-          text,
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: textColor),
+        // 七日销售额柱状图
+        ResponsiveGridCol(
+          xs: 12,
+          sm: 4,
+          md: 4,
+          lg: 4,
+          xl: 4,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Container(
+              clipBehavior: Clip.antiAlias,
+              height: 380,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey.shade300),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    color: kHeaderBlue,
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      "${LocaleKeys.salesInTheLastSevenDays.tr}(*)",
+                      style: kHeaderTextStyle,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  // _buildPieChart(salePlayRatio),
+                  Expanded(child: CustomBarChart(barChartData: sevenSale)),
+                ],
+              ),
+            ),
+          ),
+        ),
+        // 七日销售额
+        ResponsiveGridCol(
+          xs: 12,
+          sm: 4,
+          md: 4,
+          lg: 4,
+          xl: 4,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Container(
+              clipBehavior: Clip.antiAlias,
+              height: 380,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey.shade300),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    color: kHeaderBlue,
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      "${LocaleKeys.yesterdayLastWeekLastMonth.tr}(*)",
+                      style: kHeaderTextStyle,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  // _buildPieChart(salePlayRatio),
+                  Expanded(child: CustomThreeRatio(threeRatio: threeRatio)),
+                ],
+              ),
+            ),
+          ),
+        ),
+        // 线图
+        ResponsiveGridCol(
+          xs: 12,
+          sm: 12,
+          md: 12,
+          lg: 12,
+          xl: 12,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Container(
+              clipBehavior: Clip.antiAlias,
+              height: 300,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey.shade300),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    color: kHeaderBlue,
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      "${LocaleKeys.thisMonthSale.tr}(*)",
+                      style: kHeaderTextStyle,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  // _buildPieChart(salePlayRatio),
+                  Expanded(child: CustomLineChart(lineChartData: monthEverySale)),
+                ],
+              ),
+            ),
+          ),
+        ),
+        // top5销售数量
+        ResponsiveGridCol(
+          xs: 12,
+          sm: 6,
+          md: 6,
+          lg: 6,
+          xl: 6,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Container(
+              clipBehavior: Clip.antiAlias,
+              height: 350,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey.shade300),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    color: kHeaderBlue,
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      "Top5 ${LocaleKeys.saleQty.tr}(*)",
+                      style: kHeaderTextStyle,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  // _buildPieChart(salePlayRatio),
+                  Expanded(child: _buildTopSaleQty(topSaleQty)),
+                ],
+              ),
+            ),
+          ),
+        ),
+        // top5销售金额
+        ResponsiveGridCol(
+          xs: 12,
+          sm: 6,
+          md: 6,
+          lg: 6,
+          xl: 6,
+          child: Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Container(
+              clipBehavior: Clip.antiAlias,
+              height: 350,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey.shade300),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: double.infinity,
+                    color: kHeaderBlue,
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      "Top5 ${LocaleKeys.saleAmount.tr}(*)",
+                      style: kHeaderTextStyle,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  // _buildPieChart(salePlayRatio),
+                  Expanded(child: _buildTopSaleAmount(topSaleAmount)),
+                ],
+              ),
+            ),
+          ),
         ),
       ],
     );
+  }
+
+  // 通用构建表格组件（内部已处理横纵滚动 & 宽度占满）
+  Widget _buildDataTable({required List<DataColumn> columns, required List<DataRow> rows}) {
+    final ScrollController horizontalController = ScrollController();
+    final ScrollController verticalController = ScrollController();
+
+    return Scrollbar(
+      thumbVisibility: true,
+      controller: horizontalController,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        controller: horizontalController,
+        child: Scrollbar(
+          thumbVisibility: true,
+          controller: verticalController,
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                controller: verticalController,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minWidth: constraints.maxWidth),
+                  child: DataTable(columns: columns, rows: rows),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  // top5销售数量
+  Widget _buildTopSaleQty(List<TopSaleQty>? topSaleQty) {
+    if (topSaleQty == null || topSaleQty.isEmpty) {
+      return Center(child: Text(LocaleKeys.noRecordFound.tr, style: TextStyle(fontSize: 16)));
+    } else {
+      final ScrollController horizontalScrollController = ScrollController();
+      final ScrollController verticalScrollController = ScrollController();
+      return Scrollbar(
+        thumbVisibility: true, // 显示水平滚动条
+        controller: horizontalScrollController,
+        notificationPredicate: (_) => true,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          controller: horizontalScrollController,
+          child: Scrollbar(
+            thumbVisibility: true, // 显示垂直滚动条
+            controller: verticalScrollController,
+            notificationPredicate: (_) => true,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              controller: verticalScrollController,
+              child: DataTable(
+                columns: [
+                  DataColumn(label: Text("#")),
+                  DataColumn(label: Text(LocaleKeys.name.tr)),
+                  DataColumn(label: Text(LocaleKeys.qty.tr)),
+                  DataColumn(label: Text(LocaleKeys.unitPrice.tr)),
+                  DataColumn(label: Text(LocaleKeys.amount.tr)),
+                  DataColumn(label: Text(LocaleKeys.stockQty.tr)),
+                ],
+                rows: [
+                  for (var entry in topSaleQty.asMap().entries)
+                    DataRow(
+                      cells: [
+                        DataCell(Text("${entry.key + 1}")),
+                        DataCell(Text(entry.value.mDesc1 ?? "")),
+                        DataCell(Text(double.parse(entry.value.mQty ?? "0").toStringAsFixed(2))),
+                        DataCell(Text(double.parse(entry.value.mPrice ?? "0").toStringAsFixed(2))),
+                        DataCell(
+                          Text(
+                            (double.parse(entry.value.mQty ?? "0") * double.parse(entry.value.mPrice ?? "0"))
+                                .toStringAsFixed(2),
+                          ),
+                        ),
+                        DataCell(Text(double.parse(entry.value.mSQty ?? "0").toStringAsFixed(2))),
+                      ],
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
+  // top5销售金额
+  Widget _buildTopSaleAmount(List<TopSaleAmount>? topSaleAmount) {
+    if (topSaleAmount == null || topSaleAmount.isEmpty) {
+      return Center(child: Text(LocaleKeys.noRecordFound.tr, style: TextStyle(fontSize: 16)));
+    } else {
+      final ScrollController horizontalScrollController = ScrollController();
+      final ScrollController verticalScrollController = ScrollController();
+      return Scrollbar(
+        thumbVisibility: true, // 显示水平滚动条
+        controller: horizontalScrollController,
+        notificationPredicate: (_) => true,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          controller: horizontalScrollController,
+          child: Scrollbar(
+            thumbVisibility: true, // 显示垂直滚动条
+            controller: verticalScrollController,
+            notificationPredicate: (_) => true,
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              controller: verticalScrollController,
+              child: DataTable(
+                columns: [
+                  DataColumn(label: Text("#")),
+                  DataColumn(label: Text(LocaleKeys.name.tr)),
+                  DataColumn(label: Text(LocaleKeys.amount.tr)),
+                  DataColumn(label: Text(LocaleKeys.unitPrice.tr)),
+                  DataColumn(label: Text(LocaleKeys.qty.tr)),
+                  DataColumn(label: Text(LocaleKeys.stockQty.tr)),
+                ],
+                rows: [
+                  for (var entry in topSaleAmount.asMap().entries)
+                    DataRow(
+                      cells: [
+                        DataCell(Text("${entry.key + 1}")),
+                        DataCell(Text(entry.value.mDesc1 ?? "")),
+                        DataCell(Text(double.parse(entry.value.mAmount ?? "0").toStringAsFixed(2))),
+                        DataCell(Text(double.parse(entry.value.mPrice ?? "0").toStringAsFixed(2))),
+                        DataCell(Text(double.parse(entry.value.qty ?? "0").toStringAsFixed(2))),
+                        DataCell(Text(double.parse(entry.value.mSQty ?? "0").toStringAsFixed(2))),
+                      ],
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
   }
 }

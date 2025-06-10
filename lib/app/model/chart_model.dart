@@ -4,6 +4,9 @@
 //     final chartModel = chartModelFromJson(jsonString);
 
 import 'dart:convert';
+import 'dart:math';
+
+import 'package:flutter/material.dart';
 
 ChartModel chartModelFromJson(String str) => ChartModel.fromJson(json.decode(str));
 
@@ -103,16 +106,31 @@ class MonthEverySale {
 class SalePlayRatio {
   String? mPayType;
   String? totalAmount;
+  final Color color; // 不用 late，更安全
 
-  SalePlayRatio({this.mPayType, this.totalAmount});
+  SalePlayRatio({this.mPayType, this.totalAmount, Color? color}) : color = color ?? _getRandomColor();
 
-  factory SalePlayRatio.fromJson(Map<String, dynamic> json) =>
-      SalePlayRatio(mPayType: json["mPayType"], totalAmount: json["totalAmount"]);
+  factory SalePlayRatio.fromJson(Map<String, dynamic> json) {
+    return SalePlayRatio(mPayType: json["mPayType"], totalAmount: json["totalAmount"]);
+  }
 
   Map<String, dynamic> toJson() => {"mPayType": mPayType, "totalAmount": totalAmount};
 
+  static Color _getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    final Random random = Random();
+    String color = '#';
+
+    // 生成6个随机的字符
+    for (int i = 0; i < 6; i++) {
+      color += letters[random.nextInt(16)];
+    }
+
+    return Color(int.parse(color.replaceFirst('#', '0xFF')));
+  }
+
   @override
-  String toString() => 'SalePlayRatio(mPayType: $mPayType, totalAmount: $totalAmount)';
+  String toString() => 'SalePlayRatio(mPayType: $mPayType, totalAmount: $totalAmount, color: $color)';
 }
 
 class SevenSale {

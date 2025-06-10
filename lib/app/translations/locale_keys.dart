@@ -170,4 +170,21 @@ abstract class LocaleKeys {
   static const String simplifiedChinese = "simplifiedChinese";
   static const String english = "English";
   static const String traditionalChinese = "traditionalChinese";
+  static const String saleViewMsg = "saleViewMsg";
+  static const String dailySalesForTheMonth = "dailySalesForTheMonth";
+  static const String sameDayPaymentMethodSalesRatio = "sameDayPaymentMethodSalesRatio";
+  static const String salesInTheLastSevenDays = "salesInTheLastSevenDays";
+  static const String yesterdayLastWeekLastMonth = "yesterdayLastWeekLastMonth";
+  static const String yesterdaySale = "yesterdaySale";
+  static const String lastWeekSale = "lastWeekSale";
+  static const String lastMonthSale = "lastMonthSale";
+  static const String todaySale = "todaySale";
+  static const String thisWeekSale = "thisWeekSale";
+  static const String thisMonthSale = "thisMonthSale";
+  static const String amount = "amount";
+  static const String date = "date";
+  static const String saleQty = "saleQty";
+  static const String saleAmount = "saleAmount";
+  static const String unitPrice = "unitPrice";
+  static const String stockQty = "stockQty";
 }
