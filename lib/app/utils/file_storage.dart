@@ -12,42 +12,52 @@ import 'custom_alert.dart';
 import 'easy_loading.dart';
 
 // 将文件保存在设备中
+enum FileType { Excel, Pdf }
+
 class FileStorage {
   /// 保存文件到下载目录
-  static Future saveFileToDownloads(Uint8List bytes, String name) async {
-    if (kIsWeb) {
-      try {
-        await FlutterFileSaver().writeFileAsBytes(fileName: name, bytes: bytes);
-      } catch (e) {
-        showToast(LocaleKeys.operationWasCancelled.tr);
-      }
-    } else if (Platform.isWindows || Platform.isLinux) {
-      final Directory? directory = await getDownloadsDirectory();
-      if (directory == null) {
-        showToast(LocaleKeys.filePathError.tr);
-        return;
-      }
-      final String path = directory.path;
-      final file = File(join(path, name));
-      final ret = await file.writeAsBytes(bytes);
-      if (ret.existsSync()) {
-        CustomAlert.iosAlert(
-          LocaleKeys.thisFileHasBeenSavedTo.tr.trArgs([file.path]),
-          confirmText: LocaleKeys.copy.tr,
-          onConfirm: () {
-            Clipboard.setData(ClipboardData(text: file.path));
-            showToast(LocaleKeys.copySuccess.tr);
-          },
-          showCancel: true,
-        );
+  static Future saveFileToDownloads({
+    required Uint8List bytes,
+    required String fileName,
+    required FileType fileType,
+  }) async {
+    if (!kIsWeb) {
+      if (Platform.isWindows || Platform.isLinux) {
+        final Directory? directory = await getDownloadsDirectory();
+        if (directory == null) {
+          showToast(LocaleKeys.filePathError.tr);
+          return;
+        }
+        final String path = directory.path;
+        final file = File(join(path, fileName));
+        final ret = await file.writeAsBytes(bytes);
+        if (ret.existsSync()) {
+          CustomAlert.iosAlert(
+            LocaleKeys.thisFileHasBeenSavedTo.tr.trArgs([file.path]),
+            confirmText: LocaleKeys.copy.tr,
+            onConfirm: () {
+              Clipboard.setData(ClipboardData(text: file.path));
+              showToast(LocaleKeys.copySuccess.tr);
+            },
+            showCancel: true,
+          );
+        } else {
+          showToast(LocaleKeys.fileDownloadFailed.tr);
+        }
       } else {
-        showToast(LocaleKeys.fileDownloadFailed.tr);
+        try {
+          await FlutterFileSaver().writeFileAsBytes(fileName: fileName, bytes: bytes);
+        } catch (e) {
+          showToast(LocaleKeys.operationWasCancelled.tr);
+        }
       }
     } else {
-      try {
-        await FlutterFileSaver().writeFileAsBytes(fileName: name, bytes: bytes);
-      } catch (e) {
-        showToast(LocaleKeys.operationWasCancelled.tr);
+      if (fileType == FileType.Pdf) {
+        try {
+          await FlutterFileSaver().writeFileAsBytes(fileName: fileName, bytes: bytes);
+        } catch (e) {
+          showToast(LocaleKeys.operationWasCancelled.tr);
+        }
       }
     }
   }
