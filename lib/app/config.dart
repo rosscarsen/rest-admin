@@ -34,7 +34,7 @@ class Config {
   // 获取产品详情
   static String productDetail = "/Master/productDetail";
   // 进阶搜索
-  static String productadvancedSearch = "/Master/advancedSearch";
+  static String productAdvancedSearch = "/Master/advancedSearch";
   // 批量删除食品
   static String batchDeleteProduct = "/Master/batchDeleteProduct";
   // 批量删除套餐
@@ -52,9 +52,9 @@ class Config {
 
   /// excel
   // 导出产品
-  static String exportProductExcel = "/Excel/productExport";
+  static String exportProductExcel = "/Excel/exportProduct";
   // 导入产品
-  static String importProductExcel = "/Excel/productImport";
+  static String importProductExcel = "/Excel/importProduct";
   //导出套餐
   static String exportSetMealExcel = "/Excel/setMealExport";
 }

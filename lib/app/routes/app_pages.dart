@@ -11,6 +11,8 @@ import '../modules/master/product_remarks/product_remarks_binding.dart';
 import '../modules/master/product_remarks/product_remarks_view.dart';
 import '../modules/master/products/advancedSearch/advanced_search_binding.dart';
 import '../modules/master/products/advancedSearch/advanced_search_view.dart';
+import '../modules/master/products/product_edit/product_edit_binding.dart';
+import '../modules/master/products/product_edit/product_edit_view.dart';
 import '../modules/master/products/products_binding.dart';
 import '../modules/master/products/products_view.dart';
 import '../modules/open/open_binding.dart';
@@ -18,8 +20,9 @@ import '../modules/open/open_product/open_product_binding.dart';
 import '../modules/open/open_product/open_product_view.dart';
 import '../modules/open/open_product_barcode/open_product_barcode_binding.dart';
 import '../modules/open/open_product_barcode/open_product_barcode_view.dart';
-import '../modules/open/open_supllier/open_supllier_binding.dart';
-import '../modules/open/open_supllier/open_supllier_view.dart';
+
+import '../modules/open/open_supplier/open_supplier_binding.dart';
+import '../modules/open/open_supplier/open_supplier_view.dart';
 import '../modules/open/open_view.dart';
 import '../modules/pdf/pdf_binding.dart';
 import '../modules/pdf/pdf_view.dart';
@@ -55,9 +58,9 @@ class AppPages {
           middlewares: [AuthMiddleware()],
         ),
         GetPage(
-          name: _Paths.OPEN_SUPLLIER,
-          page: () => const OpenSupllierView(),
-          binding: OpenSupllierBinding(),
+          name: _Paths.OPEN_SUPPLIER,
+          page: () => const OpenSupplierView(),
+          binding: OpenSupplierBinding(),
           middlewares: [AuthMiddleware()],
         ),
         GetPage(
@@ -92,6 +95,7 @@ class AppPages {
               binding: AdvancedSearchBinding(),
               middlewares: [AuthMiddleware()],
             ),
+            GetPage(name: _Paths.PRODUCT_EDIT, page: () => const ProductEditView(), binding: ProductEditBinding()),
           ],
         ),
         GetPage(name: _Paths.PRODUCT_REMARKS, page: () => const ProductRemarksView(), binding: ProductRemarksBinding()),

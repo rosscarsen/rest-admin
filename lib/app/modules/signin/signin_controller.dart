@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+import 'package:rest_admin/app/service/dio_api_result.dart';
 import 'package:rounded_loading_button_plus/rounded_loading_button.dart';
 
 import '../../config.dart';
 import '../../model/login_model.dart';
 import '../../routes/app_pages.dart';
-import '../../service/api_client.dart';
+import '../../service/dio_api_client.dart';
 import '../../translations/locale_keys.dart';
 import '../../utils/custom_alert.dart';
 import '../../utils/easy_loading.dart';
@@ -58,13 +59,21 @@ class SigninController extends GetxController with GetSingleTickerProviderStateM
       final Map<String, dynamic> loginFormData = _formKey.currentState!.value;
 
       try {
-        final String? result = await apiClient.post(Config.login, data: loginFormData);
-        if (result?.isEmpty ?? true) return;
-        if (result == Config.noPermission) {
-          showToast(LocaleKeys.noPermission.tr);
+        final DioApiResult dioApiResult = await apiClient.post(Config.login, data: loginFormData);
+        if (!dioApiResult.success) {
+          errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
           return;
         }
-        final loginModel = loginModelFromJson(result!);
+        if (!dioApiResult.hasPermission) {
+          errorMessages(dioApiResult.error ?? LocaleKeys.noPermission.tr);
+          return;
+        }
+        if (dioApiResult.data == null) {
+          errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+          return;
+        }
+
+        final loginModel = loginModelFromJson(dioApiResult.data!);
         switch (loginModel.status) {
           case 200:
             final storageManage = StorageManage();

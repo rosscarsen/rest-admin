@@ -17,7 +17,7 @@ class ProductsModel {
   ProductsModel({this.productsInfo, this.msg, this.status});
 
   factory ProductsModel.fromJson(Map<String, dynamic> json) => ProductsModel(
-    productsInfo: json["data"] == null ? null : ProductsInfo.fromJson(json["data"]),
+    productsInfo: json["apiResult"] == null ? null : ProductsInfo.fromJson(json["apiResult"]),
     msg: json["msg"],
     status: json["status"],
   );

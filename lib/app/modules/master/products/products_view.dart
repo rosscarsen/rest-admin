@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
@@ -8,6 +12,7 @@ import '../../../config.dart';
 import '../../../routes/app_pages.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/constants.dart';
+import '../../../utils/easy_loading.dart';
 import '../../../utils/progresshub.dart';
 import '../../../widgets/custom_cell.dart';
 import '../../../widgets/custom_scaffold.dart';
@@ -20,6 +25,12 @@ class ProductsView extends GetView<ProductsController> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       route: Routes.PRODUCTS,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.refresh),
+          onPressed: controller.hasPermission.value ? () => controller.reloadData() : null,
+        ),
+      ],
       body: Obx(() {
         return Column(
           spacing: Config.defaultGap,
@@ -38,12 +49,6 @@ class ProductsView extends GetView<ProductsController> {
         ).paddingAll(Config.defaultPadding);
       }),
       title: LocaleKeys.product.tr,
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.refresh),
-          onPressed: controller.hasPermission.value ? () => controller.reloadData() : null,
-        ),
-      ],
     );
     /* Scaffold(
       appBar: AppBar(
@@ -163,7 +168,7 @@ class ProductsView extends GetView<ProductsController> {
                   ),
                   //导入
                   ElevatedButton(
-                    onPressed: controller.hasPermission.value ? () {} : null,
+                    onPressed: controller.hasPermission.value ? () => _importProduct() : null,
                     child: Text(LocaleKeys.import.tr),
                   ),
                   //导出
@@ -173,7 +178,7 @@ class ProductsView extends GetView<ProductsController> {
                   ),
                   //新增
                   ElevatedButton(
-                    onPressed: controller.hasPermission.value ? () {} : null,
+                    onPressed: controller.hasPermission.value ? () => Get.toNamed(Routes.PRODUCT_EDIT) : null,
                     child: Text(LocaleKeys.add.tr),
                   ),
                 ],
@@ -275,6 +280,131 @@ class ProductsView extends GetView<ProductsController> {
           );
         },
         child: Text(LocaleKeys.confirm.tr),
+      ),
+    );
+  }
+
+  // 产品导入
+  void _importProduct() {
+    final TextEditingController fileController = TextEditingController();
+    final TextEditingController overWriteController = TextEditingController();
+    File? excelFile;
+    int overWrite = 0;
+
+    Get.defaultDialog(
+      barrierDismissible: false,
+      title: LocaleKeys.importProduct.tr,
+      content: StatefulBuilder(
+        builder: (BuildContext context, setState) {
+          return SingleChildScrollView(
+            child: Column(
+              spacing: 8.0,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () async {
+                    FilePickerResult? result = await FilePicker.platform.pickFiles(
+                      allowMultiple: false,
+                      type: FileType.custom,
+                      allowedExtensions: ['xlsx', 'xls'],
+                      dialogTitle: LocaleKeys.selectFile.trArgs(["excel"]),
+                      lockParentWindow: true,
+                    );
+                    if (result != null) {
+                      setState(() {
+                        PlatformFile platformFile = result.files.single;
+                        excelFile = File(platformFile.path!);
+                        fileController.text = platformFile.name;
+                      });
+                    } else {
+                      showToast(LocaleKeys.userCanceledPicker.tr);
+                    }
+                  },
+                  child: AbsorbPointer(
+                    absorbing: fileController.text.isEmpty,
+                    child: TextField(
+                      readOnly: true,
+                      controller: fileController,
+                      decoration: InputDecoration(
+                        labelText: LocaleKeys.selectFile.trArgs(["excel"]),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        enabled: true,
+                        prefixIcon: Icon(FontAwesomeIcons.fileExcel, color: AppColors.openColor),
+                        suffixIcon: fileController.text.isNotEmpty
+                            ? IconButton(
+                                icon: Icon(Icons.clear),
+                                onPressed: () {
+                                  setState(() {
+                                    excelFile = null;
+                                    fileController.clear();
+                                  });
+                                },
+                              )
+                            : null,
+                      ),
+                    ),
+                  ),
+                ),
+                DropdownButtonFormField<int>(
+                  decoration: InputDecoration(
+                    labelText: LocaleKeys.price.tr,
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                  value: overWrite,
+                  items: [
+                    DropdownMenuItem(value: 0, child: Text(LocaleKeys.no.tr)),
+                    DropdownMenuItem(value: 1, child: Text(LocaleKeys.yes.tr)),
+                  ],
+                  onChanged: (value) {
+                    setState(() => overWrite = value!);
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+      cancel: ElevatedButton(
+        onPressed: () {
+          overWriteController.dispose();
+          fileController.dispose();
+          excelFile = null;
+          Get.closeDialog();
+        },
+        child: Text(LocaleKeys.cancel.tr),
+      ),
+      confirm: ElevatedButton(
+        onPressed: () async {
+          if (excelFile == null) {
+            showToast(LocaleKeys.pleaseSelectFile.tr);
+            return;
+          }
+          fileController.dispose();
+          overWriteController.dispose();
+          Get.closeDialog();
+          controller.importProduct(file: excelFile!, query: {'overWrite': overWrite});
+          excelFile = null;
+        },
+        child: Text(LocaleKeys.confirm.tr),
+      ),
+    );
+  }
+
+  // 新增产品
+  void _addProduct() {
+    Get.dialog(
+      Dialog(
+        child: Scaffold(
+          appBar: AppBar(title: Text("新增产品")),
+          persistentFooterButtons: [
+            ElevatedButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: Text("保存"),
+            ),
+          ],
+        ),
       ),
     );
   }

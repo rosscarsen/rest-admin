@@ -15,6 +15,8 @@ void successMessages(String msg) {
     ..userInteractions = true
     ..dismissOnTap = false
     ..displayDuration = const Duration(seconds: 3)
+    ..animationStyle = EasyLoadingAnimationStyle.scale
+    ..maskType = EasyLoadingMaskType.black
     ..customAnimation = CustomAnimation();
   EasyLoading.showSuccess(msg, maskType: EasyLoadingMaskType.custom);
 }
@@ -33,6 +35,8 @@ void errorMessages(String msg) {
     ..userInteractions = true
     ..dismissOnTap = false
     ..displayDuration = const Duration(seconds: 3)
+    ..animationStyle = EasyLoadingAnimationStyle.scale
+    ..maskType = EasyLoadingMaskType.black
     ..customAnimation = CustomAnimation();
   EasyLoading.showError(msg, maskType: EasyLoadingMaskType.custom);
 }
@@ -50,11 +54,13 @@ void showLoading(String msg) {
     ..maskColor = Colors.black.withValues(alpha: 0.5)
     ..userInteractions = true
     ..dismissOnTap = false
+    ..animationStyle = EasyLoadingAnimationStyle.scale
+    ..maskType = EasyLoadingMaskType.black
     ..customAnimation = CustomAnimation();
   EasyLoading.show(status: msg, maskType: EasyLoadingMaskType.custom);
 }
 
-void showToast(String msg, {int duration = 2}) {
+void showToast(String msg, {int duration = 3}) {
   EasyLoading.instance
     ..indicatorType = EasyLoadingIndicatorType.fadingCircle
     ..loadingStyle = EasyLoadingStyle.custom
@@ -68,6 +74,8 @@ void showToast(String msg, {int duration = 2}) {
     ..displayDuration = Duration(seconds: duration)
     ..userInteractions = true
     ..dismissOnTap = false
+    ..animationStyle = EasyLoadingAnimationStyle.scale
+    ..maskType = EasyLoadingMaskType.black
     ..customAnimation = CustomAnimation();
   EasyLoading.showToast(msg, maskType: EasyLoadingMaskType.custom);
 }
@@ -79,13 +87,20 @@ void dismissLoading() {
 }
 
 class CustomAnimation extends EasyLoadingAnimation {
-  CustomAnimation();
-
   @override
+  // 修复方法签名以正确覆盖 EasyLoadingAnimation 的 buildWidget 方法
   Widget buildWidget(Widget child, AnimationController controller, AlignmentGeometry alignment) {
-    return Opacity(
-      opacity: controller.value,
-      child: RotationTransition(turns: controller, child: child),
+    return FadeTransition(
+      // 'animation' 未定义，使用 controller 的 value 来创建动画
+      opacity: controller.drive(Tween<double>(begin: 0.0, end: 1.0)),
+      child: ScaleTransition(
+        // 'animation' 未定义，使用 controller 的 value 来创建缩放动画
+        scale: controller.drive(Tween<double>(begin: 0.8, end: 1.0)),
+        child: Container(
+          constraints: const BoxConstraints(minWidth: 200), // 最小宽度设置在这里
+          child: child,
+        ),
+      ),
     );
   }
 }

@@ -1,30 +1,45 @@
 // To parse this JSON data, do
 //
-//     final supplierModel = supplierModelFromJson(jsonString);
+//     final supplierModelModel = supplierModelModelFromJson(jsonString);
 
 import 'dart:convert';
 
-SupplierModel supplierModelFromJson(String str) => SupplierModel.fromJson(json.decode(str));
+SupplierModelModel supplierModelModelFromJson(String str) => SupplierModelModel.fromJson(json.decode(str));
 
-String supplierModelToJson(SupplierModel data) => json.encode(data.toJson());
+String supplierModelModelToJson(SupplierModelModel data) => json.encode(data.toJson());
 
-class SupplierModel {
+class SupplierModelModel {
+  int? status;
+  String? msg;
+  ApiResult? apiResult;
+
+  SupplierModelModel({this.status, this.msg, this.apiResult});
+
+  factory SupplierModelModel.fromJson(Map<String, dynamic> json) => SupplierModelModel(
+    status: json["status"],
+    msg: json["msg"],
+    apiResult: json["apiResult"] == null ? null : ApiResult.fromJson(json["apiResult"]),
+  );
+
+  Map<String, dynamic> toJson() => {"status": status, "msg": msg, "apiResult": apiResult?.toJson()};
+}
+
+class ApiResult {
   int? total;
   int? perPage;
   int? currentPage;
   int? lastPage;
-  List<SupplierData>? supplierData;
+  List<ApiData>? apiData;
   bool? hasMore;
 
-  SupplierModel({this.total, this.perPage, this.currentPage, this.lastPage, this.supplierData, this.hasMore});
+  ApiResult({this.total, this.perPage, this.currentPage, this.lastPage, this.apiData, this.hasMore});
 
-  factory SupplierModel.fromJson(Map<String, dynamic> json) => SupplierModel(
+  factory ApiResult.fromJson(Map<String, dynamic> json) => ApiResult(
     total: json["total"],
     perPage: json["per_page"],
     currentPage: json["current_page"],
     lastPage: json["last_page"],
-    supplierData:
-        json["data"] == null ? [] : List<SupplierData>.from(json["data"]!.map((x) => SupplierData.fromJson(x))),
+    apiData: json["data"] == null ? [] : List<ApiData>.from(json["data"]!.map((x) => ApiData.fromJson(x))),
     hasMore: json["has_more"],
   );
 
@@ -33,12 +48,12 @@ class SupplierModel {
     "per_page": perPage,
     "current_page": currentPage,
     "last_page": lastPage,
-    "data": supplierData == null ? [] : List<dynamic>.from(supplierData!.map((x) => x.toJson())),
+    "data": apiData == null ? [] : List<dynamic>.from(apiData!.map((x) => x.toJson())),
     "has_more": hasMore,
   };
 }
 
-class SupplierData {
+class ApiData {
   String? mAddress;
   String? mAnsBack;
   String? mCode;
@@ -58,7 +73,7 @@ class SupplierData {
   String? mRemarks;
   int? mNonActive;
 
-  SupplierData({
+  ApiData({
     this.mAddress,
     this.mAnsBack,
     this.mCode,
@@ -79,7 +94,7 @@ class SupplierData {
     this.mNonActive,
   });
 
-  factory SupplierData.fromJson(Map<String, dynamic> json) => SupplierData(
+  factory ApiData.fromJson(Map<String, dynamic> json) => ApiData(
     mAddress: json["mAddress"],
     mAnsBack: json["mAns_Back"],
     mCode: json["mCode"],

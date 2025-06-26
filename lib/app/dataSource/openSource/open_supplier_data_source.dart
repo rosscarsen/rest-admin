@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../model/supplier_model.dart';
-import '../../modules/open/open_supllier/open_supllier_controller.dart';
+import '../../modules/open/open_supplier/open_supplier_controller.dart';
 import '../../translations/locale_keys.dart';
 import '../../widgets/custom_cell.dart';
 
@@ -12,7 +12,7 @@ class OpenSupplierDataSource extends DataGridSource {
     updateDataSource();
   }
 
-  final OpenSupllierController controller;
+  final OpenSupplierController controller;
 
   void updateDataSource() {
     _dataGridRows = controller.DataList.map(_createDataRow).toList();
@@ -24,7 +24,7 @@ class OpenSupplierDataSource extends DataGridSource {
   @override
   List<DataGridRow> get rows => _dataGridRows;
 
-  DataGridRow _createDataRow(SupplierData e) {
+  DataGridRow _createDataRow(ApiData e) {
     return DataGridRow(
       cells: [
         DataGridCell<int>(columnName: 'T_Supplier_ID', value: e.tSupplierId),

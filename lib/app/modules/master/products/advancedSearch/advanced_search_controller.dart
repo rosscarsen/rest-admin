@@ -6,7 +6,8 @@ import '../../../../config.dart';
 import '../../../../model/advanced_search_model.dart';
 import '../../../../model/category_model.dart';
 import '../../../../model/department_model.dart';
-import '../../../../service/api_client.dart';
+import '../../../../service/dio_api_client.dart';
+import '../../../../service/dio_api_result.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/easy_loading.dart';
 import 'advanced_search_fields.dart';
@@ -86,23 +87,32 @@ class AdvancedSearchController extends GetxController {
   Future<void> getCategories() async {
     isLoading(true);
     try {
-      final String? jsonString = await apiClient.post(Config.productadvancedSearch);
+      final DioApiResult dioApiResult = await apiClient.post(Config.productAdvancedSearch);
 
-      if (jsonString?.isEmpty ?? true) {
+      if (!dioApiResult.success && dioApiResult.hasPermission) {
+        showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
-      if (jsonString == Config.noPermission) {
+      if (!dioApiResult.hasPermission) {
         showToast(LocaleKeys.noPermission.tr);
         return;
       }
-      final advancedSearchModel = advancedSearchModelFromJson(jsonString!);
+      if (dioApiResult.data == null) {
+        showToast(LocaleKeys.dataException.tr);
+        return;
+      }
+
+      final advancedSearchModel = advancedSearchModelFromJson(dioApiResult.data!);
+      if (advancedSearchModel.apiResult == null) {
+        return;
+      }
       //类目
-      final categories = advancedSearchModel.category;
+      final categories = advancedSearchModel.apiResult?.category;
       if (categories != null && categories.isNotEmpty) {
         category1.assignAll(categories);
       }
       //部门
-      final departments = advancedSearchModel.department;
+      final departments = advancedSearchModel.apiResult?.department;
       if (departments != null && departments.isNotEmpty) {
         department.assignAll(departments);
       }

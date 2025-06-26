@@ -10,7 +10,7 @@ abstract class Routes {
   static const ADVANCED_SEARCH = _Paths.MASTER + _Paths.PRODUCTS + _Paths.ADVANCED_SEARCH;
   static const OPEN = _Paths.OPEN;
   static const OPEN_PRODUCT = _Paths.OPEN + _Paths.OPEN_PRODUCT;
-  static const OPEN_SUPLLIER = _Paths.OPEN + _Paths.OPEN_SUPLLIER;
+  static const OPEN_SUPPLIER = _Paths.OPEN + _Paths.OPEN_SUPPLIER;
   static const PDF = _Paths.PDF;
   static const OPEN_PRODUCT_BARCODE = _Paths.OPEN + _Paths.OPEN_PRODUCT_BARCODE;
   static const MASTER = _Paths.MASTER;
@@ -18,6 +18,7 @@ abstract class Routes {
   static const PRODUCT_REMARKS = _Paths.MASTER + _Paths.PRODUCT_REMARKS;
   static const SUPPLIER_INVOICE = _Paths.SUPPLIER_INVOICE;
   static const REFRESH_TEMP = _Paths.REFRESH_TEMP;
+  static const PRODUCT_EDIT = _Paths.MASTER + _Paths.PRODUCTS + _Paths.PRODUCT_EDIT;
 }
 
 abstract class _Paths {
@@ -28,7 +29,7 @@ abstract class _Paths {
   static const ADVANCED_SEARCH = '/advanced-search';
   static const OPEN = '/open';
   static const OPEN_PRODUCT = '/open-product';
-  static const OPEN_SUPLLIER = '/open-supllier';
+  static const OPEN_SUPPLIER = '/open-supplier';
   static const PDF = '/pdf';
   static const OPEN_PRODUCT_BARCODE = '/open-product-barcode';
   static const MASTER = '/master';
@@ -36,4 +37,5 @@ abstract class _Paths {
   static const PRODUCT_REMARKS = '/product-remarks';
   static const SUPPLIER_INVOICE = '/supplier-invoice';
   static const REFRESH_TEMP = '/refresh-temp';
+  static const PRODUCT_EDIT = '/product-edit';
 }

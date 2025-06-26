@@ -1,16 +1,19 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../../utils/file_storage.dart';
+import '../../../utils/logger.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
 import '../../../dataSource/masterSource/product/products_data_source.dart';
-import '../../../excel/custom_excel.dart';
-import '../../../model/product_export_model.dart';
 import '../../../model/products_model.dart';
-import '../../../service/api_client.dart';
+import '../../../service/dio_api_client.dart';
+import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/custom_alert.dart';
 import '../../../utils/easy_loading.dart';
@@ -82,26 +85,30 @@ class ProductsController extends GetxController {
     isLoading(true);
     dataList.clear();
     try {
-      Map<String, dynamic> search = {'page': currentPage.value};
-      search.addAll(sort);
-      if (advancedSearch.isNotEmpty) {
-        search.addAll(advancedSearch);
-      }
-      if (searchController.text.isNotEmpty) {
-        search.addAll({"search": searchController.text});
-      }
+      Map<String, dynamic> search = {
+        'page': currentPage.value,
+        ...sort,
+        if (advancedSearch.isNotEmpty) ...advancedSearch,
+        if (searchController.text.isNotEmpty) 'search': searchController.text,
+      };
 
-      final String? result = await apiClient.post(Config.product, data: search);
-
-      if (result?.isEmpty ?? true) return;
-
-      if (result == Config.noPermission) {
-        hasPermission.value = false;
+      final DioApiResult dioApiResult = await apiClient.post(Config.product, data: search);
+      if (!dioApiResult.success) {
+        if (!dioApiResult.hasPermission) {
+          hasPermission.value = false;
+        }
+        errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
-      hasPermission.value = true;
 
-      final productsModel = productsModelFromJson(result!);
+      if (dioApiResult.data == null) {
+        errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        return;
+      }
+
+      hasPermission.value = true;
+      //logger.f(dioApiResult.data);
+      final productsModel = productsModelFromJson(dioApiResult.data.toString());
       if (productsModel.status == 200) {
         dataList = productsModel.productsInfo?.productData ?? [];
         totalPages.value = (productsModel.productsInfo?.lastPage ?? 0);
@@ -159,17 +166,20 @@ class ProductsController extends GetxController {
       onConfirm: () async {
         try {
           showLoading(LocaleKeys.deleting.tr);
-          final String? result = await apiClient.post(
+          final DioApiResult dioApiResult = await apiClient.post(
             Config.batchDeleteSetMeal,
             data: {"productIDs": jsonEncode(selectedIDS)},
           );
 
-          if (result?.isEmpty ?? true) return;
-          if (result == Config.noPermission) {
-            showToast(LocaleKeys.noPermission.tr);
+          if (!dioApiResult.success) {
+            showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
             return;
           }
-          final Map<String, dynamic> data = jsonDecode(result!) as Map<String, dynamic>;
+          if (dioApiResult.data == null) {
+            showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+            return;
+          }
+          final Map<String, dynamic> data = jsonDecode(dioApiResult.data!) as Map<String, dynamic>;
 
           switch (data['status']) {
             case 200:
@@ -198,18 +208,21 @@ class ProductsController extends GetxController {
       onConfirm: () async {
         try {
           showLoading(LocaleKeys.deleting.tr);
-          final String? result = await apiClient.post(
+          final DioApiResult dioApiResult = await apiClient.post(
             Config.batchDeleteProduct,
             data: {"ids": jsonEncode(selectedIDS)},
           );
 
-          if (result?.isEmpty ?? true) return;
-          if (result == Config.noPermission) {
-            showToast(LocaleKeys.noPermission.tr);
+          if (!dioApiResult.success) {
+            showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
             return;
           }
-          final Map<String, dynamic> data = jsonDecode(result!) as Map<String, dynamic>;
-          // logger.d(data);
+          if (dioApiResult.data == null) {
+            showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+            return;
+          }
+          final Map<String, dynamic> data = jsonDecode(dioApiResult.data!) as Map<String, dynamic>;
+
           switch (data['status']) {
             case 200:
               successMessages(LocaleKeys.deleteSuccess.tr);
@@ -233,25 +246,29 @@ class ProductsController extends GetxController {
   }
 
   //图片上传
-  void uploadImage(ProductData row, BuildContext context) async {
+  Future<void> uploadImage(ProductData row, BuildContext context) async {
     XFile? ret = await Functions.imagePicker(context);
     if (ret == null) return;
     try {
       showLoading(LocaleKeys.uploading.tr);
-      final String? result = await apiClient.uploadImage(
+      final DioApiResult dioApiResult = await apiClient.uploadImage(
         image: ret,
         uploadUrl: Config.uploadProductImage,
         code: row.mCode,
       );
-      if (result?.isEmpty ?? true) return;
-      if (result == Config.noPermission) {
-        showToast(LocaleKeys.noPermission.tr);
+      if (!dioApiResult.success) {
+        showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
-      final Map<String, dynamic> data = jsonDecode(result!) as Map<String, dynamic>;
+
+      if (dioApiResult.data == null) {
+        showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        return;
+      }
+      final Map<String, dynamic> data = json.decode(dioApiResult.data) as Map<String, dynamic>;
       switch (data['status']) {
         case 200:
-          String? imagesPath = data["data"];
+          String? imagesPath = data["apiResult"];
           successMessages(LocaleKeys.uploadSuccess.tr);
           row.imagesPath = "$imagesPath?timestamp=${DateTime.now().millisecondsSinceEpoch}";
           dataSource.updateDataSource();
@@ -281,32 +298,59 @@ class ProductsController extends GetxController {
 
   //导出产品
   Future<void> exportProduct() async {
-    showLoading(LocaleKeys.gettingData.tr);
-    Map<String, dynamic> query = {};
-    query.addAll(sort);
-    if (advancedSearch.isNotEmpty) {
-      query.addAll(advancedSearch);
-    }
-    if (searchController.text.isNotEmpty) {
-      query.addAll({"search": searchController.text});
-    }
+    showLoading(LocaleKeys.generating.trArgs(["excel"]));
+    Map<String, dynamic> query = {
+      "lang": (Get.locale?.toString() ?? "zh_HK").toLowerCase(),
+      ...sort,
+      if (advancedSearch.isNotEmpty) ...advancedSearch,
+      if (searchController.text.isNotEmpty) 'search': searchController.text,
+    };
 
-    final String? jsonString = await apiClient.post(Config.exportProductExcel, data: query);
+    try {
+      final DioApiResult dioApiResult = await apiClient.downLoadExcel(
+        Config.exportProductExcel,
+        queryParameters: query,
+      );
+      if (!dioApiResult.success) {
+        showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
+        return;
+      }
+      if (dioApiResult.data is Uint8List) {
+        FileStorage.saveFileToDownloads(
+          bytes: dioApiResult.data as Uint8List,
+          fileName: dioApiResult.fileName!,
+          fileType: DownloadFileType.Excel,
+        );
+      }
+    } catch (e) {
+      logger.i(e);
+      errorMessages(LocaleKeys.generateFileFailed.tr);
+    } finally {
+      dismissLoading();
+    }
+  }
 
-    if (jsonString?.isEmpty ?? true) {
-      showToast(LocaleKeys.noRecordFound.tr);
-      return;
-    }
-    if (jsonString == Config.noPermission) {
-      showToast(LocaleKeys.noPermission.tr);
-      return;
-    }
-    dismissLoading();
-    final productExportModel = productExportModelFromJson(jsonString!);
-    if (productExportModel.result?.isNotEmpty ?? false) {
-      await CustomExcel.exportProduct(productExportModel.result!);
-    } else {
-      showToast(LocaleKeys.noRecordFound.tr);
+  // 导入产品
+  Future<void> importProduct({required File file, required Map<String, dynamic> query}) async {
+    showLoading(LocaleKeys.importing.tr);
+    try {
+      final DioApiResult dioApiResult = await apiClient.uploadFile(
+        file: file,
+        uploadUrl: Config.importProductExcel,
+        extraData: query,
+      );
+      logger.f(dioApiResult);
+
+      if (!dioApiResult.success) {
+        showToast(dioApiResult.error ?? LocaleKeys.importFailed.tr);
+        return;
+      }
+      reloadData();
+      successMessages(LocaleKeys.importFileSuccess.tr);
+    } catch (e) {
+      showToast(LocaleKeys.importFailed.tr);
+    } finally {
+      dismissLoading();
     }
   }
 }

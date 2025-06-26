@@ -17,7 +17,7 @@ class LoginModel {
   LoginModel({this.data, this.msg, this.status});
 
   factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(
-    data: json["data"] == null ? null : UserData.fromJson(json["data"]),
+    data: json["apiResult"] == null ? null : UserData.fromJson(json["apiResult"]),
     msg: json["msg"],
     status: json["status"],
   );

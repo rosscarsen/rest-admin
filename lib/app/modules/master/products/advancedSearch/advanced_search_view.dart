@@ -193,7 +193,7 @@ class AdvancedSearchView extends GetView<AdvancedSearchController> {
             labelText: LocaleKeys.supplier.tr,
             suffixIcon: IconButton(
               onPressed: () async {
-                var result = await Get.toNamed(Routes.OPEN_SUPLLIER);
+                var result = await Get.toNamed(Routes.OPEN_SUPPLIER);
                 controller.formKey.currentState?.fields[AdvancedSearchFields.mSupplierCode]?.didChange(result);
               },
               icon: Icon(Icons.file_open, color: AppColors.openColor),

@@ -9,29 +9,28 @@ PrintBarcodeModel printBarcodeModelFromJson(String str) => PrintBarcodeModel.fro
 String printBarcodeModelToJson(PrintBarcodeModel data) => json.encode(data.toJson());
 
 class PrintBarcodeModel {
-  List<PrintbarcodeResult>? result;
-  String? msg;
   int? status;
+  String? msg;
+  List<PrintBarcodeApiResult>? apiResult;
 
-  PrintBarcodeModel({this.result, this.msg, this.status});
+  PrintBarcodeModel({this.status, this.msg, this.apiResult});
 
   factory PrintBarcodeModel.fromJson(Map<String, dynamic> json) => PrintBarcodeModel(
-    result:
-        json["result"] == null
-            ? []
-            : List<PrintbarcodeResult>.from(json["result"]!.map((x) => PrintbarcodeResult.fromJson(x))),
-    msg: json["msg"],
     status: json["status"],
+    msg: json["msg"],
+    apiResult: json["apiResult"] == null
+        ? []
+        : List<PrintBarcodeApiResult>.from(json["apiResult"]!.map((x) => PrintBarcodeApiResult.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
-    "result": result == null ? [] : List<dynamic>.from(result!.map((x) => x.toJson())),
-    "msg": msg,
     "status": status,
+    "msg": msg,
+    "apiResult": apiResult == null ? [] : List<dynamic>.from(apiResult!.map((x) => x.toJson())),
   };
 }
 
-class PrintbarcodeResult {
+class PrintBarcodeApiResult {
   String? mProductCode;
   String? mCode;
   String? mName;
@@ -41,7 +40,7 @@ class PrintbarcodeResult {
   int? mNonActived;
   String? mPrice;
 
-  PrintbarcodeResult({
+  PrintBarcodeApiResult({
     this.mProductCode,
     this.mCode,
     this.mName,
@@ -52,7 +51,7 @@ class PrintbarcodeResult {
     this.mPrice,
   });
 
-  factory PrintbarcodeResult.fromJson(Map<String, dynamic> json) => PrintbarcodeResult(
+  factory PrintBarcodeApiResult.fromJson(Map<String, dynamic> json) => PrintBarcodeApiResult(
     mProductCode: json["mProduct_Code"],
     mCode: json["mCode"],
     mName: json["mName"],

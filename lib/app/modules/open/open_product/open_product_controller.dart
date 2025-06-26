@@ -5,7 +5,8 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../config.dart';
 import '../../../dataSource/openSource/open_products_data_source.dart';
 import '../../../model/products_model.dart';
-import '../../../service/api_client.dart';
+import '../../../service/dio_api_client.dart';
+import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/easy_loading.dart';
 
@@ -54,13 +55,20 @@ class OpenProductController extends GetxController {
     try {
       Map<String, Object> search = {'page': currentPage.value};
       if (searchController.text.isNotEmpty) search['search'] = searchController.text;
-      final String? result = await apiClient.post(Config.openProduct, data: search);
-      if (result?.isEmpty ?? true) return;
-      if (result == Config.noPermission) {
-        showToast(LocaleKeys.noPermission.tr);
+      final DioApiResult dioApiResult = await apiClient.post(Config.openProduct, data: search);
+      if (!dioApiResult.success) {
+        showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
-      final productsModel = productsModelFromJson(result!);
+      if (!dioApiResult.hasPermission) {
+        showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
+        return;
+      }
+      if (dioApiResult.data == null) {
+        showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        return;
+      }
+      final productsModel = productsModelFromJson(dioApiResult.data!);
       if (productsModel.status == 200) {
         DataList = productsModel.productsInfo?.productData ?? [];
         totalPages.value = (productsModel.productsInfo?.lastPage ?? 0);

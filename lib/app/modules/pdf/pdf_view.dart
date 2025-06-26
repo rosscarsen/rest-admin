@@ -49,7 +49,11 @@ class PdfView extends GetView<PdfController> {
                     child: IconButton(
                       onPressed: () async {
                         final pdfBytes = await controller.generatePdf();
-                        await FileStorage.saveFileToDownloads(pdfBytes, controller.pdfName.value);
+                        await FileStorage.saveFileToDownloads(
+                          bytes: pdfBytes,
+                          fileName: controller.pdfName.value,
+                          fileType: DownloadFileType.Pdf,
+                        );
                       },
                       icon: const Icon(Icons.download),
                     ),
@@ -253,7 +257,7 @@ class PdfView extends GetView<PdfController> {
                   'CASH',
                   'VISA',
                   'MASTER',
-                  'MPOS',
+                  'POS',
                   'EPS',
                   'OCTOPUS',
                   'WECHAT',

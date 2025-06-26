@@ -9,10 +9,10 @@ import '../../../translations/locale_keys.dart';
 import '../../../utils/progresshub.dart';
 import '../../../widgets/custom_cell.dart';
 import '../../../widgets/data_pager.dart';
-import 'open_supllier_controller.dart';
+import 'open_supplier_controller.dart';
 
-class OpenSupllierView extends GetView<OpenSupllierController> {
-  const OpenSupllierView({super.key});
+class OpenSupplierView extends GetView<OpenSupplierController> {
+  const OpenSupplierView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +27,8 @@ class OpenSupllierView extends GetView<OpenSupllierController> {
         children: <Widget>[
           _buildSearch(context),
           Expanded(
-            child: GetX<OpenSupllierController>(
-              init: OpenSupllierController(),
+            child: GetX<OpenSupplierController>(
+              init: OpenSupplierController(),
               builder: (_) {
                 return ProgressHUD(child: controller.isLoading.value ? null : _buildDataGrid(context));
               },

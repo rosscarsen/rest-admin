@@ -3,9 +3,10 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
-import '../../../dataSource/openSource/open_prodcut_barcode_source.dart';
+import '../../../dataSource/openSource/open_product_barcode_source.dart';
 import '../../../model/product_barcode_model.dart';
-import '../../../service/api_client.dart';
+import '../../../service/dio_api_client.dart';
+import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/easy_loading.dart';
 
@@ -54,17 +55,28 @@ class OpenProductBarcodeController extends GetxController {
     try {
       Map<String, Object> search = {'page': currentPage.value};
       if (searchController.text.isNotEmpty) search['search'] = searchController.text;
-      final String? jsonString = await apiClient.post(Config.openBarcode, data: search);
-      if (jsonString?.isEmpty ?? true) {
+      final DioApiResult dioApiResult = await apiClient.post(Config.openBarcode, data: search);
+      if (!dioApiResult.success) {
+        showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
-      if (jsonString == Config.noPermission) {
-        showToast(LocaleKeys.noPermission.tr);
+      if (!dioApiResult.hasPermission) {
+        showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
         return;
       }
-      final productBarcodeModel = productBarcodeModelFromJson(jsonString!);
-      DataList = productBarcodeModel.data ?? [];
-      totalPages.value = productBarcodeModel.lastPage ?? 0;
+      if (dioApiResult.data == null) {
+        showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        return;
+      }
+      final productBarcodeModel = productBarcodeModelFromJson(dioApiResult.data!);
+      final BarcodeApiResult? apiResult = productBarcodeModel.apiResult;
+      if (apiResult == null) {
+        showToast(LocaleKeys.unknownError.tr);
+        return;
+      }
+
+      DataList = apiResult.data ?? [];
+      totalPages.value = apiResult.lastPage ?? 0;
     } finally {
       isLoading(false);
     }

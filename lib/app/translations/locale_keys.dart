@@ -187,4 +187,22 @@ abstract class LocaleKeys {
   static const String saleAmount = "saleAmount";
   static const String unitPrice = "unitPrice";
   static const String stockQty = "stockQty";
+  static const String selectFile = "selectFile";
+  static const String overWrite = "overWrite";
+  static const String userCanceledPicker = "userCanceledPicker";
+  static const String importFileError = "importFileError";
+  static const String importFileSuccess = "importFileSuccess";
+  static const String importFileFailed = "importFileFailed";
+  static const String importFileNotExists = "importFileNotExists";
+  static const String importFileNotSupported = "importFileNotSupported";
+  static const String importFileEmpty = "importFileEmpty";
+  static const String importFileInvalid = "importFileInvalid";
+  static const String importFileInvalidFormat = "importFileInvalidFormat";
+  static const String pleaseSelectFile = "pleaseSelectFile";
+  static const String fileIsEmpty = "fileIsEmpty";
+  static const String fileContentIsEmpty = "fileContentIsEmpty";
+  static const String connectionTimeout = "connectionTimeout";
+  static const String receiveTimeout = "receiveTimeout";
+  static const String generateFileFailed = "generateFileFailed";
+  static const String importing = "importing";
 }

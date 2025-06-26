@@ -7,7 +7,8 @@ import 'package:printing/printing.dart';
 
 import '../../config.dart';
 import '../../model/print_barcode_model.dart';
-import '../../service/api_client.dart';
+import '../../service/dio_api_client.dart';
+import '../../service/dio_api_result.dart';
 import '../../translations/locale_keys.dart';
 import '../../utils/easy_loading.dart';
 
@@ -30,7 +31,7 @@ class PdfController extends GetxController {
   final pdfName = 'pdf.pdf'.obs;
 
   // 条码数据
-  List<PrintbarcodeResult> barcodeData = [];
+  List<PrintBarcodeApiResult> barcodeData = [];
 
   // 通用 PDF 生成函数（UI层统一调用）
   late Future<Uint8List> Function() generatePdf;
@@ -46,7 +47,7 @@ class PdfController extends GetxController {
         title = LocaleKeys.printBarcode.tr;
         PageWidth = 230;
         pdfName.value = 'barcode_${DateTime.now().millisecondsSinceEpoch}.pdf';
-        getProductbarcodeData(parameters);
+        getProductBarcodeData(parameters);
         generatePdf = () => generateBarcodePdf();
         break;
 
@@ -58,18 +59,28 @@ class PdfController extends GetxController {
   }
 
   /// 获取barcode数据
-  Future<void> getProductbarcodeData(Map<String, String?> parameters) async {
+  Future<void> getProductBarcodeData(Map<String, String?> parameters) async {
     parameters.remove("type");
     try {
       isLoading.value = true;
       showLoading(LocaleKeys.gettingData.tr);
 
-      final String? result = await apiClient.post(Config.printBarcode, queryParameters: parameters);
-      if (result?.isEmpty ?? true) return;
-
-      final PrintBarcodeModel printBarcodeModel = printBarcodeModelFromJson(result!);
+      final DioApiResult dioApiResult = await apiClient.post(Config.printBarcode, queryParameters: parameters);
+      if (!dioApiResult.success) {
+        errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        return;
+      }
+      if (!dioApiResult.hasPermission) {
+        errorMessages(dioApiResult.error ?? LocaleKeys.noPermission.tr);
+        return;
+      }
+      if (dioApiResult.data == null) {
+        showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        return;
+      }
+      final PrintBarcodeModel printBarcodeModel = printBarcodeModelFromJson(dioApiResult.data!);
       if (printBarcodeModel.status == 200) {
-        barcodeData = printBarcodeModel.result ?? [];
+        barcodeData = printBarcodeModel.apiResult ?? [];
         hasData.value = barcodeData.isNotEmpty;
       } else {
         errorMessages(printBarcodeModel.msg ?? LocaleKeys.getDataException.tr);

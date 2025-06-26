@@ -9,6 +9,22 @@ ProductBarcodeModel productBarcodeModelFromJson(String str) => ProductBarcodeMod
 String productBarcodeModelToJson(ProductBarcodeModel data) => json.encode(data.toJson());
 
 class ProductBarcodeModel {
+  int? status;
+  String? msg;
+  BarcodeApiResult? apiResult;
+
+  ProductBarcodeModel({this.status, this.msg, this.apiResult});
+
+  factory ProductBarcodeModel.fromJson(Map<String, dynamic> json) => ProductBarcodeModel(
+    status: json["status"],
+    msg: json["msg"],
+    apiResult: json["apiResult"] == null ? null : BarcodeApiResult.fromJson(json["apiResult"]),
+  );
+
+  Map<String, dynamic> toJson() => {"status": status, "msg": msg, "apiResult": apiResult?.toJson()};
+}
+
+class BarcodeApiResult {
   int? total;
   int? perPage;
   int? currentPage;
@@ -16,17 +32,16 @@ class ProductBarcodeModel {
   List<ProductBarcodeData>? data;
   bool? hasMore;
 
-  ProductBarcodeModel({this.total, this.perPage, this.currentPage, this.lastPage, this.data, this.hasMore});
+  BarcodeApiResult({this.total, this.perPage, this.currentPage, this.lastPage, this.data, this.hasMore});
 
-  factory ProductBarcodeModel.fromJson(Map<String, dynamic> json) => ProductBarcodeModel(
+  factory BarcodeApiResult.fromJson(Map<String, dynamic> json) => BarcodeApiResult(
     total: json["total"],
     perPage: json["per_page"],
     currentPage: json["current_page"],
     lastPage: json["last_page"],
-    data:
-        json["data"] == null
-            ? []
-            : List<ProductBarcodeData>.from(json["data"]!.map((x) => ProductBarcodeData.fromJson(x))),
+    data: json["data"] == null
+        ? []
+        : List<ProductBarcodeData>.from(json["data"]!.map((x) => ProductBarcodeData.fromJson(x))),
     hasMore: json["has_more"],
   );
 
