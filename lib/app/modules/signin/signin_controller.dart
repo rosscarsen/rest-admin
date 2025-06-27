@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:rest_admin/app/service/dio_api_result.dart';
 import 'package:rounded_loading_button_plus/rounded_loading_button.dart';
 
 import '../../config.dart';
 import '../../model/login_model.dart';
 import '../../routes/app_pages.dart';
 import '../../service/dio_api_client.dart';
+import '../../service/dio_api_result.dart';
 import '../../translations/locale_keys.dart';
 import '../../utils/custom_alert.dart';
 import '../../utils/easy_loading.dart';

@@ -95,7 +95,12 @@ class AppPages {
               binding: AdvancedSearchBinding(),
               middlewares: [AuthMiddleware()],
             ),
-            GetPage(name: _Paths.PRODUCT_EDIT, page: () => const ProductEditView(), binding: ProductEditBinding()),
+            GetPage(
+              name: _Paths.PRODUCT_EDIT,
+              page: () => const ProductEditView(),
+              binding: ProductEditBinding(),
+              middlewares: [AuthMiddleware()],
+            ),
           ],
         ),
         GetPage(name: _Paths.PRODUCT_REMARKS, page: () => const ProductRemarksView(), binding: ProductRemarksBinding()),

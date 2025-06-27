@@ -13,14 +13,24 @@ class DataPager extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       if (totalPages.value == 0) return const SizedBox();
-      return NumberPagination(
-        key: ValueKey(currentPage.value),
-        onPageChanged: onPageChanged,
-        pageTotal: totalPages.value,
-        pageInit: currentPage.value,
-        colorPrimary: Theme.of(context).colorScheme.primary,
-        colorSub: Colors.white,
-        threshold: context.isPhoneOrLess ? 3 : 10,
+      return Container(
+        alignment: Alignment.bottomCenter,
+        decoration: BoxDecoration(border: Border(top: Divider.createBorderSide(context, width: 1.0))),
+        child: SafeArea(
+          top: false,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8),
+            child: NumberPagination(
+              key: ValueKey(currentPage.value),
+              onPageChanged: onPageChanged,
+              pageTotal: totalPages.value,
+              pageInit: currentPage.value,
+              colorPrimary: Theme.of(context).colorScheme.primary,
+              colorSub: Colors.white,
+              threshold: context.isPhoneOrLess ? 3 : 10,
+            ),
+          ),
+        ),
       );
     });
   }

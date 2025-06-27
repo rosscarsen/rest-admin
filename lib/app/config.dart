@@ -41,6 +41,8 @@ class Config {
   static String batchDeleteSetMeal = "/Master/batchDeleteSetMeal";
   // 打印条码
   static String printBarcode = "/Master/printBarcode";
+  // 产品操作初始化
+  static String productActionInit = "/Master/productActionInit";
 
   /// 打开选择
   // 供应商

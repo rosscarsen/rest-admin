@@ -5,19 +5,20 @@ import 'dart:typed_data';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../../utils/file_storage.dart';
-import '../../../utils/logger.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
-import '../../../dataSource/masterSource/product/products_data_source.dart';
 import '../../../model/products_model.dart';
+import '../../../routes/app_pages.dart';
 import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/custom_alert.dart';
 import '../../../utils/easy_loading.dart';
+import '../../../utils/file_storage.dart';
 import '../../../utils/functions.dart';
+import '../../../utils/logger.dart';
+import 'products_data_source.dart';
 
 class ProductsController extends GetxController {
   final DataGridController dataGridController = DataGridController();
@@ -126,8 +127,9 @@ class ProductsController extends GetxController {
   void copy(ProductData row) {}
   //编辑
   void edit(ProductData row) {
-    row.mCategory1 = "修改";
-    dataSource.updateDataSource();
+    Get.toNamed(Routes.PRODUCT_EDIT, parameters: {"id": row.tProductId?.toString() ?? ""});
+    /* row.mCategory1 = "修改";
+    dataSource.updateDataSource(); */
   }
 
   //删除单行数据

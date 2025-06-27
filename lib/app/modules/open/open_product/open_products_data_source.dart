@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../model/supplier_model.dart';
-import '../../modules/open/open_supplier/open_supplier_controller.dart';
-import '../../translations/locale_keys.dart';
-import '../../widgets/custom_cell.dart';
+import '../../../model/products_model.dart';
+import 'open_product_controller.dart';
+import '../../../translations/locale_keys.dart';
 
-class OpenSupplierDataSource extends DataGridSource {
-  OpenSupplierDataSource(this.controller) {
+class OpenProductsDataSource extends DataGridSource {
+  OpenProductsDataSource(this.controller) {
     updateDataSource();
   }
 
-  final OpenSupplierController controller;
+  final OpenProductController controller;
 
   void updateDataSource() {
     _dataGridRows = controller.DataList.map(_createDataRow).toList();
@@ -24,16 +23,17 @@ class OpenSupplierDataSource extends DataGridSource {
   @override
   List<DataGridRow> get rows => _dataGridRows;
 
-  DataGridRow _createDataRow(ApiData e) {
+  DataGridRow _createDataRow(ProductData e) {
     return DataGridRow(
       cells: [
-        DataGridCell<int>(columnName: 'T_Supplier_ID', value: e.tSupplierId),
+        DataGridCell<int>(columnName: 'T_Product_ID', value: e.tProductId),
         DataGridCell<String>(columnName: 'select', value: e.mCode.toString()),
         DataGridCell<String>(columnName: 'code', value: e.mCode),
-        DataGridCell<String>(columnName: 'simpleName', value: e.mSimpleName),
-        DataGridCell<String>(columnName: 'fullName', value: e.mFullName),
-        DataGridCell<String>(columnName: 'mobile', value: e.mPhoneNo),
-        DataGridCell<String>(columnName: 'fax', value: e.mFaxNo),
+        DataGridCell<String>(columnName: 'name', value: e.mDesc1),
+        DataGridCell<String>(columnName: 'unit', value: e.mUnit),
+        DataGridCell<String>(columnName: 'category', value: e.mCategory1),
+        DataGridCell<String>(columnName: 'price', value: e.mPrice),
+        DataGridCell<String>(columnName: 'qty', value: e.mQty),
       ],
     );
   }
@@ -43,7 +43,8 @@ class OpenSupplierDataSource extends DataGridSource {
     return DataGridRowAdapter(
       cells: row.getCells().map<Widget>((e) {
         if (e.columnName == "select") {
-          return CustomCell(
+          return Align(
+            alignment: Alignment.center,
             child: TextButton(
               onPressed: () {
                 Get.back(result: e.value.toString());
@@ -52,7 +53,12 @@ class OpenSupplierDataSource extends DataGridSource {
             ),
           );
         }
-        return CustomCell(data: e.value?.toString() ?? "");
+
+        return Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Text(e.value?.toString() ?? "", overflow: TextOverflow.ellipsis),
+        );
       }).toList(),
     );
   }

@@ -2,6 +2,7 @@ import 'package:date_field/date_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_grid/responsive_grid.dart';
@@ -17,7 +18,7 @@ class FormHelper {
   static const double _prefixIconMaxWidth = 110;
 
   /// 构建左侧 label 样式
-  static Widget buildPrefixIconText(String text, bool enabled) {
+  static Widget _buildPrefixIconText(String text, bool enabled) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0),
       child: SelectableText(
@@ -301,7 +302,7 @@ class FormHelper {
           enabled: enabled,
           initialValue: initialValue,
           decoration: InputDecoration(
-            prefixIcon: buildPrefixIconText(labelText, enabled),
+            prefixIcon: _buildPrefixIconText(labelText, enabled),
             prefixIconConstraints: const BoxConstraints(maxWidth: _prefixIconMaxWidth),
             border: InputBorder.none,
           ),
@@ -404,7 +405,7 @@ class FormHelper {
           enabled: enabled,
           initialValue: initialValue,
           decoration: InputDecoration(
-            prefixIcon: buildPrefixIconText(labelText, enabled),
+            prefixIcon: _buildPrefixIconText(labelText, enabled),
             prefixIconConstraints: const BoxConstraints(maxWidth: _prefixIconMaxWidth),
             border: InputBorder.none,
           ),
@@ -447,12 +448,21 @@ class FormHelper {
           divisions: divisions,
           enabled: enabled,
           decoration: InputDecoration(
-            prefixIcon: buildPrefixIconText(labelText, enabled),
+            prefixIcon: _buildPrefixIconText(labelText, enabled),
             prefixIconConstraints: const BoxConstraints(maxWidth: _prefixIconMaxWidth),
           ),
           onChanged: onChanged,
         ),
       ),
+    );
+  }
+
+  /// 按鈕
+  static FilledButton button({required void Function()? onPressed, Widget? icon, String? label}) {
+    return FilledButton.icon(
+      onPressed: onPressed,
+      icon: icon ?? FaIcon(FontAwesomeIcons.floppyDisk),
+      label: Text(label ?? LocaleKeys.save.tr, style: TextStyle(fontSize: 16)),
     );
   }
 }

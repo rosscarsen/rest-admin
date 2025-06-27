@@ -205,4 +205,12 @@ abstract class LocaleKeys {
   static const String receiveTimeout = "receiveTimeout";
   static const String generateFileFailed = "generateFileFailed";
   static const String importing = "importing";
+  static const String refresh = "refresh";
+  static const String addProduct = "addProduct";
+  static const String editProduct = "editProduct";
+  static const String detail = "detail";
+  static const String setMealLimit = "setMealLimit";
+  static const String shop = "shop";
+  static const String createDate = "createDate";
+  static const String modifyDate = "modifyDate";
 }

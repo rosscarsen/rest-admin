@@ -89,14 +89,11 @@ class AdvancedSearchController extends GetxController {
     try {
       final DioApiResult dioApiResult = await apiClient.post(Config.productAdvancedSearch);
 
-      if (!dioApiResult.success && dioApiResult.hasPermission) {
+      if (!dioApiResult.success) {
         showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
-      if (!dioApiResult.hasPermission) {
-        showToast(LocaleKeys.noPermission.tr);
-        return;
-      }
+
       if (dioApiResult.data == null) {
         showToast(LocaleKeys.dataException.tr);
         return;

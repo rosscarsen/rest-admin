@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
-import '../../../dataSource/openSource/open_product_barcode_source.dart';
+import 'open_product_barcode_source.dart';
 import '../../../model/product_barcode_model.dart';
 import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';

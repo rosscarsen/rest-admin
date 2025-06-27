@@ -26,9 +26,12 @@ class ProductsView extends GetView<ProductsController> {
     return CustomScaffold(
       route: Routes.PRODUCTS,
       actions: [
-        IconButton(
-          icon: const Icon(Icons.refresh),
-          onPressed: controller.hasPermission.value ? () => controller.reloadData() : null,
+        Tooltip(
+          message: LocaleKeys.refresh.tr,
+          child: IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: controller.hasPermission.value ? () => controller.reloadData() : null,
+          ),
         ),
       ],
       body: Obx(() {
@@ -386,25 +389,6 @@ class ProductsView extends GetView<ProductsController> {
           excelFile = null;
         },
         child: Text(LocaleKeys.confirm.tr),
-      ),
-    );
-  }
-
-  // 新增产品
-  void _addProduct() {
-    Get.dialog(
-      Dialog(
-        child: Scaffold(
-          appBar: AppBar(title: Text("新增产品")),
-          persistentFooterButtons: [
-            ElevatedButton(
-              onPressed: () {
-                Get.back();
-              },
-              child: Text("保存"),
-            ),
-          ],
-        ),
       ),
     );
   }

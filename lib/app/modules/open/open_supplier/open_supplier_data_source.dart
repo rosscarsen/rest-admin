@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../model/product_barcode_model.dart';
-import '../../modules/open/open_product_barcode/open_product_barcode_controller.dart';
-import '../../translations/locale_keys.dart';
-import '../../widgets/custom_cell.dart';
+import '../../../model/supplier_model.dart';
+import 'open_supplier_controller.dart';
+import '../../../translations/locale_keys.dart';
+import '../../../widgets/custom_cell.dart';
 
-class OpenProductBarcodeDataSource extends DataGridSource {
-  OpenProductBarcodeDataSource(this.controller) {
+class OpenSupplierDataSource extends DataGridSource {
+  OpenSupplierDataSource(this.controller) {
     updateDataSource();
   }
 
-  final OpenProductBarcodeController controller;
+  final OpenSupplierController controller;
 
   void updateDataSource() {
     _dataGridRows = controller.DataList.map(_createDataRow).toList();
@@ -24,13 +24,16 @@ class OpenProductBarcodeDataSource extends DataGridSource {
   @override
   List<DataGridRow> get rows => _dataGridRows;
 
-  DataGridRow _createDataRow(ProductBarcodeData e) {
+  DataGridRow _createDataRow(ApiData e) {
     return DataGridRow(
       cells: [
+        DataGridCell<int>(columnName: 'T_Supplier_ID', value: e.tSupplierId),
         DataGridCell<String>(columnName: 'select', value: e.mCode.toString()),
-        DataGridCell<String>(columnName: 'barcode', value: e.mCode),
-        DataGridCell<String>(columnName: 'code', value: e.mProductCode),
-        DataGridCell<String>(columnName: 'name', value: e.mName),
+        DataGridCell<String>(columnName: 'code', value: e.mCode),
+        DataGridCell<String>(columnName: 'simpleName', value: e.mSimpleName),
+        DataGridCell<String>(columnName: 'fullName', value: e.mFullName),
+        DataGridCell<String>(columnName: 'mobile', value: e.mPhoneNo),
+        DataGridCell<String>(columnName: 'fax', value: e.mFaxNo),
       ],
     );
   }

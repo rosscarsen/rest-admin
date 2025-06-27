@@ -5,20 +5,19 @@
 import 'dart:convert';
 
 import 'category_model.dart';
-import 'department_model.dart';
 
-AdvancedSearchModel advancedSearchModelFromJson(String str) => AdvancedSearchModel.fromJson(json.decode(str));
+ProductActionInitModel productActionInitModelFromJson(String str) => ProductActionInitModel.fromJson(json.decode(str));
 
-String advancedSearchModelToJson(AdvancedSearchModel data) => json.encode(data.toJson());
+String productActionInitModelToJson(ProductActionInitModel data) => json.encode(data.toJson());
 
-class AdvancedSearchModel {
+class ProductActionInitModel {
   int? status;
   String? msg;
   ApiResult? apiResult;
 
-  AdvancedSearchModel({this.status, this.msg, this.apiResult});
+  ProductActionInitModel({this.status, this.msg, this.apiResult});
 
-  factory AdvancedSearchModel.fromJson(Map<String, dynamic> json) => AdvancedSearchModel(
+  factory ProductActionInitModel.fromJson(Map<String, dynamic> json) => ProductActionInitModel(
     status: json["status"],
     msg: json["msg"],
     apiResult: json["apiResult"] == null ? null : ApiResult.fromJson(json["apiResult"]),
@@ -29,21 +28,16 @@ class AdvancedSearchModel {
 
 class ApiResult {
   List<CategoryModel>? category;
-  List<DepartmentModel>? department;
 
-  ApiResult({this.category, this.department});
+  ApiResult({this.category});
 
   factory ApiResult.fromJson(Map<String, dynamic> json) => ApiResult(
     category: json["category"] == null
         ? []
         : List<CategoryModel>.from(json["category"]!.map((x) => CategoryModel.fromJson(x))),
-    department: json["department"] == null
-        ? []
-        : List<DepartmentModel>.from(json["department"]!.map((x) => DepartmentModel.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "category": category == null ? [] : List<dynamic>.from(category!.map((x) => x.toJson())),
-    "department": department == null ? [] : List<dynamic>.from(department!.map((x) => x.toJson())),
   };
 }

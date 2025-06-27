@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -16,54 +17,32 @@ class AdvancedSearchView extends GetView<AdvancedSearchController> {
   const AdvancedSearchView({super.key});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(LocaleKeys.advancedSearch.tr), centerTitle: true),
-
-      body: Obx(() {
-        return Padding(
+    return Obx(
+      () => Scaffold(
+        appBar: AppBar(title: Text(LocaleKeys.advancedSearch.tr), centerTitle: true),
+        body: Padding(
           padding: EdgeInsets.all(Config.defaultPadding),
           child: Skeletonizer(
             enabled: controller.isLoading.value,
-            child: FormBuilder(
-              key: controller.formKey,
-              child: Column(
-                children: [
-                  Expanded(child: _buildSearchForm()),
-                  _buildSubmitButton(context),
-                ],
-              ),
-            ),
+            child: FormBuilder(key: controller.formKey, child: _buildSearchForm()),
           ),
-        );
-      }),
-    );
-  }
-
-  // Submit button
-  Container _buildSubmitButton(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerHighest,
-
-        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4, offset: Offset(0, 2))],
-      ),
-      child: SizedBox(
-        width: double.infinity,
-        height: 48,
-        child: FilledButton.icon(
-          onPressed: () {
-            //controller.formKey.currentState?.fields[AdvancedSearchFields.mCategory1]?.didChange("40000");
-            if (controller.formKey.currentState?.enabled == false) return;
-            if (controller.formKey.currentState?.saveAndValidate() ?? false) {
-              final Map<String, dynamic> formData = controller.formKey.currentState!.value;
-              Get.back(result: formData);
-            } else {
-              return;
-            }
-          },
-          label: Text(LocaleKeys.search.tr),
         ),
+        persistentFooterButtons: [
+          FormHelper.button(
+            onPressed: () {
+              //controller.formKey.currentState?.fields[AdvancedSearchFields.mCategory1]?.didChange("40000");
+              if (controller.formKey.currentState?.enabled == false) return;
+              if (controller.formKey.currentState?.saveAndValidate() ?? false) {
+                final Map<String, dynamic> formData = controller.formKey.currentState!.value;
+                Get.back(result: formData);
+              } else {
+                return;
+              }
+            },
+            label: LocaleKeys.search.tr,
+            icon: FaIcon(FontAwesomeIcons.magnifyingGlass),
+          ),
+        ],
       ),
     );
   }
