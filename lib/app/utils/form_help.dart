@@ -211,15 +211,14 @@ class FormHelper {
     DateFormat? dateFormat,
     Widget? prefixIcon,
   }) {
-    // 有效的日期格式
     final effectiveDateFormat =
         dateFormat ??
         {
-          DateInputType.time: DateFormat('HH:mm'),
+          DateInputType.time: DateFormat.Hm(),
           DateInputType.date: DateFormat('yyyy-MM-dd'),
-          DateInputType.dateAndTime: DateFormat('yyyy-MM-dd HH:mm'),
+          DateInputType.dateAndTime: DateFormat('yyyy-MM-dd HH:mm:ss'),
         }[inputType]!;
-    // 根据输入类型确定日期选择模式
+
     final mode = {
       DateInputType.time: DateTimeFieldPickerMode.time,
       DateInputType.date: DateTimeFieldPickerMode.date,
@@ -244,16 +243,25 @@ class FormHelper {
           builder: (field) {
             return Builder(
               builder: (context) {
-                return DateTimeFormField(
-                  clearIconData: Icons.cancel,
+                // 安全地将 field.value 字符串转为 DateTime，如果失败则为 null
+                DateTime? getDateTimeFromValue(String? value) {
+                  if (value == null || value.isEmpty) return null;
+                  try {
+                    return DateTime.tryParse(value) ?? effectiveDateFormat.parseStrict(value); // 尝试 ISO 格式或用户格式
+                  } catch (e) {
+                    return null;
+                  }
+                }
 
-                  initialValue: field.value != null ? effectiveDateFormat.parse(field.value!) : null,
-                  canClear: canClear,
+                return DateTimeFormField(
+                  initialValue: getDateTimeFromValue(field.value),
                   enabled: enabled,
+                  canClear: canClear,
+                  clearIconData: Icons.cancel,
                   style: Theme.of(context).textTheme.bodyLarge,
                   decoration: InputDecoration(
                     labelText: labelText,
-                    //prefixIcon: prefixIcon ?? buildPrefixIconText(labelText, enabled),
+                    prefixIcon: prefixIcon,
                     prefixIconConstraints: const BoxConstraints(maxWidth: _prefixIconMaxWidth),
                     fillColor: enabled ? Colors.transparent : Colors.grey.shade200,
                     filled: !enabled,
