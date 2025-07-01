@@ -36,6 +36,7 @@ class OpenSupplierView extends GetView<OpenSupplierController> {
           ),
           DataPager(
             totalPages: controller.totalPages,
+            totalRecords: controller.totalRecords,
             currentPage: controller.currentPage,
             onPageChanged: (int pageNumber) {
               controller.currentPage.value = pageNumber;

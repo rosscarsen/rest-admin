@@ -29,17 +29,19 @@ class ApiResult {
   int? perPage;
   int? currentPage;
   int? lastPage;
-  List<ApiData>? apiData;
+  List<SupplierInfo>? supplierInfo;
   bool? hasMore;
 
-  ApiResult({this.total, this.perPage, this.currentPage, this.lastPage, this.apiData, this.hasMore});
+  ApiResult({this.total, this.perPage, this.currentPage, this.lastPage, this.supplierInfo, this.hasMore});
 
   factory ApiResult.fromJson(Map<String, dynamic> json) => ApiResult(
     total: json["total"],
     perPage: json["per_page"],
     currentPage: json["current_page"],
     lastPage: json["last_page"],
-    apiData: json["data"] == null ? [] : List<ApiData>.from(json["data"]!.map((x) => ApiData.fromJson(x))),
+    supplierInfo: json["data"] == null
+        ? []
+        : List<SupplierInfo>.from(json["data"]!.map((x) => SupplierInfo.fromJson(x))),
     hasMore: json["has_more"],
   );
 
@@ -48,12 +50,12 @@ class ApiResult {
     "per_page": perPage,
     "current_page": currentPage,
     "last_page": lastPage,
-    "data": apiData == null ? [] : List<dynamic>.from(apiData!.map((x) => x.toJson())),
+    "data": supplierInfo == null ? [] : List<dynamic>.from(supplierInfo!.map((x) => x.toJson())),
     "has_more": hasMore,
   };
 }
 
-class ApiData {
+class SupplierInfo {
   String? mAddress;
   String? mAnsBack;
   String? mCode;
@@ -73,7 +75,7 @@ class ApiData {
   String? mRemarks;
   int? mNonActive;
 
-  ApiData({
+  SupplierInfo({
     this.mAddress,
     this.mAnsBack,
     this.mCode,
@@ -94,7 +96,7 @@ class ApiData {
     this.mNonActive,
   });
 
-  factory ApiData.fromJson(Map<String, dynamic> json) => ApiData(
+  factory SupplierInfo.fromJson(Map<String, dynamic> json) => SupplierInfo(
     mAddress: json["mAddress"],
     mAnsBack: json["mAns_Back"],
     mCode: json["mCode"],

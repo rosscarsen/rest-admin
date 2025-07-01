@@ -213,4 +213,6 @@ Map<String, String> get enUS => {
   LocaleKeys.shop: "Shop",
   LocaleKeys.createDate: "Create Date",
   LocaleKeys.modifyDate: "Modify Date",
+  LocaleKeys.selectProductRemarks: "Select Product Remarks",
+  LocaleKeys.totalRecords: "Total %s Records",
 };

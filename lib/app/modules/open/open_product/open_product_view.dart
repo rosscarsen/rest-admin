@@ -35,6 +35,7 @@ class OpenProductView extends GetView<OpenProductController> {
           ),
           DataPager(
             totalPages: controller.totalPages,
+            totalRecords: controller.totalRecords,
             currentPage: controller.currentPage,
             onPageChanged: (int pageNumber) {
               controller.currentPage.value = pageNumber;
@@ -82,6 +83,7 @@ class OpenProductView extends GetView<OpenProductController> {
             GridColumn(
               columnName: 'select',
               label: CustomCell(data: LocaleKeys.select.tr),
+              width: 85,
             ),
             GridColumn(
               columnName: "code",

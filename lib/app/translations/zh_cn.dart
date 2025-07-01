@@ -213,4 +213,6 @@ Map<String, String> get zhCN => {
   LocaleKeys.shop: "店铺",
   LocaleKeys.createDate: "创建日期",
   LocaleKeys.modifyDate: "修改日期",
+  LocaleKeys.selectProductRemarks: "选择食品备注",
+  LocaleKeys.totalRecords: "共%s记录数",
 };

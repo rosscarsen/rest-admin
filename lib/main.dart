@@ -7,6 +7,8 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl_standalone.dart' if (dart.library.html) 'package:intl/intl_browser.dart';
+import 'package:path/path.dart';
+import 'package:window_manager/window_manager.dart';
 
 import 'app/config.dart';
 import 'app/routes/app_pages.dart';
@@ -17,6 +19,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await findSystemLocale(); //date_field使用
+
   await StorageManage.init();
   final StorageManage storageManage = StorageManage();
   //初始语言
@@ -35,6 +38,22 @@ Future<void> main() async {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent));
   }
+  /* if (!kIsWeb && !(Platform.isAndroid || Platform.isIOS)) {
+    await windowManager.ensureInitialized();
+
+    WindowOptions windowOptions = WindowOptions(
+      size: Size(1024, 768),
+      center: true,
+      backgroundColor: Colors.transparent,
+      skipTaskbar: true,
+      titleBarStyle: TitleBarStyle.normal,
+      title: "Reset Admin",
+    );
+    windowManager.waitUntilReadyToShow(windowOptions, () async {
+      await windowManager.show();
+      await windowManager.focus();
+    });
+  } */
 
   runApp(MyApp(initialLocale, initialRoute));
 }

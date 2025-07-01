@@ -3,24 +3,24 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
-import 'open_products_data_source.dart';
-import '../../../model/products_model.dart';
+import '../../../model/product_remarks_model.dart';
 import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/easy_loading.dart';
+import 'open_product_remarks_data_source.dart';
 
-class OpenProductController extends GetxController {
+class OpenProductRemarksController extends GetxController {
   final DataGridController dataGridController = DataGridController();
   final TextEditingController searchController = TextEditingController();
-  static OpenProductController get to => Get.find();
+  static OpenProductRemarksController get to => Get.find();
   final isLoading = true.obs;
   final totalPages = 0.obs;
   final currentPage = 1.obs;
   final totalRecords = 0.obs;
-  List<ProductData> DataList = [];
+  List<ProductRemarksInfo> DataList = [];
   final ApiClient apiClient = ApiClient();
-  late OpenProductsDataSource dataSource;
+  late OpenProductRemarksDataSource dataSource;
   @override
   void onInit() {
     updateDataGridSource();
@@ -44,19 +44,20 @@ class OpenProductController extends GetxController {
 
   //更新数据源
   void updateDataGridSource() {
-    getProduct().then((_) {
-      dataSource = OpenProductsDataSource(this);
+    getData().then((_) {
+      dataSource = OpenProductRemarksDataSource(this);
     });
   }
 
   ///获取产品列表
-  Future<void> getProduct() async {
+  Future<void> getData() async {
     isLoading(true);
     DataList.clear();
     try {
       Map<String, Object> search = {'page': currentPage.value};
       if (searchController.text.isNotEmpty) search['search'] = searchController.text;
-      final DioApiResult dioApiResult = await apiClient.post(Config.openProduct, data: search);
+      final DioApiResult dioApiResult = await apiClient.post(Config.openProductRemark, data: search);
+
       if (!dioApiResult.success) {
         showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
@@ -69,13 +70,12 @@ class OpenProductController extends GetxController {
         showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
-      final productsModel = productsModelFromJson(dioApiResult.data!);
-      if (productsModel.status == 200) {
-        DataList = productsModel.productsInfo?.productData ?? [];
-        totalPages.value = (productsModel.productsInfo?.lastPage ?? 0);
-        totalRecords.value = (productsModel.productsInfo?.total ?? 0);
-      } else {
-        errorMessages(LocaleKeys.getDataException.tr);
+      final productRemarksModel = productRemarksModelFromJson(dioApiResult.data!);
+      if (productRemarksModel.status == 200) {
+        final ApiResult? apiResult = productRemarksModel.apiResult;
+        DataList = apiResult?.productRemarksInfo ?? [];
+        totalPages.value = apiResult?.lastPage ?? 0;
+        totalRecords.value = apiResult?.total ?? 0;
       }
     } finally {
       isLoading(false);

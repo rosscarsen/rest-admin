@@ -27,6 +27,7 @@ class ProductsController extends GetxController {
   final isLoading = true.obs;
   final totalPages = 0.obs;
   final currentPage = 1.obs;
+  final totalRecords = 0.obs;
   List<ProductData> dataList = [];
   final ApiClient apiClient = ApiClient();
   late ProductsDataSource dataSource;
@@ -101,7 +102,6 @@ class ProductsController extends GetxController {
         errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
-
       if (dioApiResult.data == null) {
         errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
@@ -113,6 +113,7 @@ class ProductsController extends GetxController {
       if (productsModel.status == 200) {
         dataList = productsModel.productsInfo?.productData ?? [];
         totalPages.value = (productsModel.productsInfo?.lastPage ?? 0);
+        totalRecords.value = (productsModel.productsInfo?.total ?? 0);
       } else {
         errorMessages(LocaleKeys.getDataException.tr);
       }

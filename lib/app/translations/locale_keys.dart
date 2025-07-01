@@ -213,4 +213,6 @@ abstract class LocaleKeys {
   static const String shop = "shop";
   static const String createDate = "createDate";
   static const String modifyDate = "modifyDate";
+  static const String selectProductRemarks = "selectProductRemarks";
+  static const String totalRecords = "totalRecords";
 }

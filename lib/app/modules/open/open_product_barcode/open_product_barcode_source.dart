@@ -40,12 +40,15 @@ class OpenProductBarcodeDataSource extends DataGridSource {
     return DataGridRowAdapter(
       cells: row.getCells().map<Widget>((e) {
         if (e.columnName == "select") {
-          return CustomCell(
-            child: TextButton(
-              onPressed: () {
-                Get.back(result: e.value.toString());
-              },
-              child: Text(LocaleKeys.select.tr),
+          return Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: FittedBox(
+              child: FilledButton(
+                onPressed: () {
+                  Get.back(result: e.value.toString());
+                },
+                child: Text(LocaleKeys.select.tr),
+              ),
             ),
           );
         }

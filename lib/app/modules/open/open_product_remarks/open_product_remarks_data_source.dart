@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../../model/supplier_model.dart';
-import 'open_supplier_controller.dart';
+import '../../../model/product_remarks_model.dart';
 import '../../../translations/locale_keys.dart';
+import '../../../utils/logger.dart';
 import '../../../widgets/custom_cell.dart';
+import 'open_product_remarks_controller.dart';
 
-class OpenSupplierDataSource extends DataGridSource {
-  OpenSupplierDataSource(this.controller) {
+class OpenProductRemarksDataSource extends DataGridSource {
+  OpenProductRemarksDataSource(this.controller) {
     updateDataSource();
   }
 
-  final OpenSupplierController controller;
+  final OpenProductRemarksController controller;
 
   void updateDataSource() {
     _dataGridRows = controller.DataList.map(_createDataRow).toList();
@@ -24,16 +25,16 @@ class OpenSupplierDataSource extends DataGridSource {
   @override
   List<DataGridRow> get rows => _dataGridRows;
 
-  DataGridRow _createDataRow(SupplierInfo e) {
+  DataGridRow _createDataRow(ProductRemarksInfo e) {
+    final List<RemarksDetail>? detail = e.remarksDetails;
+    final String detailStr = detail?.map((e) => e.mDetail).join(",") ?? "";
     return DataGridRow(
       cells: [
-        DataGridCell<int>(columnName: 'T_Supplier_ID', value: e.tSupplierId),
-        DataGridCell<String>(columnName: 'select', value: e.mCode.toString()),
-        DataGridCell<String>(columnName: 'code', value: e.mCode),
-        DataGridCell<String>(columnName: 'simpleName', value: e.mSimpleName),
-        DataGridCell<String>(columnName: 'fullName', value: e.mFullName),
-        DataGridCell<String>(columnName: 'mobile', value: e.mPhoneNo),
-        DataGridCell<String>(columnName: 'fax', value: e.mFaxNo),
+        DataGridCell<int>(columnName: 'T_Supplier_ID', value: e.mId),
+        DataGridCell<String>(columnName: 'select', value: e.mRemark ?? ""),
+        DataGridCell<int>(columnName: 'sort', value: e.mSort ?? 0),
+        DataGridCell<String>(columnName: 'remarks', value: e.mRemark ?? ""),
+        DataGridCell<String>(columnName: 'detail', value: detailStr),
       ],
     );
   }

@@ -19,6 +19,7 @@ abstract class Routes {
   static const SUPPLIER_INVOICE = _Paths.SUPPLIER_INVOICE;
   static const REFRESH_TEMP = _Paths.REFRESH_TEMP;
   static const PRODUCT_EDIT = _Paths.MASTER + _Paths.PRODUCTS + _Paths.PRODUCT_EDIT;
+  static const OPEN_PRODUCT_REMARKS = _Paths.OPEN + _Paths.OPEN_PRODUCT_REMARKS;
 }
 
 abstract class _Paths {
@@ -38,4 +39,5 @@ abstract class _Paths {
   static const SUPPLIER_INVOICE = '/supplier-invoice';
   static const REFRESH_TEMP = '/refresh-temp';
   static const PRODUCT_EDIT = '/product-edit';
+  static const OPEN_PRODUCT_REMARKS = '/open-product-remarks';
 }

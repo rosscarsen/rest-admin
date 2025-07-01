@@ -17,6 +17,7 @@ class OpenProductBarcodeController extends GetxController {
   final isLoading = true.obs;
   final totalPages = 0.obs;
   final currentPage = 1.obs;
+  final totalRecords = 0.obs;
   List<ProductBarcodeData> DataList = [];
   final ApiClient apiClient = ApiClient();
   late OpenProductBarcodeDataSource dataSource;
@@ -77,6 +78,7 @@ class OpenProductBarcodeController extends GetxController {
 
       DataList = apiResult.data ?? [];
       totalPages.value = apiResult.lastPage ?? 0;
+      totalRecords.value = apiResult.total ?? 0;
     } finally {
       isLoading(false);
     }

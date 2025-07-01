@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 import '../../../../config.dart';
 import '../../../../model/category_model.dart';
-import '../../../../model/product_action_init_model.dart';
+import '../../../../model/product_add_or_edit_model.dart';
 import '../../../../service/dio_api_client.dart';
 import '../../../../service/dio_api_result.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/easy_loading.dart';
+import '../../../../utils/logger.dart';
 import 'product_edit_fields.dart';
 
 class ProductEditController extends GetxController with GetTickerProviderStateMixin {
@@ -26,12 +26,13 @@ class ProductEditController extends GetxController with GetTickerProviderStateMi
   ];
   final category1 = <CategoryModel>[].obs;
   final category2 = <CategoryModel>[].obs;
-  final category3 = <CategoryModel>[].obs;
+  final hasPermission = true.obs;
 
   @override
   void onInit() {
     initParams();
-    getCategories();
+
+    productAddOrEdit();
     super.onInit();
   }
 
@@ -49,14 +50,6 @@ class ProductEditController extends GetxController with GetTickerProviderStateMi
 
   @override
   void onReady() {
-    final params = Get.parameters;
-    var format = DateFormat("yyyy-MM-dd");
-    if (params.isEmpty) {
-      formKey.currentState?.patchValue({
-        ProductEditFields.mDateCreate: format.format(DateTime.now()),
-        ProductEditFields.mDateModify: format.format(DateTime.now()),
-      });
-    }
     super.onReady();
   }
 
@@ -68,9 +61,7 @@ class ProductEditController extends GetxController with GetTickerProviderStateMi
 
   void generateCategory2(String? selectCate1) {
     category2.clear();
-    category3.clear();
-    formKey.currentState?.fields[ProductEditFields.mCategory1]?.didChange("");
-
+    formKey.currentState?.fields[ProductEditFields.mCategory2]?.didChange("");
     if (selectCate1 == null || selectCate1.isEmpty) return;
     final parent = category1.firstWhereOrNull((e) => e.mCategory == selectCate1);
     if (parent != null && parent.children != null) {
@@ -78,40 +69,52 @@ class ProductEditController extends GetxController with GetTickerProviderStateMi
     }
   }
 
-  Future<void> getCategories() async {
+  /// 获取单个产品数据
+  Future<void> productAddOrEdit() async {
     isLoading(true);
     try {
-      final DioApiResult dioApiResult = await apiClient.post(Config.productActionInit);
+      final query = Get.parameters;
+      final DioApiResult dioApiResult = await apiClient.post(Config.productAddOrEdit, data: query);
 
-      if (!dioApiResult.success && dioApiResult.hasPermission) {
+      if (!dioApiResult.success) {
+        if (!dioApiResult.hasPermission) {
+          hasPermission.value = false;
+        }
         showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
-      if (!dioApiResult.hasPermission) {
-        showToast(LocaleKeys.noPermission.tr);
-        return;
-      }
+
       if (dioApiResult.data == null) {
         showToast(LocaleKeys.dataException.tr);
         return;
       }
-
-      final advancedSearchModel = productActionInitModelFromJson(dioApiResult.data!);
-      if (advancedSearchModel.apiResult == null) {
-        return;
+      hasPermission.value = true;
+      final result = productAddOrEditModelFromJson(dioApiResult.data!);
+      final apiResult = result.apiResult;
+      if (apiResult != null) {
+        final categories = apiResult.category;
+        if (categories?.isNotEmpty ?? false) {
+          category1.assignAll(categories!);
+        }
+        if (apiResult.productInfo != null) {
+          logger.i("apiResult.productInfo:${apiResult.productInfo!.toJson()}");
+          final productInfo = apiResult.productInfo;
+          if (productInfo != null) {
+            formKey.currentState?.patchValue(
+              Map.fromEntries(apiResult.productInfo!.toJson().entries.where((e) => e.value != null)),
+            );
+          }
+        }
       }
+
+      /* 
       //类目
       final categories = advancedSearchModel.apiResult?.category;
       if (categories != null && categories.isNotEmpty) {
         category1.assignAll(categories);
-      }
-      /* //部门
-      final departments = advancedSearchModel.apiResult?.department;
-      if (departments != null && departments.isNotEmpty) {
-        department.assignAll(departments);
       } */
     } catch (e) {
-      debugPrint(e.toString());
+     showToast(LocaleKeys.getDataException.tr);
     } finally {
       isLoading(false);
     }

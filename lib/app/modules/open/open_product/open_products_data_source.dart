@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../model/products_model.dart';
+import '../../../widgets/custom_cell.dart';
 import 'open_product_controller.dart';
 import '../../../translations/locale_keys.dart';
 
@@ -43,13 +44,15 @@ class OpenProductsDataSource extends DataGridSource {
     return DataGridRowAdapter(
       cells: row.getCells().map<Widget>((e) {
         if (e.columnName == "select") {
-          return Align(
-            alignment: Alignment.center,
-            child: TextButton(
-              onPressed: () {
-                Get.back(result: e.value.toString());
-              },
-              child: Text(LocaleKeys.select.tr),
+          return Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: FittedBox(
+              child: FilledButton(
+                onPressed: () {
+                  Get.back(result: e.value.toString());
+                },
+                child: Text(LocaleKeys.select.tr),
+              ),
             ),
           );
         }

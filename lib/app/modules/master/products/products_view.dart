@@ -42,6 +42,7 @@ class ProductsView extends GetView<ProductsController> {
             Expanded(child: ProgressHUD(child: controller.isLoading.value ? null : _buildDataGrid(context))),
             DataPager(
               totalPages: controller.totalPages,
+              totalRecords: controller.totalRecords,
               currentPage: controller.currentPage,
               onPageChanged: (int pageNumber) {
                 controller.currentPage.value = pageNumber;

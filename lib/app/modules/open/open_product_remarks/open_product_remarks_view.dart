@@ -9,15 +9,16 @@ import '../../../translations/locale_keys.dart';
 import '../../../utils/progresshub.dart';
 import '../../../widgets/custom_cell.dart';
 import '../../../widgets/data_pager.dart';
-import 'open_product_barcode_controller.dart';
+import 'open_product_remarks_controller.dart';
 
-class OpenProductBarcodeView extends GetView<OpenProductBarcodeController> {
-  const OpenProductBarcodeView({super.key});
+class OpenProductRemarksView extends GetView<OpenProductRemarksController> {
+  const OpenProductRemarksView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.selectProductBarcode.tr),
+        title: Text(LocaleKeys.selectSupplier.tr),
         centerTitle: true,
         actions: [IconButton(onPressed: () => controller.reloadData(), icon: Icon(Icons.refresh))],
       ),
@@ -26,8 +27,8 @@ class OpenProductBarcodeView extends GetView<OpenProductBarcodeController> {
         children: <Widget>[
           _buildSearch(context),
           Expanded(
-            child: GetX<OpenProductBarcodeController>(
-              init: OpenProductBarcodeController(),
+            child: GetX<OpenProductRemarksController>(
+              init: OpenProductRemarksController(),
               builder: (_) {
                 return ProgressHUD(child: controller.isLoading.value ? null : _buildDataGrid(context));
               },
@@ -35,8 +36,8 @@ class OpenProductBarcodeView extends GetView<OpenProductBarcodeController> {
           ),
           DataPager(
             totalPages: controller.totalPages,
-            totalRecords: controller.totalRecords,
             currentPage: controller.currentPage,
+            totalRecords: controller.totalRecords,
             onPageChanged: (int pageNumber) {
               controller.currentPage.value = pageNumber;
               controller.updateDataGridSource();
@@ -62,7 +63,7 @@ class OpenProductBarcodeView extends GetView<OpenProductBarcodeController> {
           isScrollbarAlwaysShown: true,
           controller: controller.dataGridController,
           footerFrozenColumnsCount: 0,
-          frozenColumnsCount: 1,
+          frozenColumnsCount: 2,
           gridLinesVisibility: GridLinesVisibility.both,
           headerGridLinesVisibility: GridLinesVisibility.both,
           columnWidthMode: controller.dataSource.rows.isEmpty
@@ -77,25 +78,30 @@ class OpenProductBarcodeView extends GetView<OpenProductBarcodeController> {
           source: controller.dataSource,
           columns: <GridColumn>[
             GridColumn(
+              columnName: "m_id",
+              visible: false,
+              label: CustomCell(data: "ID"),
+            ),
+            GridColumn(
               columnName: 'select',
               label: CustomCell(data: LocaleKeys.select.tr),
               width: 85,
             ),
             GridColumn(
-              columnName: "barcode",
-              label: CustomCell(data: LocaleKeys.barcode.tr),
+              columnName: "sort",
+              label: CustomCell(data: LocaleKeys.sort.tr),
             ),
             GridColumn(
-              columnName: 'code',
-              label: CustomCell(data: LocaleKeys.code.tr),
-
-              //maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
+              columnName: 'remarks',
+              label: CustomCell(data: LocaleKeys.remarks.tr),
+              columnWidthMode: ColumnWidthMode.fitByCellValue,
+              maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
             ),
-
             GridColumn(
-              columnName: 'name',
-              label: CustomCell(data: LocaleKeys.name.tr),
-              columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.auto : ColumnWidthMode.fill,
+              columnName: 'detail',
+              label: CustomCell(data: LocaleKeys.detail.tr),
+              columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.fitByCellValue : ColumnWidthMode.fill,
+              maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
             ),
           ],
           placeholder: Center(

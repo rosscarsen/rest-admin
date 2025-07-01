@@ -17,7 +17,8 @@ class OpenSupplierController extends GetxController {
   final isLoading = true.obs;
   final totalPages = 0.obs;
   final currentPage = 1.obs;
-  List<ApiData> DataList = [];
+  final totalRecords = 0.obs;
+  List<SupplierInfo> DataList = [];
   final ApiClient apiClient = ApiClient();
   late OpenSupplierDataSource dataSource;
   @override
@@ -72,8 +73,9 @@ class OpenSupplierController extends GetxController {
       final supplierModel = supplierModelModelFromJson(dioApiResult.data!);
       if (supplierModel.status == 200) {
         final ApiResult? apiResult = supplierModel.apiResult;
-        DataList = apiResult?.apiData ?? [];
+        DataList = apiResult?.supplierInfo ?? [];
         totalPages.value = apiResult?.lastPage ?? 0;
+        totalRecords.value = apiResult?.total ?? 0;
       }
     } finally {
       isLoading(false);

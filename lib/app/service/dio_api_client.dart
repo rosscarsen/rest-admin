@@ -42,7 +42,7 @@ class ApiClient {
       contentType: "application/x-www-form-urlencoded",
       responseType: ResponseType.plain,
       connectTimeout: Duration(seconds: 30),
-      receiveTimeout: Duration(seconds: 30),
+      receiveTimeout: Duration(seconds: 60),
       validateStatus: (status) => status != null,
     );
 
@@ -236,6 +236,7 @@ class ApiClient {
 
   // 处理错误
   DioApiResult _handleError(Object e) {
+    logger.d("===>${e.toString()}");
     if (e is DioException && e.response?.statusCode == _loginInvalidCode) {
       CustomAlert.iosAlert(LocaleKeys.loginInvalid.tr, onConfirm: () => Get.offAllNamed(Routes.SIGNIN));
       return DioApiResult(success: false, error: LocaleKeys.loginInvalid.tr);

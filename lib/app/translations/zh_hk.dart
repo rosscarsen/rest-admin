@@ -213,4 +213,6 @@ Map<String, String> zhHK = {
   LocaleKeys.shop: "店鋪",
   LocaleKeys.createDate: "創建日期",
   LocaleKeys.modifyDate: "修改日期",
+  LocaleKeys.selectProductRemarks: "選擇食品備註",
+  LocaleKeys.totalRecords: "共%s條記錄",
 };

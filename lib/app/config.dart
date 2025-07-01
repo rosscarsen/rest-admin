@@ -41,8 +41,8 @@ class Config {
   static String batchDeleteSetMeal = "/Master/batchDeleteSetMeal";
   // 打印条码
   static String printBarcode = "/Master/printBarcode";
-  // 产品操作初始化
-  static String productActionInit = "/Master/productActionInit";
+  // 产品新增或删除
+  static String productAddOrEdit = "/Master/productAddOrEdit";
 
   /// 打开选择
   // 供应商
@@ -51,6 +51,8 @@ class Config {
   static String openProduct = "/Open/product";
   // 打开条码
   static String openBarcode = "/Open/barcode";
+  // 打开食品备注
+  static String openProductRemark = "/Open/productRemark";
 
   /// excel
   // 导出产品

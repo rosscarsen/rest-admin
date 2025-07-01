@@ -20,14 +20,13 @@ import '../modules/open/open_product/open_product_binding.dart';
 import '../modules/open/open_product/open_product_view.dart';
 import '../modules/open/open_product_barcode/open_product_barcode_binding.dart';
 import '../modules/open/open_product_barcode/open_product_barcode_view.dart';
-
+import '../modules/open/open_product_remarks/open_product_remarks_binding.dart';
+import '../modules/open/open_product_remarks/open_product_remarks_view.dart';
 import '../modules/open/open_supplier/open_supplier_binding.dart';
 import '../modules/open/open_supplier/open_supplier_view.dart';
 import '../modules/open/open_view.dart';
 import '../modules/pdf/pdf_binding.dart';
 import '../modules/pdf/pdf_view.dart';
-import '../modules/refresh_temp/refresh_temp_binding.dart';
-import '../modules/refresh_temp/refresh_temp_view.dart';
 import '../modules/signin/signin_binding.dart';
 import '../modules/signin/signin_view.dart';
 import '../modules/supplier_invoice/supplier_invoice_binding.dart';
@@ -69,6 +68,12 @@ class AppPages {
           binding: OpenProductBarcodeBinding(),
           middlewares: [AuthMiddleware()],
         ),
+        GetPage(
+          name: _Paths.OPEN_PRODUCT_REMARKS,
+          page: () => const OpenProductRemarksView(),
+          binding: OpenProductRemarksBinding(),
+          middlewares: [AuthMiddleware()],
+        ),
       ],
     ),
     GetPage(name: _Paths.PDF, page: () => const PdfView(), binding: PdfBinding(), middlewares: [AuthMiddleware()]),
@@ -103,15 +108,19 @@ class AppPages {
             ),
           ],
         ),
-        GetPage(name: _Paths.PRODUCT_REMARKS, page: () => const ProductRemarksView(), binding: ProductRemarksBinding()),
+        GetPage(
+          name: _Paths.PRODUCT_REMARKS,
+          page: () => const ProductRemarksView(),
+          binding: ProductRemarksBinding(),
+          middlewares: [AuthMiddleware()],
+        ),
       ],
     ),
-    GetPage(name: _Paths.SUPPLIER_INVOICE, page: () => const SupplierInvoiceView(), binding: SupplierInvoiceBinding()),
     GetPage(
-      name: _Paths.REFRESH_TEMP,
-      page: () => const RefreshTempView(),
-      binding: RefreshTempBinding(),
-      transition: Transition.noTransition,
+      name: _Paths.SUPPLIER_INVOICE,
+      page: () => const SupplierInvoiceView(),
+      binding: SupplierInvoiceBinding(),
+      middlewares: [AuthMiddleware()],
     ),
   ];
 }

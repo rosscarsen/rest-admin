@@ -164,13 +164,16 @@ class DashboardView extends GetView<DashboardController> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    width: double.infinity,
+                    alignment: Alignment.center,
                     color: kHeaderBlue,
+                    height: 40,
                     padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "${LocaleKeys.sameDayPaymentMethodSalesRatio.tr}(*)",
-                      style: kHeaderTextStyle,
-                      textAlign: TextAlign.center,
+                    child: FittedBox(
+                      child: Text(
+                        "${LocaleKeys.sameDayPaymentMethodSalesRatio.tr}(*)",
+                        style: kHeaderTextStyle,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                   // _buildPieChart(salePlayRatio),
@@ -200,13 +203,16 @@ class DashboardView extends GetView<DashboardController> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    width: double.infinity,
+                    alignment: Alignment.center,
                     color: kHeaderBlue,
+                    height: 40,
                     padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "${LocaleKeys.salesInTheLastSevenDays.tr}(*)",
-                      style: kHeaderTextStyle,
-                      textAlign: TextAlign.center,
+                    child: FittedBox(
+                      child: Text(
+                        "${LocaleKeys.salesInTheLastSevenDays.tr}(*)",
+                        style: kHeaderTextStyle,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                   // _buildPieChart(salePlayRatio),
@@ -236,13 +242,16 @@ class DashboardView extends GetView<DashboardController> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    width: double.infinity,
+                    alignment: Alignment.center,
                     color: kHeaderBlue,
+                    height: 40,
                     padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "${LocaleKeys.yesterdayLastWeekLastMonth.tr}(*)",
-                      style: kHeaderTextStyle,
-                      textAlign: TextAlign.center,
+                    child: FittedBox(
+                      child: Text(
+                        "${LocaleKeys.yesterdayLastWeekLastMonth.tr}(*)",
+                        style: kHeaderTextStyle,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                   // _buildPieChart(salePlayRatio),
@@ -272,13 +281,16 @@ class DashboardView extends GetView<DashboardController> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    width: double.infinity,
+                    alignment: Alignment.center,
+                    height: 40,
                     color: kHeaderBlue,
                     padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "${LocaleKeys.thisMonthSale.tr}(*)",
-                      style: kHeaderTextStyle,
-                      textAlign: TextAlign.center,
+                    child: FittedBox(
+                      child: Text(
+                        "${LocaleKeys.thisMonthSale.tr}(*)",
+                        style: kHeaderTextStyle,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                   // _buildPieChart(salePlayRatio),
@@ -308,13 +320,16 @@ class DashboardView extends GetView<DashboardController> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    width: double.infinity,
+                    alignment: Alignment.center,
+                    height: 40,
                     color: kHeaderBlue,
                     padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "Top5 ${LocaleKeys.saleQty.tr}(*)",
-                      style: kHeaderTextStyle,
-                      textAlign: TextAlign.center,
+                    child: FittedBox(
+                      child: Text(
+                        "Top5 ${LocaleKeys.saleQty.tr}(*)",
+                        style: kHeaderTextStyle,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                   // _buildPieChart(salePlayRatio),
@@ -344,13 +359,16 @@ class DashboardView extends GetView<DashboardController> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    width: double.infinity,
+                    alignment: Alignment.center,
+                    height: 40,
                     color: kHeaderBlue,
                     padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "Top5 ${LocaleKeys.saleAmount.tr}(*)",
-                      style: kHeaderTextStyle,
-                      textAlign: TextAlign.center,
+                    child: FittedBox(
+                      child: Text(
+                        "Top5 ${LocaleKeys.saleAmount.tr}(*)",
+                        style: kHeaderTextStyle,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                   // _buildPieChart(salePlayRatio),

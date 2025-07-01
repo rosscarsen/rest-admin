@@ -62,30 +62,30 @@ class CustomScaffold extends StatelessWidget {
             icon: FontAwesomeIcons.supple,
             route: Routes.SUPPLIER_INVOICE,
           ),
-          //语言
+          // 语言
           AdminMenuItem(
             title: LocaleKeys.language.tr,
             icon: FontAwesomeIcons.language,
             children: [
               AdminMenuItem(
-                title: LocaleKeys.simplifiedChinese.tr,
+                title: "中文简体",
                 route: "locale_zh_CN",
                 icon: Get.locale.toString() == "zh_CN" ? FontAwesomeIcons.check : null,
               ),
 
               AdminMenuItem(
-                title: LocaleKeys.traditionalChinese.tr,
+                title: "中文繁体",
                 route: "locale_zh_HK",
                 icon: Get.locale.toString() == "zh_HK" ? FontAwesomeIcons.check : null,
               ),
               AdminMenuItem(
-                title: LocaleKeys.english.tr,
+                title: "English",
                 route: "locale_en_US",
                 icon: Get.locale.toString() == "en_US" ? FontAwesomeIcons.check : null,
               ),
             ],
           ),
-
+          // 退出登录
           AdminMenuItem(
             title: LocaleKeys.logout.tr,
             route: Routes.SIGNIN,

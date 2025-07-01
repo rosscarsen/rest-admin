@@ -30,7 +30,7 @@ class CustomCell extends StatelessWidget {
         final textWidget = Text(text, textAlign: TextAlign.center, overflow: ellipsis ? TextOverflow.ellipsis : null);
 
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          padding: const EdgeInsets.symmetric(horizontal: 6.0),
           alignment: alignment,
           child: isOverflowing ? Tooltip(message: text, child: textWidget) : textWidget,
         );
