@@ -4,7 +4,6 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../model/product_remarks_model.dart';
 import '../../../translations/locale_keys.dart';
-import '../../../utils/logger.dart';
 import '../../../widgets/custom_cell.dart';
 import 'open_product_remarks_controller.dart';
 
