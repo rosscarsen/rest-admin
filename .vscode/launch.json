@@ -8,6 +8,8 @@
       "name": "rest_admin",
       "request": "launch",
       "type": "dart"
+      /* "program": "lib/main.dart",
+      "args": ["-d", "edge", "--web-experimental-hot-reload"] */
     },
     {
       "name": "rest_admin (profile mode)",

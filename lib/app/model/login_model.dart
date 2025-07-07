@@ -10,33 +10,33 @@ LoginModel loginModelFromJson(String str) => LoginModel.fromJson(json.decode(str
 String loginModelToJson(LoginModel data) => json.encode(data.toJson());
 
 class LoginModel {
-  UserData? data;
+  ApiResult? apiResult;
   String? msg;
   int? status;
 
-  LoginModel({this.data, this.msg, this.status});
+  LoginModel({this.apiResult, this.msg, this.status});
 
   factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(
-    data: json["apiResult"] == null ? null : UserData.fromJson(json["apiResult"]),
+    apiResult: json["apiResult"] == null ? null : ApiResult.fromJson(json["apiResult"]),
     msg: json["msg"],
     status: json["status"],
   );
 
-  Map<String, dynamic> toJson() => {"data": data?.toJson(), "msg": msg, "status": status};
+  Map<String, dynamic> toJson() => {"data": apiResult?.toJson(), "msg": msg, "status": status};
 
   @override
-  String toString() => 'LoginModel(data: $data, msg: $msg, status: $status)';
+  String toString() => 'LoginModel(data: $apiResult, msg: $msg, status: $status)';
 }
 
-class UserData {
+class ApiResult {
   String? company;
   String? pwd;
   String? user;
   Dsn? dsn;
 
-  UserData({this.company, this.pwd, this.user, this.dsn});
+  ApiResult({this.company, this.pwd, this.user, this.dsn});
 
-  factory UserData.fromJson(Map<String, dynamic> json) => UserData(
+  factory ApiResult.fromJson(Map<String, dynamic> json) => ApiResult(
     company: json["company"],
     pwd: json["pwd"],
     user: json["user"],

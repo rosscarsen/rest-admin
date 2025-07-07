@@ -6,7 +6,6 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart' hide Response, MultipartFile, FormData;
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:logger/logger.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 
@@ -16,10 +15,10 @@ import '../translations/locale_keys.dart';
 import '../utils/custom_alert.dart';
 import '../utils/easy_loading.dart';
 import '../utils/local_cache.dart';
+import '../utils/logger.dart';
 import 'dio_api_result.dart';
 
 class ApiClient {
-  static Logger logger = Logger();
   static final ApiClient _instance = ApiClient._internal();
   static late Dio _dio;
 
@@ -236,7 +235,7 @@ class ApiClient {
 
   // 处理错误
   DioApiResult _handleError(Object e) {
-    logger.d("===>${e.toString()}");
+    //logger.d("===>${e.toString()}");
     if (e is DioException && e.response?.statusCode == _loginInvalidCode) {
       CustomAlert.iosAlert(LocaleKeys.loginInvalid.tr, onConfirm: () => Get.offAllNamed(Routes.SIGNIN));
       return DioApiResult(success: false, error: LocaleKeys.loginInvalid.tr);

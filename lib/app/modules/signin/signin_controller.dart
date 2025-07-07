@@ -43,7 +43,7 @@ class SigninController extends GetxController with GetSingleTickerProviderStateM
   //获取本地存储的用户信息
   void getLoginInfo() {
     var loginUserJson = storageManage.read(Config.localStorageLoginInfo);
-    UserData? loginUser = loginUserJson != null ? UserData.fromJson(loginUserJson) : null;
+    ApiResult? loginUser = loginUserJson != null ? ApiResult.fromJson(loginUserJson) : null;
 
     if (loginUser != null && _formKey.currentState != null) {
       _formKey.currentState!.fields['company']?.didChange(loginUser.company);
@@ -77,7 +77,7 @@ class SigninController extends GetxController with GetSingleTickerProviderStateM
         switch (loginModel.status) {
           case 200:
             final storageManage = StorageManage();
-            await storageManage.write(Config.localStorageLoginInfo, loginModel.data?.toJson());
+            await storageManage.write(Config.localStorageLoginInfo, loginModel.apiResult?.toJson());
             await storageManage.write(Config.localStorageHasLogin, true);
             signInController.success();
             await Future.delayed(const Duration(seconds: 1), () => Get.offAndToNamed(Routes.DASHBOARD));

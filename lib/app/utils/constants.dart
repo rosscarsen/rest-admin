@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class AppColors {
@@ -39,4 +41,18 @@ class AppColors {
   static Color enableColor = Colors.grey.shade800;
 
   static Color customTextColor = Color(0XFF2F2F2F);
+
+  // 生成随机颜色
+  static Color genRandomColor() {
+    const letters = '0123456789ABCDEF';
+    final Random random = Random();
+    String color = '#';
+
+    // 生成6个随机的字符
+    for (int i = 0; i < 6; i++) {
+      color += letters[random.nextInt(16)];
+    }
+
+    return Color(int.parse(color.replaceFirst('#', '0xFF')));
+  }
 }

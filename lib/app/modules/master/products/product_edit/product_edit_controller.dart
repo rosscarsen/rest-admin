@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import '../../../../config.dart';
 import '../../../../model/category_model.dart';
 import '../../../../model/product_add_or_edit_model.dart';
+import '../../../../model/unit_model.dart';
 import '../../../../service/dio_api_client.dart';
 import '../../../../service/dio_api_result.dart';
 import '../../../../translations/locale_keys.dart';
@@ -27,6 +28,7 @@ class ProductEditController extends GetxController with GetTickerProviderStateMi
   final category1 = <CategoryModel>[].obs;
   final category2 = <CategoryModel>[].obs;
   final hasPermission = true.obs;
+  final units = <UnitModel>[].obs;
 
   @override
   void onInit() {
@@ -104,6 +106,7 @@ class ProductEditController extends GetxController with GetTickerProviderStateMi
               Map.fromEntries(apiResult.productInfo!.toJson().entries.where((e) => e.value != null)),
             );
           }
+          units.assignAll(apiResult.units ?? []);
         }
       }
 
@@ -114,7 +117,8 @@ class ProductEditController extends GetxController with GetTickerProviderStateMi
         category1.assignAll(categories);
       } */
     } catch (e) {
-     showToast(LocaleKeys.getDataException.tr);
+      logger.i(e.toString());
+      showToast(LocaleKeys.getDataException.tr);
     } finally {
       isLoading(false);
     }

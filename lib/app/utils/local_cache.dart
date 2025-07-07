@@ -12,8 +12,8 @@ class LocalCache {
 
     if (!isLogin || loginInfo.isEmpty) return {};
 
-    UserData userData = UserData.fromJson(loginInfo);
-    if ((userData.company ?? "").isEmpty || userData.dsn == null) {
+    ApiResult apiResult = ApiResult.fromJson(loginInfo);
+    if ((apiResult.company ?? "").isEmpty || apiResult.dsn == null) {
       return {};
     }
     return {"Auth": base64.encode(utf8.encode(json.encode(loginInfo)))};

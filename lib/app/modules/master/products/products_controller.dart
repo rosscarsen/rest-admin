@@ -111,9 +111,9 @@ class ProductsController extends GetxController {
       //logger.f(dioApiResult.data);
       final productsModel = productsModelFromJson(dioApiResult.data.toString());
       if (productsModel.status == 200) {
-        dataList = productsModel.productsInfo?.productData ?? [];
-        totalPages.value = (productsModel.productsInfo?.lastPage ?? 0);
-        totalRecords.value = (productsModel.productsInfo?.total ?? 0);
+        dataList = productsModel.apiResult?.productData ?? [];
+        totalPages.value = (productsModel.apiResult?.lastPage ?? 0);
+        totalRecords.value = (productsModel.apiResult?.total ?? 0);
       } else {
         errorMessages(LocaleKeys.getDataException.tr);
       }

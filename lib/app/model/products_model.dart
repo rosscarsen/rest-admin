@@ -10,25 +10,25 @@ ProductsModel productsModelFromJson(String str) => ProductsModel.fromJson(json.d
 String productsModelToJson(ProductsModel data) => json.encode(data.toJson());
 
 class ProductsModel {
-  ProductsInfo? productsInfo;
+  ApiResult? apiResult;
   String? msg;
   int? status;
 
-  ProductsModel({this.productsInfo, this.msg, this.status});
+  ProductsModel({this.apiResult, this.msg, this.status});
 
   factory ProductsModel.fromJson(Map<String, dynamic> json) => ProductsModel(
-    productsInfo: json["apiResult"] == null ? null : ProductsInfo.fromJson(json["apiResult"]),
+    apiResult: json["apiResult"] == null ? null : ApiResult.fromJson(json["apiResult"]),
     msg: json["msg"],
     status: json["status"],
   );
 
-  Map<String, dynamic> toJson() => {"data": productsInfo?.toJson(), "msg": msg, "status": status};
+  Map<String, dynamic> toJson() => {"data": apiResult?.toJson(), "msg": msg, "status": status};
 
   @override
-  String toString() => 'ProductsModel(data: $productsInfo, msg: $msg, status: $status)';
+  String toString() => 'ProductsModel(data: $apiResult, msg: $msg, status: $status)';
 }
 
-class ProductsInfo {
+class ApiResult {
   int? total;
   int? perPage;
   int? currentPage;
@@ -36,9 +36,9 @@ class ProductsInfo {
   List<ProductData>? productData;
   bool? hasMore;
 
-  ProductsInfo({this.total, this.perPage, this.currentPage, this.lastPage, this.productData, this.hasMore});
+  ApiResult({this.total, this.perPage, this.currentPage, this.lastPage, this.productData, this.hasMore});
 
-  factory ProductsInfo.fromJson(Map<String, dynamic> json) => ProductsInfo(
+  factory ApiResult.fromJson(Map<String, dynamic> json) => ApiResult(
     total: json["total"],
     perPage: json["per_page"],
     currentPage: json["current_page"],

@@ -71,9 +71,9 @@ class OpenProductController extends GetxController {
       }
       final productsModel = productsModelFromJson(dioApiResult.data!);
       if (productsModel.status == 200) {
-        DataList = productsModel.productsInfo?.productData ?? [];
-        totalPages.value = (productsModel.productsInfo?.lastPage ?? 0);
-        totalRecords.value = (productsModel.productsInfo?.total ?? 0);
+        DataList = productsModel.apiResult?.productData ?? [];
+        totalPages.value = (productsModel.apiResult?.lastPage ?? 0);
+        totalRecords.value = (productsModel.apiResult?.total ?? 0);
       } else {
         errorMessages(LocaleKeys.getDataException.tr);
       }

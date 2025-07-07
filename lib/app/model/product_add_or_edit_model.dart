@@ -94,27 +94,27 @@ class ProductInfo {
   dynamic mMemberPrice;
   int? tProductId;
   String? mRemarks;
-  int? mNonDiscount;
-  int? mNonStock;
+  String? mNonDiscount;
+  String? mNonStock;
   dynamic mOriginalPrice;
-  int? mBundleSales;
-  int? mTimes;
-  int? mPrePaid;
-  int? mNonActived;
+  String? mBundleSales;
+  String? mTimes;
+  String? mPrePaid;
+  String? mNonActived;
   String? mStandardCost;
   String? mExpiryDate;
-  int? mNonCharge;
+  String? mNonCharge;
   String? mPrice;
   String? mPrice1;
   String? mPrice2;
   String? mPrice3;
   String? mStockCode;
-  int? mSetOption;
-  int? mSoldOut;
-  int? mNonWebHide;
+  String? mSetOption;
+  String? mSoldOut;
+  String? mNonWebHide;
   dynamic mWebRemarks;
-  int? mNewest;
-  int? mSpecials;
+  String? mNewest;
+  String? mSpecials;
   dynamic mIsStandPrice;
   String? setmenu;
 
@@ -203,27 +203,27 @@ class ProductInfo {
     mMemberPrice: json["mMember_Price"],
     tProductId: json["T_Product_ID"],
     mRemarks: json["mRemarks"],
-    mNonDiscount: json["mNon_Discount"],
-    mNonStock: json["mNon_Stock"],
+    mNonDiscount: json["mNon_Discount"]?.toString() ?? "",
+    mNonStock: json["mNon_Stock"]?.toString() ?? "",
     mOriginalPrice: json["mOriginal_Price"],
-    mBundleSales: json["mBundle_Sales"],
-    mTimes: json["mTimes"],
-    mPrePaid: json["mPrePaid"],
-    mNonActived: json["mNonActived"],
+    mBundleSales: json["mBundle_Sales"]?.toString() ?? "",
+    mTimes: json["mTimes"]?.toString() ?? "",
+    mPrePaid: json["mPrePaid"]?.toString() ?? "",
+    mNonActived: json["mNonActived"]?.toString() ?? "",
     mStandardCost: json["mStandard_Cost"],
     mExpiryDate: json["mExpiryDate"],
-    mNonCharge: json["mNonCharge"],
+    mNonCharge: json["mNonCharge"]?.toString() ?? "",
     mPrice: json['mPrice'],
     mPrice1: json["mPrice1"],
     mPrice2: json["mPrice2"],
     mPrice3: json["mPrice3"],
     mStockCode: json["mStockCode"],
-    mSetOption: json["mSetOption"],
-    mSoldOut: json["mSoldOut"],
-    mNonWebHide: json["mNon_WebHide"],
+    mSetOption: json["mSetOption"]?.toString() ?? "",
+    mSoldOut: json["mSoldOut"]?.toString() ?? "0",
+    mNonWebHide: json["mNon_WebHide"]?.toString() ?? "",
     mWebRemarks: json["mWeb_Remarks"],
-    mNewest: json["mNewest"],
-    mSpecials: json["mSpecials"],
+    mNewest: json["mNewest"]?.toString() ?? "",
+    mSpecials: json["mSpecials"]?.toString() ?? "",
     mIsStandPrice: json["mIsStandPrice"],
     setmenu: json["setmenu"],
   );

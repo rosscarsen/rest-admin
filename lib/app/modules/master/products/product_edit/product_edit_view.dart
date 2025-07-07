@@ -55,6 +55,7 @@ class ProductEditView extends GetView<ProductEditController> {
             ),
           ),
           body: _buildTabBarView(),
+
           persistentFooterButtons: [
             FormHelper.button(
               onPressed: () {
@@ -207,7 +208,29 @@ class ProductEditView extends GetView<ProductEditController> {
               ),
             ),
             //单位
+            FormHelper.selectInput(
+              name: ProductEditFields.mUnit,
+              labelText: LocaleKeys.unit.tr,
+              items: [
+                DropdownMenuItem(value: "", child: Text("")),
+                if (controller.units.isNotEmpty)
+                  ...controller.units.map(
+                    (e) => DropdownMenuItem(
+                      value: e.mUnit,
+                      child: FittedBox(child: Text(e.mUnit.toString())),
+                    ),
+                  ),
+              ],
+            ),
             //售罄
+            FormHelper.selectInput(
+              name: ProductEditFields.mSoldOut,
+              labelText: LocaleKeys.soldOut.tr,
+              items: [
+                DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+              ],
+            ),
             //不具折上折
             //不具服务费
             //排序

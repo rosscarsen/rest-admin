@@ -110,10 +110,10 @@ class FormHelper {
   }
 
   /// 下拉选择框
-  static ResponsiveGridCol selectInput({
+  static ResponsiveGridCol selectInput<T>({
     required String name,
     required String labelText,
-    required List<DropdownMenuItem<String>>? items,
+    required List<DropdownMenuItem<T>>? items,
     int xs = 12,
     int? sm = 6,
     int? md = 4,
@@ -121,9 +121,9 @@ class FormHelper {
     int? xl = 4,
     bool enabled = true,
     Widget? prefixIcon,
-    FormFieldValidator<String?>? validator,
-    String? initialValue,
-    void Function(String?)? onChanged,
+    FormFieldValidator<T?>? validator,
+    T? initialValue,
+    void Function(T?)? onChanged,
     bool allowUnmatchedValue = true, // ✅ 新增参数
   }) {
     return ResponsiveGridCol(
@@ -134,7 +134,7 @@ class FormHelper {
       xl: xl,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding, vertical: _verticalPadding),
-        child: FormBuilderField<String>(
+        child: FormBuilderField<T>(
           name: name,
           enabled: enabled,
           initialValue: initialValue,
@@ -143,8 +143,8 @@ class FormHelper {
           builder: (field) {
             return Builder(
               builder: (context) {
-                String? currentValue = field.value;
-                List<DropdownMenuItem<String>> safeItems = items ?? [];
+                T? currentValue = field.value;
+                List<DropdownMenuItem<T>> safeItems = items ?? [];
 
                 // ✅ 如果允许非法值，且当前值不在选项中，加入一个“隐藏项”
                 bool valueNotInList =
@@ -152,7 +152,7 @@ class FormHelper {
 
                 if (allowUnmatchedValue && valueNotInList) {
                   safeItems = [
-                    DropdownMenuItem<String>(
+                    DropdownMenuItem<T>(
                       value: currentValue,
                       child: Text("${LocaleKeys.invalidItem.tr} $currentValue"), // 不显示该项
                     ),
@@ -160,7 +160,7 @@ class FormHelper {
                   ];
                 }
 
-                return DropdownButtonFormField<String>(
+                return DropdownButtonFormField<T>(
                   style: Theme.of(context).textTheme.bodyLarge,
                   value: currentValue,
                   items: safeItems,

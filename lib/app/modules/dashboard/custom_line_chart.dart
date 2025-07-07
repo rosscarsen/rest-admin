@@ -21,6 +21,7 @@ class _CustomLineChartState extends State<CustomLineChart> {
   @override
   Widget build(BuildContext context) {
     final lineChartDate = widget.lineChartData;
+
     if (lineChartDate == null || lineChartDate.isEmpty) {
       return Center(child: Text(LocaleKeys.noRecordFound.tr, style: TextStyle(fontSize: 16)));
     }
