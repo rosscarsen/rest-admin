@@ -6,7 +6,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:rest_admin/app/utils/constants.dart';
+
+import '../utils/constants.dart';
 
 ChartModel chartModelFromJson(String str) => ChartModel.fromJson(json.decode(str));
 

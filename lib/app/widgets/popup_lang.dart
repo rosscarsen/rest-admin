@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:path/path.dart';
-import 'package:rest_admin/app/translations/locale_keys.dart';
 
 import '../config.dart';
+import '../translations/locale_keys.dart';
 import '../utils/storage_manage.dart';
 
 class PopupLang extends StatefulWidget {
