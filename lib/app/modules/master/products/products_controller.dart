@@ -127,8 +127,8 @@ class ProductsController extends GetxController {
   //复制
   void copy(ProductData row) {}
   //编辑
-  void edit(ProductData row) {
-    Get.toNamed(Routes.PRODUCT_EDIT, parameters: {"id": row.tProductId?.toString() ?? ""});
+  void edit({ProductData? row}) {
+    Get.toNamed(Routes.PRODUCT_EDIT, parameters: row != null ? {"id": row.tProductId?.toString() ?? ""} : null);
     /* row.mCategory1 = "修改";
     dataSource.updateDataSource(); */
   }

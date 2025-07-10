@@ -215,4 +215,13 @@ abstract class LocaleKeys {
   static const String modifyDate = "modifyDate";
   static const String selectProductRemarks = "selectProductRemarks";
   static const String totalRecords = "totalRecords";
+  static const String lastPrice = "lastPrice";
+  static const String averageCost = "averageCost";
+  static const String lastCost = "lastCost";
+  static const String stdCost = "stdCost";
+  static const String barcodeEdit = "barcodeEdit";
+  static const String barcodeAdd = "barcodeAdd";
+  static const String maxQty = "maxQty";
+  static const String forceSelect = "forceSelect";
+  static const String chinese = "chinese";
 }

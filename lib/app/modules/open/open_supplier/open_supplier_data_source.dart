@@ -44,7 +44,7 @@ class OpenSupplierDataSource extends DataGridSource {
       cells: row.getCells().map<Widget>((e) {
         if (e.columnName == "select") {
           return Padding(
-            padding: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.all(6.0),
             child: FittedBox(
               child: FilledButton(
                 onPressed: () {

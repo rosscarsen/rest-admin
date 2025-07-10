@@ -215,4 +215,13 @@ Map<String, String> zhHK = {
   LocaleKeys.modifyDate: "修改日期",
   LocaleKeys.selectProductRemarks: "選擇食品備註",
   LocaleKeys.totalRecords: "共%s條記錄",
+  LocaleKeys.lastPrice: "最後售價",
+  LocaleKeys.averageCost: "平均成本",
+  LocaleKeys.lastCost: "最後成本",
+  LocaleKeys.stdCost: "標準成本",
+  LocaleKeys.barcodeEdit: "編輯条形码",
+  LocaleKeys.barcodeAdd: "添加条形码",
+  LocaleKeys.maxQty: "最大數量",
+  LocaleKeys.forceSelect: "強制選擇",
+  LocaleKeys.chinese: "中文",
 };

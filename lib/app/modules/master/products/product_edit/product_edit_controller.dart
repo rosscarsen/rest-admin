@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../config.dart';
 import '../../../../model/category_model.dart';
@@ -11,43 +12,89 @@ import '../../../../service/dio_api_result.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/easy_loading.dart';
 import '../../../../utils/logger.dart';
+import 'product_barcode_source.dart';
 import 'product_edit_fields.dart';
+import 'product_setMeal_limit_source.dart';
+import 'product_stock_source.dart';
 
-class ProductEditController extends GetxController with GetTickerProviderStateMixin {
+class ProductEditController extends GetxController with GetSingleTickerProviderStateMixin {
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
+  // 产品条码
+  final DataGridController barcodeDataGridController = DataGridController();
+  late ProductBarcodeSource productBarcodeSource;
+  final productBarcode = <ProductBarcode>[].obs;
+  // 产品仓库
+  final DataGridController stockDataGridController = DataGridController();
+  late ProductStockSource productStockSource;
+  final productStock = <ProductStock>[].obs;
+  // 套餐限制
+  final DataGridController setMealLimitDataGridController = DataGridController();
+  late SetMealLimitSource setMealLimitSource;
+  final setMealLimit = <SetMealLimit>[].obs;
+  // Dio客户端
   final ApiClient apiClient = ApiClient();
+  // 加载标识
   final isLoading = true.obs;
+  // 页面标题
   final title = "".obs;
+  // tab控制器
   late final TabController tabController;
-  List<Tab> tabs = <Tab>[
+  List<Tab> get tabs => [
     Tab(text: LocaleKeys.product.tr),
     Tab(text: LocaleKeys.detail.tr),
     Tab(text: LocaleKeys.barcode.tr),
     Tab(text: LocaleKeys.shop.tr),
+    if (Get.parameters.isNotEmpty) Tab(text: LocaleKeys.setMealLimit.tr),
+    if (Get.parameters.isNotEmpty) Tab(text: LocaleKeys.setMeal.tr),
   ];
+  final tabIndex = 0.obs;
+  // 类目
   final category1 = <CategoryModel>[].obs;
   final category2 = <CategoryModel>[].obs;
+  // 权限
   final hasPermission = true.obs;
+  // 单位
   final units = <UnitModel>[].obs;
+  // 全部类目用于多选类目
+  final categories = <CategoryModel>[].obs;
 
+  //产品ID
+  int? id;
+  //多类
+  RxList productCategory3 = [].obs;
   @override
   void onInit() {
     initParams();
-
-    productAddOrEdit();
+    updateDataGridSource();
     super.onInit();
   }
 
+  /// 重置状态
+  void restState() {
+    formKey.currentState?.reset();
+  }
+
+  /// 初始化参数
   void initParams() {
     final params = Get.parameters;
     title.value = params.isEmpty
         ? "${LocaleKeys.add.tr}${LocaleKeys.product.tr}"
         : "${LocaleKeys.edit.tr}${LocaleKeys.product.tr}";
-    if (params.isNotEmpty) {
-      tabs.add(Tab(text: LocaleKeys.setMealLimit.tr));
-      tabs.add(Tab(text: LocaleKeys.setMeal.tr));
-    }
+
     tabController = TabController(length: tabs.length, vsync: this);
+    tabController.addListener(() {
+      tabIndex.value = tabController.index;
+    });
+  }
+
+  //更新数据源
+  void updateDataGridSource() {
+    restState();
+    productAddOrEdit().then((_) {
+      productBarcodeSource = ProductBarcodeSource(this);
+      productStockSource = ProductStockSource(this);
+      setMealLimitSource = SetMealLimitSource(this);
+    });
   }
 
   @override
@@ -58,9 +105,13 @@ class ProductEditController extends GetxController with GetTickerProviderStateMi
   @override
   void onClose() {
     tabController.dispose();
+    barcodeDataGridController.dispose();
+    stockDataGridController.dispose();
+    setMealLimitDataGridController.dispose();
     super.onClose();
   }
 
+  /// 生成二级类目
   void generateCategory2(String? selectCate1) {
     category2.clear();
     formKey.currentState?.fields[ProductEditFields.mCategory2]?.didChange("");
@@ -94,33 +145,132 @@ class ProductEditController extends GetxController with GetTickerProviderStateMi
       final result = productAddOrEditModelFromJson(dioApiResult.data!);
       final apiResult = result.apiResult;
       if (apiResult != null) {
-        final categories = apiResult.category;
-        if (categories?.isNotEmpty ?? false) {
-          category1.assignAll(categories!);
+        categories.value = apiResult.category ?? [];
+        if (categories.isNotEmpty) {
+          category1.assignAll(categories);
         }
         if (apiResult.productInfo != null) {
-          logger.i("apiResult.productInfo:${apiResult.productInfo!.toJson()}");
           final productInfo = apiResult.productInfo;
           if (productInfo != null) {
+            id = productInfo.tProductId;
+            productCategory3.value = productInfo.mCategory3?.split(",") ?? [];
             formKey.currentState?.patchValue(
               Map.fromEntries(apiResult.productInfo!.toJson().entries.where((e) => e.value != null)),
             );
           }
+          productBarcode.assignAll(apiResult.productBarcode ?? []);
+          productStock.assignAll(apiResult.productStock ?? []);
+          setMealLimit.assignAll(apiResult.setMealLimit ?? []);
+
           units.assignAll(apiResult.units ?? []);
         }
       }
-
-      /* 
-      //类目
-      final categories = advancedSearchModel.apiResult?.category;
-      if (categories != null && categories.isNotEmpty) {
-        category1.assignAll(categories);
-      } */
     } catch (e) {
       logger.i(e.toString());
       showToast(LocaleKeys.getDataException.tr);
     } finally {
       isLoading(false);
     }
+  }
+
+  /// 保存产品
+  Future<void> productAddOrEditSave() async {
+    if (formKey.currentState?.saveAndValidate() ?? false) {
+      // 保存的時候要去除“平均成本”与“最后成本”
+      // 创建与修改时间为当前时间
+
+      final formData = Map<String, dynamic>.from(formKey.currentState!.value);
+      formData['T_Product_ID'] = id;
+      // 条码
+      formData.addAll({'productBarcode': productBarcode.map((e) => e.toJson()).toList()});
+      final DioApiResult dioApiResult = await apiClient.post(Config.productAddOrEditSave, data: formData);
+      logger.i(dioApiResult);
+    }
+  }
+
+  /// 编辑或添加产品条码
+  Future<void> editOrAddProductBarcode({ProductBarcode? row}) async {
+    final formKey = GlobalKey<FormState>();
+    final bool isAdd = row == null;
+    row ??= ProductBarcode();
+    Get.defaultDialog(
+      title: isAdd ? LocaleKeys.barcodeAdd.tr : LocaleKeys.barcodeEdit.tr,
+      content: Form(
+        key: formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          spacing: 8,
+          children: [
+            TextFormField(
+              initialValue: row.mCode,
+              decoration: InputDecoration(labelText: LocaleKeys.code.tr),
+              onChanged: (value) {
+                row?.mCode = value;
+              },
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return LocaleKeys.thisFieldIsRequired.tr;
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              initialValue: row.mName,
+              decoration: InputDecoration(labelText: LocaleKeys.name.tr),
+              onChanged: (value) {
+                row?.mName = value;
+              },
+            ),
+            DropdownButtonFormField(
+              value: row.mNonActived?.toString() ?? "0",
+              items: [
+                DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+              ],
+              onChanged: (value) {
+                row?.mNonActived = int.tryParse(value ?? "0");
+              },
+            ),
+            TextFormField(
+              initialValue: row.mRemarks,
+              decoration: InputDecoration(labelText: LocaleKeys.remarks.tr),
+              maxLines: 2,
+              keyboardType: TextInputType.multiline,
+              onChanged: (value) {
+                row?.mRemarks = value;
+              },
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        ElevatedButton(
+          onPressed: () {
+            Get.closeDialog();
+          },
+          child: Text(LocaleKeys.cancel.tr),
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            if (formKey.currentState?.validate() ?? false) {
+              successMessages(isAdd ? LocaleKeys.addSuccess.tr : LocaleKeys.editSuccess.tr);
+              if (isAdd && row != null) {
+                productBarcode.insert(0, row);
+              }
+              productBarcodeSource.updateDataSource();
+              Get.closeDialog();
+            }
+          },
+          child: Text(isAdd ? LocaleKeys.add.tr : LocaleKeys.edit.tr),
+        ),
+      ],
+    );
+  }
+
+  /// 删除产品条码
+  Future<void> deleteProductBarcode({ProductBarcode? row}) async {
+    if (row == null) return;
+    productBarcode.remove(row);
+    productBarcodeSource.updateDataSource();
   }
 }

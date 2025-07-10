@@ -3,8 +3,9 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../model/products_model.dart';
-import 'open_product_controller.dart';
 import '../../../translations/locale_keys.dart';
+import '../../../widgets/custom_cell.dart';
+import 'open_product_controller.dart';
 
 class OpenProductsDataSource extends DataGridSource {
   OpenProductsDataSource(this.controller) {
@@ -44,7 +45,7 @@ class OpenProductsDataSource extends DataGridSource {
       cells: row.getCells().map<Widget>((e) {
         if (e.columnName == "select") {
           return Padding(
-            padding: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.all(6.0),
             child: FittedBox(
               child: FilledButton(
                 onPressed: () {
@@ -55,12 +56,7 @@ class OpenProductsDataSource extends DataGridSource {
             ),
           );
         }
-
-        return Container(
-          alignment: Alignment.center,
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Text(e.value?.toString() ?? "", overflow: TextOverflow.ellipsis),
-        );
+        return CustomCell(data: e.value?.toString() ?? "");
       }).toList(),
     );
   }

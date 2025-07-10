@@ -106,7 +106,7 @@ class ProductsDataSource extends DataGridSource with WidgetsBindingObserver {
                         message: LocaleKeys.edit.tr,
                         child: IconButton(
                           icon: const Icon(Icons.edit, color: AppColors.editColor),
-                          onPressed: () => controller.edit(row),
+                          onPressed: () => controller.edit(row: row),
                         ),
                       ),
                     ),
@@ -148,7 +148,7 @@ class ProductsDataSource extends DataGridSource with WidgetsBindingObserver {
                           } else if (item.menuUserInfo == "copy") {
                             controller.copy(row);
                           } else if (item.menuUserInfo == "edit") {
-                            controller.edit(row);
+                            controller.edit(row: row);
                           } else if (item.menuUserInfo == "delete") {
                             controller.deleteRow(row);
                           } else if (item.menuUserInfo == "uploadPicture") {

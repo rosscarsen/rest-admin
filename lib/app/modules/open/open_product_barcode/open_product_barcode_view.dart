@@ -9,6 +9,7 @@ import '../../../translations/locale_keys.dart';
 import '../../../utils/progresshub.dart';
 import '../../../widgets/custom_cell.dart';
 import '../../../widgets/data_pager.dart';
+import '../../../widgets/no_record.dart';
 import 'open_product_barcode_controller.dart';
 
 class OpenProductBarcodeView extends GetView<OpenProductBarcodeController> {
@@ -98,16 +99,7 @@ class OpenProductBarcodeView extends GetView<OpenProductBarcodeController> {
               columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.auto : ColumnWidthMode.fill,
             ),
           ],
-          placeholder: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.thumb_down_alt_outlined, size: 30),
-                SizedBox(height: 8),
-                Text(LocaleKeys.noRecordFound.tr, style: TextStyle(fontSize: 16)),
-              ],
-            ),
-          ),
+          placeholder: NoRecord(),
         ),
       ),
     );

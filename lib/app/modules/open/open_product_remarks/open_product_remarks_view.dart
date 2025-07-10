@@ -9,6 +9,7 @@ import '../../../translations/locale_keys.dart';
 import '../../../utils/progresshub.dart';
 import '../../../widgets/custom_cell.dart';
 import '../../../widgets/data_pager.dart';
+import '../../../widgets/no_record.dart';
 import 'open_product_remarks_controller.dart';
 
 class OpenProductRemarksView extends GetView<OpenProductRemarksController> {
@@ -18,7 +19,7 @@ class OpenProductRemarksView extends GetView<OpenProductRemarksController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.selectSupplier.tr),
+        title: Text(LocaleKeys.selectProductRemarks.tr),
         centerTitle: true,
         actions: [IconButton(onPressed: () => controller.reloadData(), icon: Icon(Icons.refresh))],
       ),
@@ -104,16 +105,7 @@ class OpenProductRemarksView extends GetView<OpenProductRemarksController> {
               maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
             ),
           ],
-          placeholder: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.thumb_down_alt_outlined, size: 30),
-                SizedBox(height: 8),
-                Text(LocaleKeys.noRecordFound.tr, style: TextStyle(fontSize: 16)),
-              ],
-            ),
-          ),
+          placeholder: NoRecord(),
         ),
       ),
     );

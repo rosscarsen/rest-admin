@@ -31,12 +31,20 @@ class ApiResult {
   ProductInfo? productInfo;
   List<CategoryModel>? category;
   List<UnitModel>? units;
-  List<Barcode>? barcode;
+  List<ProductBarcode>? productBarcode;
   List<SetMeal>? setMeal;
-  List<Stock>? stock;
+  List<ProductStock>? productStock;
   List<SetMealLimit>? setMealLimit;
 
-  ApiResult({this.productInfo, this.category, this.units, this.barcode, this.setMeal, this.stock, this.setMealLimit});
+  ApiResult({
+    this.productInfo,
+    this.category,
+    this.units,
+    this.productBarcode,
+    this.setMeal,
+    this.productStock,
+    this.setMealLimit,
+  });
 
   factory ApiResult.fromJson(Map<String, dynamic> json) => ApiResult(
     productInfo: json["productInfo"] == null ? null : ProductInfo.fromJson(json["productInfo"]),
@@ -45,9 +53,13 @@ class ApiResult {
         ? []
         : List<CategoryModel>.from(json["category"]!.map((x) => CategoryModel.fromJson(x))),
     units: json["units"] == null ? [] : List<UnitModel>.from(json["units"]!.map((x) => UnitModel.fromJson(x))),
-    barcode: json["barcode"] == null ? [] : List<Barcode>.from(json["barcode"]!.map((x) => Barcode.fromJson(x))),
+    productBarcode: json["barcode"] == null
+        ? []
+        : List<ProductBarcode>.from(json["barcode"]!.map((x) => ProductBarcode.fromJson(x))),
     setMeal: json["setMeal"] == null ? [] : List<SetMeal>.from(json["setMeal"]!.map((x) => SetMeal.fromJson(x))),
-    stock: json["stock"] == null ? [] : List<Stock>.from(json["stock"]!.map((x) => Stock.fromJson(x))),
+    productStock: json["stock"] == null
+        ? []
+        : List<ProductStock>.from(json["stock"]!.map((x) => ProductStock.fromJson(x))),
     setMealLimit: json["setMealLimit"] == null
         ? []
         : List<SetMealLimit>.from(json["setMealLimit"]!.map((x) => SetMealLimit.fromJson(x))),
@@ -57,9 +69,9 @@ class ApiResult {
     "productInfo": productInfo?.toJson(),
     "category": category == null ? [] : List<dynamic>.from(category!.map((x) => x.toJson())),
     "units": units == null ? [] : List<dynamic>.from(units!.map((x) => x.toJson())),
-    "barcode": barcode == null ? [] : List<dynamic>.from(barcode!.map((x) => x.toJson())),
+    "productBarcode": productBarcode == null ? [] : List<dynamic>.from(productBarcode!.map((x) => x.toJson())),
     "setMeal": setMeal == null ? [] : List<dynamic>.from(setMeal!.map((x) => x.toJson())),
-    "stock": stock == null ? [] : List<dynamic>.from(stock!.map((x) => x.toJson())),
+    "stock": productStock == null ? [] : List<dynamic>.from(productStock!.map((x) => x.toJson())),
     "setMealLimit": setMealLimit == null ? [] : List<dynamic>.from(setMealLimit!.map((x) => x.toJson())),
   };
 }
@@ -189,10 +201,10 @@ class ProductInfo {
     mColor: json["mColor"],
     mSize: json["mSize"],
     mAvPrice: json["mAv_Price"],
-    mAvCost: json["mAv_Cost"],
+    mAvCost: json["mAv_Cost"] ?? "0.00",
     mDateCreate: json["mDate_Create"] == null ? null : DateTime.parse(json["mDate_Create"]),
-    mLatPrice: json["mLat_Price"],
-    mLatCost: json["mLat_Cost"],
+    mLatPrice: json["mLat_Price"] ?? "0.00",
+    mLatCost: json["mLat_Cost"] ?? "0.00",
     mDateModify: json["mDate_Modify"] == null ? null : DateTime.parse(json["mDate_Modify"]),
     mModel: json["mModel"],
     mSupplierCode: json["mSupplier_Code"],
@@ -203,22 +215,22 @@ class ProductInfo {
     mMemberPrice: json["mMember_Price"],
     tProductId: json["T_Product_ID"],
     mRemarks: json["mRemarks"],
-    mNonDiscount: json["mNon_Discount"]?.toString() ?? "",
-    mNonStock: json["mNon_Stock"]?.toString() ?? "",
+    mNonDiscount: json["mNon_Discount"]?.toString() ?? "0",
+    mNonStock: json["mNon_Stock"]?.toString() ?? "1",
     mOriginalPrice: json["mOriginal_Price"],
     mBundleSales: json["mBundle_Sales"]?.toString() ?? "",
     mTimes: json["mTimes"]?.toString() ?? "",
-    mPrePaid: json["mPrePaid"]?.toString() ?? "",
-    mNonActived: json["mNonActived"]?.toString() ?? "",
-    mStandardCost: json["mStandard_Cost"],
+    mPrePaid: json["mPrePaid"]?.toString() ?? "0",
+    mNonActived: json["mNonActived"]?.toString() ?? "0",
+    mStandardCost: json["mStandard_Cost"] ?? "0.00",
     mExpiryDate: json["mExpiryDate"],
-    mNonCharge: json["mNonCharge"]?.toString() ?? "",
+    mNonCharge: json["mNonCharge"]?.toString() ?? "0",
     mPrice: json['mPrice'],
     mPrice1: json["mPrice1"],
     mPrice2: json["mPrice2"],
     mPrice3: json["mPrice3"],
     mStockCode: json["mStockCode"],
-    mSetOption: json["mSetOption"]?.toString() ?? "",
+    mSetOption: json["mSetOption"]?.toString() ?? "1",
     mSoldOut: json["mSoldOut"]?.toString() ?? "0",
     mNonWebHide: json["mNon_WebHide"]?.toString() ?? "",
     mWebRemarks: json["mWeb_Remarks"],
@@ -284,7 +296,7 @@ class ProductInfo {
   };
 }
 
-class Barcode {
+class ProductBarcode {
   String? mProductCode;
   String? mCode;
   String? mName;
@@ -293,9 +305,17 @@ class Barcode {
   int? tProductId;
   int? mNonActived;
 
-  Barcode({this.mProductCode, this.mCode, this.mName, this.mItem, this.mRemarks, this.tProductId, this.mNonActived});
+  ProductBarcode({
+    this.mProductCode,
+    this.mCode,
+    this.mName,
+    this.mItem,
+    this.mRemarks,
+    this.tProductId,
+    this.mNonActived,
+  });
 
-  factory Barcode.fromJson(Map<String, dynamic> json) => Barcode(
+  factory ProductBarcode.fromJson(Map<String, dynamic> json) => ProductBarcode(
     mProductCode: json["mProduct_Code"],
     mCode: json["mCode"],
     mName: json["mName"],
@@ -424,7 +444,7 @@ class SetMealLimit {
   };
 }
 
-class Stock {
+class ProductStock {
   String? mPhone;
   String? mName;
   String? mAddress;
@@ -444,7 +464,7 @@ class Stock {
   String? mOpenning;
   String? mQty;
 
-  Stock({
+  ProductStock({
     this.mPhone,
     this.mName,
     this.mAddress,
@@ -465,7 +485,7 @@ class Stock {
     this.mQty,
   });
 
-  factory Stock.fromJson(Map<String, dynamic> json) => Stock(
+  factory ProductStock.fromJson(Map<String, dynamic> json) => ProductStock(
     mPhone: json["mPhone"],
     mName: json["mName"],
     mAddress: json["mAddress"],

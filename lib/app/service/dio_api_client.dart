@@ -93,6 +93,7 @@ class ApiClient {
         queryParameters: queryParameters,
         onSendProgress: onSendProgress,
       );
+      //logger.i(response);
       return _handleResponse(response);
     } catch (e) {
       return _handleError(e);

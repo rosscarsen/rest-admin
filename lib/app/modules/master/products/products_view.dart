@@ -17,6 +17,7 @@ import '../../../utils/progresshub.dart';
 import '../../../widgets/custom_cell.dart';
 import '../../../widgets/custom_scaffold.dart';
 import '../../../widgets/data_pager.dart';
+import '../../../widgets/no_record.dart';
 import 'products_controller.dart';
 
 class ProductsView extends GetView<ProductsController> {
@@ -182,7 +183,7 @@ class ProductsView extends GetView<ProductsController> {
                   ),
                   //新增
                   ElevatedButton(
-                    onPressed: controller.hasPermission.value ? () => Get.toNamed(Routes.PRODUCT_EDIT) : null,
+                    onPressed: controller.hasPermission.value ? () => controller.edit() : null,
                     child: Text(LocaleKeys.add.tr),
                   ),
                 ],
@@ -493,19 +494,7 @@ class ProductsView extends GetView<ProductsController> {
               label: CustomCell(data: LocaleKeys.operation.tr),
             ),
           ],
-          placeholder: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.thumb_down_alt_outlined, size: 30),
-                SizedBox(height: 8),
-                Text(
-                  controller.hasPermission.value ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
-                  style: TextStyle(fontSize: 16),
-                ),
-              ],
-            ),
-          ),
+          placeholder: NoRecord(),
         ),
       ),
     );

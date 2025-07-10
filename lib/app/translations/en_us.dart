@@ -215,4 +215,13 @@ Map<String, String> get enUS => {
   LocaleKeys.modifyDate: "Modify Date",
   LocaleKeys.selectProductRemarks: "Select Product Remarks",
   LocaleKeys.totalRecords: "Total %s Records",
+  LocaleKeys.lastPrice: "Last Price",
+  LocaleKeys.averageCost: "Average Cost",
+  LocaleKeys.lastCost: "Last Cost",
+  LocaleKeys.stdCost: "Standard Cost",
+  LocaleKeys.barcodeEdit: "Edit Barcode",
+  LocaleKeys.barcodeAdd: "Add Barcode",
+  LocaleKeys.maxQty: "Max Qty.",
+  LocaleKeys.forceSelect: "Force Select",
+  LocaleKeys.chinese: "Chinese",
 };

@@ -54,6 +54,7 @@ class FormHelper {
     bool enabled = true,
     bool isVisible = true, // 控制可见性的状态
     TextEditingController? controller,
+    int? maxDecimalDigits = 2,
   }) {
     assert(maxLines >= 1, 'maxLines不能小于1');
     return ResponsiveGridCol(
@@ -95,8 +96,23 @@ class FormHelper {
                 filled: !enabled,
               ),
               keyboardType: keyboardType ?? (maxLines > 1 ? TextInputType.multiline : TextInputType.text),
-              inputFormatters: inputFormatters,
-              textInputAction: maxLines > 1 ? TextInputAction.newline : TextInputAction.next,
+              inputFormatters: keyboardType == TextInputType.number
+                  ? inputFormatters ??
+                        [
+                          TextInputFormatter.withFunction((oldValue, newValue) {
+                            final text = newValue.text;
+
+                            if (text.isEmpty) return newValue;
+                            if (text == '.') return oldValue; // 禁止首个字符为小数点
+                            final regex = RegExp(r'^\d+(\.\d{0,' + maxDecimalDigits.toString() + r'})?$');
+                            if (regex.hasMatch(text)) {
+                              return newValue;
+                            }
+                            return oldValue;
+                          }),
+                        ]
+                  : null,
+              //textInputAction: maxLines > 1 ? TextInputAction.newline : TextInputAction.done,
               enableSuggestions: true,
               enableInteractiveSelection: true,
               contextMenuBuilder: (context, editableTextState) {

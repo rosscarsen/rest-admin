@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart';
+import 'package:rest_admin/app/translations/locale_keys.dart';
 
 import '../config.dart';
 import '../utils/storage_manage.dart';
@@ -16,38 +18,60 @@ class _PopupLangState extends State<PopupLang> {
   @override
   Widget build(BuildContext context) {
     final StorageManage storageManage = StorageManage();
-    return PopupMenuButton(
-      icon: Icon(FontAwesomeIcons.language),
-      itemBuilder: (BuildContext context) {
-        final String currentLanguage = storageManage.read(Config.localStorageLanguage);
-        return <PopupMenuEntry<String>>[
-          PopupMenuItem(
-            value: "zh_CN",
-            child: Text("中文简体", style: TextStyle(color: currentLanguage == "zh_CN" ? Colors.green : null)),
+    final String? currentLang = Get.locale?.toString();
+    final activeColor = Theme.of(context).primaryColor;
+    return MenuAnchor(
+      alignmentOffset: const Offset(-50, 0),
+      menuChildren: [
+        MenuItemButton(
+          child: Row(
+            spacing: 8,
+            children: [
+              Text("中文简体", style: TextStyle(color: currentLang == "zh_CN" ? activeColor : null)),
+              if (currentLang == "zh_CN") Icon(Icons.check, size: 18, color: activeColor),
+            ],
           ),
-          PopupMenuDivider(),
-          PopupMenuItem(
-            value: "zh_HK",
-            child: Text("中文繁體", style: TextStyle(color: currentLanguage == "zh_HK" ? Colors.green : null)),
+          onPressed: () {
+            Get.updateLocale(const Locale("zh", "CN"));
+            storageManage.write(Config.localStorageLanguage, "zh_CN");
+          },
+        ),
+        const Divider(),
+        MenuItemButton(
+          child: Row(
+            spacing: 8,
+            children: [
+              Text("中文繁體", style: TextStyle(color: currentLang == "zh_HK" ? activeColor : null)),
+              if (currentLang == "zh_HK") Icon(Icons.check, size: 18, color: activeColor),
+            ],
           ),
-          PopupMenuDivider(),
-          PopupMenuItem(
-            value: "en_US",
-            child: Text("English", style: TextStyle(color: currentLanguage == "en_US" ? Colors.green : null)),
+          onPressed: () {
+            Get.updateLocale(const Locale("zh", "HK"));
+            storageManage.write(Config.localStorageLanguage, "zh_HK");
+          },
+        ),
+        const Divider(),
+        MenuItemButton(
+          child: Row(
+            spacing: 8,
+            children: [
+              Text("English", style: TextStyle(color: currentLang == "en_US" ? activeColor : null)),
+              if (currentLang == "en_US") Icon(Icons.check, size: 18, color: activeColor),
+            ],
           ),
-        ];
-      },
-      onSelected: (String value) {
-        final locale = switch (value) {
-          "zh_CN" => const Locale("zh", "CN"),
-          "zh_HK" => const Locale("zh", "HK"),
-          _ => const Locale("en", "US"),
-        };
-        storageManage.write(Config.localStorageLanguage, value);
-        Get.updateLocale(locale);
-        /* if (Get.currentRoute != Routes.SIGNIN) {
-          Get.offAndToNamed(Routes.REFRESH_TEMP, arguments: Get.currentRoute);
-        } */
+          onPressed: () {
+            Get.updateLocale(const Locale("en", "US"));
+            storageManage.write(Config.localStorageLanguage, "en_US");
+          },
+        ),
+      ],
+      /* CheckedPopupMenuItem */
+      builder: (context, controller, child) {
+        return IconButton(
+          icon: const Icon(FontAwesomeIcons.language),
+          tooltip: LocaleKeys.language.tr,
+          onPressed: () => controller.isOpen ? controller.close() : controller.open(),
+        );
       },
     );
   }

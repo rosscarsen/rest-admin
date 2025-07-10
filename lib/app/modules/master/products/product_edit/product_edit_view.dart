@@ -5,11 +5,16 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:syncfusion_flutter_core/theme.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../routes/app_pages.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/form_help.dart';
+import '../../../../utils/progresshub.dart';
+import '../../../../widgets/custom_cell.dart';
+import '../../../../widgets/no_record.dart';
 import 'product_edit_controller.dart';
 import 'product_edit_fields.dart';
 
@@ -18,245 +23,675 @@ class ProductEditView extends GetView<ProductEditController> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Skeletonizer(
-        enabled: controller.isLoading.value,
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(controller.title.value),
-            centerTitle: true,
-            actions: [
-              Tooltip(
-                message: LocaleKeys.refresh.tr,
-                child: IconButton(
-                  onPressed: () {
-                    controller.productAddOrEdit();
-                  },
-                  icon: FaIcon(Icons.refresh),
-                ),
+      () => Scaffold(
+        appBar: AppBar(
+          title: Text(controller.title.value),
+          centerTitle: true,
+          actions: [
+            Tooltip(
+              message: LocaleKeys.refresh.tr,
+              child: IconButton(
+                onPressed: () {
+                  controller.updateDataGridSource();
+                },
+                icon: FaIcon(Icons.refresh),
               ),
-            ],
-            bottom: PreferredSize(
-              preferredSize: Size.fromHeight(48.0),
-              child: Container(
-                color: Colors.white,
-                child: TabBar(
-                  isScrollable: true,
-                  controller: controller.tabController,
-                  tabs: controller.tabs,
-                  labelColor: Colors.blueAccent,
-                  indicatorColor: Colors.blueAccent,
-                  indicatorWeight: 2,
-                  indicatorSize: TabBarIndicatorSize.label,
-                  unselectedLabelColor: Colors.grey.shade600,
-                  overlayColor: WidgetStateProperty.all(Colors.blue.withValues(alpha: 0.1)),
-                  tabAlignment: TabAlignment.start,
-                ),
-              ),
-            ),
-          ),
-          body: _buildTabBarView(),
-
-          persistentFooterButtons: [
-            FormHelper.button(
-              onPressed: () {
-                if (controller.formKey.currentState?.saveAndValidate() ?? false) {
-                  debugPrint(controller.formKey.currentState?.value.toString());
-                }
-              },
             ),
           ],
+          bottom: controller.hasPermission.value
+              ? PreferredSize(
+                  preferredSize: Size.fromHeight(48.0),
+                  child: Container(
+                    color: Colors.white,
+                    child: TabBar(
+                      isScrollable: true,
+                      controller: controller.tabController,
+                      tabs: controller.tabs,
+                      labelColor: Colors.blueAccent,
+                      indicatorColor: Colors.blueAccent,
+                      indicatorWeight: 2,
+                      indicatorSize: TabBarIndicatorSize.label,
+                      unselectedLabelColor: Colors.grey.shade600,
+                      overlayColor: WidgetStateProperty.all(Colors.blue.withValues(alpha: 0.1)),
+                      tabAlignment: TabAlignment.start,
+                    ),
+                  ),
+                )
+              : null,
         ),
-      ),
-    );
-  }
-
-  // tabBarView
-  Widget _buildTabBarView() {
-    return FormBuilder(
-      key: controller.formKey,
-      child: TabBarView(
-        controller: controller.tabController,
-        children: [
-          _buildProduct(),
-          _buildDetail(),
-          _buildBarcode(),
-          _buildShop(),
-          if (Get.parameters.isNotEmpty) _buildSetMealLimit(),
-          if (Get.parameters.isNotEmpty) _buildSetMeal(),
+        body: controller.hasPermission.value
+            ? _buildTabBarView(context)
+            : Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.thumb_down_alt_outlined, size: 30),
+                    SizedBox(height: 8),
+                    Text(
+                      controller.hasPermission.value ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+        persistentFooterButtons: [
+          FormHelper.button(onPressed: controller.hasPermission.value ? controller.productAddOrEditSave : null),
         ],
       ),
     );
   }
 
-  // 产品实图
-  Widget _buildProduct() {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ResponsiveGridRow(
-          children: [
-            //类目1
-            FormHelper.selectInput(
-              name: ProductEditFields.mCategory1,
-              labelText: "${LocaleKeys.category.tr}1",
-              items: [
-                DropdownMenuItem(value: "", child: Text("")),
-                if (controller.category1.isNotEmpty)
-                  ...controller.category1.map(
-                    (e) => DropdownMenuItem(
-                      value: e.mCategory.toString(),
-                      child: Row(
-                        spacing: 8.0,
-                        children: [
-                          Text(e.mCategory.toString()),
-                          Flexible(child: Text(e.mDescription.toString())),
-                        ],
+  // 主视图
+  Widget _buildTabBarView(BuildContext context) {
+    return FormBuilder(
+      key: controller.formKey,
+      child: IndexedStack(
+        index: controller.tabIndex.value.clamp(0, controller.tabs.length - 1),
+        children: [
+          _buildProduct(context: context),
+          _buildDetail(context: context),
+          _buildBarcode(context: context),
+          _buildShop(context: context),
+          if (Get.parameters.isNotEmpty) _buildSetMealLimit(context: context),
+          if (Get.parameters.isNotEmpty) _buildSetMeal(context: context),
+        ],
+      ),
+    );
+  }
+
+  // 产品视图
+  Widget _buildProduct({required BuildContext context}) {
+    return Skeletonizer(
+      enabled: controller.isLoading.value,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ResponsiveGridRow(
+            children: [
+              //类目1
+              FormHelper.selectInput(
+                name: ProductEditFields.mCategory1,
+                labelText: "${LocaleKeys.category.tr}1",
+                items: [
+                  DropdownMenuItem(value: "", child: Text("")),
+                  if (controller.category1.isNotEmpty)
+                    ...controller.category1.map(
+                      (e) => DropdownMenuItem(
+                        value: e.mCategory.toString(),
+                        child: Row(
+                          spacing: 8.0,
+                          children: [
+                            Text(e.mCategory.toString()),
+                            Flexible(child: Text(e.mDescription.toString())),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-              ],
-              onChanged: (String? category1) {
-                controller.generateCategory2(category1);
-              },
-            ),
-            //类目2
-            FormHelper.selectInput(
-              name: ProductEditFields.mCategory2,
-              labelText: "${LocaleKeys.category.tr}2",
-              items: [
-                DropdownMenuItem(value: "", child: Text("")),
-                if (controller.category2.isNotEmpty)
-                  ...controller.category2.map(
-                    (e) => DropdownMenuItem(
-                      value: e.mCategory,
-                      child: Row(
-                        spacing: 8.0,
-                        children: [
-                          Text(e.mCategory.toString()),
-                          Flexible(child: Text(e.mDescription.toString())),
-                        ],
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            //创建日期
-            FormHelper.dateInput(
-              name: ProductEditFields.mDate_Create,
-              labelText: LocaleKeys.createDate.tr,
-              enabled: false,
-              inputType: DateInputType.dateAndTime,
-              canClear: false,
-            ),
-            //编号
-            FormHelper.textInput(
-              name: ProductEditFields.mCode,
-              labelText: LocaleKeys.code.tr,
-              enabled: Get.parameters.isEmpty,
-              validator: (value) {
-                if (value?.isEmpty ?? true) {
-                  return LocaleKeys.thisFieldIsRequired.tr;
-                }
-                return null;
-              },
-            ),
-            //价钱1
-            FormHelper.textInput(
-              name: ProductEditFields.mPrice,
-              labelText: "${LocaleKeys.price.tr}1",
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
-                TextInputFormatter.withFunction((oldValue, newValue) {
-                  try {
-                    final text = newValue.text;
-                    if (text.isEmpty) return newValue;
-                    double.parse(text);
-                    return newValue;
-                  } catch (_) {
-                    return oldValue;
-                  }
-                }),
-              ],
-            ),
-            //修改日期
-            FormHelper.dateInput(
-              name: ProductEditFields.mDate_Modify,
-              labelText: LocaleKeys.modifyDate.tr,
-              enabled: false,
-              inputType: DateInputType.dateAndTime,
-              canClear: false,
-            ),
-            //名称
-            FormHelper.textInput(name: ProductEditFields.mDesc1, labelText: LocaleKeys.name.tr, maxLines: 2),
-            //厨房单
-            FormHelper.textInput(name: ProductEditFields.mDesc2, labelText: LocaleKeys.kitchenList.tr, maxLines: 2),
-            //按键名称
-            FormHelper.textInput(name: ProductEditFields.mRemarks, labelText: LocaleKeys.keyName.tr, maxLines: 2),
-            //食品备注
-            FormHelper.textInput(
-              name: ProductEditFields.mMeasurement,
-              labelText: LocaleKeys.productRemarks.tr,
-              suffixIcon: IconButton(
-                onPressed: () async {
-                  String? result = await Get.toNamed(Routes.OPEN_PRODUCT_REMARKS);
-                  if (result?.isNotEmpty ?? false) {
-                    controller.formKey.currentState?.fields[ProductEditFields.mMeasurement]?.didChange(result);
-                  }
+                ],
+                onChanged: (String? category1) {
+                  controller.generateCategory2(category1);
                 },
-                icon: Icon(Icons.file_open, color: AppColors.openColor),
               ),
-            ),
-            //单位
-            FormHelper.selectInput(
-              name: ProductEditFields.mUnit,
-              labelText: LocaleKeys.unit.tr,
-              items: [
-                DropdownMenuItem(value: "", child: Text("")),
-                if (controller.units.isNotEmpty)
-                  ...controller.units.map(
-                    (e) => DropdownMenuItem(
-                      value: e.mUnit,
-                      child: FittedBox(child: Text(e.mUnit.toString())),
+              //类目2
+              FormHelper.selectInput(
+                name: ProductEditFields.mCategory2,
+                labelText: "${LocaleKeys.category.tr}2",
+                items: [
+                  DropdownMenuItem(value: "", child: Text("")),
+                  if (controller.category2.isNotEmpty)
+                    ...controller.category2.map(
+                      (e) => DropdownMenuItem(
+                        value: e.mCategory,
+                        child: Row(
+                          spacing: 8.0,
+                          children: [
+                            Text(e.mCategory.toString()),
+                            Flexible(child: Text(e.mDescription.toString())),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-              ],
-            ),
-            //售罄
-            FormHelper.selectInput(
-              name: ProductEditFields.mSoldOut,
-              labelText: LocaleKeys.soldOut.tr,
-              items: [
-                DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
-                DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
-              ],
-            ),
-            //不具折上折
-            //不具服务费
-            //排序
-          ],
+                ],
+              ),
+              //创建日期
+              FormHelper.dateInput(
+                name: ProductEditFields.mDate_Create,
+                labelText: LocaleKeys.createDate.tr,
+                enabled: false,
+                inputType: DateInputType.dateAndTime,
+                canClear: false,
+              ),
+              //编号
+              FormHelper.textInput(
+                name: ProductEditFields.mCode,
+                labelText: LocaleKeys.code.tr,
+                enabled: Get.parameters.isEmpty,
+                validator: (value) {
+                  if (value?.isEmpty ?? true) {
+                    return LocaleKeys.thisFieldIsRequired.tr;
+                  }
+                  return null;
+                },
+              ),
+              //价钱1
+              FormHelper.textInput(
+                name: ProductEditFields.mPrice,
+                labelText: "${LocaleKeys.price.tr}1",
+                keyboardType: TextInputType.number,
+              ),
+              //修改日期
+              FormHelper.dateInput(
+                name: ProductEditFields.mDate_Modify,
+                labelText: LocaleKeys.modifyDate.tr,
+                enabled: false,
+                inputType: DateInputType.dateAndTime,
+                canClear: false,
+              ),
+              //名称
+              FormHelper.textInput(name: ProductEditFields.mDesc1, labelText: LocaleKeys.name.tr, maxLines: 2),
+              //厨房单
+              FormHelper.textInput(name: ProductEditFields.mDesc2, labelText: LocaleKeys.kitchenList.tr, maxLines: 2),
+              //按键名称
+              FormHelper.textInput(name: ProductEditFields.mRemarks, labelText: LocaleKeys.keyName.tr, maxLines: 2),
+              //食品备注
+              FormHelper.textInput(
+                name: ProductEditFields.mMeasurement,
+                labelText: LocaleKeys.productRemarks.tr,
+                suffixIcon: IconButton(
+                  onPressed: () async {
+                    String? result = await Get.toNamed(Routes.OPEN_PRODUCT_REMARKS);
+                    if (result?.isNotEmpty ?? false) {
+                      controller.formKey.currentState?.fields[ProductEditFields.mMeasurement]?.didChange(result);
+                    }
+                  },
+                  icon: Icon(Icons.file_open, color: AppColors.openColor),
+                ),
+              ),
+              //单位
+              FormHelper.selectInput(
+                name: ProductEditFields.mUnit,
+                labelText: LocaleKeys.unit.tr,
+                items: [
+                  DropdownMenuItem(value: "", child: Text("")),
+                  if (controller.units.isNotEmpty)
+                    ...controller.units.map(
+                      (e) => DropdownMenuItem(
+                        value: e.mUnit,
+                        child: FittedBox(child: Text(e.mUnit.toString())),
+                      ),
+                    ),
+                ],
+              ),
+              //售罄
+              FormHelper.selectInput(
+                name: ProductEditFields.mSoldOut,
+                labelText: LocaleKeys.soldOut.tr,
+                items: [
+                  DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                  DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+                ],
+              ),
+              //不具折上折
+              FormHelper.selectInput(
+                name: ProductEditFields.mNon_Discount,
+                labelText: LocaleKeys.notDiscount.tr,
+                items: [
+                  DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                  DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+                ],
+              ),
+              //不具服务费
+              FormHelper.selectInput(
+                name: ProductEditFields.mNonCharge,
+                labelText: LocaleKeys.noServiceCharge.tr,
+                items: [
+                  DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                  DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+                ],
+              ),
+              //排序
+              FormHelper.textInput(
+                name: ProductEditFields.mModel,
+                labelText: LocaleKeys.sort.tr,
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildDetail() {
-    return Text("detail");
+  // 详细
+  Widget _buildDetail({required BuildContext context}) {
+    return Skeletonizer(
+      enabled: controller.isLoading.value,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ResponsiveGridRow(
+            children: [
+              //非库存食品
+              FormHelper.selectInput(
+                name: ProductEditFields.mNon_Stock,
+                labelText: LocaleKeys.nonStock.tr,
+                items: [
+                  DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                  DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+                ],
+              ),
+              //非启用
+              FormHelper.selectInput(
+                name: ProductEditFields.mNonActived,
+                labelText: LocaleKeys.nonEnable.tr,
+                items: [
+                  DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                  DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+                ],
+              ),
+              //价钱2
+              FormHelper.textInput(
+                name: ProductEditFields.mBottom_Price,
+                labelText: "${LocaleKeys.price.tr}2",
+                keyboardType: TextInputType.number,
+              ),
+              //价钱3
+              FormHelper.textInput(
+                name: ProductEditFields.mPrice1,
+                labelText: "${LocaleKeys.price.tr}3",
+                keyboardType: TextInputType.number,
+              ),
+              //价钱4
+              FormHelper.textInput(
+                name: ProductEditFields.mPrice2,
+                labelText: "${LocaleKeys.price.tr}4",
+                keyboardType: TextInputType.number,
+              ),
+              //价钱5
+              FormHelper.textInput(
+                name: ProductEditFields.mPrice3,
+                labelText: "${LocaleKeys.price.tr}5",
+                keyboardType: TextInputType.number,
+              ),
+              // 参考编号
+              FormHelper.textInput(name: ProductEditFields.mRef_Code, labelText: LocaleKeys.refCode.tr),
+              //供应商
+              FormHelper.textInput(
+                name: ProductEditFields.mSupplier_Code,
+                labelText: LocaleKeys.supplier.tr,
+                suffixIcon: IconButton(
+                  onPressed: () async {
+                    var result = await Get.toNamed(Routes.OPEN_SUPPLIER);
+                    controller.formKey.currentState?.fields[ProductEditFields.mSupplier_Code]?.didChange(result);
+                  },
+                  icon: Icon(Icons.file_open, color: AppColors.openColor),
+                ),
+              ),
+              // 预支付
+              FormHelper.selectInput(
+                name: ProductEditFields.mPrePaid,
+                labelText: LocaleKeys.prePaid.tr,
+                items: [
+                  DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                  DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+                ],
+              ),
+              //高存量
+              FormHelper.textInput(
+                name: ProductEditFields.mMax_Level,
+                labelText: LocaleKeys.maxStock.tr,
+                keyboardType: TextInputType.number,
+              ),
+              //低存量
+              FormHelper.textInput(
+                name: ProductEditFields.mMin_Level,
+                labelText: LocaleKeys.minStock.tr,
+                keyboardType: TextInputType.number,
+              ),
+              // 最后卖价
+              FormHelper.textInput(
+                name: ProductEditFields.mLat_Price,
+                labelText: LocaleKeys.lastPrice.tr,
+                keyboardType: TextInputType.number,
+                enabled: false,
+              ),
+              // 平均成本
+              FormHelper.textInput(
+                name: ProductEditFields.mAv_Cost,
+                labelText: LocaleKeys.averageCost.tr,
+                keyboardType: TextInputType.number,
+                enabled: false,
+              ),
+              // 最后成本
+              FormHelper.textInput(
+                name: ProductEditFields.mLat_Cost,
+                labelText: LocaleKeys.lastCost.tr,
+                keyboardType: TextInputType.number,
+                enabled: false,
+              ),
+              // 标准成本
+              FormHelper.textInput(
+                name: ProductEditFields.mStandard_Cost,
+                labelText: LocaleKeys.stdCost.tr,
+                keyboardType: TextInputType.number,
+              ),
+              // 图片路径
+              FormHelper.textInput(
+                sm: 12,
+                md: 12,
+                lg: 12,
+                xl: 12,
+                name: ProductEditFields.mPicture_Path,
+                labelText: LocaleKeys.picturePath.tr,
+              ),
+              // 多类别
+              ResponsiveGridCol(
+                sm: 12,
+                md: 12,
+                lg: 12,
+                xl: 12,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text(
+                    LocaleKeys.multipleCategory.tr,
+                    style: TextStyle(color: Colors.grey.shade600, fontSize: 18),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+
+              ...controller.categories.map((item) {
+                final ScrollController scrollController = ScrollController();
+                return ResponsiveGridCol(
+                  sm: 12,
+                  md: 6,
+                  lg: 4,
+                  xl: 4,
+                  child: Container(
+                    padding: EdgeInsets.all(4.0),
+                    margin: EdgeInsets.all(4.0),
+                    height: 200,
+                    decoration: BoxDecoration(
+                      border: Border.fromBorderSide(Divider.createBorderSide(context, width: 1.0)),
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    child: Column(
+                      spacing: 4,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        /*  '${item.children?.length ?? 0}' */
+                        Text(
+                          "${item.mDescription ?? ""}(${item.children?.length ?? 0})",
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        Expanded(
+                          child: Scrollbar(
+                            thickness: 8,
+                            radius: Radius.circular(5),
+                            thumbVisibility: true,
+                            interactive: true,
+                            controller: scrollController,
+                            child: SingleChildScrollView(
+                              controller: scrollController,
+                              child: item.children?.isEmpty ?? false
+                                  ? null
+                                  : FormBuilderCheckboxGroup(
+                                      initialValue: controller.productCategory3.value
+                                          .where(
+                                            (value) =>
+                                                item.children?.any((child) => child.mCategory?.toString() == value) ??
+                                                false,
+                                          )
+                                          .toList(), //controller.productCategory3.value,
+                                      orientation: OptionsOrientation.vertical,
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        enabledBorder: InputBorder.none,
+                                        focusedBorder: InputBorder.none,
+                                      ),
+                                      name: "multipleCategory[${item.tCategoryId}][]",
+                                      options: item.children?.isEmpty ?? false
+                                          ? []
+                                          : item.children!
+                                                .asMap()
+                                                .entries
+                                                .map(
+                                                  (entry) => FormBuilderFieldOption(
+                                                    value: entry.value.mCategory?.toString() ?? "",
+                                                    child: Row(
+                                                      children: [
+                                                        Text(
+                                                          '(${entry.key + 1}) ${entry.value.mCategory?.toString()} ',
+                                                        ),
+                                                        Flexible(child: Text(entry.value.mDescription ?? "")),
+                                                      ],
+                                                    ), // 移除FittedBox
+                                                  ),
+                                                )
+                                                .toList(),
+                                    ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
-  Widget _buildBarcode() {
-    return Text("barcode");
+  // 条码视图
+  Widget _buildBarcode({required BuildContext context}) {
+    return ProgressHUD(
+      child: controller.isLoading.value
+          ? null
+          : SelectionArea(
+              child: SfDataGridTheme(
+                data: SfDataGridThemeData(
+                  gridLineColor: Colors.grey.shade300,
+                  currentCellStyle: DataGridCurrentCellStyle(
+                    borderColor: Colors.transparent, // 避免选中单元格边框影响
+                    borderWidth: 0,
+                  ),
+                ),
+
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SfDataGrid(
+                    /* onQueryRowHeight: (details) {
+                      return details.getIntrinsicRowHeight(details.rowIndex);
+                    }, */
+                    isScrollbarAlwaysShown: true,
+                    controller: controller.barcodeDataGridController,
+                    footerFrozenColumnsCount: 1,
+                    frozenColumnsCount: 0,
+                    gridLinesVisibility: GridLinesVisibility.both,
+                    headerGridLinesVisibility: GridLinesVisibility.both,
+                    columnWidthMode: controller.productBarcodeSource.rows.isEmpty
+                        ? context.isPhoneOrLess
+                              ? ColumnWidthMode.fitByColumnName
+                              : ColumnWidthMode.fill
+                        : ColumnWidthMode.auto,
+                    columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
+                    columnSizer: ColumnSizer(),
+                    allowSorting: false,
+                    showCheckboxColumn: false,
+                    source: controller.productBarcodeSource,
+                    columns: <GridColumn>[
+                      GridColumn(
+                        columnName: "barcode",
+                        label: CustomCell(data: LocaleKeys.barcode.tr),
+                      ),
+                      GridColumn(
+                        columnName: 'name',
+                        label: CustomCell(data: LocaleKeys.name.tr),
+                        columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.auto : ColumnWidthMode.fill,
+                      ),
+                      GridColumn(
+                        columnName: 'nonEnable',
+                        label: CustomCell(data: LocaleKeys.nonEnable.tr),
+                      ),
+                      GridColumn(
+                        columnName: 'remarks',
+                        label: CustomCell(data: LocaleKeys.remarks.tr),
+                        maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
+                      ),
+                      GridColumn(
+                        allowSorting: false,
+                        columnName: 'actions',
+                        width: 100,
+                        label: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Flexible(child: CustomCell(data: LocaleKeys.operation.tr)),
+                            IconButton(
+                              icon: Icon(Icons.add, color: AppColors.editColor),
+                              onPressed: () async {
+                                await controller.editOrAddProductBarcode();
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                    placeholder: NoRecord(),
+                  ),
+                ),
+              ),
+            ),
+    );
   }
 
-  Widget _buildShop() {
-    return Text("shop");
+  // 库存视图
+  Widget _buildShop({required BuildContext context}) {
+    return ProgressHUD(
+      child: controller.isLoading.value
+          ? null
+          : SelectionArea(
+              child: SfDataGridTheme(
+                data: SfDataGridThemeData(
+                  gridLineColor: Colors.grey.shade300,
+                  currentCellStyle: DataGridCurrentCellStyle(
+                    borderColor: Colors.transparent, // 避免选中单元格边框影响
+                    borderWidth: 0,
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SfDataGrid(
+                    isScrollbarAlwaysShown: true,
+                    controller: controller.stockDataGridController,
+                    footerFrozenColumnsCount: 0,
+                    frozenColumnsCount: 0,
+                    gridLinesVisibility: GridLinesVisibility.both,
+                    headerGridLinesVisibility: GridLinesVisibility.both,
+                    columnWidthMode: ColumnWidthMode.fill,
+                    columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
+                    columnSizer: ColumnSizer(),
+                    allowSorting: false,
+                    showCheckboxColumn: false,
+                    source: controller.productStockSource,
+                    columns: <GridColumn>[
+                      GridColumn(
+                        columnName: "mCode",
+                        label: CustomCell(data: LocaleKeys.code.tr),
+                      ),
+                      GridColumn(
+                        columnName: 'mName',
+                        label: CustomCell(data: LocaleKeys.name.tr),
+                      ),
+
+                      GridColumn(
+                        columnName: 'qty',
+                        label: CustomCell(data: LocaleKeys.qty.tr),
+                      ),
+                    ],
+                    placeholder: NoRecord(),
+                  ),
+                ),
+              ),
+            ),
+    );
   }
 
-  Widget _buildSetMealLimit() {
-    return Text("setMeal limit");
+  // 套餐限制
+  Widget _buildSetMealLimit({required BuildContext context}) {
+    return ProgressHUD(
+      child: controller.isLoading.value
+          ? null
+          : SelectionArea(
+              child: SfDataGridTheme(
+                data: SfDataGridThemeData(
+                  gridLineColor: Colors.grey.shade300,
+                  currentCellStyle: DataGridCurrentCellStyle(
+                    borderColor: Colors.transparent, // 避免选中单元格边框影响
+                    borderWidth: 0,
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: SfDataGrid(
+                    isScrollbarAlwaysShown: true,
+                    controller: controller.setMealLimitDataGridController,
+                    footerFrozenColumnsCount: 0,
+                    frozenColumnsCount: 0,
+                    gridLinesVisibility: GridLinesVisibility.both,
+                    headerGridLinesVisibility: GridLinesVisibility.both,
+                    columnWidthMode: controller.setMealLimitSource.rows.isEmpty
+                        ? context.isPhoneOrLess
+                              ? ColumnWidthMode.fitByColumnName
+                              : ColumnWidthMode.fill
+                        : context.isPhoneOrLess
+                        ? ColumnWidthMode.auto
+                        : ColumnWidthMode.fill,
+                    columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
+
+                    columnSizer: ColumnSizer(),
+                    allowSorting: false,
+                    showCheckboxColumn: false,
+                    source: controller.setMealLimitSource,
+                    columns: <GridColumn>[
+                      GridColumn(
+                        columnName: "setMealLimit",
+                        label: CustomCell(data: LocaleKeys.setMealLimit.tr),
+                      ),
+                      GridColumn(
+                        columnName: 'maxQty',
+                        label: CustomCell(data: LocaleKeys.maxQty.tr),
+                      ),
+
+                      GridColumn(
+                        columnName: 'forceSelect',
+                        label: CustomCell(data: LocaleKeys.forceSelect.tr),
+                      ),
+                      GridColumn(
+                        columnName: 'chinese',
+                        label: CustomCell(data: LocaleKeys.chinese.tr),
+                      ),
+                      GridColumn(
+                        columnName: 'english',
+                        label: CustomCell(data: LocaleKeys.english.tr),
+                      ),
+                    ],
+                    placeholder: NoRecord(),
+                  ),
+                ),
+              ),
+            ),
+    );
   }
 
-  Widget _buildSetMeal() {
+  Widget _buildSetMeal({required BuildContext context}) {
     return Text("setMeal");
   }
 }

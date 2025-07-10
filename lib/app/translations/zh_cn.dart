@@ -215,4 +215,13 @@ Map<String, String> get zhCN => {
   LocaleKeys.modifyDate: "修改日期",
   LocaleKeys.selectProductRemarks: "选择食品备注",
   LocaleKeys.totalRecords: "共%s记录数",
+  LocaleKeys.lastPrice: "最后卖价",
+  LocaleKeys.averageCost: "平均成本",
+  LocaleKeys.lastCost: "最后成本",
+  LocaleKeys.stdCost: "标准成本",
+  LocaleKeys.barcodeEdit: "编辑条形码",
+  LocaleKeys.barcodeAdd: "添加条形码",
+  LocaleKeys.maxQty: "最大数量",
+  LocaleKeys.forceSelect: "强制选择",
+  LocaleKeys.chinese: "中文",
 };
