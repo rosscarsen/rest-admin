@@ -285,8 +285,11 @@ class ErrorHandlerInterceptor extends Interceptor {
     // 使用定义的超时错误常量
     if (err.type == DioExceptionType.connectionTimeout) {
       CustomDialog.errorMessages(ApiClient._connectionTimeout);
-    } else if (err.type == DioExceptionType.receiveTimeout) {
+      return handler.resolve(err.response!);
+    }
+    if (err.type == DioExceptionType.receiveTimeout) {
       CustomDialog.errorMessages(ApiClient._receiveTimeout);
+      return handler.resolve(err.response!);
     }
 
     return handler.next(err);
