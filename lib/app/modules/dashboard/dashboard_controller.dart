@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:rest_admin/app/utils/logger.dart';
 
 import '../../config.dart';
 import '../../model/chart_model.dart';
