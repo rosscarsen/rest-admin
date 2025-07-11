@@ -277,11 +277,11 @@ class AuthInterceptor extends Interceptor {
 class ErrorHandlerInterceptor extends Interceptor {
   @override
   Future onError(DioException err, ErrorInterceptorHandler handler) async {
+    // 登录失效
     if (err.response?.statusCode == ApiClient._loginInvalidCode) {
       CustomAlert.iosAlert(LocaleKeys.loginInvalid.tr, onConfirm: () => Get.offAllNamed(Routes.SIGNIN));
       return handler.resolve(err.response!);
     }
-
     // 使用定义的超时错误常量
     if (err.type == DioExceptionType.connectionTimeout) {
       CustomDialog.errorMessages(ApiClient._connectionTimeout);
