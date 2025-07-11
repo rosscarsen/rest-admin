@@ -8,7 +8,7 @@ import '../../../model/supplier_model.dart';
 import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
-import '../../../utils/easy_loading.dart';
+import '../../../utils/custom_dialog.dart';
 
 class OpenSupplierController extends GetxController {
   final DataGridController dataGridController = DataGridController();
@@ -59,15 +59,15 @@ class OpenSupplierController extends GetxController {
       final DioApiResult dioApiResult = await apiClient.post(Config.openSupplier, data: search);
 
       if (!dioApiResult.success) {
-        showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       if (!dioApiResult.hasPermission) {
-        showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
         return;
       }
       if (dioApiResult.data == null) {
-        showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       final supplierModel = supplierModelModelFromJson(dioApiResult.data!);

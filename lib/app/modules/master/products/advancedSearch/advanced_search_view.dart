@@ -53,223 +53,284 @@ class AdvancedSearchView extends GetView<AdvancedSearchController> {
       child: ResponsiveGridRow(
         children: [
           //类目1
-          FormHelper.selectInput(
-            name: AdvancedSearchFields.mCategory1,
-            labelText: "${LocaleKeys.category.tr}1",
-            items: [
-              DropdownMenuItem(value: "", child: Text("")),
-              if (controller.category1.isNotEmpty)
-                ...controller.category1.map(
-                  (e) => DropdownMenuItem(
-                    value: e.mCategory.toString(),
-                    child: Row(
-                      spacing: 8.0,
-                      children: [
-                        Text(e.mCategory.toString()),
-                        Flexible(child: Text(e.mDescription.toString())),
-                      ],
+          FormHelper.buildGridCol(
+            child: FormHelper.selectInput(
+              name: AdvancedSearchFields.mCategory1,
+              labelText: "${LocaleKeys.category.tr}1",
+              items: [
+                DropdownMenuItem(value: "", child: Text("")),
+                if (controller.category1.isNotEmpty)
+                  ...controller.category1.map(
+                    (e) => DropdownMenuItem(
+                      value: e.mCategory.toString(),
+                      child: Row(
+                        spacing: 8.0,
+                        children: [
+                          Text(e.mCategory.toString()),
+                          Flexible(child: Text(e.mDescription.toString())),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-            ],
-            onChanged: (String? category1) {
-              controller.generateCategory2(category1);
-            },
+              ],
+              onChanged: (String? category1) {
+                controller.generateCategory2(category1);
+              },
+            ),
           ),
           //类目2
-          FormHelper.selectInput(
-            name: AdvancedSearchFields.mCategory2,
-            labelText: "${LocaleKeys.category.tr}2",
-            items: [
-              DropdownMenuItem(value: "", child: Text("")),
-              if (controller.category2.isNotEmpty)
-                ...controller.category2.map(
-                  (e) => DropdownMenuItem(
-                    value: e.mCategory,
-                    child: Row(
-                      spacing: 8.0,
-                      children: [
-                        Text(e.mCategory.toString()),
-                        Flexible(child: Text(e.mDescription.toString())),
-                      ],
+          FormHelper.buildGridCol(
+            child: FormHelper.selectInput(
+              name: AdvancedSearchFields.mCategory2,
+              labelText: "${LocaleKeys.category.tr}2",
+              items: [
+                DropdownMenuItem(value: "", child: Text("")),
+                if (controller.category2.isNotEmpty)
+                  ...controller.category2.map(
+                    (e) => DropdownMenuItem(
+                      value: e.mCategory,
+                      child: Row(
+                        spacing: 8.0,
+                        children: [
+                          Text(e.mCategory.toString()),
+                          Flexible(child: Text(e.mDescription.toString())),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-            ],
-            onChanged: (String? category2) {
-              controller.generateCategory3(category2);
-            },
+              ],
+              onChanged: (String? category2) {
+                controller.generateCategory3(category2);
+              },
+            ),
           ),
           //类目3
-          FormHelper.selectInput(
-            name: AdvancedSearchFields.mCategory3,
-            labelText: "${LocaleKeys.category.tr}3",
-            items: [
-              DropdownMenuItem(value: "", child: Text("")),
-              if (controller.category3.isNotEmpty)
-                ...controller.category3.map(
-                  (e) => DropdownMenuItem(
-                    value: e.mCategory,
-                    child: Row(
-                      spacing: 8.0,
-                      children: [
-                        Text(e.mCategory.toString()),
-                        Flexible(child: Text(e.mDescription.toString())),
-                      ],
+          FormHelper.buildGridCol(
+            child: FormHelper.selectInput(
+              name: AdvancedSearchFields.mCategory3,
+              labelText: "${LocaleKeys.category.tr}3",
+              items: [
+                DropdownMenuItem(value: "", child: Text("")),
+                if (controller.category3.isNotEmpty)
+                  ...controller.category3.map(
+                    (e) => DropdownMenuItem(
+                      value: e.mCategory,
+                      child: Row(
+                        spacing: 8.0,
+                        children: [
+                          Text(e.mCategory.toString()),
+                          Flexible(child: Text(e.mDescription.toString())),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
-
           //编号
-          FormHelper.textInput(
-            name: AdvancedSearchFields.mCode,
-            labelText: LocaleKeys.code.tr,
-            suffixIcon: IconButton(
-              onPressed: () async {
-                var result = await Get.toNamed(Routes.OPEN_PRODUCT);
-                controller.formKey.currentState?.fields[AdvancedSearchFields.mCode]?.didChange(result);
-              },
-              icon: Icon(Icons.file_open, color: AppColors.openColor),
+          FormHelper.buildGridCol(
+            child: FormHelper.textInput(
+              name: AdvancedSearchFields.mCode,
+              labelText: LocaleKeys.code.tr,
+              suffixIcon: IconButton(
+                onPressed: () async {
+                  var result = await Get.toNamed(Routes.OPEN_PRODUCT);
+                  controller.formKey.currentState?.fields[AdvancedSearchFields.mCode]?.didChange(result);
+                },
+                icon: Icon(Icons.file_open, color: AppColors.openColor),
+              ),
             ),
           ),
           //条形码
-          FormHelper.textInput(name: AdvancedSearchFields.mBarcode, labelText: LocaleKeys.barcode.tr),
+          FormHelper.buildGridCol(
+            child: FormHelper.textInput(name: AdvancedSearchFields.mBarcode, labelText: LocaleKeys.barcode.tr),
+          ),
           //开始编号
-          FormHelper.textInput(
-            name: AdvancedSearchFields.startNo,
-            labelText: LocaleKeys.startCode.tr,
-            suffixIcon: IconButton(
-              onPressed: () async {
-                var result = await Get.toNamed(Routes.OPEN_PRODUCT);
-                controller.formKey.currentState?.fields[AdvancedSearchFields.startNo]?.didChange(result);
-              },
-              icon: Icon(Icons.file_open, color: AppColors.openColor),
+          FormHelper.buildGridCol(
+            child: FormHelper.textInput(
+              name: AdvancedSearchFields.startNo,
+              labelText: LocaleKeys.startCode.tr,
+              suffixIcon: IconButton(
+                onPressed: () async {
+                  var result = await Get.toNamed(Routes.OPEN_PRODUCT);
+                  controller.formKey.currentState?.fields[AdvancedSearchFields.startNo]?.didChange(result);
+                },
+                icon: Icon(Icons.file_open, color: AppColors.openColor),
+              ),
             ),
           ),
           //结束编号
-          FormHelper.textInput(
-            name: AdvancedSearchFields.endNo,
-            labelText: LocaleKeys.endCode.tr,
-            suffixIcon: IconButton(
-              onPressed: () async {
-                var result = await Get.toNamed(Routes.OPEN_PRODUCT);
-                controller.formKey.currentState?.fields[AdvancedSearchFields.endNo]?.didChange(result);
-              },
-              icon: Icon(Icons.file_open, color: AppColors.openColor),
+          FormHelper.buildGridCol(
+            child: FormHelper.textInput(
+              name: AdvancedSearchFields.endNo,
+              labelText: LocaleKeys.endCode.tr,
+              suffixIcon: IconButton(
+                onPressed: () async {
+                  var result = await Get.toNamed(Routes.OPEN_PRODUCT);
+                  controller.formKey.currentState?.fields[AdvancedSearchFields.endNo]?.didChange(result);
+                },
+                icon: Icon(Icons.file_open, color: AppColors.openColor),
+              ),
             ),
           ),
           //名称
-          FormHelper.textInput(name: AdvancedSearchFields.mDesc1, labelText: LocaleKeys.name.tr),
+          FormHelper.buildGridCol(
+            child: FormHelper.textInput(name: AdvancedSearchFields.mDesc1, labelText: LocaleKeys.name.tr),
+          ),
           //厨房单
-          FormHelper.textInput(name: AdvancedSearchFields.mDesc2, labelText: LocaleKeys.kitchenList.tr),
+          FormHelper.buildGridCol(
+            child: FormHelper.textInput(name: AdvancedSearchFields.mDesc2, labelText: LocaleKeys.kitchenList.tr),
+          ),
           //参考编号
-          FormHelper.textInput(name: AdvancedSearchFields.mRefCode, labelText: LocaleKeys.refCode.tr),
+          FormHelper.buildGridCol(
+            child: FormHelper.textInput(name: AdvancedSearchFields.mRefCode, labelText: LocaleKeys.refCode.tr),
+          ),
           //供应商
-          FormHelper.textInput(
-            name: AdvancedSearchFields.mSupplierCode,
-            labelText: LocaleKeys.supplier.tr,
-            suffixIcon: IconButton(
-              onPressed: () async {
-                var result = await Get.toNamed(Routes.OPEN_SUPPLIER);
-                controller.formKey.currentState?.fields[AdvancedSearchFields.mSupplierCode]?.didChange(result);
-              },
-              icon: Icon(Icons.file_open, color: AppColors.openColor),
+          FormHelper.buildGridCol(
+            child: FormHelper.textInput(
+              name: AdvancedSearchFields.mSupplierCode,
+              labelText: LocaleKeys.supplier.tr,
+              suffixIcon: IconButton(
+                onPressed: () async {
+                  var result = await Get.toNamed(Routes.OPEN_SUPPLIER);
+                  controller.formKey.currentState?.fields[AdvancedSearchFields.mSupplierCode]?.didChange(result);
+                },
+                icon: Icon(Icons.file_open, color: AppColors.openColor),
+              ),
             ),
           ),
+
           //部门
-          FormHelper.selectInput(
-            name: AdvancedSearchFields.mBrand,
-            labelText: LocaleKeys.department.tr,
-            items: [
-              DropdownMenuItem(value: "", child: Text("")),
-              if (controller.department.isNotEmpty)
-                ...controller.department.map(
-                  (e) => DropdownMenuItem(value: e.mBrand.toString(), child: Text(e.mBrand.toString())),
-                ),
-            ],
+          FormHelper.buildGridCol(
+            child: FormHelper.selectInput(
+              name: AdvancedSearchFields.mBrand,
+              labelText: LocaleKeys.department.tr,
+              items: [
+                DropdownMenuItem(value: "", child: Text("")),
+                if (controller.department.isNotEmpty)
+                  ...controller.department.map(
+                    (e) => DropdownMenuItem(value: e.mBrand.toString(), child: Text(e.mBrand.toString())),
+                  ),
+              ],
+            ),
           ),
           /*  //开始日期
           FormHelper.dateInput(name: AdvancedSearchFields.dateStart, labelText: LocaleKeys.startDate.tr),
           //结束日期
           FormHelper.dateInput(name: AdvancedSearchFields.dateEnd, labelText: LocaleKeys.endDate.tr), */
           //非启用
-          FormHelper.selectInput(
-            name: AdvancedSearchFields.mNonActived,
-            labelText: LocaleKeys.nonEnable.tr,
-            initialValue: "0",
-            items: [
-              DropdownMenuItem(value: "", child: Text(LocaleKeys.all.tr)),
-              DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
-              DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
-            ],
+          FormHelper.buildGridCol(
+            child: FormHelper.selectInput(
+              name: AdvancedSearchFields.mNonActived,
+              labelText: LocaleKeys.nonEnable.tr,
+              initialValue: "0",
+              items: [
+                DropdownMenuItem(value: "", child: Text(LocaleKeys.all.tr)),
+                DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+              ],
+            ),
           ),
           //非库存
-          FormHelper.selectInput(
-            name: AdvancedSearchFields.mNonStock,
-            labelText: LocaleKeys.nonStock.tr,
-            initialValue: "",
-            items: [
-              DropdownMenuItem(value: "", child: Text(LocaleKeys.all.tr)),
-              DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
-              DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
-            ],
+          FormHelper.buildGridCol(
+            child: FormHelper.selectInput(
+              name: AdvancedSearchFields.mNonStock,
+              labelText: LocaleKeys.nonStock.tr,
+              initialValue: "",
+              items: [
+                DropdownMenuItem(value: "", child: Text(LocaleKeys.all.tr)),
+                DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+              ],
+            ),
           ),
           //创建开始日期
-          FormHelper.dateInput(name: AdvancedSearchFields.startDateCreate, labelText: LocaleKeys.startCreateDate.tr),
+          FormHelper.buildGridCol(
+            child: FormHelper.dateInput(
+              name: AdvancedSearchFields.startDateCreate,
+              labelText: LocaleKeys.startCreateDate.tr,
+            ),
+          ),
           //创建结束日期
-          FormHelper.dateInput(name: AdvancedSearchFields.endDateCreate, labelText: LocaleKeys.endCreateDate.tr),
+          FormHelper.buildGridCol(
+            child: FormHelper.dateInput(
+              name: AdvancedSearchFields.endDateCreate,
+              labelText: LocaleKeys.endCreateDate.tr,
+            ),
+          ),
           //不具折上折
-          FormHelper.selectInput(
-            name: AdvancedSearchFields.mNonDiscount,
-            labelText: LocaleKeys.notDiscount.tr,
-            initialValue: "",
+          FormHelper.buildGridCol(
+            child: FormHelper.selectInput(
+              name: AdvancedSearchFields.mNonDiscount,
+              labelText: LocaleKeys.notDiscount.tr,
+              initialValue: "",
 
-            items: [
-              DropdownMenuItem(value: "", child: Text(LocaleKeys.all.tr)),
-              DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
-              DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
-            ],
+              items: [
+                DropdownMenuItem(value: "", child: Text(LocaleKeys.all.tr)),
+                DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+              ],
+            ),
           ),
           //预支付
-          FormHelper.selectInput(
-            name: AdvancedSearchFields.mPrePaid,
-            labelText: LocaleKeys.prePaid.tr,
-            initialValue: "",
-            items: [
-              DropdownMenuItem(value: "", child: Text(LocaleKeys.all.tr)),
-              DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
-              DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
-            ],
+          FormHelper.buildGridCol(
+            child: FormHelper.selectInput(
+              name: AdvancedSearchFields.mPrePaid,
+              labelText: LocaleKeys.prePaid.tr,
+              initialValue: "",
+              items: [
+                DropdownMenuItem(value: "", child: Text(LocaleKeys.all.tr)),
+                DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+              ],
+            ),
           ),
           //开始修改日期
-          FormHelper.dateInput(name: AdvancedSearchFields.startDateModify, labelText: LocaleKeys.startModifyDate.tr),
+          FormHelper.buildGridCol(
+            child: FormHelper.dateInput(
+              name: AdvancedSearchFields.startDateModify,
+              labelText: LocaleKeys.startModifyDate.tr,
+            ),
+          ),
           //结束修改日期
-          FormHelper.dateInput(name: AdvancedSearchFields.endDateModify, labelText: LocaleKeys.endModifyDate.tr),
+          FormHelper.buildGridCol(
+            child: FormHelper.dateInput(
+              name: AdvancedSearchFields.endDateModify,
+              labelText: LocaleKeys.endModifyDate.tr,
+            ),
+          ),
           //套餐产品编号
-          FormHelper.textInput(name: AdvancedSearchFields.setMealCode, labelText: LocaleKeys.setMealProductCode.tr),
+          FormHelper.buildGridCol(
+            child: FormHelper.textInput(
+              name: AdvancedSearchFields.setMealCode,
+              labelText: LocaleKeys.setMealProductCode.tr,
+            ),
+          ),
           //套餐
-          FormHelper.selectInput(
-            name: AdvancedSearchFields.setMenu,
-            labelText: LocaleKeys.setMeal.tr,
-            initialValue: "",
-            items: [
-              DropdownMenuItem(value: "", child: Text(LocaleKeys.all.tr)),
-              DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
-              DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
-            ],
+          FormHelper.buildGridCol(
+            child: FormHelper.selectInput(
+              name: AdvancedSearchFields.setMenu,
+              labelText: LocaleKeys.setMeal.tr,
+              initialValue: "",
+              items: [
+                DropdownMenuItem(value: "", child: Text(LocaleKeys.all.tr)),
+                DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+              ],
+            ),
           ),
           //售罄
-          FormHelper.selectInput(
-            name: AdvancedSearchFields.mSoldOut,
-            labelText: LocaleKeys.soldOut.tr,
-            initialValue: "",
-            items: [
-              DropdownMenuItem(value: "", child: Text(LocaleKeys.all.tr)),
-              DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
-              DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
-            ],
+          FormHelper.buildGridCol(
+            child: FormHelper.selectInput(
+              name: AdvancedSearchFields.mSoldOut,
+              labelText: LocaleKeys.soldOut.tr,
+              initialValue: "",
+              items: [
+                DropdownMenuItem(value: "", child: Text(LocaleKeys.all.tr)),
+                DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+              ],
+            ),
           ),
         ],
       ),

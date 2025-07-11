@@ -8,7 +8,7 @@ import '../../../model/product_barcode_model.dart';
 import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
-import '../../../utils/easy_loading.dart';
+import '../../../utils/custom_dialog.dart';
 
 class OpenProductBarcodeController extends GetxController {
   final DataGridController dataGridController = DataGridController();
@@ -58,21 +58,21 @@ class OpenProductBarcodeController extends GetxController {
       if (searchController.text.isNotEmpty) search['search'] = searchController.text;
       final DioApiResult dioApiResult = await apiClient.post(Config.openBarcode, data: search);
       if (!dioApiResult.success) {
-        showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       if (!dioApiResult.hasPermission) {
-        showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
         return;
       }
       if (dioApiResult.data == null) {
-        showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       final productBarcodeModel = productBarcodeModelFromJson(dioApiResult.data!);
       final BarcodeApiResult? apiResult = productBarcodeModel.apiResult;
       if (apiResult == null) {
-        showToast(LocaleKeys.unknownError.tr);
+        CustomDialog.showToast(LocaleKeys.unknownError.tr);
         return;
       }
 

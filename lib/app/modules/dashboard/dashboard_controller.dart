@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:rest_admin/app/utils/logger.dart';
 
 import '../../config.dart';
 import '../../model/chart_model.dart';
 import '../../service/dio_api_client.dart';
 import '../../service/dio_api_result.dart';
 import '../../translations/locale_keys.dart';
-import '../../utils/easy_loading.dart';
+import '../../utils/custom_dialog.dart';
 
 class DashboardController extends GetxController {
   static DashboardController get to => Get.find();
@@ -35,12 +36,12 @@ class DashboardController extends GetxController {
       final DioApiResult dioApiResult = await apiClient.post(Config.chartData, data: search);
 
       if (dioApiResult.success == false) {
-        showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       if (dioApiResult.hasPermission == false) {
         hasPermission.value = false;
-        showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
         return;
       }
 
@@ -49,7 +50,7 @@ class DashboardController extends GetxController {
       if (chartModel.status == 200) {
         apiResult.value = chartModel.apiResult ?? ApiResult();
       } else {
-        errorMessages(LocaleKeys.getDataException.tr);
+        CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
       }
     } finally {
       isLoading(false);

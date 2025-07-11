@@ -13,7 +13,7 @@ import '../config.dart';
 import '../routes/app_pages.dart';
 import '../translations/locale_keys.dart';
 import '../utils/custom_alert.dart';
-import '../utils/easy_loading.dart';
+import '../utils/custom_dialog.dart';
 import '../utils/local_cache.dart';
 import '../utils/logger.dart';
 import 'dio_api_result.dart';
@@ -214,7 +214,7 @@ class ApiClient {
   // 处理响应
   DioApiResult _handleResponse(Response response) {
     if (response.statusCode != 200) {
-      dismissLoading();
+      CustomDialog.dismissLoading();
       return DioApiResult(success: false, error: 'HTTP ${response.statusCode}');
     }
     final responseData = response.data;
@@ -284,11 +284,9 @@ class ErrorHandlerInterceptor extends Interceptor {
 
     // 使用定义的超时错误常量
     if (err.type == DioExceptionType.connectionTimeout) {
-      errorMessages(ApiClient._connectionTimeout);
+      CustomDialog.errorMessages(ApiClient._connectionTimeout);
     } else if (err.type == DioExceptionType.receiveTimeout) {
-      errorMessages(ApiClient._receiveTimeout);
-    } else {
-      errorMessages(err.message ?? ApiClient._unknownError);
+      CustomDialog.errorMessages(ApiClient._receiveTimeout);
     }
 
     return handler.next(err);

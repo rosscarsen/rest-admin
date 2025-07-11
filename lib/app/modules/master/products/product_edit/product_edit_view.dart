@@ -84,7 +84,7 @@ class ProductEditView extends GetView<ProductEditController> {
   // 主视图
   Widget _buildTabBarView(BuildContext context) {
     return FormBuilder(
-      key: controller.formKey,
+      key: controller.productEditFormKey,
       child: IndexedStack(
         index: controller.tabIndex.value.clamp(0, controller.tabs.length - 1),
         children: [
@@ -92,8 +92,8 @@ class ProductEditView extends GetView<ProductEditController> {
           _buildDetail(context: context),
           _buildBarcode(context: context),
           _buildShop(context: context),
-          if (Get.parameters.isNotEmpty) _buildSetMealLimit(context: context),
-          if (Get.parameters.isNotEmpty) _buildSetMeal(context: context),
+          if (controller.productID != null) _buildSetMealLimit(context: context),
+          if (controller.productID != null) _buildSetMeal(context: context),
         ],
       ),
     );
@@ -106,157 +106,189 @@ class ProductEditView extends GetView<ProductEditController> {
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: ResponsiveGridRow(
-            children: [
-              //类目1
-              FormHelper.selectInput(
-                name: ProductEditFields.mCategory1,
-                labelText: "${LocaleKeys.category.tr}1",
-                items: [
-                  DropdownMenuItem(value: "", child: Text("")),
-                  if (controller.category1.isNotEmpty)
-                    ...controller.category1.map(
-                      (e) => DropdownMenuItem(
-                        value: e.mCategory.toString(),
-                        child: Row(
-                          spacing: 8.0,
-                          children: [
-                            Text(e.mCategory.toString()),
-                            Flexible(child: Text(e.mDescription.toString())),
-                          ],
+          child: FocusTraversalGroup(
+            child: ResponsiveGridRow(
+              children: [
+                //类目1
+                FormHelper.buildGridCol(
+                  child: FormHelper.selectInput(
+                    name: ProductEditFields.mCategory1,
+                    labelText: "${LocaleKeys.category.tr}1",
+                    items: [
+                      DropdownMenuItem(value: "", child: Text("")),
+                      if (controller.category1.isNotEmpty)
+                        ...controller.category1.map(
+                          (e) => DropdownMenuItem(
+                            value: e.mCategory.toString(),
+                            child: Row(
+                              spacing: 8.0,
+                              children: [
+                                Text(e.mCategory.toString()),
+                                Flexible(child: Text(e.mDescription.toString())),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                ],
-                onChanged: (String? category1) {
-                  controller.generateCategory2(category1);
-                },
-              ),
-              //类目2
-              FormHelper.selectInput(
-                name: ProductEditFields.mCategory2,
-                labelText: "${LocaleKeys.category.tr}2",
-                items: [
-                  DropdownMenuItem(value: "", child: Text("")),
-                  if (controller.category2.isNotEmpty)
-                    ...controller.category2.map(
-                      (e) => DropdownMenuItem(
-                        value: e.mCategory,
-                        child: Row(
-                          spacing: 8.0,
-                          children: [
-                            Text(e.mCategory.toString()),
-                            Flexible(child: Text(e.mDescription.toString())),
-                          ],
+                    ],
+                    onChanged: (String? category1) {
+                      controller.generateCategory2(category1);
+                    },
+                  ),
+                ), //类目2
+                FormHelper.buildGridCol(
+                  child: FormHelper.selectInput(
+                    name: ProductEditFields.mCategory2,
+                    labelText: "${LocaleKeys.category.tr}2",
+                    items: [
+                      DropdownMenuItem(value: "", child: Text("")),
+                      if (controller.category2.isNotEmpty)
+                        ...controller.category2.map(
+                          (e) => DropdownMenuItem(
+                            value: e.mCategory,
+                            child: Row(
+                              spacing: 8.0,
+                              children: [
+                                Text(e.mCategory.toString()),
+                                Flexible(child: Text(e.mDescription.toString())),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
+                    ],
+                  ),
+                ), //创建日期
+                FormHelper.buildGridCol(
+                  child: FormHelper.dateInput(
+                    name: ProductEditFields.mDate_Create,
+                    labelText: LocaleKeys.createDate.tr,
+                    enabled: false,
+                    inputType: DateInputType.dateAndTime,
+                    canClear: false,
+                  ),
+                ), //编号
+                FormHelper.buildGridCol(
+                  child: FormHelper.textInput(
+                    name: ProductEditFields.mCode,
+                    labelText: LocaleKeys.code.tr,
+                    enabled: Get.parameters.isEmpty,
+                    validator: (value) {
+                      if (value?.isEmpty ?? true) {
+                        return LocaleKeys.thisFieldIsRequired.tr;
+                      }
+                      return null;
+                    },
+                  ),
+                ), //价钱1
+                FormHelper.buildGridCol(
+                  child: FormHelper.textInput(
+                    name: ProductEditFields.mPrice,
+                    labelText: "${LocaleKeys.price.tr}1",
+                    keyboardType: TextInputType.number,
+                  ),
+                ), //修改日期
+                FormHelper.buildGridCol(
+                  child: FormHelper.dateInput(
+                    name: ProductEditFields.mDate_Modify,
+                    labelText: LocaleKeys.modifyDate.tr,
+                    enabled: false,
+                    inputType: DateInputType.dateAndTime,
+                    canClear: false,
+                  ),
+                ), //名称
+                FormHelper.buildGridCol(
+                  child: FormHelper.textInput(
+                    name: ProductEditFields.mDesc1,
+                    labelText: LocaleKeys.name.tr,
+                    maxLines: 2,
+                  ),
+                ), //厨房单
+                FormHelper.buildGridCol(
+                  child: FormHelper.textInput(
+                    name: ProductEditFields.mDesc2,
+                    labelText: LocaleKeys.kitchenList.tr,
+                    maxLines: 2,
+                  ),
+                ), //按键名称
+                FormHelper.buildGridCol(
+                  child: FormHelper.textInput(
+                    name: ProductEditFields.mRemarks,
+                    labelText: LocaleKeys.keyName.tr,
+                    maxLines: 2,
+                  ),
+                ), //食品备注
+                FormHelper.buildGridCol(
+                  child: FormHelper.textInput(
+                    name: ProductEditFields.mMeasurement,
+                    labelText: LocaleKeys.productRemarks.tr,
+                    suffixIcon: IconButton(
+                      onPressed: () async {
+                        String? result = await Get.toNamed(Routes.OPEN_PRODUCT_REMARKS);
+                        if (result?.isNotEmpty ?? false) {
+                          controller.productEditFormKey.currentState?.fields[ProductEditFields.mMeasurement]?.didChange(
+                            result,
+                          );
+                        }
+                      },
+                      icon: Icon(Icons.file_open, color: AppColors.openColor),
                     ),
-                ],
-              ),
-              //创建日期
-              FormHelper.dateInput(
-                name: ProductEditFields.mDate_Create,
-                labelText: LocaleKeys.createDate.tr,
-                enabled: false,
-                inputType: DateInputType.dateAndTime,
-                canClear: false,
-              ),
-              //编号
-              FormHelper.textInput(
-                name: ProductEditFields.mCode,
-                labelText: LocaleKeys.code.tr,
-                enabled: Get.parameters.isEmpty,
-                validator: (value) {
-                  if (value?.isEmpty ?? true) {
-                    return LocaleKeys.thisFieldIsRequired.tr;
-                  }
-                  return null;
-                },
-              ),
-              //价钱1
-              FormHelper.textInput(
-                name: ProductEditFields.mPrice,
-                labelText: "${LocaleKeys.price.tr}1",
-                keyboardType: TextInputType.number,
-              ),
-              //修改日期
-              FormHelper.dateInput(
-                name: ProductEditFields.mDate_Modify,
-                labelText: LocaleKeys.modifyDate.tr,
-                enabled: false,
-                inputType: DateInputType.dateAndTime,
-                canClear: false,
-              ),
-              //名称
-              FormHelper.textInput(name: ProductEditFields.mDesc1, labelText: LocaleKeys.name.tr, maxLines: 2),
-              //厨房单
-              FormHelper.textInput(name: ProductEditFields.mDesc2, labelText: LocaleKeys.kitchenList.tr, maxLines: 2),
-              //按键名称
-              FormHelper.textInput(name: ProductEditFields.mRemarks, labelText: LocaleKeys.keyName.tr, maxLines: 2),
-              //食品备注
-              FormHelper.textInput(
-                name: ProductEditFields.mMeasurement,
-                labelText: LocaleKeys.productRemarks.tr,
-                suffixIcon: IconButton(
-                  onPressed: () async {
-                    String? result = await Get.toNamed(Routes.OPEN_PRODUCT_REMARKS);
-                    if (result?.isNotEmpty ?? false) {
-                      controller.formKey.currentState?.fields[ProductEditFields.mMeasurement]?.didChange(result);
-                    }
-                  },
-                  icon: Icon(Icons.file_open, color: AppColors.openColor),
+                  ),
+                ), //单位
+                FormHelper.buildGridCol(
+                  child: FormHelper.selectInput(
+                    name: ProductEditFields.mUnit,
+                    labelText: LocaleKeys.unit.tr,
+                    items: [
+                      DropdownMenuItem(value: "", child: Text("")),
+                      if (controller.units.isNotEmpty)
+                        ...controller.units.map(
+                          (e) => DropdownMenuItem(
+                            value: e.mUnit,
+                            child: FittedBox(child: Text(e.mUnit.toString())),
+                          ),
+                        ),
+                    ],
+                  ),
+                ), //售罄
+                FormHelper.buildGridCol(
+                  child: FormHelper.selectInput(
+                    name: ProductEditFields.mSoldOut,
+                    labelText: LocaleKeys.soldOut.tr,
+                    items: [
+                      DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                      DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+                    ],
+                  ),
+                ), //不具折上折
+                FormHelper.buildGridCol(
+                  child: FormHelper.selectInput(
+                    name: ProductEditFields.mNon_Discount,
+                    labelText: LocaleKeys.notDiscount.tr,
+                    items: [
+                      DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                      DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+                    ],
+                  ),
+                ), //不具服务费
+                FormHelper.buildGridCol(
+                  child: FormHelper.selectInput(
+                    name: ProductEditFields.mNonCharge,
+                    labelText: LocaleKeys.noServiceCharge.tr,
+                    items: [
+                      DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                      DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+                    ],
+                  ),
+                ), //排序
+                FormHelper.buildGridCol(
+                  child: FormHelper.textInput(
+                    name: ProductEditFields.mModel,
+                    labelText: LocaleKeys.sort.tr,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  ),
                 ),
-              ),
-              //单位
-              FormHelper.selectInput(
-                name: ProductEditFields.mUnit,
-                labelText: LocaleKeys.unit.tr,
-                items: [
-                  DropdownMenuItem(value: "", child: Text("")),
-                  if (controller.units.isNotEmpty)
-                    ...controller.units.map(
-                      (e) => DropdownMenuItem(
-                        value: e.mUnit,
-                        child: FittedBox(child: Text(e.mUnit.toString())),
-                      ),
-                    ),
-                ],
-              ),
-              //售罄
-              FormHelper.selectInput(
-                name: ProductEditFields.mSoldOut,
-                labelText: LocaleKeys.soldOut.tr,
-                items: [
-                  DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
-                  DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
-                ],
-              ),
-              //不具折上折
-              FormHelper.selectInput(
-                name: ProductEditFields.mNon_Discount,
-                labelText: LocaleKeys.notDiscount.tr,
-                items: [
-                  DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
-                  DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
-                ],
-              ),
-              //不具服务费
-              FormHelper.selectInput(
-                name: ProductEditFields.mNonCharge,
-                labelText: LocaleKeys.noServiceCharge.tr,
-                items: [
-                  DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
-                  DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
-                ],
-              ),
-              //排序
-              FormHelper.textInput(
-                name: ProductEditFields.mModel,
-                labelText: LocaleKeys.sort.tr,
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -270,218 +302,238 @@ class ProductEditView extends GetView<ProductEditController> {
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: ResponsiveGridRow(
-            children: [
-              //非库存食品
-              FormHelper.selectInput(
-                name: ProductEditFields.mNon_Stock,
-                labelText: LocaleKeys.nonStock.tr,
-                items: [
-                  DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
-                  DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
-                ],
-              ),
-              //非启用
-              FormHelper.selectInput(
-                name: ProductEditFields.mNonActived,
-                labelText: LocaleKeys.nonEnable.tr,
-                items: [
-                  DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
-                  DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
-                ],
-              ),
-              //价钱2
-              FormHelper.textInput(
-                name: ProductEditFields.mBottom_Price,
-                labelText: "${LocaleKeys.price.tr}2",
-                keyboardType: TextInputType.number,
-              ),
-              //价钱3
-              FormHelper.textInput(
-                name: ProductEditFields.mPrice1,
-                labelText: "${LocaleKeys.price.tr}3",
-                keyboardType: TextInputType.number,
-              ),
-              //价钱4
-              FormHelper.textInput(
-                name: ProductEditFields.mPrice2,
-                labelText: "${LocaleKeys.price.tr}4",
-                keyboardType: TextInputType.number,
-              ),
-              //价钱5
-              FormHelper.textInput(
-                name: ProductEditFields.mPrice3,
-                labelText: "${LocaleKeys.price.tr}5",
-                keyboardType: TextInputType.number,
-              ),
-              // 参考编号
-              FormHelper.textInput(name: ProductEditFields.mRef_Code, labelText: LocaleKeys.refCode.tr),
-              //供应商
-              FormHelper.textInput(
-                name: ProductEditFields.mSupplier_Code,
-                labelText: LocaleKeys.supplier.tr,
-                suffixIcon: IconButton(
-                  onPressed: () async {
-                    var result = await Get.toNamed(Routes.OPEN_SUPPLIER);
-                    controller.formKey.currentState?.fields[ProductEditFields.mSupplier_Code]?.didChange(result);
-                  },
-                  icon: Icon(Icons.file_open, color: AppColors.openColor),
-                ),
-              ),
-              // 预支付
-              FormHelper.selectInput(
-                name: ProductEditFields.mPrePaid,
-                labelText: LocaleKeys.prePaid.tr,
-                items: [
-                  DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
-                  DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
-                ],
-              ),
-              //高存量
-              FormHelper.textInput(
-                name: ProductEditFields.mMax_Level,
-                labelText: LocaleKeys.maxStock.tr,
-                keyboardType: TextInputType.number,
-              ),
-              //低存量
-              FormHelper.textInput(
-                name: ProductEditFields.mMin_Level,
-                labelText: LocaleKeys.minStock.tr,
-                keyboardType: TextInputType.number,
-              ),
-              // 最后卖价
-              FormHelper.textInput(
-                name: ProductEditFields.mLat_Price,
-                labelText: LocaleKeys.lastPrice.tr,
-                keyboardType: TextInputType.number,
-                enabled: false,
-              ),
-              // 平均成本
-              FormHelper.textInput(
-                name: ProductEditFields.mAv_Cost,
-                labelText: LocaleKeys.averageCost.tr,
-                keyboardType: TextInputType.number,
-                enabled: false,
-              ),
-              // 最后成本
-              FormHelper.textInput(
-                name: ProductEditFields.mLat_Cost,
-                labelText: LocaleKeys.lastCost.tr,
-                keyboardType: TextInputType.number,
-                enabled: false,
-              ),
-              // 标准成本
-              FormHelper.textInput(
-                name: ProductEditFields.mStandard_Cost,
-                labelText: LocaleKeys.stdCost.tr,
-                keyboardType: TextInputType.number,
-              ),
-              // 图片路径
-              FormHelper.textInput(
-                sm: 12,
-                md: 12,
-                lg: 12,
-                xl: 12,
-                name: ProductEditFields.mPicture_Path,
-                labelText: LocaleKeys.picturePath.tr,
-              ),
-              // 多类别
-              ResponsiveGridCol(
-                sm: 12,
-                md: 12,
-                lg: 12,
-                xl: 12,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 8.0),
-                  child: Text(
-                    LocaleKeys.multipleCategory.tr,
-                    style: TextStyle(color: Colors.grey.shade600, fontSize: 18),
-                    textAlign: TextAlign.center,
+          child: FocusTraversalGroup(
+            child: ResponsiveGridRow(
+              children: [
+                //非库存食品
+                FormHelper.buildGridCol(
+                  child: FormHelper.selectInput(
+                    name: ProductEditFields.mNon_Stock,
+                    labelText: LocaleKeys.nonStock.tr,
+                    items: [
+                      DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                      DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+                    ],
+                  ),
+                ), //非启用
+                FormHelper.buildGridCol(
+                  child: FormHelper.selectInput(
+                    name: ProductEditFields.mNonActived,
+                    labelText: LocaleKeys.nonEnable.tr,
+                    items: [
+                      DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                      DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+                    ],
+                  ),
+                ), //价钱2
+                FormHelper.buildGridCol(
+                  child: FormHelper.textInput(
+                    name: ProductEditFields.mBottom_Price,
+                    labelText: "${LocaleKeys.price.tr}2",
+                    keyboardType: TextInputType.number,
+                  ),
+                ), //价钱3
+                FormHelper.buildGridCol(
+                  child: FormHelper.textInput(
+                    name: ProductEditFields.mPrice1,
+                    labelText: "${LocaleKeys.price.tr}3",
+                    keyboardType: TextInputType.number,
+                  ),
+                ), //价钱4
+                FormHelper.buildGridCol(
+                  child: FormHelper.textInput(
+                    name: ProductEditFields.mPrice2,
+                    labelText: "${LocaleKeys.price.tr}4",
+                    keyboardType: TextInputType.number,
+                  ),
+                ), //价钱5
+                FormHelper.buildGridCol(
+                  child: FormHelper.textInput(
+                    name: ProductEditFields.mPrice3,
+                    labelText: "${LocaleKeys.price.tr}5",
+                    keyboardType: TextInputType.number,
+                  ),
+                ), // 参考编号
+                FormHelper.buildGridCol(
+                  child: FormHelper.textInput(name: ProductEditFields.mRef_Code, labelText: LocaleKeys.refCode.tr),
+                ), //供应商
+                FormHelper.buildGridCol(
+                  child: FormHelper.textInput(
+                    name: ProductEditFields.mSupplier_Code,
+                    labelText: LocaleKeys.supplier.tr,
+                    suffixIcon: IconButton(
+                      onPressed: () async {
+                        var result = await Get.toNamed(Routes.OPEN_SUPPLIER);
+                        controller.productEditFormKey.currentState?.fields[ProductEditFields.mSupplier_Code]?.didChange(
+                          result,
+                        );
+                      },
+                      icon: Icon(Icons.file_open, color: AppColors.openColor),
+                    ),
+                  ),
+                ), // 预支付
+                FormHelper.buildGridCol(
+                  child: FormHelper.selectInput(
+                    name: ProductEditFields.mPrePaid,
+                    labelText: LocaleKeys.prePaid.tr,
+                    items: [
+                      DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                      DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+                    ],
+                  ),
+                ), //高存量
+                FormHelper.buildGridCol(
+                  child: FormHelper.textInput(
+                    name: ProductEditFields.mMax_Level,
+                    labelText: LocaleKeys.maxStock.tr,
+                    keyboardType: TextInputType.number,
+                  ),
+                ), //低存量
+                FormHelper.buildGridCol(
+                  child: FormHelper.textInput(
+                    name: ProductEditFields.mMin_Level,
+                    labelText: LocaleKeys.minStock.tr,
+                    keyboardType: TextInputType.number,
+                  ),
+                ), // 最后卖价
+                FormHelper.buildGridCol(
+                  child: FormHelper.textInput(
+                    name: ProductEditFields.mLat_Price,
+                    labelText: LocaleKeys.lastPrice.tr,
+                    keyboardType: TextInputType.number,
+                    enabled: false,
+                  ),
+                ), // 平均成本
+                FormHelper.buildGridCol(
+                  child: FormHelper.textInput(
+                    name: ProductEditFields.mAv_Cost,
+                    labelText: LocaleKeys.averageCost.tr,
+                    keyboardType: TextInputType.number,
+                    enabled: false,
+                  ),
+                ), // 最后成本
+                FormHelper.buildGridCol(
+                  child: FormHelper.textInput(
+                    name: ProductEditFields.mLat_Cost,
+                    labelText: LocaleKeys.lastCost.tr,
+                    keyboardType: TextInputType.number,
+                    enabled: false,
+                  ),
+                ), // 标准成本
+                FormHelper.buildGridCol(
+                  child: FormHelper.textInput(
+                    name: ProductEditFields.mStandard_Cost,
+                    labelText: LocaleKeys.stdCost.tr,
+                    keyboardType: TextInputType.number,
+                  ),
+                ), // 图片路径
+                FormHelper.buildGridCol(
+                  sm: 12,
+                  md: 12,
+                  lg: 12,
+                  xl: 12,
+                  child: FormHelper.textInput(
+                    name: ProductEditFields.mPicture_Path,
+                    labelText: LocaleKeys.picturePath.tr,
+                  ),
+                ), // 多类别
+                ResponsiveGridCol(
+                  sm: 12,
+                  md: 12,
+                  lg: 12,
+                  xl: 12,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    child: Text(
+                      LocaleKeys.multipleCategory.tr,
+                      style: TextStyle(color: Colors.grey.shade600, fontSize: 18),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                 ),
-              ),
 
-              ...controller.categories.map((item) {
-                final ScrollController scrollController = ScrollController();
-                return ResponsiveGridCol(
-                  sm: 12,
-                  md: 6,
-                  lg: 4,
-                  xl: 4,
-                  child: Container(
-                    padding: EdgeInsets.all(4.0),
-                    margin: EdgeInsets.all(4.0),
-                    height: 200,
-                    decoration: BoxDecoration(
-                      border: Border.fromBorderSide(Divider.createBorderSide(context, width: 1.0)),
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    child: Column(
-                      spacing: 4,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        /*  '${item.children?.length ?? 0}' */
-                        Text(
-                          "${item.mDescription ?? ""}(${item.children?.length ?? 0})",
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        Expanded(
-                          child: Scrollbar(
-                            thickness: 8,
-                            radius: Radius.circular(5),
-                            thumbVisibility: true,
-                            interactive: true,
-                            controller: scrollController,
-                            child: SingleChildScrollView(
+                ...controller.categories.map((item) {
+                  final ScrollController scrollController = ScrollController();
+                  return ResponsiveGridCol(
+                    sm: 12,
+                    md: 6,
+                    lg: 4,
+                    xl: 4,
+                    child: Container(
+                      padding: EdgeInsets.all(4.0),
+                      margin: EdgeInsets.all(4.0),
+                      height: 200,
+                      decoration: BoxDecoration(
+                        border: Border.fromBorderSide(Divider.createBorderSide(context, width: 1.0)),
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      child: Column(
+                        spacing: 4,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          /*  '${item.children?.length ?? 0}' */
+                          Text(
+                            "${item.mDescription ?? ""}(${item.children?.length ?? 0})",
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          Expanded(
+                            child: Scrollbar(
+                              thickness: 8,
+                              radius: Radius.circular(5),
+                              thumbVisibility: true,
+                              interactive: true,
                               controller: scrollController,
-                              child: item.children?.isEmpty ?? false
-                                  ? null
-                                  : FormBuilderCheckboxGroup(
-                                      initialValue: controller.productCategory3.value
-                                          .where(
-                                            (value) =>
-                                                item.children?.any((child) => child.mCategory?.toString() == value) ??
-                                                false,
-                                          )
-                                          .toList(), //controller.productCategory3.value,
-                                      orientation: OptionsOrientation.vertical,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        enabledBorder: InputBorder.none,
-                                        focusedBorder: InputBorder.none,
+                              child: SingleChildScrollView(
+                                controller: scrollController,
+                                child: item.children?.isEmpty ?? false
+                                    ? null
+                                    : FormBuilderCheckboxGroup(
+                                        initialValue: controller.productCategory3.value
+                                            .where(
+                                              (value) =>
+                                                  item.children?.any((child) => child.mCategory?.toString() == value) ??
+                                                  false,
+                                            )
+                                            .toList(), //controller.productCategory3.value,
+                                        orientation: OptionsOrientation.vertical,
+                                        decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          enabledBorder: InputBorder.none,
+                                          focusedBorder: InputBorder.none,
+                                        ),
+                                        name: "multipleCategory[${item.tCategoryId}][]",
+                                        options: item.children?.isEmpty ?? false
+                                            ? []
+                                            : item.children!
+                                                  .asMap()
+                                                  .entries
+                                                  .map(
+                                                    (entry) => FormBuilderFieldOption(
+                                                      value: entry.value.mCategory?.toString() ?? "",
+                                                      child: Row(
+                                                        children: [
+                                                          Text(
+                                                            '(${entry.key + 1}) ${entry.value.mCategory?.toString()} ',
+                                                          ),
+                                                          Flexible(child: Text(entry.value.mDescription ?? "")),
+                                                        ],
+                                                      ), // 移除FittedBox
+                                                    ),
+                                                  )
+                                                  .toList(),
                                       ),
-                                      name: "multipleCategory[${item.tCategoryId}][]",
-                                      options: item.children?.isEmpty ?? false
-                                          ? []
-                                          : item.children!
-                                                .asMap()
-                                                .entries
-                                                .map(
-                                                  (entry) => FormBuilderFieldOption(
-                                                    value: entry.value.mCategory?.toString() ?? "",
-                                                    child: Row(
-                                                      children: [
-                                                        Text(
-                                                          '(${entry.key + 1}) ${entry.value.mCategory?.toString()} ',
-                                                        ),
-                                                        Flexible(child: Text(entry.value.mDescription ?? "")),
-                                                      ],
-                                                    ), // 移除FittedBox
-                                                  ),
-                                                )
-                                                .toList(),
-                                    ),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }),
-            ],
+                  );
+                }),
+              ],
+            ),
           ),
         ),
       ),
@@ -595,7 +647,13 @@ class ProductEditView extends GetView<ProductEditController> {
                     frozenColumnsCount: 0,
                     gridLinesVisibility: GridLinesVisibility.both,
                     headerGridLinesVisibility: GridLinesVisibility.both,
-                    columnWidthMode: ColumnWidthMode.fill,
+                    columnWidthMode: controller.setMealLimitSource.rows.isEmpty
+                        ? context.isPhoneOrLess
+                              ? ColumnWidthMode.fitByColumnName
+                              : ColumnWidthMode.fill
+                        : context.isPhoneOrLess
+                        ? ColumnWidthMode.auto
+                        : ColumnWidthMode.fill,
                     columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
                     columnSizer: ColumnSizer(),
                     allowSorting: false,
@@ -677,6 +735,7 @@ class ProductEditView extends GetView<ProductEditController> {
                       GridColumn(
                         columnName: 'chinese',
                         label: CustomCell(data: LocaleKeys.chinese.tr),
+                        allowEditing: true,
                       ),
                       GridColumn(
                         columnName: 'english',

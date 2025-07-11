@@ -10,7 +10,7 @@ import '../../service/dio_api_client.dart';
 import '../../service/dio_api_result.dart';
 import '../../translations/locale_keys.dart';
 import '../../utils/custom_alert.dart';
-import '../../utils/easy_loading.dart';
+import '../../utils/custom_dialog.dart';
 import '../../utils/storage_manage.dart';
 
 class SigninController extends GetxController with GetSingleTickerProviderStateMixin {
@@ -61,15 +61,15 @@ class SigninController extends GetxController with GetSingleTickerProviderStateM
       try {
         final DioApiResult dioApiResult = await apiClient.post(Config.login, data: loginFormData);
         if (!dioApiResult.success) {
-          errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+          CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
           return;
         }
         if (!dioApiResult.hasPermission) {
-          errorMessages(dioApiResult.error ?? LocaleKeys.noPermission.tr);
+          CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.noPermission.tr);
           return;
         }
         if (dioApiResult.data == null) {
-          errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+          CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
           return;
         }
 

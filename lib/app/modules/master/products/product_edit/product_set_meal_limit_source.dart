@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../model/product_add_or_edit_model.dart';
-import '../../../../translations/locale_keys.dart';
 import '../../../../widgets/custom_cell.dart';
 import 'product_edit_controller.dart';
 
@@ -38,10 +37,26 @@ class SetMealLimitSource extends DataGridSource {
 
   @override
   DataGridRowAdapter buildRow(DataGridRow dataGridRow) {
+    final int index = _dataGridRows.indexOf(dataGridRow);
     return DataGridRowAdapter(
       cells: dataGridRow.getCells().map<Widget>((e) {
-        if (e.columnName == "nonEnable") {
-          return CustomCell(data: e.value == 1 ? LocaleKeys.yes.tr : LocaleKeys.no.tr);
+        if (e.columnName == "maxQty") {
+          return Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: TextFormField(
+              key: ValueKey('maxQty_$index'),
+              initialValue: e.value?.toString() ?? "",
+              onChanged: (value) {
+                final parsed = int.tryParse(value);
+                if (parsed != null) {
+                  controller.setMealLimit[index].limitMax = parsed;
+                }
+              },
+              keyboardType: TextInputType.number,
+              inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'))],
+            ),
+          );
         }
         return CustomCell(data: e.value?.toString() ?? "");
       }).toList(),

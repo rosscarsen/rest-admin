@@ -7,7 +7,7 @@ import '../../../model/product_remarks_model.dart';
 import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
-import '../../../utils/easy_loading.dart';
+import '../../../utils/custom_dialog.dart';
 import 'open_product_remarks_data_source.dart';
 
 class OpenProductRemarksController extends GetxController {
@@ -59,15 +59,15 @@ class OpenProductRemarksController extends GetxController {
       final DioApiResult dioApiResult = await apiClient.post(Config.openProductRemark, data: search);
 
       if (!dioApiResult.success) {
-        showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       if (!dioApiResult.hasPermission) {
-        showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
         return;
       }
       if (dioApiResult.data == null) {
-        showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       final productRemarksModel = productRemarksModelFromJson(dioApiResult.data!);

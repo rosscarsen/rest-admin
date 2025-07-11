@@ -10,15 +10,15 @@ import '../../../../model/unit_model.dart';
 import '../../../../service/dio_api_client.dart';
 import '../../../../service/dio_api_result.dart';
 import '../../../../translations/locale_keys.dart';
-import '../../../../utils/easy_loading.dart';
+import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/logger.dart';
 import 'product_barcode_source.dart';
 import 'product_edit_fields.dart';
-import 'product_setMeal_limit_source.dart';
+import 'product_set_meal_limit_source.dart';
 import 'product_stock_source.dart';
 
 class ProductEditController extends GetxController with GetSingleTickerProviderStateMixin {
-  final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
+  final GlobalKey<FormBuilderState> productEditFormKey = GlobalKey<FormBuilderState>();
   // 产品条码
   final DataGridController barcodeDataGridController = DataGridController();
   late ProductBarcodeSource productBarcodeSource;
@@ -39,13 +39,11 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
   final title = "".obs;
   // tab控制器
   late final TabController tabController;
-  List<Tab> get tabs => [
+  List<Tab> tabs = [
     Tab(text: LocaleKeys.product.tr),
     Tab(text: LocaleKeys.detail.tr),
     Tab(text: LocaleKeys.barcode.tr),
     Tab(text: LocaleKeys.shop.tr),
-    if (Get.parameters.isNotEmpty) Tab(text: LocaleKeys.setMealLimit.tr),
-    if (Get.parameters.isNotEmpty) Tab(text: LocaleKeys.setMeal.tr),
   ];
   final tabIndex = 0.obs;
   // 类目
@@ -59,7 +57,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
   final categories = <CategoryModel>[].obs;
 
   //产品ID
-  int? id;
+  int? productID;
   //多类
   RxList productCategory3 = [].obs;
   @override
@@ -71,13 +69,18 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
 
   /// 重置状态
   void restState() {
-    formKey.currentState?.reset();
+    productEditFormKey.currentState?.reset();
   }
 
   /// 初始化参数
   void initParams() {
-    final params = Get.parameters;
-    title.value = params.isEmpty
+    final params = Get.arguments as Map<String, dynamic>?;
+    productID = int.tryParse(params?["id"] ?? "");
+    if (productID != null) {
+      tabs.add(Tab(text: LocaleKeys.setMealLimit.tr));
+      tabs.add(Tab(text: LocaleKeys.setMeal.tr));
+    }
+    title.value = productID == null
         ? "${LocaleKeys.add.tr}${LocaleKeys.product.tr}"
         : "${LocaleKeys.edit.tr}${LocaleKeys.product.tr}";
 
@@ -114,7 +117,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
   /// 生成二级类目
   void generateCategory2(String? selectCate1) {
     category2.clear();
-    formKey.currentState?.fields[ProductEditFields.mCategory2]?.didChange("");
+    productEditFormKey.currentState?.fields[ProductEditFields.mCategory2]?.didChange("");
     if (selectCate1 == null || selectCate1.isEmpty) return;
     final parent = category1.firstWhereOrNull((e) => e.mCategory == selectCate1);
     if (parent != null && parent.children != null) {
@@ -126,19 +129,18 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
   Future<void> productAddOrEdit() async {
     isLoading(true);
     try {
-      final query = Get.parameters;
-      final DioApiResult dioApiResult = await apiClient.post(Config.productAddOrEdit, data: query);
+      final DioApiResult dioApiResult = await apiClient.post(Config.productAddOrEdit, data: {'id': productID});
 
       if (!dioApiResult.success) {
         if (!dioApiResult.hasPermission) {
           hasPermission.value = false;
         }
-        showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
 
       if (dioApiResult.data == null) {
-        showToast(LocaleKeys.dataException.tr);
+        CustomDialog.showToast(LocaleKeys.dataException.tr);
         return;
       }
       hasPermission.value = true;
@@ -152,9 +154,8 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
         if (apiResult.productInfo != null) {
           final productInfo = apiResult.productInfo;
           if (productInfo != null) {
-            id = productInfo.tProductId;
             productCategory3.value = productInfo.mCategory3?.split(",") ?? [];
-            formKey.currentState?.patchValue(
+            productEditFormKey.currentState?.patchValue(
               Map.fromEntries(apiResult.productInfo!.toJson().entries.where((e) => e.value != null)),
             );
           }
@@ -167,7 +168,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
       }
     } catch (e) {
       logger.i(e.toString());
-      showToast(LocaleKeys.getDataException.tr);
+      CustomDialog.showToast(LocaleKeys.getDataException.tr);
     } finally {
       isLoading(false);
     }
@@ -175,12 +176,12 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
 
   /// 保存产品
   Future<void> productAddOrEditSave() async {
-    if (formKey.currentState?.saveAndValidate() ?? false) {
+    if (productEditFormKey.currentState?.saveAndValidate() ?? false) {
       // 保存的時候要去除“平均成本”与“最后成本”
       // 创建与修改时间为当前时间
 
-      final formData = Map<String, dynamic>.from(formKey.currentState!.value);
-      formData['T_Product_ID'] = id;
+      final formData = Map<String, dynamic>.from(productEditFormKey.currentState!.value);
+      formData['T_Product_ID'] = productID;
       // 条码
       formData.addAll({'productBarcode': productBarcode.map((e) => e.toJson()).toList()});
       final DioApiResult dioApiResult = await apiClient.post(Config.productAddOrEditSave, data: formData);
@@ -253,7 +254,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
         ElevatedButton(
           onPressed: () async {
             if (formKey.currentState?.validate() ?? false) {
-              successMessages(isAdd ? LocaleKeys.addSuccess.tr : LocaleKeys.editSuccess.tr);
+              CustomDialog.successMessages(isAdd ? LocaleKeys.addSuccess.tr : LocaleKeys.editSuccess.tr);
               if (isAdd && row != null) {
                 productBarcode.insert(0, row);
               }

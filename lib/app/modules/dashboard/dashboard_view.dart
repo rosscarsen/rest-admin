@@ -34,35 +34,40 @@ class DashboardView extends GetView<DashboardController> {
               key: controller.formKey,
               child: ResponsiveGridRow(
                 children: [
-                  FormHelper.dateInput(
-                    name: "startDate",
-                    labelText: LocaleKeys.startDate.tr,
-                    initialValue: DateTime.now().subtract(const Duration(days: 7)),
-                    enabled: false,
-                    canClear: false,
+                  FormHelper.buildGridCol(
+                    child: FormHelper.dateInput(
+                      name: "startDate",
+                      labelText: LocaleKeys.startDate.tr,
+                      initialValue: DateTime.now().subtract(const Duration(days: 7)),
+                      enabled: false,
+                      canClear: false,
+                    ),
                   ),
-                  FormHelper.dateInput(
-                    name: "endDate",
-                    labelText: LocaleKeys.endDate.tr,
-                    initialValue: DateTime.now().subtract(const Duration(days: 1)),
-                    canClear: false,
-                    onChanged: (String? value) {
-                      if (value != null) {
-                        final formatter = DateFormat('yyyy-MM-dd');
-                        final endDate = DateTime.parse(value);
-                        final startDate = endDate.subtract(Duration(days: 6));
-                        controller.formKey.currentState?.fields['startDate']?.didChange(formatter.format(startDate));
-                        // 触发搜索
-                        controller.search.addAll({
-                          "startDate": formatter.format(startDate),
-                          "endDate": formatter.format(endDate),
-                        });
-                        controller.getChartData();
-                      } else {
-                        controller.formKey.currentState?.fields['startDate']?.didChange(null);
-                      }
-                    },
+                  FormHelper.buildGridCol(
+                    child: FormHelper.dateInput(
+                      name: "endDate",
+                      labelText: LocaleKeys.endDate.tr,
+                      initialValue: DateTime.now().subtract(const Duration(days: 1)),
+                      canClear: false,
+                      onChanged: (String? value) {
+                        if (value != null) {
+                          final formatter = DateFormat('yyyy-MM-dd');
+                          final endDate = DateTime.parse(value);
+                          final startDate = endDate.subtract(Duration(days: 6));
+                          controller.formKey.currentState?.fields['startDate']?.didChange(formatter.format(startDate));
+                          // 触发搜索
+                          controller.search.addAll({
+                            "startDate": formatter.format(startDate),
+                            "endDate": formatter.format(endDate),
+                          });
+                          controller.getChartData();
+                        } else {
+                          controller.formKey.currentState?.fields['startDate']?.didChange(null);
+                        }
+                      },
+                    ),
                   ),
+                  //搜索
                   ResponsiveGridCol(
                     xs: 12,
                     sm: 6,
@@ -80,8 +85,8 @@ class DashboardView extends GetView<DashboardController> {
                           child: ElevatedButton(
                             child: Text(LocaleKeys.search.tr),
                             onPressed: () {
-                              controller.formKey.currentState?.saveAndValidate();
-                              controller.search.addAll(controller.formKey.currentState!.value);
+                              /*  controller.formKey.currentState?.saveAndValidate();
+                              controller.search.addAll(controller.formKey.currentState!.value); */
                               controller.getChartData();
                             },
                           ),

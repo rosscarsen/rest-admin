@@ -9,7 +9,7 @@ import '../../../../model/department_model.dart';
 import '../../../../service/dio_api_client.dart';
 import '../../../../service/dio_api_result.dart';
 import '../../../../translations/locale_keys.dart';
-import '../../../../utils/easy_loading.dart';
+import '../../../../utils/custom_dialog.dart';
 import 'advanced_search_fields.dart';
 
 class AdvancedSearchController extends GetxController {
@@ -90,12 +90,12 @@ class AdvancedSearchController extends GetxController {
       final DioApiResult dioApiResult = await apiClient.post(Config.productAdvancedSearch);
 
       if (!dioApiResult.success) {
-        showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
 
       if (dioApiResult.data == null) {
-        showToast(LocaleKeys.dataException.tr);
+        CustomDialog.showToast(LocaleKeys.dataException.tr);
         return;
       }
 

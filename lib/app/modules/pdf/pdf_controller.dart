@@ -10,7 +10,7 @@ import '../../model/print_barcode_model.dart';
 import '../../service/dio_api_client.dart';
 import '../../service/dio_api_result.dart';
 import '../../translations/locale_keys.dart';
-import '../../utils/easy_loading.dart';
+import '../../utils/custom_dialog.dart';
 
 class PdfController extends GetxController {
   final isLoading = true.obs;
@@ -63,19 +63,19 @@ class PdfController extends GetxController {
     parameters.remove("type");
     try {
       isLoading.value = true;
-      showLoading(LocaleKeys.gettingData.tr);
+      CustomDialog.showLoading(LocaleKeys.gettingData.tr);
 
       final DioApiResult dioApiResult = await apiClient.post(Config.printBarcode, queryParameters: parameters);
       if (!dioApiResult.success) {
-        errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       if (!dioApiResult.hasPermission) {
-        errorMessages(dioApiResult.error ?? LocaleKeys.noPermission.tr);
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.noPermission.tr);
         return;
       }
       if (dioApiResult.data == null) {
-        showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       final PrintBarcodeModel printBarcodeModel = printBarcodeModelFromJson(dioApiResult.data!);
@@ -83,10 +83,10 @@ class PdfController extends GetxController {
         barcodeData = printBarcodeModel.apiResult ?? [];
         hasData.value = barcodeData.isNotEmpty;
       } else {
-        errorMessages(printBarcodeModel.msg ?? LocaleKeys.getDataException.tr);
+        CustomDialog.errorMessages(printBarcodeModel.msg ?? LocaleKeys.getDataException.tr);
       }
     } finally {
-      dismissLoading();
+      CustomDialog.dismissLoading();
       isLoading.value = false;
     }
   }

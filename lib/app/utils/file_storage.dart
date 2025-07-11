@@ -8,7 +8,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../translations/locale_keys.dart';
 import 'custom_alert.dart';
-import 'easy_loading.dart';
+import 'custom_dialog.dart';
 
 enum DownloadFileType { Excel, Pdf }
 
@@ -23,7 +23,7 @@ class FileStorage {
     if (Platform.isWindows || Platform.isLinux) {
       final Directory? directory = await getDownloadsDirectory();
       if (directory == null) {
-        showToast(LocaleKeys.filePathError.tr);
+        CustomDialog.showToast(LocaleKeys.filePathError.tr);
         return;
       }
       final String path = directory.path;
@@ -35,18 +35,18 @@ class FileStorage {
           confirmText: LocaleKeys.copy.tr,
           onConfirm: () {
             Clipboard.setData(ClipboardData(text: file.path));
-            showToast(LocaleKeys.copySuccess.tr);
+            CustomDialog.showToast(LocaleKeys.copySuccess.tr);
           },
           showCancel: true,
         );
       } else {
-        showToast(LocaleKeys.fileDownloadFailed.tr);
+        CustomDialog.showToast(LocaleKeys.fileDownloadFailed.tr);
       }
     } else {
       try {
         await FlutterFileSaver().writeFileAsBytes(fileName: fileName, bytes: bytes);
       } catch (e) {
-        showToast(LocaleKeys.operationWasCancelled.tr);
+        CustomDialog.showToast(LocaleKeys.operationWasCancelled.tr);
       }
     }
   }

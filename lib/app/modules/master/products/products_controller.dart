@@ -14,7 +14,7 @@ import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/custom_alert.dart';
-import '../../../utils/easy_loading.dart';
+import '../../../utils/custom_dialog.dart';
 import '../../../utils/file_storage.dart';
 import '../../../utils/functions.dart';
 import '../../../utils/logger.dart';
@@ -95,15 +95,16 @@ class ProductsController extends GetxController {
       };
 
       final DioApiResult dioApiResult = await apiClient.post(Config.product, data: search);
+
       if (!dioApiResult.success) {
         if (!dioApiResult.hasPermission) {
           hasPermission.value = false;
         }
-        errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       if (dioApiResult.data == null) {
-        errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
 
@@ -115,7 +116,7 @@ class ProductsController extends GetxController {
         totalPages.value = (productsModel.apiResult?.lastPage ?? 0);
         totalRecords.value = (productsModel.apiResult?.total ?? 0);
       } else {
-        errorMessages(LocaleKeys.getDataException.tr);
+        CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
       }
     } finally {
       isLoading(false);
@@ -128,7 +129,7 @@ class ProductsController extends GetxController {
   void copy(ProductData row) {}
   //编辑
   void edit({ProductData? row}) {
-    Get.toNamed(Routes.PRODUCT_EDIT, parameters: row != null ? {"id": row.tProductId?.toString() ?? ""} : null);
+    Get.toNamed(Routes.PRODUCT_EDIT, arguments: row != null ? {"id": row.tProductId?.toString() ?? ""} : null);
     /* row.mCategory1 = "修改";
     dataSource.updateDataSource(); */
   }
@@ -142,7 +143,7 @@ class ProductsController extends GetxController {
   void deleteSelectedRows() async {
     final selectedRows = dataGridController.selectedRows;
     if (selectedRows.isEmpty) {
-      showToast(LocaleKeys.pleaseSelectOneDataOrMoreToDelete.tr);
+      CustomDialog.showToast(LocaleKeys.pleaseSelectOneDataOrMoreToDelete.tr);
       return;
     }
     final selectedIDS = selectedRows.map((dataGridRow) {
@@ -156,7 +157,7 @@ class ProductsController extends GetxController {
   void deleteSelectedSetMeal() {
     final selectedRows = dataGridController.selectedRows;
     if (selectedRows.isEmpty) {
-      showToast(LocaleKeys.pleaseSelectOneDataOrMoreToDelete.tr);
+      CustomDialog.showToast(LocaleKeys.pleaseSelectOneDataOrMoreToDelete.tr);
       return;
     }
     final selectedIDS = selectedRows.map((dataGridRow) {
@@ -168,36 +169,36 @@ class ProductsController extends GetxController {
       LocaleKeys.deleteConfirmMsg.tr,
       onConfirm: () async {
         try {
-          showLoading(LocaleKeys.deleting.tr);
+          CustomDialog.showLoading(LocaleKeys.deleting.tr);
           final DioApiResult dioApiResult = await apiClient.post(
             Config.batchDeleteSetMeal,
             data: {"productIDs": jsonEncode(selectedIDS)},
           );
 
           if (!dioApiResult.success) {
-            showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+            CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
             return;
           }
           if (dioApiResult.data == null) {
-            showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+            CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
             return;
           }
           final Map<String, dynamic> data = jsonDecode(dioApiResult.data!) as Map<String, dynamic>;
 
           switch (data['status']) {
             case 200:
-              successMessages(LocaleKeys.deleteSuccess.tr);
+              CustomDialog.successMessages(LocaleKeys.deleteSuccess.tr);
               reloadData();
               break;
             case 201:
-              errorMessages(LocaleKeys.deleteFailed.tr);
+              CustomDialog.errorMessages(LocaleKeys.deleteFailed.tr);
             default:
-              errorMessages(LocaleKeys.unknownError.tr);
+              CustomDialog.errorMessages(LocaleKeys.unknownError.tr);
           }
         } catch (e) {
-          errorMessages(LocaleKeys.deleteFailed.tr);
+          CustomDialog.errorMessages(LocaleKeys.deleteFailed.tr);
         } finally {
-          dismissLoading();
+          CustomDialog.dismissLoading();
         }
       },
     );
@@ -210,39 +211,39 @@ class ProductsController extends GetxController {
       LocaleKeys.deleteConfirmMsg.tr,
       onConfirm: () async {
         try {
-          showLoading(LocaleKeys.deleting.tr);
+          CustomDialog.showLoading(LocaleKeys.deleting.tr);
           final DioApiResult dioApiResult = await apiClient.post(
             Config.batchDeleteProduct,
             data: {"ids": jsonEncode(selectedIDS)},
           );
 
           if (!dioApiResult.success) {
-            showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+            CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
             return;
           }
           if (dioApiResult.data == null) {
-            showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+            CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
             return;
           }
           final Map<String, dynamic> data = jsonDecode(dioApiResult.data!) as Map<String, dynamic>;
 
           switch (data['status']) {
             case 200:
-              successMessages(LocaleKeys.deleteSuccess.tr);
+              CustomDialog.successMessages(LocaleKeys.deleteSuccess.tr);
               reloadData();
               break;
             case 201:
-              errorMessages(LocaleKeys.ftpConnectFailed.tr);
+              CustomDialog.errorMessages(LocaleKeys.ftpConnectFailed.tr);
               break;
             case 202:
-              errorMessages(LocaleKeys.exitsTxCannotDelete.tr.trArgs([data['msg']]));
+              CustomDialog.errorMessages(LocaleKeys.exitsTxCannotDelete.tr.trArgs([data['msg']]));
             default:
-              errorMessages(LocaleKeys.unknownError.tr);
+              CustomDialog.errorMessages(LocaleKeys.unknownError.tr);
           }
         } catch (e) {
-          errorMessages(LocaleKeys.deleteFailed.tr);
+          CustomDialog.errorMessages(LocaleKeys.deleteFailed.tr);
         } finally {
-          dismissLoading();
+          CustomDialog.dismissLoading();
         }
       },
     );
@@ -253,55 +254,56 @@ class ProductsController extends GetxController {
     XFile? ret = await Functions.imagePicker(context);
     if (ret == null) return;
     try {
-      showLoading(LocaleKeys.uploading.tr);
+      CustomDialog.showLoading(LocaleKeys.uploading.tr);
       final DioApiResult dioApiResult = await apiClient.uploadImage(
         image: ret,
         uploadUrl: Config.uploadProductImage,
         code: row.mCode,
       );
+
       if (!dioApiResult.success) {
-        showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
 
       if (dioApiResult.data == null) {
-        showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       final Map<String, dynamic> data = json.decode(dioApiResult.data) as Map<String, dynamic>;
       switch (data['status']) {
         case 200:
           String? imagesPath = data["apiResult"];
-          successMessages(LocaleKeys.uploadSuccess.tr);
+          CustomDialog.successMessages(LocaleKeys.uploadSuccess.tr);
           row.imagesPath = "$imagesPath?timestamp=${DateTime.now().millisecondsSinceEpoch}";
           dataSource.updateDataSource();
           break;
         case 201:
-          errorMessages(LocaleKeys.ftpInfoNotIsSet.tr);
+          CustomDialog.errorMessages(LocaleKeys.ftpInfoNotIsSet.tr);
           break;
         case 202:
-          errorMessages(LocaleKeys.ftpConnectFailed.tr);
+          CustomDialog.errorMessages(LocaleKeys.ftpConnectFailed.tr);
           break;
         case 203:
-          errorMessages(LocaleKeys.ftpLoginFailed.tr);
+          CustomDialog.errorMessages(LocaleKeys.ftpLoginFailed.tr);
           break;
         case 204:
-          errorMessages(LocaleKeys.fileNotFound.tr);
+          CustomDialog.errorMessages(LocaleKeys.fileNotFound.tr);
           break;
         case 205:
-          errorMessages(LocaleKeys.uploadFailed.tr);
+          CustomDialog.errorMessages(LocaleKeys.uploadFailed.tr);
           break;
         default:
-          errorMessages(LocaleKeys.unknownError.tr);
+          CustomDialog.errorMessages(LocaleKeys.unknownError.tr);
       }
     } finally {
-      dismissLoading();
+      CustomDialog.dismissLoading();
     }
   }
 
   //导出产品
   Future<void> exportProduct() async {
-    showLoading(LocaleKeys.generating.trArgs(["excel"]));
+    CustomDialog.showLoading(LocaleKeys.generating.trArgs(["excel"]));
     Map<String, dynamic> query = {
       "lang": (Get.locale?.toString() ?? "zh_HK").toLowerCase(),
       ...sort,
@@ -315,7 +317,7 @@ class ProductsController extends GetxController {
         queryParameters: query,
       );
       if (!dioApiResult.success) {
-        showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
         return;
       }
       if (dioApiResult.data is Uint8List) {
@@ -327,33 +329,32 @@ class ProductsController extends GetxController {
       }
     } catch (e) {
       logger.i(e);
-      errorMessages(LocaleKeys.generateFileFailed.tr);
+      CustomDialog.errorMessages(LocaleKeys.generateFileFailed.tr);
     } finally {
-      dismissLoading();
+      CustomDialog.dismissLoading();
     }
   }
 
   // 导入产品
   Future<void> importProduct({required File file, required Map<String, dynamic> query}) async {
-    showLoading(LocaleKeys.importing.tr);
+    CustomDialog.showLoading(LocaleKeys.importing.tr);
     try {
       final DioApiResult dioApiResult = await apiClient.uploadFile(
         file: file,
         uploadUrl: Config.importProductExcel,
         extraData: query,
       );
-      logger.f(dioApiResult);
 
       if (!dioApiResult.success) {
-        showToast(dioApiResult.error ?? LocaleKeys.importFailed.tr);
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.importFailed.tr);
         return;
       }
       reloadData();
-      successMessages(LocaleKeys.importFileSuccess.tr);
+      CustomDialog.successMessages(LocaleKeys.importFileSuccess.tr);
     } catch (e) {
-      showToast(LocaleKeys.importFailed.tr);
+      CustomDialog.showToast(LocaleKeys.importFailed.tr);
     } finally {
-      dismissLoading();
+      CustomDialog.dismissLoading();
     }
   }
 }

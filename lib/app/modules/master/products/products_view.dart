@@ -12,7 +12,7 @@ import '../../../config.dart';
 import '../../../routes/app_pages.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/constants.dart';
-import '../../../utils/easy_loading.dart';
+import '../../../utils/custom_dialog.dart';
 import '../../../utils/progresshub.dart';
 import '../../../widgets/custom_cell.dart';
 import '../../../widgets/custom_scaffold.dart';
@@ -321,7 +321,7 @@ class ProductsView extends GetView<ProductsController> {
                         fileController.text = platformFile.name;
                       });
                     } else {
-                      showToast(LocaleKeys.userCanceledPicker.tr);
+                      CustomDialog.showToast(LocaleKeys.userCanceledPicker.tr);
                     }
                   },
                   child: AbsorbPointer(
@@ -381,7 +381,7 @@ class ProductsView extends GetView<ProductsController> {
       confirm: ElevatedButton(
         onPressed: () async {
           if (excelFile == null) {
-            showToast(LocaleKeys.pleaseSelectFile.tr);
+            CustomDialog.showToast(LocaleKeys.pleaseSelectFile.tr);
             return;
           }
           fileController.dispose();

@@ -8,7 +8,7 @@ import '../../../model/products_model.dart';
 import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
-import '../../../utils/easy_loading.dart';
+import '../../../utils/custom_dialog.dart';
 
 class OpenProductController extends GetxController {
   final DataGridController dataGridController = DataGridController();
@@ -57,16 +57,17 @@ class OpenProductController extends GetxController {
       Map<String, Object> search = {'page': currentPage.value};
       if (searchController.text.isNotEmpty) search['search'] = searchController.text;
       final DioApiResult dioApiResult = await apiClient.post(Config.openProduct, data: search);
+
       if (!dioApiResult.success) {
-        showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       if (!dioApiResult.hasPermission) {
-        showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
         return;
       }
       if (dioApiResult.data == null) {
-        showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       final productsModel = productsModelFromJson(dioApiResult.data!);
@@ -75,7 +76,7 @@ class OpenProductController extends GetxController {
         totalPages.value = (productsModel.apiResult?.lastPage ?? 0);
         totalRecords.value = (productsModel.apiResult?.total ?? 0);
       } else {
-        errorMessages(LocaleKeys.getDataException.tr);
+        CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
       }
     } finally {
       isLoading(false);
