@@ -224,4 +224,11 @@ Map<String, String> get zhCN => {
   LocaleKeys.maxQty: "最大数量",
   LocaleKeys.forceSelect: "强制选择",
   LocaleKeys.chinese: "中文",
+  LocaleKeys.selectItemByItem: "逐项选择",
+  LocaleKeys.listAll: "列出所有",
+  LocaleKeys.copyProduct: "复制(食品)",
+  LocaleKeys.copySetMeal: "复制(套餐)",
+  LocaleKeys.updateSetMeal: "更新套餐",
+  LocaleKeys.batchDelete: "批量删除",
+  LocaleKeys.scorePrice: "撇数价钱",
 };

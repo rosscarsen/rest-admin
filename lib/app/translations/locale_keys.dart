@@ -224,4 +224,11 @@ abstract class LocaleKeys {
   static const String maxQty = "maxQty";
   static const String forceSelect = "forceSelect";
   static const String chinese = "chinese";
+  static const String selectItemByItem = "selectItemByItem";
+  static const String listAll = "listAll";
+  static const String copyProduct = "copyProduct";
+  static const String copySetMeal = "copySetMeal";
+  static const String updateSetMeal = "updateSetMeal";
+  static const String batchDelete = "batchDelete";
+  static const String scorePrice = "scorePrice";
 }

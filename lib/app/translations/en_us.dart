@@ -224,4 +224,11 @@ Map<String, String> get enUS => {
   LocaleKeys.maxQty: "Max Qty.",
   LocaleKeys.forceSelect: "Force Select",
   LocaleKeys.chinese: "Chinese",
+  LocaleKeys.selectItemByItem: "Select Item By Item",
+  LocaleKeys.listAll: "List All",
+  LocaleKeys.copyProduct: "Copy(Product)",
+  LocaleKeys.copySetMeal: "Copy(SetMeal)",
+  LocaleKeys.updateSetMeal: "Update SetMeal",
+  LocaleKeys.batchDelete: "Batch Delete",
+  LocaleKeys.scorePrice: "Score Price",
 };

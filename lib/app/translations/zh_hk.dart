@@ -224,4 +224,11 @@ Map<String, String> zhHK = {
   LocaleKeys.maxQty: "最大數量",
   LocaleKeys.forceSelect: "強制選擇",
   LocaleKeys.chinese: "中文",
+  LocaleKeys.selectItemByItem: "逐项选择",
+  LocaleKeys.listAll: "列出所有",
+  LocaleKeys.copyProduct: "複製(食品)",
+  LocaleKeys.copySetMeal: "複製(套餐)",
+  LocaleKeys.updateSetMeal: "更新套餐",
+  LocaleKeys.batchDelete: "批量刪除",
+  LocaleKeys.scorePrice: "撇数价钱",
 };
