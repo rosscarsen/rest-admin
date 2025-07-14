@@ -231,4 +231,5 @@ abstract class LocaleKeys {
   static const String updateSetMeal = "updateSetMeal";
   static const String batchDelete = "batchDelete";
   static const String scorePrice = "scorePrice";
+  static const String choose = "choose";
 }

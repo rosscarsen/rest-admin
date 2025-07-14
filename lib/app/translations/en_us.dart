@@ -231,4 +231,5 @@ Map<String, String> get enUS => {
   LocaleKeys.updateSetMeal: "Update SetMeal",
   LocaleKeys.batchDelete: "Batch Delete",
   LocaleKeys.scorePrice: "Score Price",
+  LocaleKeys.choose: "Choose",
 };
