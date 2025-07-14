@@ -184,8 +184,11 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
       formData['T_Product_ID'] = productID;
       // 条码
       formData.addAll({'productBarcode': productBarcode.map((e) => e.toJson()).toList()});
+      // 套餐限制
+      formData.addAll({'setMealLimit': setMealLimit.map((e) => e.toJson()).toList()});
+      logger.i(formData);
       final DioApiResult dioApiResult = await apiClient.post(Config.productAddOrEditSave, data: formData);
-      logger.i(dioApiResult);
+      logger.f(dioApiResult);
     }
   }
 

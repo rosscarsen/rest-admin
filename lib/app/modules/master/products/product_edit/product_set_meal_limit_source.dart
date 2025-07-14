@@ -58,6 +58,14 @@ class SetMealLimitSource extends DataGridSource {
             ),
           );
         }
+        if (e.columnName == "forceSelect") {
+          return Checkbox(
+            value: e.value == 1,
+            onChanged: (value) {
+              controller.setMealLimit[index].obligatory = value == true ? 1 : 0;
+            },
+          );
+        }
         return CustomCell(data: e.value?.toString() ?? "");
       }).toList(),
     );
