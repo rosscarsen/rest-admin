@@ -76,6 +76,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
   void initParams() {
     final params = Get.arguments as Map<String, dynamic>?;
     productID = int.tryParse(params?["id"] ?? "");
+
     if (productID != null) {
       tabs.add(Tab(text: LocaleKeys.setMealLimit.tr));
       tabs.add(Tab(text: LocaleKeys.setMeal.tr));
@@ -181,12 +182,37 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
       // 创建与修改时间为当前时间
 
       final formData = Map<String, dynamic>.from(productEditFormKey.currentState!.value);
+      final selectedMultipleCategory = formData.entries
+          .where((e) => e.key.startsWith('multipleCategory_'))
+          .expand((e) => e.value ?? [])
+          .toList();
+
+      formData['category3'] = selectedMultipleCategory.isEmpty ? null : selectedMultipleCategory.join(",");
+      formData.removeWhere((key, value) => key.startsWith('multipleCategory_'));
+
       formData['T_Product_ID'] = productID;
       // 条码
-      formData.addAll({'productBarcode': productBarcode.map((e) => e.toJson()).toList()});
+      formData.addAll({
+        'productBarcode': productBarcode.isNotEmpty
+            ? productBarcode.map((e) {
+                final json = Map<String, dynamic>.from(e.toJson());
+                json.remove('T_Product_ID');
+                return json;
+              }).toList()
+            : [],
+      });
       // 套餐限制
-      formData.addAll({'setMealLimit': setMealLimit.map((e) => e.toJson()).toList()});
-      logger.i(formData);
+      formData.addAll({
+        'setMealLimit': setMealLimit.isNotEmpty
+            ? setMealLimit.map((e) {
+                final json = Map<String, dynamic>.from(e.toJson());
+                json.remove('set_limit_id');
+                json.remove('t_product_id');
+                return json;
+              }).toList()
+            : [],
+      });
+      logger.e(formData);
       final DioApiResult dioApiResult = await apiClient.post(Config.productAddOrEditSave, data: formData);
       logger.f(dioApiResult);
     }
@@ -259,6 +285,10 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
             if (formKey.currentState?.validate() ?? false) {
               CustomDialog.successMessages(isAdd ? LocaleKeys.addSuccess.tr : LocaleKeys.editSuccess.tr);
               if (isAdd && row != null) {
+                row.mName = row.mName ?? "";
+                row.mNonActived = row.mNonActived ?? 0;
+                row.mRemarks = row.mName ?? "";
+                row.mItem = productBarcode.length + 1;
                 productBarcode.insert(0, row);
               }
               productBarcodeSource.updateDataSource();

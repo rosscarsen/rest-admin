@@ -92,8 +92,8 @@ class ProductEditView extends GetView<ProductEditController> {
           _buildDetail(context: context),
           _buildBarcode(context: context),
           _buildShop(context: context),
-          if (controller.productID != null) _buildSetMealLimit(context: context),
-          if (controller.productID != null) _buildSetMeal(context: context),
+          _buildSetMealLimit(context: context),
+          _buildSetMeal(context: context),
         ],
       ),
     );
@@ -451,7 +451,6 @@ class ProductEditView extends GetView<ProductEditController> {
                     ),
                   ),
                 ),
-
                 ...controller.categories.map((item) {
                   final ScrollController scrollController = ScrollController();
                   return ResponsiveGridCol(
@@ -503,7 +502,7 @@ class ProductEditView extends GetView<ProductEditController> {
                                           enabledBorder: InputBorder.none,
                                           focusedBorder: InputBorder.none,
                                         ),
-                                        name: "multipleCategory[${item.tCategoryId}][]",
+                                        name: "multipleCategory_${item.tCategoryId}",
                                         options: item.children?.isEmpty ?? false
                                             ? []
                                             : item.children!
@@ -519,7 +518,7 @@ class ProductEditView extends GetView<ProductEditController> {
                                                           ),
                                                           Flexible(child: Text(entry.value.mDescription ?? "")),
                                                         ],
-                                                      ), // 移除FittedBox
+                                                      ),
                                                     ),
                                                   )
                                                   .toList(),
@@ -607,6 +606,7 @@ class ProductEditView extends GetView<ProductEditController> {
                           children: [
                             Flexible(child: CustomCell(data: LocaleKeys.operation.tr)),
                             IconButton(
+                              tooltip: LocaleKeys.barcodeAdd.tr,
                               icon: Icon(Icons.add, color: AppColors.editColor),
                               onPressed: () async {
                                 await controller.editOrAddProductBarcode();

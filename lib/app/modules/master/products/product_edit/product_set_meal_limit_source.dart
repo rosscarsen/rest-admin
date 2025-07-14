@@ -37,20 +37,22 @@ class SetMealLimitSource extends DataGridSource {
 
   @override
   DataGridRowAdapter buildRow(DataGridRow dataGridRow) {
-    final int index = _dataGridRows.indexOf(dataGridRow);
+    final int rowIndex = _dataGridRows.indexOf(dataGridRow);
     return DataGridRowAdapter(
-      cells: dataGridRow.getCells().map<Widget>((e) {
+      cells: dataGridRow.getCells().asMap().entries.map<Widget>((entry) {
+        final int columnIndex = entry.key;
+        final DataGridCell e = entry.value;
         if (e.columnName == "maxQty") {
           return Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: TextFormField(
-              key: ValueKey('maxQty_$index'),
+              key: ValueKey('maxQty_$rowIndex'),
               initialValue: e.value?.toString() ?? "",
               onChanged: (value) {
                 final parsed = int.tryParse(value);
                 if (parsed != null) {
-                  controller.setMealLimit[index].limitMax = parsed;
+                  controller.setMealLimit[rowIndex].limitMax = parsed;
                 }
               },
               keyboardType: TextInputType.number,
@@ -60,10 +62,42 @@ class SetMealLimitSource extends DataGridSource {
         }
         if (e.columnName == "forceSelect") {
           return Checkbox(
+            key: ValueKey("forceSelect_$rowIndex"),
             value: e.value == 1,
             onChanged: (value) {
-              controller.setMealLimit[index].obligatory = value == true ? 1 : 0;
+              controller.setMealLimit[rowIndex].obligatory = value == true ? 1 : 0;
+              dataGridRow.getCells()[columnIndex] = DataGridCell(
+                columnName: "forceSelect",
+                value: value == true ? 1 : 0,
+              );
+              notifyDataSourceListeners(rowColumnIndex: RowColumnIndex(rowIndex, columnIndex));
             },
+          );
+        }
+        if (e.columnName == "chinese") {
+          return Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: TextFormField(
+              key: ValueKey('chinese_$rowIndex'),
+              initialValue: e.value?.toString() ?? "",
+              onChanged: (value) {
+                controller.setMealLimit[rowIndex].zhtw = value;
+              },
+            ),
+          );
+        }
+        if (e.columnName == "english") {
+          return Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: TextFormField(
+              key: ValueKey('english_$rowIndex'),
+              initialValue: e.value?.toString() ?? "",
+              onChanged: (value) {
+                controller.setMealLimit[rowIndex].enus = value;
+              },
+            ),
           );
         }
         return CustomCell(data: e.value?.toString() ?? "");

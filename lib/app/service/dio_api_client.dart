@@ -38,7 +38,7 @@ class ApiClient {
   factory ApiClient() {
     final baseOptions = BaseOptions(
       baseUrl: Config.baseurl,
-      contentType: "application/x-www-form-urlencoded",
+      contentType: Headers.jsonContentType,
       responseType: ResponseType.plain,
       connectTimeout: Duration(seconds: 30),
       receiveTimeout: Duration(seconds: 60),
