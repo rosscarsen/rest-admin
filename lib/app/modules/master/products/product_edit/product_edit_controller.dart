@@ -15,6 +15,7 @@ import '../../../../utils/logger.dart';
 import 'product_barcode_source.dart';
 import 'product_edit_fields.dart';
 import 'product_set_meal_limit_source.dart';
+import 'product_set_meal_source.dart';
 import 'product_stock_source.dart';
 
 class ProductEditController extends GetxController with GetSingleTickerProviderStateMixin {
@@ -31,6 +32,10 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
   final DataGridController setMealLimitDataGridController = DataGridController();
   late SetMealLimitSource setMealLimitSource;
   final setMealLimit = <SetMealLimit>[].obs;
+  // 套餐
+  final DataGridController setMealDataGridController = DataGridController();
+  late ProductSetMealSource productSetMealSource;
+  final setMeal = <SetMeal>[].obs;
   // Dio客户端
   final ApiClient apiClient = ApiClient();
   // 加载标识
@@ -93,11 +98,16 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
 
   //更新数据源
   void updateDataGridSource() {
+    barcodeDataGridController.selectedRows = [];
+    stockDataGridController.selectedRows = [];
+    setMealLimitDataGridController.selectedRows = [];
+    setMealDataGridController.selectedRows = [];
     restState();
     productAddOrEdit().then((_) {
       productBarcodeSource = ProductBarcodeSource(this);
       productStockSource = ProductStockSource(this);
       setMealLimitSource = SetMealLimitSource(this);
+      productSetMealSource = ProductSetMealSource(this);
     });
   }
 
@@ -112,6 +122,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
     barcodeDataGridController.dispose();
     stockDataGridController.dispose();
     setMealLimitDataGridController.dispose();
+    setMealDataGridController.dispose();
     super.onClose();
   }
 
@@ -163,6 +174,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
           productBarcode.assignAll(apiResult.productBarcode ?? []);
           productStock.assignAll(apiResult.productStock ?? []);
           setMealLimit.assignAll(apiResult.setMealLimit ?? []);
+          setMeal.assignAll(apiResult.setMeal ?? []);
 
           units.assignAll(apiResult.units ?? []);
         }
@@ -306,5 +318,15 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
     if (row == null) return;
     productBarcode.remove(row);
     productBarcodeSource.updateDataSource();
+  }
+
+  ///批量删除套餐Item
+  Future<void> batchDeleteSetMealItems() async {
+    logger.e(2);
+    /* final selectedRows = setMealDataGridController.selectedRows;
+    if (selectedRows.isEmpty) {
+      CustomDialog.showToast(LocaleKeys.pleaseSelectOneDataOrMoreToDelete.tr);
+      return;
+    } */
   }
 }

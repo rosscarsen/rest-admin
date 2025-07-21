@@ -232,4 +232,8 @@ abstract class LocaleKeys {
   static const String batchDelete = "batchDelete";
   static const String scorePrice = "scorePrice";
   static const String choose = "choose";
+  static const String clearText = "clearText";
+  static const String option = "option";
+  static const String defaultSelect = "defaultSelect";
+  static const String addSetMeal = "addSetMeal";
 }

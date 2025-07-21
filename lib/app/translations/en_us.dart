@@ -232,4 +232,8 @@ Map<String, String> get enUS => {
   LocaleKeys.batchDelete: "Batch Delete",
   LocaleKeys.scorePrice: "Score Price",
   LocaleKeys.choose: "Choose",
+  LocaleKeys.clearText: "Clear",
+  LocaleKeys.option: "Option",
+  LocaleKeys.defaultSelect: "Default Select",
+  LocaleKeys.addSetMeal: "Add SetMeal",
 };

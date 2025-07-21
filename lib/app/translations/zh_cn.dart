@@ -232,4 +232,8 @@ Map<String, String> get zhCN => {
   LocaleKeys.batchDelete: "批量删除",
   LocaleKeys.scorePrice: "撇数价钱",
   LocaleKeys.choose: "选择",
+  LocaleKeys.clearText: "清空",
+  LocaleKeys.option: "选项",
+  LocaleKeys.defaultSelect: "默认选择",
+  LocaleKeys.addSetMeal: "添加套餐",
 };

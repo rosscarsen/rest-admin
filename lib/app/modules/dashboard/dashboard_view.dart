@@ -68,28 +68,18 @@ class DashboardView extends GetView<DashboardController> {
                     ),
                   ),
                   //搜索
-                  ResponsiveGridCol(
-                    xs: 12,
-                    sm: 6,
-                    md: 3,
-                    lg: 3,
-                    xl: 4,
+                  FormHelper.buildGridCol(
                     child: ConstrainedBox(
-                      constraints: BoxConstraints(minHeight: 44),
+                      constraints: BoxConstraints(minHeight: context.isPhoneOrWider ? 40 : 48),
                       child: Align(
                         alignment: context.isPhoneOrLess ? Alignment.centerRight : Alignment.centerLeft,
-                        child: Padding(
-                          padding: context.isPhoneOrLess
-                              ? EdgeInsets.zero
-                              : EdgeInsets.only(left: Config.defaultPadding),
-                          child: ElevatedButton(
-                            child: Text(LocaleKeys.search.tr),
-                            onPressed: () {
-                              /*  controller.formKey.currentState?.saveAndValidate();
-                              controller.search.addAll(controller.formKey.currentState!.value); */
-                              controller.getChartData();
-                            },
-                          ),
+                        child: FilledButton(
+                          child: Text(LocaleKeys.search.tr),
+                          onPressed: () {
+                            /*  controller.formKey.currentState?.saveAndValidate();
+                            controller.search.addAll(controller.formKey.currentState!.value); */
+                            controller.getChartData();
+                          },
                         ),
                       ),
                     ),

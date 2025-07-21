@@ -349,7 +349,7 @@ class SetMeal {
   int? mFlag;
   String? mTime;
   String? mPCode;
-  int? mStep;
+  String? mStep;
   int? mDefault;
   int? mSort;
   int? soldOut;
@@ -386,7 +386,7 @@ class SetMeal {
     mFlag: json["mFlag"],
     mTime: json["mTime"],
     mPCode: json["mPCode"],
-    mStep: json["mStep"],
+    mStep: json["mStep"]?.toString() ?? "",
     mDefault: json["mDefault"],
     mSort: json["mSort"],
     soldOut: json["Sold_out"],

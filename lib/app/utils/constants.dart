@@ -36,11 +36,13 @@ class AppColors {
   // 特殊功能
   //static const disableColor = Color(0xFFD9D9D9);
 
-  static Color openColor = Colors.indigo.shade300;
-  static Color disableColor = Colors.grey.shade600;
-  static Color enableColor = Colors.grey.shade800;
+  static Color openColor = const Color.fromARGB(255, 121, 134, 203);
+  static Color disableColor = const Color.fromARGB(255, 117, 117, 117);
+  static Color enableColor = const Color.fromARGB(255, 66, 66, 66);
 
-  static Color customTextColor = Color(0XFF2F2F2F);
+  static const Color customTextColor = Color(0XFF2F2F2F);
+
+  static const Color tableHeaderColor = Color(0xFFF1F1F1);
 
   // 生成随机颜色
   static Color genRandomColor() {

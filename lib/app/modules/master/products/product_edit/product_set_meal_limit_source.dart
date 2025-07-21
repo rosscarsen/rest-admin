@@ -49,6 +49,7 @@ class SetMealLimitSource extends DataGridSource {
             child: TextFormField(
               key: ValueKey('maxQty_$rowIndex'),
               initialValue: e.value?.toString() ?? "",
+              decoration: InputDecoration(isDense: true),
               onChanged: (value) {
                 final parsed = int.tryParse(value);
                 if (parsed != null) {
@@ -80,6 +81,7 @@ class SetMealLimitSource extends DataGridSource {
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: TextFormField(
               key: ValueKey('chinese_$rowIndex'),
+              decoration: InputDecoration(isDense: true),
               initialValue: e.value?.toString() ?? "",
               onChanged: (value) {
                 controller.setMealLimit[rowIndex].zhtw = value;
@@ -92,6 +94,7 @@ class SetMealLimitSource extends DataGridSource {
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: TextFormField(
+              decoration: InputDecoration(isDense: true),
               key: ValueKey('english_$rowIndex'),
               initialValue: e.value?.toString() ?? "",
               onChanged: (value) {

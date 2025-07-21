@@ -138,6 +138,7 @@ class FormHelper {
     FormFieldValidator<T?>? validator,
     T? initialValue,
     void Function(T?)? onChanged,
+    Widget? suffixIcon,
     bool allowUnmatchedValue = true, // ✅ 新增参数
   }) {
     return FormBuilderField<T>(
@@ -146,6 +147,7 @@ class FormHelper {
       initialValue: initialValue,
       validator: validator,
       onChanged: onChanged,
+
       builder: (field) {
         T? currentValue = field.value;
         List<DropdownMenuItem<T>> safeItems = items ?? [];
@@ -172,6 +174,7 @@ class FormHelper {
           onSaved: field.didChange,
           decoration: InputDecoration(
             labelText: labelText,
+            suffixIcon: suffixIcon,
             //prefixIcon: prefixIcon ?? buildPrefixIconText(labelText, enabled),
             prefixIconConstraints: const BoxConstraints(maxWidth: _prefixIconMaxWidth),
             floatingLabelBehavior: FloatingLabelBehavior.always,
