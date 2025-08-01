@@ -27,71 +27,75 @@ class DashboardView extends GetView<DashboardController> {
 
       body: Padding(
         padding: EdgeInsets.all(Config.defaultPadding),
-        child: Column(
-          children: [
-            // 搜索框
-            FormBuilder(
-              key: controller.formKey,
-              child: ResponsiveGridRow(
-                children: [
-                  FormHelper.buildGridCol(
-                    child: FormHelper.dateInput(
-                      name: "startDate",
-                      labelText: LocaleKeys.startDate.tr,
-                      initialValue: DateTime.now().subtract(const Duration(days: 7)),
-                      enabled: false,
-                      canClear: false,
+        child: Obx(() {
+          return Column(
+            children: [
+              // 搜索框
+              FormBuilder(
+                key: controller.formKey,
+                child: ResponsiveGridRow(
+                  children: [
+                    FormHelper.buildGridCol(
+                      child: FormHelper.dateInput(
+                        name: "startDate",
+                        labelText: LocaleKeys.startDate.tr,
+                        initialValue: DateTime.now().subtract(const Duration(days: 7)),
+                        enabled: false,
+                        canClear: false,
+                      ),
                     ),
-                  ),
-                  FormHelper.buildGridCol(
-                    child: FormHelper.dateInput(
-                      name: "endDate",
-                      labelText: LocaleKeys.endDate.tr,
-                      initialValue: DateTime.now().subtract(const Duration(days: 1)),
-                      canClear: false,
-                      onChanged: (String? value) {
-                        if (value != null) {
-                          final formatter = DateFormat('yyyy-MM-dd');
-                          final endDate = DateTime.parse(value);
-                          final startDate = endDate.subtract(Duration(days: 6));
-                          controller.formKey.currentState?.fields['startDate']?.didChange(formatter.format(startDate));
-                          // 触发搜索
-                          controller.search.addAll({
-                            "startDate": formatter.format(startDate),
-                            "endDate": formatter.format(endDate),
-                          });
-                          controller.getChartData();
-                        } else {
-                          controller.formKey.currentState?.fields['startDate']?.didChange(null);
-                        }
-                      },
-                    ),
-                  ),
-                  //搜索
-                  FormHelper.buildGridCol(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(minHeight: context.isPhoneOrWider ? 40 : 48),
-                      child: Align(
-                        alignment: context.isPhoneOrLess ? Alignment.centerRight : Alignment.centerLeft,
-                        child: FilledButton(
-                          child: Text(LocaleKeys.search.tr),
-                          onPressed: () {
-                            /*  controller.formKey.currentState?.saveAndValidate();
-                            controller.search.addAll(controller.formKey.currentState!.value); */
+                    FormHelper.buildGridCol(
+                      child: FormHelper.dateInput(
+                        name: "endDate",
+                        labelText: LocaleKeys.endDate.tr,
+                        initialValue: DateTime.now().subtract(const Duration(days: 1)),
+                        canClear: false,
+                        onChanged: (String? value) {
+                          if (value != null) {
+                            final formatter = DateFormat('yyyy-MM-dd');
+                            final endDate = DateTime.parse(value);
+                            final startDate = endDate.subtract(Duration(days: 6));
+                            controller.formKey.currentState?.fields['startDate']?.didChange(
+                              formatter.format(startDate),
+                            );
+                            // 触发搜索
+                            controller.search.addAll({
+                              "startDate": formatter.format(startDate),
+                              "endDate": formatter.format(endDate),
+                            });
                             controller.getChartData();
-                          },
+                          } else {
+                            controller.formKey.currentState?.fields['startDate']?.didChange(null);
+                          }
+                        },
+                      ),
+                    ),
+                    //搜索
+                    FormHelper.buildGridCol(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(minHeight: context.isPhoneOrWider ? 40 : 48),
+                        child: Align(
+                          alignment: context.isPhoneOrLess ? Alignment.centerRight : Alignment.centerLeft,
+                          child: FilledButton(
+                            child: Text(LocaleKeys.search.tr),
+                            onPressed: () {
+                              /*  controller.formKey.currentState?.saveAndValidate();
+                              controller.search.addAll(controller.formKey.currentState!.value); */
+                              controller.getChartData();
+                            },
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
 
-            // 内容
-            _buildContent(),
-          ],
-        ),
+              // 内容
+              _buildContent(),
+            ],
+          );
+        }),
       ),
       title: LocaleKeys.salesView.tr,
     );
@@ -100,28 +104,26 @@ class DashboardView extends GetView<DashboardController> {
   // 构建内容
   Widget _buildContent() {
     return Expanded(
-      child: Obx(
-        () => ProgressHUD(
-          child: controller.isLoading.value
-              ? null
-              : SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 4.0),
-                        child: Text(
-                          LocaleKeys.saleViewMsg.tr,
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey[600]),
-                          textAlign: TextAlign.left,
-                        ),
+      child: ProgressHUD(
+        child: controller.isLoading.value
+            ? null
+            : SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 4.0),
+                      child: Text(
+                        LocaleKeys.saleViewMsg.tr,
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey[600]),
+                        textAlign: TextAlign.left,
                       ),
-                      _buildChart(),
-                    ],
-                  ),
+                    ),
+                    _buildChart(),
+                  ],
                 ),
-        ),
+              ),
       ),
     );
   }

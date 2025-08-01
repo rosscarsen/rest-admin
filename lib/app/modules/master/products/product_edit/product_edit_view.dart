@@ -43,7 +43,7 @@ class ProductEditView extends GetView<ProductEditController> {
               ? PreferredSize(
                   preferredSize: Size.fromHeight(48.0),
                   child: Container(
-                    color: Colors.white,
+                    color: Theme.of(context).scaffoldBackgroundColor,
                     child: TabBar(
                       isScrollable: true,
                       controller: controller.tabController,
@@ -587,79 +587,70 @@ class ProductEditView extends GetView<ProductEditController> {
 
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: SfDataGrid(
-                    /* onQueryRowHeight: (details) {
-                      return details.getIntrinsicRowHeight(details.rowIndex);
-                    }, */
-                    isScrollbarAlwaysShown: true,
-                    controller: controller.barcodeDataGridController,
-                    footerFrozenColumnsCount: 1,
-                    frozenColumnsCount: 0,
-                    gridLinesVisibility: GridLinesVisibility.both,
-                    headerGridLinesVisibility: GridLinesVisibility.both,
-                    columnWidthMode: controller.productBarcodeSource.rows.isEmpty
-                        ? context.isPhoneOrLess
-                              ? ColumnWidthMode.fitByColumnName
-                              : ColumnWidthMode.fill
-                        : ColumnWidthMode.auto,
-                    columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
-                    columnSizer: ColumnSizer(),
-                    allowSorting: false,
-                    showCheckboxColumn: false,
-                    source: controller.productBarcodeSource,
-                    stackedHeaderRows: <StackedHeaderRow>[
-                      StackedHeaderRow(
-                        cells: [
-                          StackedHeaderCell(
-                            columnNames: ['barcode', 'name', 'nonEnable', 'remarks', 'mPrice', 'actions'],
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: OverflowBar(
-                                  spacing: 8,
-                                  children: [
-                                    ElevatedButton(
-                                      child: Text(LocaleKeys.barcodeAdd.tr),
-                                      onPressed: () async {
-                                        await controller.editOrAddProductBarcode();
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
+                  child: Column(
+                    spacing: 8.0,
+
+                    children: [
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: ElevatedButton(
+                          child: Text(LocaleKeys.barcodeAdd.tr),
+                          onPressed: () async {
+                            await controller.editOrAddProductBarcode();
+                          },
+                        ),
+                      ),
+                      Expanded(
+                        child: SfDataGrid(
+                          /* onQueryRowHeight: (details) {
+                            return details.getIntrinsicRowHeight(details.rowIndex);
+                          }, */
+                          isScrollbarAlwaysShown: true,
+                          controller: controller.barcodeDataGridController,
+                          footerFrozenColumnsCount: 1,
+                          frozenColumnsCount: 0,
+                          gridLinesVisibility: GridLinesVisibility.both,
+                          headerGridLinesVisibility: GridLinesVisibility.both,
+                          columnWidthMode: controller.productBarcodeSource.rows.isEmpty
+                              ? context.isPhoneOrLess
+                                    ? ColumnWidthMode.fitByColumnName
+                                    : ColumnWidthMode.fill
+                              : ColumnWidthMode.auto,
+                          columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
+                          columnSizer: ColumnSizer(),
+                          allowSorting: false,
+                          showCheckboxColumn: false,
+                          source: controller.productBarcodeSource,
+                          columns: <GridColumn>[
+                            GridColumn(
+                              columnName: "barcode",
+                              label: CustomCell(data: LocaleKeys.barcode.tr),
                             ),
-                          ),
-                        ],
+                            GridColumn(
+                              columnName: 'name',
+                              label: CustomCell(data: LocaleKeys.name.tr),
+                              columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.auto : ColumnWidthMode.fill,
+                            ),
+                            GridColumn(
+                              columnName: 'nonEnable',
+                              label: CustomCell(data: LocaleKeys.nonEnable.tr),
+                            ),
+                            GridColumn(
+                              columnName: 'remarks',
+                              label: CustomCell(data: LocaleKeys.remarks.tr),
+                              maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
+                            ),
+                            GridColumn(
+                              allowSorting: false,
+                              columnName: 'actions',
+                              width: 100,
+                              label: CustomCell(data: LocaleKeys.operation.tr),
+                            ),
+                          ],
+                          placeholder: NoRecord(),
+                        ),
                       ),
                     ],
-                    columns: <GridColumn>[
-                      GridColumn(
-                        columnName: "barcode",
-                        label: CustomCell(data: LocaleKeys.barcode.tr),
-                      ),
-                      GridColumn(
-                        columnName: 'name',
-                        label: CustomCell(data: LocaleKeys.name.tr),
-                        columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.auto : ColumnWidthMode.fill,
-                      ),
-                      GridColumn(
-                        columnName: 'nonEnable',
-                        label: CustomCell(data: LocaleKeys.nonEnable.tr),
-                      ),
-                      GridColumn(
-                        columnName: 'remarks',
-                        label: CustomCell(data: LocaleKeys.remarks.tr),
-                        maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
-                      ),
-                      GridColumn(
-                        allowSorting: false,
-                        columnName: 'actions',
-                        width: 100,
-                        label: CustomCell(data: LocaleKeys.operation.tr),
-                      ),
-                    ],
-                    placeholder: NoRecord(),
                   ),
                 ),
               ),
@@ -793,79 +784,105 @@ class ProductEditView extends GetView<ProductEditController> {
 
   // 套餐
   Widget _buildSetMeal({required BuildContext context}) {
-    return CustomScrollView(
-      slivers: [
-        // 顶部表单部分
-        SliverToBoxAdapter(
-          child: Skeletonizer(
-            enabled: controller.isLoading.value,
-            child: FocusTraversalGroup(
-              child: Padding(
-                padding: EdgeInsets.all(8),
-                child: ResponsiveGridRow(
-                  children: [
-                    // 选择
-                    FormHelper.buildGridCol(
-                      child: FormHelper.selectInput(
-                        name: ProductEditFields.mSetOption,
-                        labelText: LocaleKeys.choose.tr,
-                        items: [
-                          DropdownMenuItem(value: "0", child: Text(LocaleKeys.selectItemByItem.tr)),
-                          DropdownMenuItem(value: "1", child: Text(LocaleKeys.listAll.tr)),
+    return Column(
+      children: [
+        Skeletonizer(
+          enabled: controller.isLoading.value,
+          child: FocusTraversalGroup(
+            child: Padding(
+              padding: EdgeInsets.all(8),
+              child: ResponsiveGridRow(
+                children: [
+                  // 选择
+                  FormHelper.buildGridCol(
+                    child: FormHelper.selectInput(
+                      name: ProductEditFields.mSetOption,
+                      labelText: LocaleKeys.choose.tr,
+                      items: [
+                        DropdownMenuItem(value: "0", child: Text(LocaleKeys.selectItemByItem.tr)),
+                        DropdownMenuItem(value: "1", child: Text(LocaleKeys.listAll.tr)),
+                      ],
+                    ),
+                  ),
+                  // 选项
+                  FormHelper.buildGridCol(
+                    child: FormHelper.selectInput(
+                      name: "setMealStep",
+                      labelText: LocaleKeys.choose.tr,
+                      initialValue: "0",
+                      items: List.generate(
+                        10,
+                        (index) => DropdownMenuItem(
+                          value: index.toString(),
+                          child: Text(index == 0 ? LocaleKeys.all.tr : index.toString()),
+                        ),
+                      ),
+                      onChanged: (val) {},
+                    ),
+                  ),
+                  // 复制（食品）
+                  FormHelper.buildGridCol(
+                    child: SizedBox(
+                      height: context.isPhoneOrWider ? 40 : 48,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: FilledButton(onPressed: () {}, child: Text(LocaleKeys.copyProduct.tr)),
+                      ),
+                    ),
+                  ),
+                  // 复制（套餐）
+                  FormHelper.buildGridCol(
+                    child: FormHelper.textInput(
+                      name: ProductEditFields.setMenu,
+                      labelText: LocaleKeys.copySetMeal.tr,
+                      suffixIcon: OverflowBar(
+                        children: [
+                          IconButton(
+                            onPressed: () {},
+                            tooltip: LocaleKeys.copySetMeal.tr,
+                            icon: Icon(Icons.file_open, color: AppColors.openColor),
+                          ),
+                          IconButton(tooltip: LocaleKeys.clearText.tr, onPressed: () {}, icon: Icon(Icons.cancel)),
                         ],
                       ),
                     ),
-                    // 选项
-                    FormHelper.buildGridCol(
-                      child: FormHelper.selectInput(
-                        name: "setMealStep",
-                        labelText: LocaleKeys.choose.tr,
-                        initialValue: "0",
-                        items: List.generate(
-                          10,
-                          (index) => DropdownMenuItem(
-                            value: index.toString(),
-                            child: Text(index == 0 ? LocaleKeys.all.tr : index.toString()),
-                          ),
+                  ),
+                  FormHelper.buildGridCol(
+                    sm: 12,
+                    md: 12,
+                    lg: 12,
+                    xl: 12,
+                    child: OverflowBar(
+                      alignment: MainAxisAlignment.start,
+                      spacing: 8,
+                      children: [
+                        // 批量刪除套餐
+                        ElevatedButton(
+                          onPressed: () {
+                            controller.batchDeleteSetMealItems();
+                          },
+                          child: Text(LocaleKeys.batchDelete.tr),
                         ),
-                        onChanged: (val) {},
-                      ),
-                    ),
-                    // 复制（食品）
-                    FormHelper.buildGridCol(
-                      child: SizedBox(
-                        height: context.isPhoneOrWider ? 40 : 48,
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: FilledButton(onPressed: () {}, child: Text(LocaleKeys.copyProduct.tr)),
+                        // 添加套餐
+                        ElevatedButton(
+                          onPressed: () async {
+                            var ret = await Get.toNamed(
+                              Routes.OPEN_MULTIPLE_PRODUCT,
+                              parameters: {"productId": controller.productID.toString(), "isShowOption": "Y"},
+                            );
+                            logger.i(ret);
+                          },
+                          child: Text(LocaleKeys.setMealAdd.tr),
                         ),
-                      ),
+                      ],
                     ),
-                    // 复制（套餐）
-                    FormHelper.buildGridCol(
-                      child: FormHelper.textInput(
-                        name: "setMenu",
-                        labelText: LocaleKeys.copySetMeal.tr,
-                        suffixIcon: OverflowBar(
-                          children: [
-                            IconButton(
-                              onPressed: () {},
-                              tooltip: LocaleKeys.copySetMeal.tr,
-                              icon: Icon(Icons.file_open, color: AppColors.openColor),
-                            ),
-                            IconButton(tooltip: LocaleKeys.clearText.tr, onPressed: () {}, icon: Icon(Icons.cancel)),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
         ),
-        // 数据表格
-        SliverFillRemaining(
+        Expanded(
           child: ProgressHUD(
             child: controller.isLoading.value
                 ? null
@@ -876,70 +893,28 @@ class ProductEditView extends GetView<ProductEditController> {
                         currentCellStyle: DataGridCurrentCellStyle(borderColor: Colors.transparent, borderWidth: 0),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.fromLTRB(8.0, 0, 8.0, 8.0),
                         child: SfDataGrid(
-                          shrinkWrapRows: true,
-                          rowHeight: 48,
                           isScrollbarAlwaysShown: true,
                           controller: controller.setMealDataGridController,
                           footerFrozenColumnsCount: 1,
                           frozenColumnsCount: 1,
                           gridLinesVisibility: GridLinesVisibility.both,
                           headerGridLinesVisibility: GridLinesVisibility.both,
-                          columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.auto : ColumnWidthMode.fill,
+                          columnWidthMode: controller.productSetMealSource.rows.isEmpty
+                              ? context.isPhoneOrLess
+                                    ? ColumnWidthMode.fitByColumnName
+                                    : ColumnWidthMode.fill
+                              : context.isPhoneOrLess
+                              ? ColumnWidthMode.fitByColumnName
+                              : ColumnWidthMode.fill,
+
                           columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
                           columnSizer: ColumnSizer(),
                           allowSorting: false,
                           showCheckboxColumn: true,
                           selectionMode: SelectionMode.multiple,
                           source: controller.productSetMealSource,
-
-                          stackedHeaderRows: <StackedHeaderRow>[
-                            StackedHeaderRow(
-                              cells: [
-                                StackedHeaderCell(
-                                  columnNames: [
-                                    'ID',
-                                    'mBarcode',
-                                    'mName',
-                                    'mQty',
-                                    'mPrice',
-                                    'mPrice2',
-                                    'mStep',
-                                    'mDefault',
-                                    'mSort',
-                                    'mRemarks',
-                                    'actions',
-                                  ],
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: OverflowBar(
-                                        spacing: 8,
-                                        children: [
-                                          // 批量刪除套餐
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              controller.batchDeleteSetMealItems();
-                                            },
-                                            child: Text(LocaleKeys.batchDelete.tr),
-                                          ),
-                                          // 添加套餐
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              controller.batchDeleteSetMealItems();
-                                            },
-                                            child: Text(LocaleKeys.addSetMeal.tr),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
                           columns: <GridColumn>[
                             GridColumn(
                               columnName: "ID",
@@ -949,12 +924,14 @@ class ProductEditView extends GetView<ProductEditController> {
                             GridColumn(
                               columnName: "mBarcode",
                               label: CustomCell(data: LocaleKeys.code.tr),
+                              columnWidthMode: ColumnWidthMode.auto,
                             ),
                             GridColumn(
                               columnName: 'mName',
                               label: CustomCell(data: LocaleKeys.name.tr),
-                              columnWidthMode: ColumnWidthMode.auto,
-                              maximumWidth: 200,
+                              columnWidthMode: ColumnWidthMode.fill,
+                              maximumWidth: 500,
+                              minimumWidth: 200,
                             ),
                             GridColumn(
                               columnName: 'mQty',
@@ -983,6 +960,7 @@ class ProductEditView extends GetView<ProductEditController> {
                             GridColumn(
                               columnName: 'mRemarks',
                               label: CustomCell(data: LocaleKeys.remarks.tr),
+                              maximumWidth: 500,
                             ),
                             GridColumn(
                               allowSorting: false,
@@ -991,7 +969,7 @@ class ProductEditView extends GetView<ProductEditController> {
                               label: CustomCell(data: LocaleKeys.operation.tr),
                             ),
                           ],
-                          //placeholder: NoRecord(),
+                          /* placeholder: NoRecord(), */
                         ),
                       ),
                     ),

@@ -54,7 +54,7 @@ class OpenProductController extends GetxController {
     isLoading(true);
     DataList.clear();
     try {
-      Map<String, Object> search = {'page': currentPage.value};
+      Map<String, Object> search = {'page': currentPage.value, "byCode": "asc"};
       if (searchController.text.isNotEmpty) search['search'] = searchController.text;
       final DioApiResult dioApiResult = await apiClient.post(Config.openProduct, data: search);
 

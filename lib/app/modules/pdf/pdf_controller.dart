@@ -86,7 +86,7 @@ class PdfController extends GetxController {
         CustomDialog.errorMessages(printBarcodeModel.msg ?? LocaleKeys.getDataException.tr);
       }
     } finally {
-      CustomDialog.dismissLoading();
+      CustomDialog.dismissDialog();
       isLoading.value = false;
     }
   }

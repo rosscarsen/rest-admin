@@ -235,5 +235,19 @@ abstract class LocaleKeys {
   static const String clearText = "clearText";
   static const String option = "option";
   static const String defaultSelect = "defaultSelect";
-  static const String addSetMeal = "addSetMeal";
+  static const String itHasBeenCopiedToTheClipboard = "itHasBeenCopiedToTheClipboard";
+  static const String setMealEdit = "setMealEdit";
+  static const String setMealDelete = "setMealDelete";
+  static const String setMealAdd = "setMealAdd";
+  static const String saving = "saving";
+  static const String codeExists = "codeExists";
+  static const String leave = "leave";
+  static const String join = "join";
+  static const String joinSuccess = "joinSuccess";
+  static const String joinFailed = "joinFailed";
+  static const String exception = "exception";
+  static const String theSelectedContentAlreadyExists = "theSelectedContentAlreadyExists";
+  static const String ignore = "ignore";
+  static const String skip = "skip";
+  static const String joining = "joining";
 }

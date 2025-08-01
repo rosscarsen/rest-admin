@@ -92,8 +92,23 @@ class OpenProductView extends GetView<OpenProductController> {
             ),
             GridColumn(
               columnName: 'name',
-              columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.auto : ColumnWidthMode.fill,
+              columnWidthMode: ColumnWidthMode.fill,
               maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
+              minimumWidth: 200,
+              label: CustomCell(data: LocaleKeys.name.tr),
+            ),
+            GridColumn(
+              columnName: 'mDesc2',
+              columnWidthMode: ColumnWidthMode.fill,
+              maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
+              minimumWidth: 200,
+              label: CustomCell(data: LocaleKeys.name.tr),
+            ),
+            GridColumn(
+              columnName: 'mRemarks',
+              columnWidthMode: ColumnWidthMode.fill,
+              maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
+              minimumWidth: 200,
               label: CustomCell(data: LocaleKeys.name.tr),
             ),
             GridColumn(
@@ -111,6 +126,10 @@ class OpenProductView extends GetView<OpenProductController> {
             GridColumn(
               columnName: 'qty',
               label: CustomCell(data: LocaleKeys.qty.tr),
+            ),
+            GridColumn(
+              columnName: 'mMeasurement',
+              label: CustomCell(data: LocaleKeys.productRemarks.tr),
             ),
           ],
           placeholder: NoRecord(),

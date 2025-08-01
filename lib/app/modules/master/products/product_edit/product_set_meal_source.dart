@@ -16,7 +16,7 @@ class ProductSetMealSource extends DataGridSource {
   final ProductEditController controller;
 
   void updateDataSource() {
-    _dataGridRows = controller.setMeal.map(_createDataRow).toList();
+    _dataGridRows = controller.productSetMeal.map(_createDataRow).toList();
     notifyListeners();
   }
 
@@ -25,7 +25,7 @@ class ProductSetMealSource extends DataGridSource {
   @override
   List<DataGridRow> get rows => _dataGridRows;
 
-  DataGridRow _createDataRow(SetMeal e) {
+  DataGridRow _createDataRow(ProductSetMeal e) {
     return DataGridRow(
       cells: [
         DataGridCell<int>(columnName: 'ID', value: e.mId),
@@ -38,7 +38,7 @@ class ProductSetMealSource extends DataGridSource {
         DataGridCell<int>(columnName: 'mDefault', value: e.mDefault),
         DataGridCell<int>(columnName: 'mSort', value: e.mSort),
         DataGridCell<String>(columnName: 'mRemarks', value: e.mRemarks),
-        DataGridCell<SetMeal>(columnName: 'actions', value: e),
+        DataGridCell<ProductSetMeal>(columnName: 'actions', value: e),
       ],
     );
   }
@@ -48,28 +48,31 @@ class ProductSetMealSource extends DataGridSource {
     return DataGridRowAdapter(
       cells: dataGridRow.getCells().map<Widget>((e) {
         if (e.columnName == "actions") {
-          SetMeal row = e.value as SetMeal;
+          ProductSetMeal row = e.value as ProductSetMeal;
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Flexible(
                 child: Tooltip(
-                  message: LocaleKeys.edit.tr,
+                  message: LocaleKeys.setMealEdit.tr,
                   child: IconButton(
                     icon: const Icon(Icons.edit, color: AppColors.editColor),
                     onPressed: () {
-                      // controller.editOrAddProductBarcode(row: row);
+                      controller.editProductSetMeal(row: row);
                     },
                   ),
                 ),
               ),
               Flexible(
                 child: Tooltip(
-                  message: LocaleKeys.delete.tr,
+                  message: LocaleKeys.setMealDelete.tr,
                   child: IconButton(
                     icon: const Icon(Icons.delete, color: AppColors.deleteColor),
                     onPressed: () {
-                      // controller.deleteProductBarcode(row: row);
+                      controller.deleteSetMeal([row.mId ?? 0]);
+                      /* _dataGridRows.remove(dataGridRow);
+                      controller.productSetMeal.remove(row);
+                      notifyListeners(); */
                     },
                   ),
                 ),

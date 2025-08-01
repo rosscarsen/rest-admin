@@ -14,7 +14,7 @@ class SetMealLimitSource extends DataGridSource {
   final ProductEditController controller;
 
   void updateDataSource() {
-    _dataGridRows = controller.setMealLimit.map(_createDataRow).toList();
+    _dataGridRows = controller.productSetMealLimit.map(_createDataRow).toList();
     notifyListeners();
   }
 
@@ -53,7 +53,7 @@ class SetMealLimitSource extends DataGridSource {
               onChanged: (value) {
                 final parsed = int.tryParse(value);
                 if (parsed != null) {
-                  controller.setMealLimit[rowIndex].limitMax = parsed;
+                  controller.productSetMealLimit[rowIndex].limitMax = parsed;
                 }
               },
               keyboardType: TextInputType.number,
@@ -66,7 +66,7 @@ class SetMealLimitSource extends DataGridSource {
             key: ValueKey("forceSelect_$rowIndex"),
             value: e.value == 1,
             onChanged: (value) {
-              controller.setMealLimit[rowIndex].obligatory = value == true ? 1 : 0;
+              controller.productSetMealLimit[rowIndex].obligatory = value == true ? 1 : 0;
               dataGridRow.getCells()[columnIndex] = DataGridCell(
                 columnName: "forceSelect",
                 value: value == true ? 1 : 0,
@@ -84,7 +84,7 @@ class SetMealLimitSource extends DataGridSource {
               decoration: InputDecoration(isDense: true),
               initialValue: e.value?.toString() ?? "",
               onChanged: (value) {
-                controller.setMealLimit[rowIndex].zhtw = value;
+                controller.productSetMealLimit[rowIndex].zhtw = value;
               },
             ),
           );
@@ -98,7 +98,7 @@ class SetMealLimitSource extends DataGridSource {
               key: ValueKey('english_$rowIndex'),
               initialValue: e.value?.toString() ?? "",
               onChanged: (value) {
-                controller.setMealLimit[rowIndex].enus = value;
+                controller.productSetMealLimit[rowIndex].enus = value;
               },
             ),
           );

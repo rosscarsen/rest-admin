@@ -7,7 +7,8 @@ abstract class Routes {
   static const SIGNIN = _Paths.SIGNIN;
   static const DASHBOARD = _Paths.DASHBOARD;
   static const PRODUCTS = _Paths.MASTER + _Paths.PRODUCTS;
-  static const ADVANCED_SEARCH = _Paths.MASTER + _Paths.PRODUCTS + _Paths.ADVANCED_SEARCH;
+  static const ADVANCED_SEARCH =
+      _Paths.MASTER + _Paths.PRODUCTS + _Paths.ADVANCED_SEARCH;
   static const OPEN = _Paths.OPEN;
   static const OPEN_PRODUCT = _Paths.OPEN + _Paths.OPEN_PRODUCT;
   static const OPEN_SUPPLIER = _Paths.OPEN + _Paths.OPEN_SUPPLIER;
@@ -18,8 +19,12 @@ abstract class Routes {
   static const PRODUCT_REMARKS = _Paths.MASTER + _Paths.PRODUCT_REMARKS;
   static const SUPPLIER_INVOICE = _Paths.SUPPLIER_INVOICE;
   static const REFRESH_TEMP = _Paths.REFRESH_TEMP;
-  static const PRODUCT_EDIT = _Paths.MASTER + _Paths.PRODUCTS + _Paths.PRODUCT_EDIT;
+  static const PRODUCT_EDIT =
+      _Paths.MASTER + _Paths.PRODUCTS + _Paths.PRODUCT_EDIT;
   static const OPEN_PRODUCT_REMARKS = _Paths.OPEN + _Paths.OPEN_PRODUCT_REMARKS;
+  static const OPEN_MULTIPLE_PRODUCT =
+      _Paths.OPEN + _Paths.OPEN_MULTIPLE_PRODUCT;
+  static const OPEN_SET_MEAL = _Paths.OPEN + _Paths.OPEN_SET_MEAL;
 }
 
 abstract class _Paths {
@@ -40,4 +45,6 @@ abstract class _Paths {
   static const REFRESH_TEMP = '/refresh-temp';
   static const PRODUCT_EDIT = '/product-edit';
   static const OPEN_PRODUCT_REMARKS = '/open-product-remarks';
+  static const OPEN_MULTIPLE_PRODUCT = '/open-multiple-product';
+  static const OPEN_SET_MEAL = '/open-set-meal';
 }

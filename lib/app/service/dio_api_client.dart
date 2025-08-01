@@ -214,7 +214,7 @@ class ApiClient {
   // 处理响应
   DioApiResult _handleResponse(Response response) {
     if (response.statusCode != 200) {
-      CustomDialog.dismissLoading();
+      CustomDialog.dismissDialog();
       return DioApiResult(success: false, error: 'HTTP ${response.statusCode}');
     }
     final responseData = response.data;

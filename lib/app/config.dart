@@ -45,6 +45,14 @@ class Config {
   static String productAddOrEdit = "/Master/productAddOrEdit";
   // 产品新增或编辑保存
   static String productAddOrEditSave = "/Master/productAddOrEditSave";
+  // 类目
+  static String categories = "/Master/categories";
+  // 更新套餐
+  static String productSetMealSave = "/Master/productSetMealSave";
+  // 添加套餐
+  static String addProductSetMeal = "/Master/addProductSetMeal";
+  // 删除套餐
+  static String deleteProductSetMeal = "/Master/deleteProductSetMeal";
 
   /// 打开选择
   // 供应商
@@ -55,6 +63,8 @@ class Config {
   static String openBarcode = "/Open/barcode";
   // 打开食品备注
   static String openProductRemark = "/Open/productRemark";
+  // 打开套餐
+  static String openSetMeal = "/Open/setMeal";
 
   /// excel
   // 导出产品

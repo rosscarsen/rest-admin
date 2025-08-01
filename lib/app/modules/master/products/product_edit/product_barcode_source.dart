@@ -63,7 +63,9 @@ class ProductBarcodeSource extends DataGridSource {
                   child: IconButton(
                     icon: const Icon(Icons.delete, color: AppColors.deleteColor),
                     onPressed: () {
-                      controller.deleteProductBarcode(row: row);
+                      _dataGridRows.remove(dataGridRow);
+                      controller.productBarcode.remove(row);
+                      notifyListeners();
                     },
                   ),
                 ),

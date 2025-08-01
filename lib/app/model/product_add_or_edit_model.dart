@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // To parse this JSON data, do
 //
 //     final productAddOrEditModel = productAddOrEditModelFromJson(jsonString);
@@ -32,7 +33,7 @@ class ApiResult {
   List<CategoryModel>? category;
   List<UnitModel>? units;
   List<ProductBarcode>? productBarcode;
-  List<SetMeal>? setMeal;
+  List<ProductSetMeal>? setMeal;
   List<ProductStock>? productStock;
   List<SetMealLimit>? setMealLimit;
 
@@ -56,7 +57,9 @@ class ApiResult {
     productBarcode: json["barcode"] == null
         ? []
         : List<ProductBarcode>.from(json["barcode"]!.map((x) => ProductBarcode.fromJson(x))),
-    setMeal: json["setMeal"] == null ? [] : List<SetMeal>.from(json["setMeal"]!.map((x) => SetMeal.fromJson(x))),
+    setMeal: json["setMeal"] == null
+        ? []
+        : List<ProductSetMeal>.from(json["setMeal"]!.map((x) => ProductSetMeal.fromJson(x))),
     productStock: json["stock"] == null
         ? []
         : List<ProductStock>.from(json["stock"]!.map((x) => ProductStock.fromJson(x))),
@@ -336,7 +339,7 @@ class ProductBarcode {
   };
 }
 
-class SetMeal {
+class ProductSetMeal {
   int? tProductId;
   String? mName;
   String? mBarcode;
@@ -354,7 +357,7 @@ class SetMeal {
   int? mSort;
   int? soldOut;
 
-  SetMeal({
+  ProductSetMeal({
     this.tProductId,
     this.mName,
     this.mBarcode,
@@ -373,7 +376,7 @@ class SetMeal {
     this.soldOut,
   });
 
-  factory SetMeal.fromJson(Map<String, dynamic> json) => SetMeal(
+  factory ProductSetMeal.fromJson(Map<String, dynamic> json) => ProductSetMeal(
     tProductId: json["T_Product_ID"],
     mName: json["mName"],
     mBarcode: json["mBarcode"],
@@ -410,6 +413,63 @@ class SetMeal {
     "mSort": mSort,
     "Sold_out": soldOut,
   };
+
+  void copyFrom(ProductSetMeal source) {
+    tProductId = source.tProductId;
+    mName = source.mName;
+    mBarcode = source.mBarcode;
+    mPrice = source.mPrice;
+    mPrice2 = source.mPrice2;
+    mQty = source.mQty;
+    mRemarks = source.mRemarks;
+    mProductCode = source.mProductCode;
+    mId = source.mId;
+    mFlag = source.mFlag;
+    mTime = source.mTime;
+    mPCode = source.mPCode;
+    mStep = source.mStep;
+    mDefault = source.mDefault;
+    mSort = source.mSort;
+    soldOut = source.soldOut;
+  }
+
+  ProductSetMeal copyWith({
+    int? tProductId,
+    String? mName,
+    String? mBarcode,
+    String? mPrice,
+    String? mPrice2,
+    String? mQty,
+    String? mRemarks,
+    String? mProductCode,
+    int? mId,
+    int? mFlag,
+    String? mTime,
+    String? mPCode,
+    String? mStep,
+    int? mDefault,
+    int? mSort,
+    int? soldOut,
+  }) {
+    return ProductSetMeal(
+      tProductId: tProductId ?? this.tProductId,
+      mName: mName ?? this.mName,
+      mBarcode: mBarcode ?? this.mBarcode,
+      mPrice: mPrice ?? this.mPrice,
+      mPrice2: mPrice2 ?? this.mPrice2,
+      mQty: mQty ?? this.mQty,
+      mRemarks: mRemarks ?? this.mRemarks,
+      mProductCode: mProductCode ?? this.mProductCode,
+      mId: mId ?? this.mId,
+      mFlag: mFlag ?? this.mFlag,
+      mTime: mTime ?? this.mTime,
+      mPCode: mPCode ?? this.mPCode,
+      mStep: mStep ?? this.mStep,
+      mDefault: mDefault ?? this.mDefault,
+      mSort: mSort ?? this.mSort,
+      soldOut: soldOut ?? this.soldOut,
+    );
+  }
 }
 
 class SetMealLimit {

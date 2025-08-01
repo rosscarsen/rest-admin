@@ -44,7 +44,7 @@ class CustomDialog {
     );
   }
 
-  static Future<void> dismissLoading() async {
+  static Future<void> dismissDialog() async {
     if (SmartDialog.checkExist()) {
       await SmartDialog.dismiss();
     }

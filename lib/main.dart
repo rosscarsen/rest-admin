@@ -99,6 +99,7 @@ class MyApp extends StatelessWidget {
             borderSide: BorderSide(color: Colors.grey.shade400, width: 1.0),
             borderRadius: BorderRadius.all(Radius.circular(8.0)),
           ),
+          isDense: true,
         ),
       ),
       builder: (context, child) {
@@ -109,12 +110,7 @@ class MyApp extends StatelessWidget {
         child = GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-          child: Theme(
-            data: Theme.of(context).copyWith(
-              inputDecorationTheme: Theme.of(context).inputDecorationTheme.copyWith(isDense: context.isPhoneOrWider),
-            ),
-            child: child,
-          ),
+          child: child,
         );
 
         /// 提示框

@@ -89,6 +89,7 @@ class ProductsController extends GetxController {
     try {
       Map<String, dynamic> search = {
         'page': currentPage.value,
+        'hasImage': true,
         ...sort,
         if (advancedSearch.isNotEmpty) ...advancedSearch,
         if (searchController.text.isNotEmpty) 'search': searchController.text,
@@ -129,7 +130,7 @@ class ProductsController extends GetxController {
   void copy(ProductData row) {}
   //编辑
   void edit({ProductData? row}) {
-    Get.toNamed(Routes.PRODUCT_EDIT, arguments: row != null ? {"id": row.tProductId?.toString() ?? ""} : null);
+    Get.toNamed(Routes.PRODUCT_EDIT, parameters: row != null ? {"id": row.tProductId?.toString() ?? ""} : null);
     /* row.mCategory1 = "修改";
     dataSource.updateDataSource(); */
   }
@@ -198,7 +199,7 @@ class ProductsController extends GetxController {
         } catch (e) {
           CustomDialog.errorMessages(LocaleKeys.deleteFailed.tr);
         } finally {
-          CustomDialog.dismissLoading();
+          CustomDialog.dismissDialog();
         }
       },
     );
@@ -236,14 +237,15 @@ class ProductsController extends GetxController {
               CustomDialog.errorMessages(LocaleKeys.ftpConnectFailed.tr);
               break;
             case 202:
-              CustomDialog.errorMessages(LocaleKeys.exitsTxCannotDelete.tr.trArgs([data['msg']]));
+              logger.f(data['msg']);
+              CustomAlert.iosAlert(LocaleKeys.exitsTxCannotDelete.tr.trArgs([data['msg']]));
             default:
               CustomDialog.errorMessages(LocaleKeys.unknownError.tr);
           }
         } catch (e) {
           CustomDialog.errorMessages(LocaleKeys.deleteFailed.tr);
         } finally {
-          CustomDialog.dismissLoading();
+          CustomDialog.dismissDialog();
         }
       },
     );
@@ -297,7 +299,7 @@ class ProductsController extends GetxController {
           CustomDialog.errorMessages(LocaleKeys.unknownError.tr);
       }
     } finally {
-      CustomDialog.dismissLoading();
+      CustomDialog.dismissDialog();
     }
   }
 
@@ -331,7 +333,7 @@ class ProductsController extends GetxController {
       logger.i(e);
       CustomDialog.errorMessages(LocaleKeys.generateFileFailed.tr);
     } finally {
-      CustomDialog.dismissLoading();
+      CustomDialog.dismissDialog();
     }
   }
 
@@ -354,7 +356,7 @@ class ProductsController extends GetxController {
     } catch (e) {
       CustomDialog.showToast(LocaleKeys.importFailed.tr);
     } finally {
-      CustomDialog.dismissLoading();
+      CustomDialog.dismissDialog();
     }
   }
 }

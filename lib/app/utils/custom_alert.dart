@@ -4,8 +4,15 @@ import 'package:get/get.dart';
 import '../translations/locale_keys.dart';
 
 class CustomAlert {
-  static void iosAlert(String message, {void Function()? onConfirm, bool showCancel = false, String? confirmText}) {
-    showCupertinoDialog(
+  static Future<void> iosAlert(
+    String message, {
+    void Function()? onConfirm,
+    void Function()? onCancel,
+    bool showCancel = false,
+    String? confirmText,
+    String? cancelText,
+  }) {
+    return showCupertinoDialog(
       context: Get.context!,
       builder: (context) {
         return CupertinoAlertDialog(
@@ -14,9 +21,12 @@ class CustomAlert {
           actions: [
             if (showCancel)
               CupertinoDialogAction(
-                child: Text(LocaleKeys.cancel.tr),
+                child: Text(cancelText ?? LocaleKeys.cancel.tr),
                 onPressed: () {
                   Navigator.pop(context); // 关闭对话框
+                  if (onCancel != null) {
+                    onCancel.call();
+                  }
                 },
               ),
             CupertinoDialogAction(

@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+
+import '../translations/locale_keys.dart';
+import '../utils/custom_dialog.dart';
 
 class CustomCell extends StatelessWidget {
   const CustomCell({super.key, this.data, this.alignment = Alignment.centerLeft, this.ellipsis = true, this.child});
@@ -29,10 +34,18 @@ class CustomCell extends StatelessWidget {
 
         final textWidget = Text(text, textAlign: TextAlign.center, overflow: ellipsis ? TextOverflow.ellipsis : null);
 
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 6.0),
-          alignment: alignment,
-          child: isOverflowing ? Tooltip(message: text, child: textWidget) : textWidget,
+        return InkWell(
+          onLongPress: isOverflowing
+              ? () async {
+                  await Clipboard.setData(ClipboardData(text: text));
+                  CustomDialog.showToast(LocaleKeys.itHasBeenCopiedToTheClipboard.tr);
+                }
+              : null,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6.0),
+            alignment: alignment,
+            child: isOverflowing ? Tooltip(message: text, child: textWidget) : textWidget,
+          ),
         );
       },
     );

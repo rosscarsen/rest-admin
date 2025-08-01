@@ -45,9 +45,11 @@ class DataPager extends StatelessWidget {
                     colorSub: Colors.white,
                     threshold: context.isPhoneOrLess ? 3 : 10,
                   ),
-                  Text(
-                    LocaleKeys.totalRecords.trArgs([totalRecords.value.toString()]),
-                    style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+                  FittedBox(
+                    child: Text(
+                      LocaleKeys.totalRecords.trArgs([totalRecords.value.toString()]),
+                      style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
+                    ),
                   ),
                 ],
               ),

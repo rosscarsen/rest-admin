@@ -335,10 +335,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_smart_dialog
-      sha256: d09a661b928b0af0bff58c84c5a5244ab342fc7ce6f910ac1d01b0b284d821be
+      sha256: "0852df132cb03fd8fc5144eb404c31eb7eb50c22aecb1cc2504f2f598090d756"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "4.9.8+8"
+    version: "4.9.8+9"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -417,10 +417,10 @@ packages:
     dependency: transitive
     description:
       name: image_picker_android
-      sha256: "317a5d961cec5b34e777b9252393f2afbd23084aa6e60fcf601dcf6341b9ebeb"
+      sha256: "6fae381e6af2bbe0365a5e4ce1db3959462fa0c4d234facf070746024bb80c8d"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "0.8.12+23"
+    version: "0.8.12+24"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -529,10 +529,10 @@ packages:
     dependency: "direct main"
     description:
       name: logger
-      sha256: "2621da01aabaf223f8f961e751f2c943dbb374dc3559b982f200ccedadaa6999"
+      sha256: "55d6c23a6c15db14920e037fe7e0dc32e7cdaf3b64b4b25df2d541b5b6b81c0c"
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "2.6.0"
+    version: "2.6.1"
   matcher:
     dependency: transitive
     description:
@@ -822,18 +822,18 @@ packages:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_core
-      sha256: df52b3d5c9c593c2954a7e776f6c7a8776a583819832ee32fb16697bb1bfbc27
+      sha256: f999f11af9c54bd46ceb478273e06774d28723ffa2c622d2d6e7e84a358c23e0
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "30.1.39"
+    version: "30.1.42"
   syncfusion_flutter_datagrid:
     dependency: "direct main"
     description:
       name: syncfusion_flutter_datagrid
-      sha256: "87449a9d2cd412b5dc5fe7a90d23cbae7517f323b15ba0001fcb19a46e4b9c67"
+      sha256: d205f758e7bca4aa82a844813dfe65f7981825fedbc8fd8678423ec7ce9647c4
       url: "https://pub.flutter-io.cn"
     source: hosted
-    version: "30.1.39"
+    version: "30.1.42"
   term_glyph:
     dependency: transitive
     description:

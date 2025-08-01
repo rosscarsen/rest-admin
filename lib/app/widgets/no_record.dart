@@ -9,13 +9,15 @@ class NoRecord extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.thumb_down_alt_outlined, size: 30),
-          SizedBox(height: 8),
-          Text(LocaleKeys.noRecordFound.tr, style: TextStyle(fontSize: 16)),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.thumb_down_alt_outlined, size: 30),
+            SizedBox(height: 8),
+            Text(LocaleKeys.noRecordFound.tr, style: TextStyle(fontSize: 16)),
+          ],
+        ),
       ),
     );
   }

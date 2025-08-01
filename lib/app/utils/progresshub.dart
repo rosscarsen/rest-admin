@@ -14,11 +14,14 @@ class ProgressHUD extends StatelessWidget {
     if (child == null) {
       final modal = Stack(
         children: [
-          Opacity(opacity: opacity!, child: ModalBarrier(dismissible: false, color: color)),
+          Opacity(
+            opacity: opacity!,
+            child: ModalBarrier(dismissible: false, color: color),
+          ),
           Center(child: LoadingAnimationWidget.fourRotatingDots(color: Colors.blue, size: 63)),
         ],
       );
-      return modal;
+      return ConstrainedBox(constraints: BoxConstraints.loose(Size.fromHeight(100)), child: modal);
     } else {
       return child!;
     }

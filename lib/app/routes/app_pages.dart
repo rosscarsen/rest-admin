@@ -16,12 +16,16 @@ import '../modules/master/products/product_edit/product_edit_view.dart';
 import '../modules/master/products/products_binding.dart';
 import '../modules/master/products/products_view.dart';
 import '../modules/open/open_binding.dart';
+import '../modules/open/open_multiple_product/open_multiple_product_binding.dart';
+import '../modules/open/open_multiple_product/open_multiple_product_view.dart';
 import '../modules/open/open_product/open_product_binding.dart';
 import '../modules/open/open_product/open_product_view.dart';
 import '../modules/open/open_product_barcode/open_product_barcode_binding.dart';
 import '../modules/open/open_product_barcode/open_product_barcode_view.dart';
 import '../modules/open/open_product_remarks/open_product_remarks_binding.dart';
 import '../modules/open/open_product_remarks/open_product_remarks_view.dart';
+import '../modules/open/open_set_meal/open_set_meal_binding.dart';
+import '../modules/open/open_set_meal/open_set_meal_view.dart';
 import '../modules/open/open_supplier/open_supplier_binding.dart';
 import '../modules/open/open_supplier/open_supplier_view.dart';
 import '../modules/open/open_view.dart';
@@ -38,7 +42,10 @@ class AppPages {
   AppPages._();
 
   static final routes = [
-    GetPage(name: _Paths.SIGNIN, page: () => const SigninView(), binding: SigninBinding()),
+    GetPage(
+        name: _Paths.SIGNIN,
+        page: () => const SigninView(),
+        binding: SigninBinding()),
     GetPage(
       name: _Paths.DASHBOARD,
       page: () => const DashboardView(),
@@ -74,9 +81,23 @@ class AppPages {
           binding: OpenProductRemarksBinding(),
           middlewares: [AuthMiddleware()],
         ),
+        GetPage(
+          name: _Paths.OPEN_MULTIPLE_PRODUCT,
+          page: () => const OpenMultipleProductView(),
+          binding: OpenMultipleProductBinding(),
+        ),
+        GetPage(
+          name: _Paths.OPEN_SET_MEAL,
+          page: () => const OpenSetMealView(),
+          binding: OpenSetMealBinding(),
+        ),
       ],
     ),
-    GetPage(name: _Paths.PDF, page: () => const PdfView(), binding: PdfBinding(), middlewares: [AuthMiddleware()]),
+    GetPage(
+        name: _Paths.PDF,
+        page: () => const PdfView(),
+        binding: PdfBinding(),
+        middlewares: [AuthMiddleware()]),
     GetPage(
       name: _Paths.MASTER,
       page: () => const MasterView(),
