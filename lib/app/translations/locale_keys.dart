@@ -250,4 +250,12 @@ abstract class LocaleKeys {
   static const String ignore = "ignore";
   static const String skip = "skip";
   static const String joining = "joining";
+  static const String copySetMealSuccess = "copyProductSetMealSuccess";
+  static const String copySetMealFailed = "copyProductSetMealFailed";
+  static const String copySameProduct = "copySameProduct";
+  static const String noOperation = "noOperation";
+  static const String copying = "copying";
+  static const String operationSuccess = "operationSuccess";
+  static const String operationFailed = "operationFailed";
+  static const String selectSetMeal = "selectSetMeal";
 }

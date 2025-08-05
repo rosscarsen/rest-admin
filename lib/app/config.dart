@@ -53,6 +53,10 @@ class Config {
   static String addProductSetMeal = "/Master/addProductSetMeal";
   // 删除套餐
   static String deleteProductSetMeal = "/Master/deleteProductSetMeal";
+  // 从食品复制套餐
+  static String copyProductSetMeal = "/Master/copyProductSetMeal";
+  // 清除产品表setMenu栏位
+  static String clearSetMenu = "/Master/clearSetMenu";
 
   /// 打开选择
   // 供应商
@@ -65,6 +69,8 @@ class Config {
   static String openProductRemark = "/Open/productRemark";
   // 打开套餐
   static String openSetMeal = "/Open/setMeal";
+  // 打开食品套餐
+  static String openProductSetMeal = "/open/productSetMeal";
 
   /// excel
   // 导出产品

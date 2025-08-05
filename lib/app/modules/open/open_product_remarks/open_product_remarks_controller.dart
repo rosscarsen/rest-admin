@@ -59,15 +59,15 @@ class OpenProductRemarksController extends GetxController {
       final DioApiResult dioApiResult = await apiClient.post(Config.openProductRemark, data: search);
 
       if (!dioApiResult.success) {
-        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       if (!dioApiResult.hasPermission) {
-        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.noPermission.tr);
         return;
       }
       if (dioApiResult.data == null) {
-        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       final productRemarksModel = productRemarksModelFromJson(dioApiResult.data!);

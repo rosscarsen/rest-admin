@@ -25,6 +25,10 @@ abstract class Routes {
   static const OPEN_MULTIPLE_PRODUCT =
       _Paths.OPEN + _Paths.OPEN_MULTIPLE_PRODUCT;
   static const OPEN_SET_MEAL = _Paths.OPEN + _Paths.OPEN_SET_MEAL;
+  static const COPY_PRODUCT_SET_MEAL = _Paths.MASTER +
+      _Paths.PRODUCTS +
+      _Paths.PRODUCT_EDIT +
+      _Paths.COPY_PRODUCT_SET_MEAL;
 }
 
 abstract class _Paths {
@@ -47,4 +51,5 @@ abstract class _Paths {
   static const OPEN_PRODUCT_REMARKS = '/open-product-remarks';
   static const OPEN_MULTIPLE_PRODUCT = '/open-multiple-product';
   static const OPEN_SET_MEAL = '/open-set-meal';
+  static const COPY_PRODUCT_SET_MEAL = '/copy-product-set-meal';
 }

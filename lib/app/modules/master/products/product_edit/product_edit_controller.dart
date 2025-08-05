@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:responsive_grid/responsive_grid.dart';
-import 'package:rest_admin/app/utils/form_help.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../config.dart';
@@ -16,7 +15,9 @@ import '../../../../service/dio_api_client.dart';
 import '../../../../service/dio_api_result.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/constants.dart';
+import '../../../../utils/custom_alert.dart';
 import '../../../../utils/custom_dialog.dart';
+import '../../../../utils/form_help.dart';
 import '../../../../utils/logger.dart';
 import 'product_barcode_source.dart';
 import 'product_edit_fields.dart';
@@ -26,7 +27,7 @@ import 'product_stock_source.dart';
 
 class ProductEditController extends GetxController with GetSingleTickerProviderStateMixin {
   final GlobalKey<FormBuilderState> productEditFormKey = GlobalKey<FormBuilderState>();
-
+  final setMealController = TextEditingController();
   // 产品条码
   final DataGridController barcodeDataGridController = DataGridController();
   late ProductBarcodeSource productBarcodeSource;
@@ -153,12 +154,12 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
         if (!dioApiResult.hasPermission) {
           hasPermission.value = false;
         }
-        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
 
       if (dioApiResult.data == null) {
-        CustomDialog.showToast(LocaleKeys.dataException.tr);
+        CustomDialog.errorMessages(LocaleKeys.dataException.tr);
         return;
       }
       hasPermission.value = true;
@@ -186,7 +187,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
       }
     } catch (e) {
       logger.i(e.toString());
-      CustomDialog.showToast(LocaleKeys.getDataException.tr);
+      CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
     } finally {
       isLoading(false);
     }
@@ -566,17 +567,24 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
   Future<void> batchDeleteSetMealItems() async {
     final selectedRows = setMealDataGridController.selectedRows;
     if (selectedRows.isEmpty) {
-      CustomDialog.showToast(LocaleKeys.pleaseSelectOneDataOrMoreToDelete.tr);
+      CustomDialog.errorMessages(LocaleKeys.pleaseSelectOneDataOrMoreToDelete.tr);
       return;
     }
-    // 选中ID
-    final selectedIds = selectedRows
-        .map((dataGridRow) {
-          return dataGridRow.getCells().firstWhereOrNull((cell) => cell.columnName == 'ID')?.value;
-        })
-        .whereType<int>()
-        .toList();
-    await deleteSetMeal(selectedIds);
+    await CustomAlert.iosAlert(
+      LocaleKeys.deleteConfirmMsg.tr,
+
+      showCancel: true,
+      onConfirm: () async {
+        // 选中ID
+        final selectedIds = selectedRows
+            .map((dataGridRow) {
+              return dataGridRow.getCells().firstWhereOrNull((cell) => cell.columnName == 'ID')?.value;
+            })
+            .whereType<int>()
+            .toList();
+        await deleteSetMeal(selectedIds);
+      },
+    );
   }
 
   // 执行删除套餐
@@ -586,16 +594,54 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
       final DioApiResult dioApiResult = await apiClient.post(Config.deleteProductSetMeal, data: {"mIds": ids});
       final Map<String, dynamic> data = jsonDecode(dioApiResult.data) as Map<String, dynamic>;
       if (data["status"] == 200) {
-        CustomDialog.showToast(LocaleKeys.deleteSuccess.tr);
+        CustomDialog.successMessages(LocaleKeys.deleteSuccess.tr);
         productSetMeal.removeWhere((rows) => ids.contains(rows.mId));
       } else {
-        CustomDialog.showToast(LocaleKeys.deleteFailed.tr);
+        CustomDialog.errorMessages(LocaleKeys.deleteFailed.tr);
       }
     } catch (e) {
-      CustomDialog.showToast(LocaleKeys.deleteFailed.tr);
+      CustomDialog.errorMessages(LocaleKeys.deleteFailed.tr);
     } finally {
       productSetMealSource.updateDataSource();
       CustomDialog.dismissDialog();
+    }
+  }
+
+  // 从产品套餐复制
+  Future<void> copyProductSetMeal(Map<String, dynamic> query) async {
+    CustomDialog.showLoading(LocaleKeys.copying.tr);
+    try {
+      final DioApiResult dioApiResult = await apiClient.post(Config.copyProductSetMeal, data: query);
+      final Map<String, dynamic> data = jsonDecode(dioApiResult.data) as Map<String, dynamic>;
+      logger.i(dioApiResult);
+      if (data["status"] == 200) {
+        CustomDialog.successMessages(LocaleKeys.copySuccess.tr);
+        productSetMeal
+          ..clear()
+          ..addAll((data["apiResult"] as List<dynamic>).map((e) => ProductSetMeal.fromJson(e)).toList());
+        productSetMealSource.updateDataSource();
+      } else {
+        CustomDialog.errorMessages(LocaleKeys.copyFailed.tr);
+      }
+    } catch (e) {
+      CustomDialog.errorMessages(LocaleKeys.copyFailed.tr);
+    } finally {
+      CustomDialog.dismissDialog();
+    }
+  }
+
+  // 清除产品表setMenu栏位
+  Future<void> clearSetMenu() async {
+    try {
+      final DioApiResult dioApiResult = await apiClient.post(Config.clearSetMenu, data: {"productID": productID});
+      if (dioApiResult.success) {
+        productEditFormKey.currentState?.fields[ProductEditFields.setMenu]?.didChange("");
+        CustomDialog.successMessages(LocaleKeys.operationSuccess.tr);
+      } else {
+        CustomDialog.errorMessages(LocaleKeys.operationFailed.tr);
+      }
+    } catch (e) {
+      CustomDialog.errorMessages(LocaleKeys.operationFailed.tr);
     }
   }
 }

@@ -11,11 +11,13 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/constants.dart';
+import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/form_help.dart';
-import '../../../../utils/logger.dart';
 import '../../../../utils/progresshub.dart';
 import '../../../../widgets/custom_cell.dart';
 import '../../../../widgets/no_record.dart';
+import '../../../open/open_set_meal/open_set_meal_view.dart';
+import 'copy_product_set_meal/copy_product_set_meal_view.dart';
 import 'product_edit_controller.dart';
 import 'product_edit_fields.dart';
 
@@ -503,7 +505,6 @@ class ProductEditView extends GetView<ProductEditController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          /*  '${item.children?.length ?? 0}' */
                           Text(
                             "${item.mDescription ?? ""}(${item.children?.length ?? 0})",
                             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -823,30 +824,46 @@ class ProductEditView extends GetView<ProductEditController> {
                   // 复制（食品）
                   FormHelper.buildGridCol(
                     child: SizedBox(
-                      height: context.isPhoneOrWider ? 40 : 48,
+                      height: 40,
                       child: Align(
                         alignment: Alignment.centerLeft,
-                        child: FilledButton(onPressed: () {}, child: Text(LocaleKeys.copyProduct.tr)),
+                        child: FilledButton(onPressed: copySetMeal, child: Text(LocaleKeys.copyProduct.tr)),
                       ),
                     ),
                   ),
                   // 复制（套餐）
                   FormHelper.buildGridCol(
-                    child: FormHelper.textInput(
-                      name: ProductEditFields.setMenu,
-                      labelText: LocaleKeys.copySetMeal.tr,
-                      suffixIcon: OverflowBar(
-                        children: [
-                          IconButton(
-                            onPressed: () {},
-                            tooltip: LocaleKeys.copySetMeal.tr,
-                            icon: Icon(Icons.file_open, color: AppColors.openColor),
+                    child: ValueListenableBuilder(
+                      valueListenable: controller.setMealController,
+                      builder: (BuildContext context, TextEditingValue value, Widget? child) {
+                        final hasText = value.text.isNotEmpty;
+                        return FormHelper.textInput(
+                          name: ProductEditFields.setMenu,
+                          labelText: LocaleKeys.copySetMeal.tr,
+                          controller: controller.setMealController,
+                          readOnly: true,
+                          suffixIcon: OverflowBar(
+                            children: [
+                              // 从套餐复制
+                              IconButton(
+                                onPressed: openSetMeal,
+                                tooltip: LocaleKeys.copySetMeal.tr,
+                                icon: Icon(Icons.file_open, color: AppColors.openColor),
+                              ),
+                              // 清除产品表setMenu栏位
+                              if (hasText)
+                                IconButton(
+                                  tooltip: LocaleKeys.clearText.tr,
+                                  onPressed: controller.clearSetMenu,
+                                  icon: Icon(Icons.cancel),
+                                ),
+                            ],
                           ),
-                          IconButton(tooltip: LocaleKeys.clearText.tr, onPressed: () {}, icon: Icon(Icons.cancel)),
-                        ],
-                      ),
+                        );
+                      },
                     ),
                   ),
+                  // 批量刪除套餐 && 添加套餐
                   FormHelper.buildGridCol(
                     sm: 12,
                     md: 12,
@@ -866,11 +883,10 @@ class ProductEditView extends GetView<ProductEditController> {
                         // 添加套餐
                         ElevatedButton(
                           onPressed: () async {
-                            var ret = await Get.toNamed(
+                            await Get.toNamed(
                               Routes.OPEN_MULTIPLE_PRODUCT,
                               parameters: {"productId": controller.productID.toString(), "isShowOption": "Y"},
                             );
-                            logger.i(ret);
                           },
                           child: Text(LocaleKeys.setMealAdd.tr),
                         ),
@@ -969,7 +985,7 @@ class ProductEditView extends GetView<ProductEditController> {
                               label: CustomCell(data: LocaleKeys.operation.tr),
                             ),
                           ],
-                          /* placeholder: NoRecord(), */
+                          placeholder: NoRecord(),
                         ),
                       ),
                     ),
@@ -978,5 +994,30 @@ class ProductEditView extends GetView<ProductEditController> {
         ),
       ],
     );
+  }
+
+  // 复制（食品）function
+  void copySetMeal() async {
+    final ret = await Get.dialog(Dialog(child: CopyProductSetMealView()));
+    final selectProductID = ret != null ? int.parse(ret.toString()) : 0;
+    final currentProductID = controller.productID;
+    if (selectProductID == 0) {
+      return;
+    }
+    if (selectProductID == currentProductID) {
+      return CustomDialog.errorMessages(LocaleKeys.copySameProduct.tr);
+    }
+    if (ret != null) {
+      final Map<String, dynamic> query = {"selectProductID": selectProductID, "currentProductID": currentProductID};
+      await controller.copyProductSetMeal(query);
+    }
+  }
+
+  // 打开套餐
+  void openSetMeal() async {
+    final ret = await Get.dialog(Dialog(child: OpenSetMealView()));
+    if (ret != null) {
+      controller.setMealController.text = ret.toString();
+    }
   }
 }

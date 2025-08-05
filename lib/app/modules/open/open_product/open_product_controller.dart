@@ -3,12 +3,12 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
-import 'open_products_data_source.dart';
 import '../../../model/products_model.dart';
 import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/custom_dialog.dart';
+import 'open_products_data_source.dart';
 
 class OpenProductController extends GetxController {
   final DataGridController dataGridController = DataGridController();
@@ -59,15 +59,15 @@ class OpenProductController extends GetxController {
       final DioApiResult dioApiResult = await apiClient.post(Config.openProduct, data: search);
 
       if (!dioApiResult.success) {
-        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       if (!dioApiResult.hasPermission) {
-        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.noPermission.tr);
         return;
       }
       if (dioApiResult.data == null) {
-        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       final productsModel = productsModelFromJson(dioApiResult.data!);

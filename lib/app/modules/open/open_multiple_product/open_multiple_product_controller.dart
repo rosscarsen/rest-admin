@@ -3,17 +3,17 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:rest_admin/app/model/product_add_or_edit_model.dart';
-import 'package:rest_admin/app/utils/custom_alert.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
 import '../../../model/categories_model.dart';
 import '../../../model/category_model.dart';
+import '../../../model/product_add_or_edit_model.dart';
 import '../../../model/products_model.dart';
 import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
+import '../../../utils/custom_alert.dart';
 import '../../../utils/custom_dialog.dart';
 import '../../../utils/logger.dart';
 import '../../master/products/product_edit/product_edit_controller.dart';
@@ -21,7 +21,6 @@ import 'open_multiple_products_data_source.dart';
 
 class OpenMultipleProductController extends GetxController {
   final DataGridController dataGridController = DataGridController();
-  final TextEditingController searchController = TextEditingController();
   static OpenMultipleProductController get to => Get.find();
   final GlobalKey<FormBuilderState> openMultipleProductFormKey = GlobalKey<FormBuilderState>();
   final isLoading = true.obs;
@@ -46,7 +45,6 @@ class OpenMultipleProductController extends GetxController {
   @override
   void onClose() {
     dataGridController.dispose();
-    searchController.dispose();
     super.onClose();
   }
 
@@ -91,15 +89,15 @@ class OpenMultipleProductController extends GetxController {
       final DioApiResult dioApiResult = await apiClient.post(Config.openProduct, data: search);
 
       if (!dioApiResult.success) {
-        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       if (!dioApiResult.hasPermission) {
-        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.noPermission.tr);
         return;
       }
       if (dioApiResult.data == null) {
-        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       final productsModel = productsModelFromJson(dioApiResult.data!);
@@ -132,15 +130,15 @@ class OpenMultipleProductController extends GetxController {
           final DioApiResult productDioApiResult = results[i];
 
           if (!productDioApiResult.success) {
-            CustomDialog.showToast(productDioApiResult.error ?? LocaleKeys.unknownError.tr);
+            CustomDialog.errorMessages(productDioApiResult.error ?? LocaleKeys.unknownError.tr);
             continue;
           }
           if (!productDioApiResult.hasPermission) {
-            CustomDialog.showToast(productDioApiResult.error ?? LocaleKeys.noPermission.tr);
+            CustomDialog.errorMessages(productDioApiResult.error ?? LocaleKeys.noPermission.tr);
             continue;
           }
           if (productDioApiResult.data == null) {
-            CustomDialog.showToast(productDioApiResult.error ?? LocaleKeys.unknownError.tr);
+            CustomDialog.errorMessages(productDioApiResult.error ?? LocaleKeys.unknownError.tr);
             continue;
           }
           final productsModel = productsModelFromJson(productDioApiResult.data!);
@@ -187,13 +185,13 @@ class OpenMultipleProductController extends GetxController {
     final oldSetMealCodes = productCtl.productSetMeal.map((e) => e.mBarcode).toSet().toList();
 
     if (dataGridController.selectedRows.isEmpty) {
-      CustomDialog.showToast(LocaleKeys.pleaseSelectOneDataOrMore.tr);
+      CustomDialog.errorMessages(LocaleKeys.pleaseSelectOneDataOrMore.tr);
       return;
     }
 
     final selectedRows = dataGridController.selectedRows;
     if (selectedRows.isEmpty) {
-      CustomDialog.showToast(LocaleKeys.pleaseSelectOneDataOrMore.tr);
+      CustomDialog.errorMessages(LocaleKeys.pleaseSelectOneDataOrMore.tr);
       return;
     }
     final selectProductCodes = selectedRows
@@ -223,7 +221,7 @@ class OpenMultipleProductController extends GetxController {
     }
     final parameters = Get.parameters;
     if (parameters["productId"] == null) {
-      CustomDialog.showToast(LocaleKeys.exception.tr);
+      CustomDialog.errorMessages(LocaleKeys.exception.tr);
       return;
     }
     final query = {
@@ -235,11 +233,11 @@ class OpenMultipleProductController extends GetxController {
     try {
       final DioApiResult dioApiResult = await apiClient.post(Config.addProductSetMeal, data: query);
       if (!dioApiResult.success) {
-        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       if (dioApiResult.data == null) {
-        CustomDialog.showToast(LocaleKeys.dataException.tr);
+        CustomDialog.errorMessages(LocaleKeys.dataException.tr);
         return;
       }
       final Map<String, dynamic> data = jsonDecode(dioApiResult.data) ?? {};
@@ -247,21 +245,23 @@ class OpenMultipleProductController extends GetxController {
         if (data["status"] == 200) {
           final List<dynamic>? apiProductList = data["apiResult"];
           if (apiProductList != null) {
-            productCtl.productSetMeal = apiProductList.map((e) => ProductSetMeal.fromJson(e)).toList();
+            productCtl.productSetMeal
+              ..clear()
+              ..addAll(apiProductList.map((e) => ProductSetMeal.fromJson(e)).toList());
             productCtl.productSetMealSource.updateDataSource();
             CustomDialog.successMessages(LocaleKeys.joinSuccess.tr);
             Get.back();
           } else {
-            CustomDialog.showToast(LocaleKeys.getDataException.tr);
+            CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
           }
         } else {
-          CustomDialog.showToast(LocaleKeys.joinFailed.tr);
+          CustomDialog.errorMessages(LocaleKeys.joinFailed.tr);
         }
       } else {
         CustomDialog.showToast(LocaleKeys.joinFailed.tr);
       }
     } catch (e) {
-      CustomDialog.showToast(LocaleKeys.joinFailed.tr);
+      CustomDialog.errorMessages(LocaleKeys.joinFailed.tr);
     } finally {
       CustomDialog.dismissDialog();
     }

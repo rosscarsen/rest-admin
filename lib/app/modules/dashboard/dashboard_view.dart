@@ -24,7 +24,6 @@ class DashboardView extends GetView<DashboardController> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       route: Routes.DASHBOARD,
-
       body: Padding(
         padding: EdgeInsets.all(Config.defaultPadding),
         child: Obx(() {

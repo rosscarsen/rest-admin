@@ -44,7 +44,13 @@ class CustomCell extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 6.0),
             alignment: alignment,
-            child: isOverflowing ? Tooltip(message: text, child: textWidget) : textWidget,
+            child: isOverflowing
+                ? Tooltip(
+                    message: text,
+                    decoration: BoxDecoration(color: Color(0XFF2F2F2F)),
+                    child: textWidget,
+                  )
+                : textWidget,
           ),
         );
       },

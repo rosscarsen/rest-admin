@@ -55,7 +55,7 @@ class FormHelper {
   }
 
   /// 文本输入框
-  static FormBuilderTextField textInput({
+  static Widget textInput({
     required String name,
     required String labelText,
     Widget? prefixIcon,
@@ -70,6 +70,7 @@ class FormHelper {
     void Function(String?)? onChanged,
     void Function(String?)? onSubmitted,
     bool enabled = true,
+    bool readOnly = false,
     TextEditingController? controller,
     int? maxDecimalDigits = 2,
   }) {
@@ -81,6 +82,7 @@ class FormHelper {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       enabled: enabled,
       initialValue: initialValue,
+      readOnly: readOnly,
       name: name,
       maxLines: maxLines,
       validator: validator,
@@ -92,7 +94,7 @@ class FormHelper {
         //prefixIcon: prefixIcon ?? buildPrefixIconText(labelText, enabled),
         prefixIconConstraints: const BoxConstraints(maxWidth: _prefixIconMaxWidth),
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        focusedBorder: !enabled
+        focusedBorder: !enabled || readOnly
             ? OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.grey.shade400, width: 1.0),
                 borderRadius: const BorderRadius.all(Radius.circular(8.0)),
@@ -100,7 +102,7 @@ class FormHelper {
             : null,
         suffixIcon: suffixIcon,
         fillColor: Colors.grey.shade200,
-        filled: !enabled,
+        filled: !enabled || readOnly,
       ),
       keyboardType: keyboardType ?? (maxLines > 1 ? TextInputType.multiline : TextInputType.text),
       inputFormatters: keyboardType == TextInputType.number

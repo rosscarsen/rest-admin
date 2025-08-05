@@ -3,12 +3,12 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
-import 'open_product_barcode_source.dart';
 import '../../../model/product_barcode_model.dart';
 import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/custom_dialog.dart';
+import 'open_product_barcode_source.dart';
 
 class OpenProductBarcodeController extends GetxController {
   final DataGridController dataGridController = DataGridController();
@@ -58,21 +58,21 @@ class OpenProductBarcodeController extends GetxController {
       if (searchController.text.isNotEmpty) search['search'] = searchController.text;
       final DioApiResult dioApiResult = await apiClient.post(Config.openBarcode, data: search);
       if (!dioApiResult.success) {
-        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       if (!dioApiResult.hasPermission) {
-        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.noPermission.tr);
         return;
       }
       if (dioApiResult.data == null) {
-        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       final productBarcodeModel = productBarcodeModelFromJson(dioApiResult.data!);
       final BarcodeApiResult? apiResult = productBarcodeModel.apiResult;
       if (apiResult == null) {
-        CustomDialog.showToast(LocaleKeys.unknownError.tr);
+        CustomDialog.errorMessages(LocaleKeys.unknownError.tr);
         return;
       }
 

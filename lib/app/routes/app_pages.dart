@@ -11,6 +11,8 @@ import '../modules/master/product_remarks/product_remarks_binding.dart';
 import '../modules/master/product_remarks/product_remarks_view.dart';
 import '../modules/master/products/advancedSearch/advanced_search_binding.dart';
 import '../modules/master/products/advancedSearch/advanced_search_view.dart';
+import '../modules/master/products/product_edit/copy_product_set_meal/copy_product_set_meal_binding.dart';
+import '../modules/master/products/product_edit/copy_product_set_meal/copy_product_set_meal_view.dart';
 import '../modules/master/products/product_edit/product_edit_binding.dart';
 import '../modules/master/products/product_edit/product_edit_view.dart';
 import '../modules/master/products/products_binding.dart';
@@ -126,6 +128,13 @@ class AppPages {
               page: () => const ProductEditView(),
               binding: ProductEditBinding(),
               middlewares: [AuthMiddleware()],
+              children: [
+                GetPage(
+                  name: _Paths.COPY_PRODUCT_SET_MEAL,
+                  page: () => const CopyProductSetMealView(),
+                  binding: CopyProductSetMealBinding(),
+                ),
+              ],
             ),
           ],
         ),

@@ -70,9 +70,6 @@ class ProductSetMealSource extends DataGridSource {
                     icon: const Icon(Icons.delete, color: AppColors.deleteColor),
                     onPressed: () {
                       controller.deleteSetMeal([row.mId ?? 0]);
-                      /* _dataGridRows.remove(dataGridRow);
-                      controller.productSetMeal.remove(row);
-                      notifyListeners(); */
                     },
                   ),
                 ),

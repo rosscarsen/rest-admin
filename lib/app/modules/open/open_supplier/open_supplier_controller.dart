@@ -3,12 +3,12 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
-import 'open_supplier_data_source.dart';
 import '../../../model/supplier_model.dart';
 import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/custom_dialog.dart';
+import 'open_supplier_data_source.dart';
 
 class OpenSupplierController extends GetxController {
   final DataGridController dataGridController = DataGridController();
@@ -59,21 +59,23 @@ class OpenSupplierController extends GetxController {
       final DioApiResult dioApiResult = await apiClient.post(Config.openSupplier, data: search);
 
       if (!dioApiResult.success) {
-        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       if (!dioApiResult.hasPermission) {
-        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.noPermission.tr);
         return;
       }
       if (dioApiResult.data == null) {
-        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       final supplierModel = supplierModelModelFromJson(dioApiResult.data!);
       if (supplierModel.status == 200) {
         final ApiResult? apiResult = supplierModel.apiResult;
-        DataList = apiResult?.supplierInfo ?? [];
+        DataList
+          ..clear()
+          ..addAll(apiResult?.supplierInfo ?? []);
         totalPages.value = apiResult?.lastPage ?? 0;
         totalRecords.value = apiResult?.total ?? 0;
       }
