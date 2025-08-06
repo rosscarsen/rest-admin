@@ -92,7 +92,7 @@ class OpenProductView extends GetView<OpenProductController> {
             ),
             GridColumn(
               columnName: 'name',
-              columnWidthMode: ColumnWidthMode.fill,
+              columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.auto : ColumnWidthMode.fill,
               maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
               minimumWidth: 200,
               label: CustomCell(data: LocaleKeys.name.tr),

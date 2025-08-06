@@ -215,7 +215,7 @@ class ApiClient {
   DioApiResult _handleResponse(Response response) {
     if (response.statusCode != 200) {
       CustomDialog.dismissDialog();
-      return DioApiResult(success: false, error: 'HTTP ${response.statusCode}');
+      return DioApiResult(success: false, error: 'HTTP ${response.statusCode} ${response.statusMessage}');
     }
     final responseData = response.data;
     String dataJson = responseData.toString();

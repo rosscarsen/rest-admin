@@ -258,4 +258,8 @@ Map<String, String> get zhCN => {
   LocaleKeys.operationSuccess: "操作成功",
   LocaleKeys.operationFailed: "操作失败",
   LocaleKeys.selectSetMeal: "选择套餐",
+  LocaleKeys.dataIsEmptyDoNotOperation: "数据为空，不操作",
+  LocaleKeys.updating: "更新中...",
+  LocaleKeys.updateFailed: "更新失败",
+  LocaleKeys.updateSuccess: "更新成功",
 };

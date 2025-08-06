@@ -613,7 +613,6 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
     try {
       final DioApiResult dioApiResult = await apiClient.post(Config.copyProductSetMeal, data: query);
       final Map<String, dynamic> data = jsonDecode(dioApiResult.data) as Map<String, dynamic>;
-      logger.i(dioApiResult);
       if (data["status"] == 200) {
         CustomDialog.successMessages(LocaleKeys.copySuccess.tr);
         productSetMeal
@@ -631,14 +630,64 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
   }
 
   // 清除产品表setMenu栏位
-  Future<void> clearSetMenu() async {
+  Future<void> updateSetMenu(String setMenu) async {
+    CustomDialog.showLoading(LocaleKeys.saving.tr);
     try {
-      final DioApiResult dioApiResult = await apiClient.post(Config.clearSetMenu, data: {"productID": productID});
+      final DioApiResult dioApiResult = await apiClient.post(
+        Config.updateSetMenu,
+        data: {"productID": productID, "setMenu": setMenu},
+      );
       if (dioApiResult.success) {
-        productEditFormKey.currentState?.fields[ProductEditFields.setMenu]?.didChange("");
+        productEditFormKey.currentState?.fields[ProductEditFields.setMenu]?.didChange(setMenu);
         CustomDialog.successMessages(LocaleKeys.operationSuccess.tr);
       } else {
         CustomDialog.errorMessages(LocaleKeys.operationFailed.tr);
+      }
+    } catch (e) {
+      CustomDialog.errorMessages(LocaleKeys.operationFailed.tr);
+    } finally {
+      CustomDialog.dismissDialog();
+    }
+  }
+
+  // 按钮更新套餐
+  Future<void> updateProductSetMeal() async {
+    final String setMenu = setMealController.text;
+    if (setMenu.isEmpty) {
+      CustomDialog.errorMessages(LocaleKeys.dataIsEmptyDoNotOperation.tr);
+      return;
+    }
+    final Map<String, dynamic> query = {"productID": productID, "setMenu": setMealController.text};
+    try {
+      final DioApiResult dioApiResult = await apiClient.post(Config.updateProductSetMeal, data: query);
+      if (dioApiResult.success) {
+        //CustomDialog.successMessages(LocaleKeys.operationSuccess.tr);
+
+        final data = jsonDecode(dioApiResult.data) as Map<String, dynamic>;
+        switch (data["status"]) {
+          case 200:
+            CustomDialog.successMessages(LocaleKeys.operationSuccess.tr);
+            final apiResult = data['apiResult'] as Map<String, dynamic>;
+            final productSetMealLimitRet = apiResult['productSetMealLimit'] as List<dynamic>;
+            productSetMealLimit
+              ..clear()
+              ..addAll(productSetMealLimitRet.map((e) => SetMealLimit.fromJson(e)).toList());
+            productSetMealSource.updateDataSource();
+            final productSetMealRet = apiResult['productSetMeal'] as List<dynamic>;
+            productSetMeal
+              ..clear()
+              ..addAll(productSetMealRet.map((e) => ProductSetMeal.fromJson(e)).toList());
+            productSetMealSource.updateDataSource();
+            break;
+          case 201:
+            CustomDialog.errorMessages(LocaleKeys.dataIsEmptyDoNotOperation.tr);
+            break;
+          default:
+            CustomDialog.errorMessages(LocaleKeys.updateFailed.tr);
+            break;
+        }
+      } else {
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.operationFailed.tr);
       }
     } catch (e) {
       CustomDialog.errorMessages(LocaleKeys.operationFailed.tr);

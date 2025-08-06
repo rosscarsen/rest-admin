@@ -27,6 +27,8 @@ class Config {
   static String chartData = "/dashboard/chartData";
 
   /// 主档
+
+  /* 食品主档操作 start */
   // 图片上传
   static String uploadProductImage = "/Master/uploadImage";
   // 获取产品列表
@@ -56,7 +58,10 @@ class Config {
   // 从食品复制套餐
   static String copyProductSetMeal = "/Master/copyProductSetMeal";
   // 清除产品表setMenu栏位
-  static String clearSetMenu = "/Master/clearSetMenu";
+  static String updateSetMenu = "/Master/updateSetMenu";
+  //更新食品套餐
+  static String updateProductSetMeal = "/Master/updateProductSetMeal";
+  /* 食品主档操作 end */
 
   /// 打开选择
   // 供应商

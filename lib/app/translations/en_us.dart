@@ -258,4 +258,8 @@ Map<String, String> get enUS => {
   LocaleKeys.operationSuccess: "Operation Success",
   LocaleKeys.operationFailed: "Operation Failed",
   LocaleKeys.selectSetMeal: "Select SetMeal",
+  LocaleKeys.dataIsEmptyDoNotOperation: "Data is empty, do not operation",
+  LocaleKeys.updating: "Updating...",
+  LocaleKeys.updateFailed: "Update Failed",
+  LocaleKeys.updateSuccess: "Update Success",
 };

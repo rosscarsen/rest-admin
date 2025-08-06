@@ -73,6 +73,7 @@ class FormHelper {
     bool readOnly = false,
     TextEditingController? controller,
     int? maxDecimalDigits = 2,
+    String? errorText,
   }) {
     assert(maxLines >= 1, 'maxLines不能小于1');
     return FormBuilderTextField(
@@ -103,6 +104,7 @@ class FormHelper {
         suffixIcon: suffixIcon,
         fillColor: Colors.grey.shade200,
         filled: !enabled || readOnly,
+        errorText: errorText,
       ),
       keyboardType: keyboardType ?? (maxLines > 1 ? TextInputType.multiline : TextInputType.text),
       inputFormatters: keyboardType == TextInputType.number

@@ -258,4 +258,8 @@ Map<String, String> zhHK = {
   LocaleKeys.operationSuccess: "操作成功",
   LocaleKeys.operationFailed: "操作失敗",
   LocaleKeys.selectSetMeal: "選擇套餐",
+  LocaleKeys.dataIsEmptyDoNotOperation: "數據為空，不操作",
+  LocaleKeys.updating: "更新中...",
+  LocaleKeys.updateFailed: "更新失敗",
+  LocaleKeys.updateSuccess: "更新成功",
 };

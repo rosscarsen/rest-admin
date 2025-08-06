@@ -258,4 +258,8 @@ abstract class LocaleKeys {
   static const String operationSuccess = "operationSuccess";
   static const String operationFailed = "operationFailed";
   static const String selectSetMeal = "selectSetMeal";
+  static const String dataIsEmptyDoNotOperation = "dataIsEmptyDoNotOperation";
+  static const String updating = "updating";
+  static const String updateFailed = "updateFailed";
+  static const String updateSuccess = "updateSuccess";
 }

@@ -20,7 +20,7 @@ class OpenSetMealView extends GetView<OpenSetMealController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleKeys.selectProductRemarks.tr),
+        title: Text(LocaleKeys.selectSetMeal.tr),
         centerTitle: true,
         actions: [IconButton(onPressed: () => controller.reloadData(), icon: Icon(Icons.refresh))],
       ),
