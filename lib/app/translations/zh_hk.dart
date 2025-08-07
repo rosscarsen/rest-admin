@@ -262,4 +262,5 @@ Map<String, String> zhHK = {
   LocaleKeys.updating: "更新中...",
   LocaleKeys.updateFailed: "更新失敗",
   LocaleKeys.updateSuccess: "更新成功",
+  LocaleKeys.theFormValidateFailed: "表單驗證失敗",
 };

@@ -200,39 +200,25 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
       // 创建与修改时间为当前时间
 
       final formData = Map<String, dynamic>.from(productEditFormKey.currentState!.value);
+
       final selectedMultipleCategory = formData.entries
           .where((e) => e.key.startsWith('multipleCategory_'))
           .expand((e) => e.value ?? [])
           .toList();
 
-      formData['category3'] = selectedMultipleCategory.isEmpty ? null : selectedMultipleCategory.join(",");
+      formData['category3'] = selectedMultipleCategory.isEmpty ? '' : selectedMultipleCategory.join(",");
       formData.removeWhere((key, value) => key.startsWith('multipleCategory_'));
-
       formData['T_Product_ID'] = productID;
       // 条码
-      formData.addAll({
-        'productBarcode': productBarcode.isNotEmpty
-            ? productBarcode.map((e) {
-                final json = Map<String, dynamic>.from(e.toJson());
-                json.remove('T_Product_ID');
-                return json;
-              }).toList()
-            : [],
-      });
+      formData.addAll({'productBarcode': productBarcode});
       // 套餐限制
-      formData.addAll({
-        'productSetMealLimit': productSetMealLimit.isNotEmpty
-            ? productSetMealLimit.map((e) {
-                final json = Map<String, dynamic>.from(e.toJson());
-                json.remove('set_limit_id');
-                json.remove('t_product_id');
-                return json;
-              }).toList()
-            : [],
-      });
-      logger.e(formData);
+      formData.addAll({'productSetMealLimit': productSetMealLimit});
+
+      //logger.f(formData);
       final DioApiResult dioApiResult = await apiClient.post(Config.productAddOrEditSave, data: formData);
       logger.f(dioApiResult);
+    } else {
+      CustomDialog.errorMessages(LocaleKeys.theFormValidateFailed.tr);
     }
   }
 
@@ -661,8 +647,6 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
     try {
       final DioApiResult dioApiResult = await apiClient.post(Config.updateProductSetMeal, data: query);
       if (dioApiResult.success) {
-        //CustomDialog.successMessages(LocaleKeys.operationSuccess.tr);
-
         final data = jsonDecode(dioApiResult.data) as Map<String, dynamic>;
         switch (data["status"]) {
           case 200:

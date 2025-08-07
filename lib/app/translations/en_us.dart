@@ -262,4 +262,5 @@ Map<String, String> get enUS => {
   LocaleKeys.updating: "Updating...",
   LocaleKeys.updateFailed: "Update Failed",
   LocaleKeys.updateSuccess: "Update Success",
+  LocaleKeys.theFormValidateFailed: "The form validate failed",
 };

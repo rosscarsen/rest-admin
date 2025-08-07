@@ -90,6 +90,7 @@ class FormHelper {
       onSaved: onSaved,
       onChanged: onChanged,
       obscureText: obscureText,
+      valueTransformer: (value) => (value ?? "").trim(),
       decoration: InputDecoration(
         labelText: labelText,
         //prefixIcon: prefixIcon ?? buildPrefixIconText(labelText, enabled),
@@ -153,7 +154,7 @@ class FormHelper {
       initialValue: initialValue,
       validator: validator,
       onChanged: onChanged,
-
+      valueTransformer: (value) => (value?.toString() ?? "").trim(),
       builder: (field) {
         T? currentValue = field.value;
         List<DropdownMenuItem<T>> safeItems = items ?? [];
@@ -234,6 +235,7 @@ class FormHelper {
       validator: validator,
       onSaved: onSaved,
       onChanged: onChanged,
+      valueTransformer: (value) => (value?.toString() ?? "").trim(),
       initialValue: initialValue != null ? effectiveDateFormat.format(initialValue) : null,
       builder: (field) {
         // 安全地将 field.value 字符串转为 DateTime，如果失败则为 null

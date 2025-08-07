@@ -210,6 +210,12 @@ class ProductEditView extends GetView<ProductEditController> {
                     name: ProductEditFields.mDesc1,
                     labelText: LocaleKeys.name.tr,
                     maxLines: 2,
+                    onChanged: (value) {
+                      controller.productEditFormKey.currentState?.patchValue({
+                        ProductEditFields.mDesc2: value?.trim(),
+                        ProductEditFields.mRemarks: value?.trim(),
+                      });
+                    },
                   ),
                 ),
                 //厨房单
