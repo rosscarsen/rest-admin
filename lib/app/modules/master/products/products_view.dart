@@ -441,14 +441,17 @@ class ProductsView extends GetView<ProductsController> {
             GridColumn(
               columnName: 'name',
               label: CustomCell(data: LocaleKeys.name.tr),
+              maximumWidth: 300,
             ),
             GridColumn(
               columnName: 'kitchenList',
               label: CustomCell(data: LocaleKeys.kitchenList.tr),
+              maximumWidth: 300,
             ),
             GridColumn(
               columnName: 'keyName',
               label: CustomCell(data: LocaleKeys.keyName.tr),
+              maximumWidth: 300,
             ),
             GridColumn(
               columnName: 'soldOut',

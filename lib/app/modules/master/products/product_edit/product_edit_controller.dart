@@ -9,6 +9,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../../config.dart';
 import '../../../../model/category_model.dart';
 import '../../../../model/product_add_or_edit_model.dart';
+import '../../../../model/products_model.dart';
 import '../../../../model/unit_model.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../service/dio_api_client.dart';
@@ -19,6 +20,7 @@ import '../../../../utils/custom_alert.dart';
 import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/form_help.dart';
 import '../../../../utils/logger.dart';
+import '../products_controller.dart';
 import 'product_barcode_source.dart';
 import 'product_edit_fields.dart';
 import 'product_set_meal_limit_source.dart';
@@ -206,7 +208,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
           .expand((e) => e.value ?? [])
           .toList();
 
-      formData['category3'] = selectedMultipleCategory.isEmpty ? '' : selectedMultipleCategory.join(",");
+      formData['mCategory3'] = selectedMultipleCategory.isEmpty ? '' : selectedMultipleCategory.join(",");
       formData.removeWhere((key, value) => key.startsWith('multipleCategory_'));
       formData['T_Product_ID'] = productID;
       // 条码
@@ -214,9 +216,47 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
       // 套餐限制
       formData.addAll({'productSetMealLimit': productSetMealLimit});
 
-      //logger.f(formData);
-      final DioApiResult dioApiResult = await apiClient.post(Config.productAddOrEditSave, data: formData);
-      logger.f(dioApiResult);
+      try {
+        CustomDialog.showLoading(LocaleKeys.saving.tr);
+        final DioApiResult dioApiResult = await apiClient.post(Config.productAddOrEditSave, data: formData);
+        if (!dioApiResult.success) {
+          return CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        }
+        final data = jsonDecode(dioApiResult.data) as Map<String, dynamic>;
+
+        switch (data["status"]) {
+          case 200:
+            CustomDialog.successMessages(productID == null ? LocaleKeys.addSuccess.tr : LocaleKeys.editSuccess.tr);
+            final apiData = data["apiResult"];
+            final ProductData newProduct = ProductData.fromJson(apiData);
+            final productCtl = Get.find<ProductsController>();
+            if (productID == null) {
+              productCtl.dataList.insert(0, newProduct);
+            } else {
+              final newID = newProduct.tProductId;
+              final oldProduct = productCtl.dataList.firstWhereOrNull((element) => element.tProductId == newID);
+              oldProduct?.copyForm(newProduct);
+            }
+            Get.back();
+            productCtl.dataSource.updateDataSource();
+            break;
+          case 201:
+            CustomDialog.errorMessages(
+              LocaleKeys.codeExists.trArgs([productEditFormKey.currentState?.fields[ProductEditFields.mCode]?.value]),
+            );
+            break;
+          case 202:
+            CustomDialog.errorMessages(productID == null ? LocaleKeys.addFailed.tr : LocaleKeys.editFailed.tr);
+            break;
+          default:
+            CustomDialog.errorMessages(LocaleKeys.unknownError.tr);
+            break;
+        }
+      } catch (e) {
+        CustomDialog.errorMessages(LocaleKeys.unknownError.tr);
+      } finally {
+        CustomDialog.dismissDialog();
+      }
     } else {
       CustomDialog.errorMessages(LocaleKeys.theFormValidateFailed.tr);
     }

@@ -231,7 +231,8 @@ class ProductsController extends GetxController {
           switch (data['status']) {
             case 200:
               CustomDialog.successMessages(LocaleKeys.deleteSuccess.tr);
-              reloadData();
+              dataList.removeWhere((element) => selectedIDS.contains(element.tProductId));
+              dataSource.updateDataSource();
               break;
             case 201:
               CustomDialog.errorMessages(LocaleKeys.ftpConnectFailed.tr);

@@ -13,7 +13,6 @@ import '../../../../translations/locale_keys.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/form_help.dart';
-import '../../../../utils/logger.dart';
 import '../../../../utils/progresshub.dart';
 import '../../../../widgets/custom_cell.dart';
 import '../../../../widgets/no_record.dart';
@@ -240,6 +239,7 @@ class ProductEditView extends GetView<ProductEditController> {
                     name: ProductEditFields.mMeasurement,
                     labelText: LocaleKeys.productRemarks.tr,
                     suffixIcon: IconButton(
+                      tooltip: LocaleKeys.selectProductRemarks.tr,
                       onPressed: () async {
                         String? result = await Get.toNamed(Routes.OPEN_PRODUCT_REMARKS);
                         if (result?.isNotEmpty ?? false) {
@@ -393,6 +393,7 @@ class ProductEditView extends GetView<ProductEditController> {
                     name: ProductEditFields.mSupplier_Code,
                     labelText: LocaleKeys.supplier.tr,
                     suffixIcon: IconButton(
+                      tooltip: LocaleKeys.selectSupplier.tr,
                       onPressed: () async {
                         var result = await Get.toNamed(Routes.OPEN_SUPPLIER);
                         controller.productEditFormKey.currentState?.fields[ProductEditFields.mSupplier_Code]?.didChange(
