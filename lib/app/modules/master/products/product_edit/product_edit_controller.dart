@@ -215,7 +215,6 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
       formData.addAll({'productBarcode': productBarcode});
       // 套餐限制
       formData.addAll({'productSetMealLimit': productSetMealLimit});
-
       try {
         CustomDialog.showLoading(LocaleKeys.saving.tr);
         final DioApiResult dioApiResult = await apiClient.post(Config.productAddOrEditSave, data: formData);
@@ -702,6 +701,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
               ..clear()
               ..addAll(productSetMealRet.map((e) => ProductSetMeal.fromJson(e)).toList());
             productSetMealSource.updateDataSource();
+            setMealLimitSource.updateDataSource();
             break;
           case 201:
             CustomDialog.errorMessages(LocaleKeys.dataIsEmptyDoNotOperation.tr);

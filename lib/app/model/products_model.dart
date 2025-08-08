@@ -79,7 +79,7 @@ class ProductData {
   String? mPrice;
   String? mDiscount;
   String? mQty;
-  dynamic mPCode;
+  String? mPCode;
   int? mSoldOut;
   String? imagesPath;
 
@@ -122,7 +122,7 @@ class ProductData {
     mPrice: json["mPrice"],
     mDiscount: json["mDiscount"],
     mQty: json["mQty"],
-    mPCode: json["mPCode"],
+    mPCode: json["mPCode"]?.toString() ?? "",
     mSoldOut: json["mSoldOut"],
     imagesPath: json["imagesPath"],
   );
@@ -193,7 +193,7 @@ class ProductData {
     String? mPrice,
     String? mDiscount,
     String? mQty,
-    dynamic? mPCode,
+    String? mPCode,
     int? mSoldOut,
     String? imagesPath,
   }) {
