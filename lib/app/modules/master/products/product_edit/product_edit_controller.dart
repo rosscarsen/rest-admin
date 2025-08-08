@@ -132,6 +132,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
     stockDataGridController.dispose();
     setMealLimitDataGridController.dispose();
     setMealDataGridController.dispose();
+    setMealController.dispose();
     super.onClose();
   }
 
@@ -289,7 +290,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
               },
             ),
             TextFormField(
-              initialValue: row.mName,
+              initialValue: row.mName ?? "",
               decoration: InputDecoration(labelText: LocaleKeys.name.tr),
               onChanged: (value) {
                 row?.mName = value;
@@ -307,7 +308,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
               },
             ),
             TextFormField(
-              initialValue: row.mRemarks,
+              initialValue: row.mRemarks ?? "",
               decoration: InputDecoration(labelText: LocaleKeys.remarks.tr),
               maxLines: 2,
               keyboardType: TextInputType.multiline,
@@ -328,11 +329,15 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
         ElevatedButton(
           onPressed: () async {
             if (formKey.currentState?.validate() ?? false) {
-              CustomDialog.successMessages(isAdd ? LocaleKeys.addSuccess.tr : LocaleKeys.editSuccess.tr);
               if (isAdd) {
                 row?.mNonActived ??= 0;
+                if (productBarcode.any((element) => element.mCode == row?.mCode)) {
+                  CustomDialog.errorMessages(LocaleKeys.codeExists.trArgs([row?.mCode ?? ""]));
+                  return;
+                }
                 productBarcode.insert(0, row!);
               }
+              CustomDialog.successMessages(isAdd ? LocaleKeys.addSuccess.tr : LocaleKeys.editSuccess.tr);
               productBarcodeSource.updateDataSource();
               Get.closeDialog();
             }

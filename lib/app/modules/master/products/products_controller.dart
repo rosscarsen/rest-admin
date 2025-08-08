@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,6 +24,7 @@ import 'products_data_source.dart';
 class ProductsController extends GetxController {
   final DataGridController dataGridController = DataGridController();
   final TextEditingController searchController = TextEditingController();
+  final copyNewCodeCtl = TextEditingController();
   static ProductsController get to => Get.find();
   final isLoading = true.obs;
   final totalPages = 0.obs;
@@ -44,6 +46,7 @@ class ProductsController extends GetxController {
   void onClose() {
     dataGridController.dispose();
     searchController.dispose();
+    copyNewCodeCtl.dispose();
     super.onClose();
   }
 
@@ -127,7 +130,107 @@ class ProductsController extends GetxController {
   //导出
   void exportSetMeal(ProductData row) {}
   //复制
-  void copy(ProductData row) {}
+  void copyProduct(int? productID) {
+    if (productID == null) {
+      CustomDialog.showToast(LocaleKeys.exception.tr);
+      return;
+    }
+    String? errorText;
+    Get.dialog(
+      barrierDismissible: false,
+      StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: Text(LocaleKeys.copyProduct.tr),
+            content: TextField(
+              autofocus: true,
+              controller: copyNewCodeCtl,
+              decoration: InputDecoration(
+                labelText: LocaleKeys.code.tr,
+                errorText: errorText,
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+              ),
+              onSubmitted: (value) async {
+                final newCode = copyNewCodeCtl.text.trim();
+                if (newCode.isEmpty) {
+                  setState(() {
+                    errorText = LocaleKeys.thisFieldIsRequired.tr;
+                  });
+                  return;
+                }
+                Get.closeDialog();
+                await doCopyProduct(productID, newCode);
+              },
+              onChanged: (value) {
+                errorText = value.isEmpty ? LocaleKeys.thisFieldIsRequired.tr : null;
+                setState(() {});
+              },
+            ),
+            actionsAlignment: MainAxisAlignment.center,
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Get.closeDialog();
+                },
+                child: Text(LocaleKeys.cancel.tr),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  final newCode = copyNewCodeCtl.text.trim();
+                  if (newCode.isEmpty) {
+                    setState(() {
+                      errorText = LocaleKeys.thisFieldIsRequired.tr;
+                    });
+                    return;
+                  }
+                  Get.closeDialog();
+                  await doCopyProduct(productID, newCode);
+                },
+                child: Text(LocaleKeys.confirm.tr),
+              ),
+            ],
+          );
+        },
+      ),
+    ).then((_) => WidgetsBinding.instance.addPostFrameCallback((_) => copyNewCodeCtl.clear()));
+  }
+
+  // 执行复制产品
+  Future<void> doCopyProduct(int productID, String code) async {
+    final Map<String, dynamic> param = {"productID": productID, "code": code};
+    try {
+      CustomDialog.showLoading(LocaleKeys.copying.tr);
+      final DioApiResult dioApiResult = await apiClient.post(Config.copyProduct, data: param);
+      if (!dioApiResult.success) {
+        return CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+      }
+      final data = jsonDecode(dioApiResult.data) as Map<String, dynamic>;
+
+      switch (data["status"]) {
+        case 200:
+          CustomDialog.successMessages(LocaleKeys.copySuccess.tr);
+          final apiData = data["apiResult"];
+          final ProductData newProduct = ProductData.fromJson(apiData);
+          dataList.insert(0, newProduct);
+          dataSource.updateDataSource();
+          break;
+        case 201:
+          CustomDialog.errorMessages(LocaleKeys.codeExists.trArgs([code]));
+          break;
+        case 202:
+          CustomDialog.errorMessages(LocaleKeys.copyFailed.tr);
+          break;
+        default:
+          CustomDialog.errorMessages(LocaleKeys.unknownError.tr);
+          break;
+      }
+    } catch (e) {
+      CustomDialog.showToast(LocaleKeys.unknownError.tr);
+    } finally {
+      CustomDialog.dismissDialog();
+    }
+  }
+
   //编辑
   void edit({ProductData? row}) {
     Get.toNamed(Routes.PRODUCT_EDIT, parameters: row != null ? {"id": row.tProductId?.toString() ?? ""} : null);

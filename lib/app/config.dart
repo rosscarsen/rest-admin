@@ -43,12 +43,12 @@ class Config {
   static String batchDeleteSetMeal = "/Master/batchDeleteSetMeal";
   // 打印条码
   static String printBarcode = "/Master/printBarcode";
-  // 产品新增或编辑
+  // 新增或编辑
   static String productAddOrEdit = "/Master/productAddOrEdit";
-  // 产品新增或编辑保存
+  // 新增或编辑保存
   static String productAddOrEditSave = "/Master/productAddOrEditSave";
-  // 类目
-  static String categories = "/Master/categories";
+  // 复制
+  static String copyProduct = "/Master/copyProduct";
   // 更新套餐
   static String productSetMealSave = "/Master/productSetMealSave";
   // 添加套餐
@@ -59,10 +59,15 @@ class Config {
   static String copyProductSetMeal = "/Master/copyProductSetMeal";
   // 清除产品表setMenu栏位
   static String updateSetMenu = "/Master/updateSetMenu";
-  //更新食品套餐
+  // 更新食品套餐
   static String updateProductSetMeal = "/Master/updateProductSetMeal";
   /* 食品主档操作 end */
 
+  /* 类目 start */
+
+  // 类目
+  static String categories = "/Master/categories";
+  /* 类目 end */
   /// 打开选择
   // 供应商
   static String openSupplier = "/Open/supplier";

@@ -97,7 +97,7 @@ class ProductsDataSource extends DataGridSource with WidgetsBindingObserver {
                         message: LocaleKeys.copy.tr,
                         child: IconButton(
                           icon: const Icon(Icons.copy, color: AppColors.copyColor),
-                          onPressed: () => controller.copy(row),
+                          onPressed: () => controller.copyProduct(row.tProductId),
                         ),
                       ),
                     ),
@@ -146,7 +146,7 @@ class ProductsDataSource extends DataGridSource with WidgetsBindingObserver {
                           if (item.menuUserInfo == "exportSetMeal") {
                             controller.exportSetMeal(row);
                           } else if (item.menuUserInfo == "copy") {
-                            controller.copy(row);
+                            controller.copyProduct(row.tProductId);
                           } else if (item.menuUserInfo == "edit") {
                             controller.edit(row: row);
                           } else if (item.menuUserInfo == "delete") {
