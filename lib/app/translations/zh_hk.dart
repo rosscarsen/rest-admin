@@ -263,4 +263,6 @@ Map<String, String> zhHK = {
   LocaleKeys.updateFailed: "更新失敗",
   LocaleKeys.updateSuccess: "更新成功",
   LocaleKeys.theFormValidateFailed: "表單驗證失敗",
+  LocaleKeys.areYouSureToUpdate: "確定更新嗎？",
+  LocaleKeys.areYouSureToDelete: "確定刪除嗎？",
 };

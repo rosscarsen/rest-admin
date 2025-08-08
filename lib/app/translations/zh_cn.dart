@@ -263,4 +263,6 @@ Map<String, String> get zhCN => {
   LocaleKeys.updateFailed: "更新失败",
   LocaleKeys.updateSuccess: "更新成功",
   LocaleKeys.theFormValidateFailed: "表单验证失败",
+  LocaleKeys.areYouSureToUpdate: "确定更新吗？",
+  LocaleKeys.areYouSureToDelete: "确定删除吗？",
 };

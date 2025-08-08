@@ -297,6 +297,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
             ),
             DropdownButtonFormField(
               value: row.mNonActived?.toString() ?? "0",
+              decoration: InputDecoration(labelText: LocaleKeys.nonEnable.tr),
               items: [
                 DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
                 DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
@@ -677,44 +678,50 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
 
   // 按钮更新套餐
   Future<void> updateProductSetMeal() async {
-    final String setMenu = setMealController.text;
-    if (setMenu.isEmpty) {
-      CustomDialog.errorMessages(LocaleKeys.dataIsEmptyDoNotOperation.tr);
-      return;
-    }
-    final Map<String, dynamic> query = {"productID": productID, "setMenu": setMealController.text};
-    try {
-      final DioApiResult dioApiResult = await apiClient.post(Config.updateProductSetMeal, data: query);
-      if (dioApiResult.success) {
-        final data = jsonDecode(dioApiResult.data) as Map<String, dynamic>;
-        switch (data["status"]) {
-          case 200:
-            CustomDialog.successMessages(LocaleKeys.operationSuccess.tr);
-            final apiResult = data['apiResult'] as Map<String, dynamic>;
-            final productSetMealLimitRet = apiResult['productSetMealLimit'] as List<dynamic>;
-            productSetMealLimit
-              ..clear()
-              ..addAll(productSetMealLimitRet.map((e) => SetMealLimit.fromJson(e)).toList());
-            productSetMealSource.updateDataSource();
-            final productSetMealRet = apiResult['productSetMeal'] as List<dynamic>;
-            productSetMeal
-              ..clear()
-              ..addAll(productSetMealRet.map((e) => ProductSetMeal.fromJson(e)).toList());
-            productSetMealSource.updateDataSource();
-            setMealLimitSource.updateDataSource();
-            break;
-          case 201:
-            CustomDialog.errorMessages(LocaleKeys.dataIsEmptyDoNotOperation.tr);
-            break;
-          default:
-            CustomDialog.errorMessages(LocaleKeys.updateFailed.tr);
-            break;
+    await CustomAlert.iosAlert(
+      LocaleKeys.areYouSureToUpdate.tr,
+      showCancel: true,
+      onConfirm: () async {
+        final String setMenu = setMealController.text;
+        if (setMenu.isEmpty) {
+          CustomDialog.errorMessages(LocaleKeys.dataIsEmptyDoNotOperation.tr);
+          return;
         }
-      } else {
-        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.operationFailed.tr);
-      }
-    } catch (e) {
-      CustomDialog.errorMessages(LocaleKeys.operationFailed.tr);
-    }
+        final Map<String, dynamic> query = {"productID": productID, "setMenu": setMealController.text};
+        try {
+          final DioApiResult dioApiResult = await apiClient.post(Config.updateProductSetMeal, data: query);
+          if (dioApiResult.success) {
+            final data = jsonDecode(dioApiResult.data) as Map<String, dynamic>;
+            switch (data["status"]) {
+              case 200:
+                CustomDialog.successMessages(LocaleKeys.operationSuccess.tr);
+                final apiResult = data['apiResult'] as Map<String, dynamic>;
+                final productSetMealLimitRet = apiResult['productSetMealLimit'] as List<dynamic>;
+                productSetMealLimit
+                  ..clear()
+                  ..addAll(productSetMealLimitRet.map((e) => SetMealLimit.fromJson(e)).toList());
+                productSetMealSource.updateDataSource();
+                final productSetMealRet = apiResult['productSetMeal'] as List<dynamic>;
+                productSetMeal
+                  ..clear()
+                  ..addAll(productSetMealRet.map((e) => ProductSetMeal.fromJson(e)).toList());
+                productSetMealSource.updateDataSource();
+                setMealLimitSource.updateDataSource();
+                break;
+              case 201:
+                CustomDialog.errorMessages(LocaleKeys.dataIsEmptyDoNotOperation.tr);
+                break;
+              default:
+                CustomDialog.errorMessages(LocaleKeys.updateFailed.tr);
+                break;
+            }
+          } else {
+            CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.operationFailed.tr);
+          }
+        } catch (e) {
+          CustomDialog.errorMessages(LocaleKeys.operationFailed.tr);
+        }
+      },
+    );
   }
 }

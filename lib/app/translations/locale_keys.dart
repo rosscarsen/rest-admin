@@ -263,4 +263,6 @@ abstract class LocaleKeys {
   static const String updateFailed = "updateFailed";
   static const String updateSuccess = "updateSuccess";
   static const String theFormValidateFailed = "theFormValidateFailed";
+  static const String areYouSureToUpdate = "areYouSureToUpdate";
+  static const String areYouSureToDelete = "areYouSureToDelete";
 }
