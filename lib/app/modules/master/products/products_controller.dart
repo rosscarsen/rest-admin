@@ -126,7 +126,7 @@ class ProductsController extends GetxController {
     }
   }
 
-  // 导出
+  // 导出套餐
   void exportSetMeal(String? productCode) async {
     try {
       CustomDialog.showLoading(LocaleKeys.generating.trArgs(["excel"]));
@@ -433,7 +433,6 @@ class ProductsController extends GetxController {
   Future<void> exportProduct() async {
     CustomDialog.showLoading(LocaleKeys.generating.trArgs(["excel"]));
     Map<String, dynamic> query = {
-      "lang": (Get.locale?.toString() ?? "zh_HK").toLowerCase(),
       ...sort,
       if (advancedSearch.isNotEmpty) ...advancedSearch,
       if (searchController.text.isNotEmpty) 'search': searchController.text,

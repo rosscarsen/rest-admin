@@ -103,7 +103,7 @@ class ApiClient {
   // 下载excel
   Future<DioApiResult> generateExcel(String path, {Object? data, Map<String, dynamic>? queryParameters}) async {
     try {
-      final finalQuery = {...?queryParameters};
+      final finalQuery = {"lang": (Get.locale?.toString() ?? "zh_HK").toLowerCase(), ...?queryParameters};
       if (data is Map<String, dynamic>) {
         finalQuery.addAll(data);
       }
