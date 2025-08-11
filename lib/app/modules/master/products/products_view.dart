@@ -497,7 +497,9 @@ class ProductsView extends GetView<ProductsController> {
               label: CustomCell(data: LocaleKeys.operation.tr),
             ),
           ],
-          placeholder: NoRecord(),
+          placeholder: NoRecord(
+            msg: controller.hasPermission.value ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
+          ),
         ),
       ),
     );

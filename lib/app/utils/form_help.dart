@@ -74,6 +74,7 @@ class FormHelper {
     TextEditingController? controller,
     int? maxDecimalDigits = 2,
     String? errorText,
+    String? hintText,
   }) {
     assert(maxLines >= 1, 'maxLines不能小于1');
     return FormBuilderTextField(
@@ -93,6 +94,7 @@ class FormHelper {
       valueTransformer: (value) => (value ?? "").trim(),
       decoration: InputDecoration(
         labelText: labelText,
+        hintText: hintText,
         //prefixIcon: prefixIcon ?? buildPrefixIconText(labelText, enabled),
         prefixIconConstraints: const BoxConstraints(maxWidth: _prefixIconMaxWidth),
         floatingLabelBehavior: FloatingLabelBehavior.always,

@@ -16,7 +16,7 @@ class CustomScaffold extends StatelessWidget {
     required this.body,
     this.actions,
     required this.title,
-    this.mobileThreshold = 768.0,
+    this.mobileThreshold = 1024,
   });
 
   final Widget body;

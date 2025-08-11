@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 import '../translations/locale_keys.dart';
 
 class NoRecord extends StatelessWidget {
-  const NoRecord({super.key});
+  const NoRecord({super.key, this.msg});
+  final String? msg;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,7 @@ class NoRecord extends StatelessWidget {
           children: [
             Icon(Icons.thumb_down_alt_outlined, size: 30),
             SizedBox(height: 8),
-            Text(LocaleKeys.noRecordFound.tr, style: TextStyle(fontSize: 16)),
+            Text(msg ?? LocaleKeys.noRecordFound.tr, style: TextStyle(fontSize: 16)),
           ],
         ),
       ),
