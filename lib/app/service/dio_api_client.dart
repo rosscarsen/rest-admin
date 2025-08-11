@@ -101,7 +101,7 @@ class ApiClient {
   }
 
   // 下载excel
-  Future<DioApiResult> downLoadExcel(String path, {Object? data, Map<String, dynamic>? queryParameters}) async {
+  Future<DioApiResult> generateExcel(String path, {Object? data, Map<String, dynamic>? queryParameters}) async {
     try {
       final finalQuery = {...?queryParameters};
       if (data is Map<String, dynamic>) {

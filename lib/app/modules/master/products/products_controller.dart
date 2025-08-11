@@ -85,7 +85,7 @@ class ProductsController extends GetxController {
     });
   }
 
-  ///获取产品列表
+  // 获取产品列表
   Future<void> getProduct() async {
     isLoading(true);
     dataList.clear();
@@ -127,9 +127,32 @@ class ProductsController extends GetxController {
     }
   }
 
-  //导出
-  void exportSetMeal(ProductData row) {}
-  //复制
+  // 导出
+  void exportSetMeal(String? productCode) async {
+    try {
+      CustomDialog.showLoading(LocaleKeys.generating.trArgs(["excel"]));
+      final Map<String, dynamic> param = {"productCode": productCode};
+      final DioApiResult dioApiResult = await apiClient.generateExcel(Config.exportSetMealExcel, data: param);
+      logger.e(dioApiResult);
+      if (!dioApiResult.success) {
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.noPermission.tr);
+        return;
+      }
+      if (dioApiResult.data is Uint8List) {
+        FileStorage.saveFileToDownloads(
+          bytes: dioApiResult.data as Uint8List,
+          fileName: dioApiResult.fileName!,
+          fileType: DownloadFileType.Excel,
+        );
+      }
+    } catch (e) {
+      CustomDialog.errorMessages(e.toString());
+    } finally {
+      CustomDialog.dismissDialog();
+    }
+  }
+
+  // 复制
   void copyProduct(int? productID) {
     if (productID == null) {
       CustomDialog.showToast(LocaleKeys.exception.tr);
@@ -243,7 +266,7 @@ class ProductsController extends GetxController {
     await deleteRemoteProduct([row.tProductId]);
   }
 
-  //批量删除食品
+  // 批量删除食品
   void deleteSelectedRows() async {
     final selectedRows = dataGridController.selectedRows;
     if (selectedRows.isEmpty) {
@@ -308,7 +331,7 @@ class ProductsController extends GetxController {
     );
   }
 
-  //远程删除
+  // 远程删除
   Future<void> deleteRemoteProduct(List<dynamic> selectedIDS) async {
     CustomAlert.iosAlert(
       showCancel: true,
@@ -418,7 +441,7 @@ class ProductsController extends GetxController {
     };
 
     try {
-      final DioApiResult dioApiResult = await apiClient.downLoadExcel(
+      final DioApiResult dioApiResult = await apiClient.generateExcel(
         Config.exportProductExcel,
         queryParameters: query,
       );

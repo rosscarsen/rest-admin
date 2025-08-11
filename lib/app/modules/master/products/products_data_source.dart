@@ -88,7 +88,7 @@ class ProductsDataSource extends DataGridSource with WidgetsBindingObserver {
                         message: LocaleKeys.exportSetMeal.tr,
                         child: IconButton(
                           icon: const Icon(Icons.file_open, color: AppColors.exportColor),
-                          onPressed: () => controller.exportSetMeal(row),
+                          onPressed: () => controller.exportSetMeal(row.mCode),
                         ),
                       ),
                     ),
@@ -144,7 +144,7 @@ class ProductsDataSource extends DataGridSource with WidgetsBindingObserver {
                         ),
                         onClickMenu: (MenuItemProvider item) {
                           if (item.menuUserInfo == "exportSetMeal") {
-                            controller.exportSetMeal(row);
+                            controller.exportSetMeal(row.mCode);
                           } else if (item.menuUserInfo == "copy") {
                             controller.copyProduct(row.tProductId);
                           } else if (item.menuUserInfo == "edit") {
