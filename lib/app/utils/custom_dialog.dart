@@ -8,15 +8,53 @@ class CustomDialog {
       notifyType: NotifyType.success,
       clickMaskDismiss: false,
       animationType: SmartAnimationType.fade,
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Colors.black),
+          child: Column(
+            spacing: 8.0,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.check_circle, color: Colors.green, size: 30),
+              Text(
+                msg,
+                style: const TextStyle(color: Colors.green, fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
   static Future<void> errorMessages(String msg) async {
     await SmartDialog.showNotify(
       msg: msg,
-      notifyType: NotifyType.failure,
+      notifyType: NotifyType.error,
       clickMaskDismiss: false,
       animationType: SmartAnimationType.fade,
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: Colors.black),
+          child: Column(
+            spacing: 8.0,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.error_outline, color: Colors.redAccent, size: 30),
+              Text(
+                msg,
+                style: const TextStyle(color: Colors.redAccent, fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
