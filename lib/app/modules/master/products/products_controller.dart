@@ -363,8 +363,12 @@ class ProductsController extends GetxController {
               CustomDialog.errorMessages(LocaleKeys.ftpConnectFailed.tr);
               break;
             case 202:
-              logger.f(data['msg']);
-              CustomAlert.iosAlert(LocaleKeys.exitsTxCannotDelete.tr.trArgs([data['msg']]));
+              CustomAlert.iosAlert(
+                LocaleKeys.exitsTxCannotDelete.tr.trArgs([data['msg']]),
+                onConfirm: () {
+                  reloadData();
+                },
+              );
             default:
               CustomDialog.errorMessages(LocaleKeys.unknownError.tr);
           }
