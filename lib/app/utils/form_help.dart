@@ -208,7 +208,7 @@ class FormHelper {
     bool enabled = true,
     bool canClear = true,
     FormFieldValidator<String?>? validator,
-    DateTime? initialValue,
+    dynamic initialValue, // ✅ 支持 DateTime 或 String
     void Function(String?)? onSaved,
     void Function(String?)? onChanged,
     DateTime? firstDate,
@@ -231,6 +231,14 @@ class FormHelper {
       DateInputType.dateAndTime: DateTimeFieldPickerMode.dateAndTime,
     }[inputType]!;
 
+    // ✅ 统一转换 initialValue 为字符串（内部统一逻辑）
+    String? normalizeInitialValue(dynamic value) {
+      if (value == null) return null;
+      if (value is DateTime) return effectiveDateFormat.format(value);
+      if (value is String && value.trim().isNotEmpty) return value.trim();
+      return null;
+    }
+
     return FormBuilderField<String>(
       name: name,
       enabled: enabled,
@@ -238,13 +246,28 @@ class FormHelper {
       onSaved: onSaved,
       onChanged: onChanged,
       valueTransformer: (value) => (value?.toString() ?? "").trim(),
-      initialValue: initialValue != null ? effectiveDateFormat.format(initialValue) : null,
+      initialValue: normalizeInitialValue(initialValue),
       builder: (field) {
-        // 安全地将 field.value 字符串转为 DateTime，如果失败则为 null
         DateTime? getDateTimeFromValue(String? value) {
           if (value == null || value.isEmpty) return null;
           try {
-            return DateTime.tryParse(value) ?? effectiveDateFormat.parseStrict(value); // 尝试 ISO 格式或用户格式
+            final iso = DateTime.tryParse(value);
+            if (iso != null) return iso;
+
+            String normalized = value;
+
+            if (inputType == DateInputType.time && RegExp(r'^\d{2}:\d{2}:\d{2}$').hasMatch(normalized)) {
+              normalized = normalized.substring(0, 5);
+            }
+            if (inputType == DateInputType.dateAndTime &&
+                RegExp(r'^\d{4}[-/]\d{2}[-/]\d{2} \d{2}:\d{2}:\d{2}$').hasMatch(normalized)) {
+              normalized = normalized.substring(0, 16);
+            }
+            if (inputType == DateInputType.date && RegExp(r'^\d{4}/\d{2}/\d{2}$').hasMatch(normalized)) {
+              normalized = normalized.replaceAll('/', '-');
+            }
+
+            return effectiveDateFormat.parseStrict(normalized);
           } catch (e) {
             return null;
           }
