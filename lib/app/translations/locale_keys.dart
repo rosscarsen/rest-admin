@@ -265,4 +265,17 @@ abstract class LocaleKeys {
   static const String theFormValidateFailed = "theFormValidateFailed";
   static const String areYouSureToUpdate = "areYouSureToUpdate";
   static const String areYouSureToDelete = "areYouSureToDelete";
+  static const String layer = "layer";
+  static const String startTime = "startTime";
+  static const String endTime = "endTime";
+  static const String deactivate = "deactivate";
+  static const String customerHide = "customerHide";
+  static const String takeawayHide = "takeawayHide";
+  static const String kiosk = "kiosk";
+  static const String description = "description";
+  static const String childrenCategory = "childrenCategory";
+  static const String moreOperation = "moreOperation";
+  static const String categoryAdd = "categoryAdd";
+  static const String categoryEdit = "categoryEdit";
+  static const String adding = "adding";
 }

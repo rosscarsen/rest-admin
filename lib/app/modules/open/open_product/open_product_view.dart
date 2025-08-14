@@ -132,7 +132,7 @@ class OpenProductView extends GetView<OpenProductController> {
               label: CustomCell(data: LocaleKeys.productRemarks.tr),
             ),
           ],
-          placeholder: NoRecord(),
+          placeholder: NoRecordPermission(),
         ),
       ),
     );

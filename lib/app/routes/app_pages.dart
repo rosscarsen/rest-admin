@@ -4,6 +4,8 @@ import '../Middlewares/auth_middleware.dart';
 import '../modules/dashboard/dashboard_binding.dart';
 import '../modules/dashboard/dashboard_view.dart';
 import '../modules/master/category/category_binding.dart';
+import '../modules/master/category/category_edit/category_edit_binding.dart';
+import '../modules/master/category/category_edit/category_edit_view.dart';
 import '../modules/master/category/category_view.dart';
 import '../modules/master/master_binding.dart';
 import '../modules/master/master_view.dart';
@@ -44,10 +46,7 @@ class AppPages {
   AppPages._();
 
   static final routes = [
-    GetPage(
-        name: _Paths.SIGNIN,
-        page: () => const SigninView(),
-        binding: SigninBinding()),
+    GetPage(name: _Paths.SIGNIN, page: () => const SigninView(), binding: SigninBinding()),
     GetPage(
       name: _Paths.DASHBOARD,
       page: () => const DashboardView(),
@@ -87,19 +86,17 @@ class AppPages {
           name: _Paths.OPEN_MULTIPLE_PRODUCT,
           page: () => const OpenMultipleProductView(),
           binding: OpenMultipleProductBinding(),
+          middlewares: [AuthMiddleware()],
         ),
         GetPage(
           name: _Paths.OPEN_SET_MEAL,
           page: () => const OpenSetMealView(),
           binding: OpenSetMealBinding(),
+          middlewares: [AuthMiddleware()],
         ),
       ],
     ),
-    GetPage(
-        name: _Paths.PDF,
-        page: () => const PdfView(),
-        binding: PdfBinding(),
-        middlewares: [AuthMiddleware()]),
+    GetPage(name: _Paths.PDF, page: () => const PdfView(), binding: PdfBinding(), middlewares: [AuthMiddleware()]),
     GetPage(
       name: _Paths.MASTER,
       page: () => const MasterView(),
@@ -110,6 +107,14 @@ class AppPages {
           page: () => const CategoryView(),
           binding: CategoryBinding(),
           middlewares: [AuthMiddleware()],
+          children: [
+            GetPage(
+              name: _Paths.CATEGORY_EDIT,
+              page: () => const CategoryEditView(),
+              binding: CategoryEditBinding(),
+              middlewares: [AuthMiddleware()],
+            ),
+          ],
         ),
         GetPage(
           name: _Paths.PRODUCTS,
@@ -133,6 +138,7 @@ class AppPages {
                   name: _Paths.COPY_PRODUCT_SET_MEAL,
                   page: () => const CopyProductSetMealView(),
                   binding: CopyProductSetMealBinding(),
+                  middlewares: [AuthMiddleware()],
                 ),
               ],
             ),

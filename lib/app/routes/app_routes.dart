@@ -29,6 +29,8 @@ abstract class Routes {
       _Paths.PRODUCTS +
       _Paths.PRODUCT_EDIT +
       _Paths.COPY_PRODUCT_SET_MEAL;
+  static const CATEGORY_EDIT =
+      _Paths.MASTER + _Paths.CATEGORY + _Paths.CATEGORY_EDIT;
 }
 
 abstract class _Paths {
@@ -52,4 +54,5 @@ abstract class _Paths {
   static const OPEN_MULTIPLE_PRODUCT = '/open-multiple-product';
   static const OPEN_SET_MEAL = '/open-set-meal';
   static const COPY_PRODUCT_SET_MEAL = '/copy-product-set-meal';
+  static const CATEGORY_EDIT = '/category-edit';
 }

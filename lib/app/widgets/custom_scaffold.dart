@@ -30,13 +30,13 @@ class CustomScaffold extends StatelessWidget {
     return KeyedSubtree(
       key: ObjectKey(Get.locale),
       child: AdminScaffold(
-        backgroundColor: Colors.white,
+        //backgroundColor: Colors.white,
         leadingIcon: Icon(Icons.menu),
         mobileThreshold: mobileThreshold,
         appBar: AppBar(
           title: Text(title),
-          backgroundColor: Theme.of(context).primaryColor,
-          foregroundColor: Colors.white,
+          //backgroundColor: Theme.of(context).primaryColor,
+          //foregroundColor: Colors.white,
           actions: actions,
         ),
 

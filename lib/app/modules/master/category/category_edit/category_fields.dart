@@ -1,0 +1,29 @@
+class CategoryFields {
+  static const mCategory = "mCategory";
+  static const mParent = "mParent";
+  static const mDescription = "mDescription";
+  static const T_Category_ID = "T_Category_ID";
+  static const mDiscount = "mDiscount";
+  static const mDateTimeStart = "mDateTimeStart";
+  static const mDateTimeEnd = "mDateTimeEnd";
+  static const mPrinter = "mPrinter";
+  static const mContinue = "mContinue";
+  static const mTimeStart = "mTimeStart";
+  static const mTimeEnd = "mTimeEnd";
+  static const mTimeZone = "mTimeZone";
+  static const mStockCode = "mStockCode";
+  static const mHide = "mHide";
+  static const mSetColor = "mSetColor";
+  static const mPrintType = "mPrintType";
+  static const mPrintTemp = "mPrintTemp";
+  static const mQty = "mQty";
+  static const mHidden = "mHidden";
+  static const mNon_WebHide = "mNon_WebHide";
+  static const mBDLPrinter = "mBDLPrinter";
+  static const mCustomer_self_help_Hide = "mCustomer_self_help_Hide";
+  static const mTakeaway_display = "mTakeaway_display";
+  static const mKiosk = "mKiosk";
+  static const mNonContinue = "mNonContinue";
+  static const mSort = "mSort";
+  static const tier = "tier";
+}

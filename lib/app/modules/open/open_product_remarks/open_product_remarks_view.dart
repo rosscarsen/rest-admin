@@ -105,7 +105,7 @@ class OpenProductRemarksView extends GetView<OpenProductRemarksController> {
               maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
             ),
           ],
-          placeholder: NoRecord(),
+          placeholder: NoRecordPermission(),
         ),
       ),
     );

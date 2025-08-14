@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 
 import '../translations/locale_keys.dart';
 
-class NoRecord extends StatelessWidget {
-  const NoRecord({super.key, this.msg});
+class NoRecordPermission extends StatelessWidget {
+  const NoRecordPermission({super.key, this.msg});
   final String? msg;
 
   @override

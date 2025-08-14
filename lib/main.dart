@@ -83,7 +83,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         appBarTheme: AppBarTheme(
           backgroundColor: Theme.of(context).colorScheme.primary,
-          foregroundColor: Colors.white,
+          foregroundColor: Theme.of(context).colorScheme.onPrimary,
           centerTitle: true,
         ),
         inputDecorationTheme: InputDecorationTheme(

@@ -113,7 +113,7 @@ class OpenSupplierView extends GetView<OpenSupplierController> {
               label: CustomCell(data: LocaleKeys.fax.tr),
             ),
           ],
-          placeholder: NoRecord(),
+          placeholder: NoRecordPermission(),
         ),
       ),
     );

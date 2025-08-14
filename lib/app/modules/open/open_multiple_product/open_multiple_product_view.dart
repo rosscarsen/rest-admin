@@ -154,7 +154,7 @@ class OpenMultipleProductView extends GetView<OpenMultipleProductController> {
               label: CustomCell(data: LocaleKeys.qty.tr),
             ),
           ],
-          placeholder: NoRecord(),
+          placeholder: NoRecordPermission(),
         ),
       ),
     );

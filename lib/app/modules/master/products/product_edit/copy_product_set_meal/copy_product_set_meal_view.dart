@@ -138,7 +138,7 @@ class CopyProductSetMealView extends GetView<CopyProductSetMealController> {
                       columnWidthMode: ColumnWidthMode.fitByColumnName,
                     ),
                   ],
-                  placeholder: NoRecord(),
+                  placeholder: NoRecordPermission(),
                 ),
               ),
             ),

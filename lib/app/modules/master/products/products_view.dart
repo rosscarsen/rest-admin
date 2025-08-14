@@ -413,11 +413,7 @@ class ProductsView extends GetView<ProductsController> {
           frozenColumnsCount: 1,
           gridLinesVisibility: GridLinesVisibility.both,
           headerGridLinesVisibility: GridLinesVisibility.both,
-          columnWidthMode: controller.dataSource.rows.isEmpty
-              ? context.isPhoneOrLess
-                    ? ColumnWidthMode.fitByColumnName
-                    : ColumnWidthMode.fill
-              : ColumnWidthMode.auto,
+          columnWidthMode: controller.dataSource.rows.isEmpty ? ColumnWidthMode.fitByColumnName : ColumnWidthMode.auto,
           columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
           showCheckboxColumn: true,
           selectionMode: SelectionMode.multiple,
@@ -497,7 +493,7 @@ class ProductsView extends GetView<ProductsController> {
               label: CustomCell(data: LocaleKeys.operation.tr),
             ),
           ],
-          placeholder: NoRecord(
+          placeholder: NoRecordPermission(
             msg: controller.hasPermission.value ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
           ),
         ),

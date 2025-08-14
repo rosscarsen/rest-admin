@@ -228,6 +228,9 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
           case 200:
             CustomDialog.successMessages(productID == null ? LocaleKeys.addSuccess.tr : LocaleKeys.editSuccess.tr);
             final apiData = data["apiResult"];
+            if (apiData == null) {
+              return;
+            }
             final ProductData newProduct = ProductData.fromJson(apiData);
             final productCtl = Get.find<ProductsController>();
             if (productID == null) {
@@ -645,6 +648,9 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
       final DioApiResult dioApiResult = await apiClient.post(Config.copyProductSetMeal, data: query);
       final Map<String, dynamic> data = jsonDecode(dioApiResult.data) as Map<String, dynamic>;
       if (data["status"] == 200) {
+        if (data["apiResult"] == null) {
+          return;
+        }
         CustomDialog.successMessages(LocaleKeys.copySuccess.tr);
         productSetMeal
           ..clear()
@@ -699,6 +705,9 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
             final data = jsonDecode(dioApiResult.data) as Map<String, dynamic>;
             switch (data["status"]) {
               case 200:
+                if (data['apiResult'] == null) {
+                  return;
+                }
                 CustomDialog.successMessages(LocaleKeys.operationSuccess.tr);
                 final apiResult = data['apiResult'] as Map<String, dynamic>;
                 final productSetMealLimitRet = apiResult['productSetMealLimit'] as List<dynamic>;

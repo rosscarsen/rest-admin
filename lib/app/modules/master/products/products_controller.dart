@@ -232,6 +232,9 @@ class ProductsController extends GetxController {
         case 200:
           CustomDialog.successMessages(LocaleKeys.copySuccess.tr);
           final apiData = data["apiResult"];
+          if (apiData == null) {
+            return;
+          }
           final ProductData newProduct = ProductData.fromJson(apiData);
           dataList.insert(0, newProduct);
           dataSource.updateDataSource();

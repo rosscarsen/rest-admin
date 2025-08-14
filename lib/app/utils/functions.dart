@@ -124,4 +124,20 @@ class Functions {
       return null;
     }
   }
+
+  /// 比较map是否一样
+  /// sourceMap 源数据
+  /// targetMap 目标数据
+  static bool compareMap(Map<String, dynamic> sourceMap, Map<String, dynamic> targetMap) {
+    // 1. 只保留目标字段
+    final sourceRowFiltered = Map.fromEntries(sourceMap.entries.where((e) => targetMap.containsKey(e.key)));
+
+    // 2. 类型统一（全部转字符串）
+    final normalizedSource = sourceRowFiltered.map((k, v) => MapEntry(k, (v ?? "").toString()));
+    final normalizedTarget = targetMap.map((k, v) => MapEntry(k, (v ?? '').toString()));
+
+    // 3. 比较
+    const eq = DeepCollectionEquality();
+    return eq.equals(normalizedSource, normalizedTarget);
+  }
 }

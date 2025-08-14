@@ -67,7 +67,19 @@ class Config {
 
   // 类目
   static String categories = "/Master/categories";
+  // 类目添加或编辑
+  static String categoryAddOrEdit = "/Master/categoryAddOrEdit";
+  // 类目保存
+  static String categorySave = "/Master/categorySave";
+  // 类目删除
+  static String categoryDelete = "/Master/categoryDelete";
+  // 导出类目
+  static String exportCategoryExcel = "/Excel/categoryExport";
+  // 导入类目
+  static String importCategoryExcel = "/Excel/categoryImport";
+
   /* 类目 end */
+
   /// 打开选择
   // 供应商
   static String openSupplier = "/Open/supplier";
@@ -87,6 +99,6 @@ class Config {
   static String exportProductExcel = "/Excel/exportProduct";
   // 导入产品
   static String importProductExcel = "/Excel/importProduct";
-  //导出套餐
+  // 导出套餐
   static String exportSetMealExcel = "/Excel/setMealExport";
 }

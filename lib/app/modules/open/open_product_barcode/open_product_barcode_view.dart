@@ -99,7 +99,7 @@ class OpenProductBarcodeView extends GetView<OpenProductBarcodeController> {
               columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.auto : ColumnWidthMode.fill,
             ),
           ],
-          placeholder: NoRecord(),
+          placeholder: NoRecordPermission(),
         ),
       ),
     );

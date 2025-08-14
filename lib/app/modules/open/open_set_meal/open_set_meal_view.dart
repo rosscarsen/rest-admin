@@ -99,7 +99,7 @@ class OpenSetMealView extends GetView<OpenSetMealController> {
                       columnWidthMode: ColumnWidthMode.fill,
                     ),
                   ],
-                  placeholder: NoRecord(),
+                  placeholder: NoRecordPermission(),
                 ),
               ),
             ),

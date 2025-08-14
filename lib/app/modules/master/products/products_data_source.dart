@@ -134,6 +134,7 @@ class ProductsDataSource extends DataGridSource with WidgetsBindingObserver {
                 )
               : Center(
                   child: IconButton(
+                    tooltip: LocaleKeys.moreOperation.tr,
                     key: globalKey,
                     onPressed: () {
                       PopupMenu menu = PopupMenu(

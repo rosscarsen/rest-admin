@@ -99,10 +99,9 @@ class CategoryModel {
     mNonContinue: json["mNonContinue"],
     mSort: json["mSort"],
     tier: json["tier"],
-    children:
-        json["children"] == null
-            ? []
-            : List<CategoryModel>.from(json["children"]!.map((x) => CategoryModel.fromJson(x))),
+    children: json["children"] == null
+        ? []
+        : List<CategoryModel>.from(json["children"]!.map((x) => CategoryModel.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -139,5 +138,98 @@ class CategoryModel {
   @override
   String toString() {
     return 'CategoryModel(mCategory: $mCategory, mParent: $mParent, mDescription: $mDescription, tCategoryId: $tCategoryId, mDiscount: $mDiscount, mDateTimeStart: $mDateTimeStart, mDateTimeEnd: $mDateTimeEnd, mPrinter: $mPrinter, mContinue: $mContinue, mTimeStart: $mTimeStart, mTimeEnd: $mTimeEnd, mTimeZone: $mTimeZone, mStockCode: $mStockCode, mHide: $mHide, mSetColor: $mSetColor, mPrintType: $mPrintType, mPrintTemp: $mPrintTemp, mQty: $mQty, mHidden: $mHidden, mNonWebHide: $mNonWebHide, mBdlPrinter: $mBdlPrinter, mCustomerSelfHelpHide: $mCustomerSelfHelpHide, mTakeawayDisplay: $mTakeawayDisplay, mKiosk: $mKiosk, mNonContinue: $mNonContinue, mSort: $mSort, tier: $tier, children: $children)';
+  }
+
+  CategoryModel copyWith({
+    String? mCategory,
+    String? mParent,
+    String? mDescription,
+    int? tCategoryId,
+    String? mDiscount,
+    String? mDateTimeStart,
+    String? mDateTimeEnd,
+    String? mPrinter,
+    int? mContinue,
+    String? mTimeStart,
+    String? mTimeEnd,
+    int? mTimeZone,
+    String? mStockCode,
+    int? mHide,
+    int? mSetColor,
+    int? mPrintType,
+    String? mPrintTemp,
+    int? mQty,
+    int? mHidden,
+    int? mNonWebHide,
+    String? mBdlPrinter,
+    int? mCustomerSelfHelpHide,
+    int? mTakeawayDisplay,
+    int? mKiosk,
+    int? mNonContinue,
+    int? mSort,
+    int? tier,
+    List<CategoryModel>? children,
+  }) {
+    return CategoryModel(
+      mCategory: mCategory ?? this.mCategory,
+      mParent: mParent ?? this.mParent,
+      mDescription: mDescription ?? this.mDescription,
+      tCategoryId: tCategoryId ?? this.tCategoryId,
+      mDiscount: mDiscount ?? this.mDiscount,
+      mDateTimeStart: mDateTimeStart ?? this.mDateTimeStart,
+      mDateTimeEnd: mDateTimeEnd ?? this.mDateTimeEnd,
+      mPrinter: mPrinter ?? this.mPrinter,
+      mContinue: mContinue ?? this.mContinue,
+      mTimeStart: mTimeStart ?? this.mTimeStart,
+      mTimeEnd: mTimeEnd ?? this.mTimeEnd,
+      mTimeZone: mTimeZone ?? this.mTimeZone,
+      mStockCode: mStockCode ?? this.mStockCode,
+      mHide: mHide ?? this.mHide,
+      mSetColor: mSetColor ?? this.mSetColor,
+      mPrintType: mPrintType ?? this.mPrintType,
+      mPrintTemp: mPrintTemp ?? this.mPrintTemp,
+      mQty: mQty ?? this.mQty,
+      mHidden: mHidden ?? this.mHidden,
+      mNonWebHide: mNonWebHide ?? this.mNonWebHide,
+      mBdlPrinter: mBdlPrinter ?? this.mBdlPrinter,
+      mCustomerSelfHelpHide: mCustomerSelfHelpHide ?? this.mCustomerSelfHelpHide,
+      mTakeawayDisplay: mTakeawayDisplay ?? this.mTakeawayDisplay,
+      mKiosk: mKiosk ?? this.mKiosk,
+      mNonContinue: mNonContinue ?? this.mNonContinue,
+      mSort: mSort ?? this.mSort,
+      tier: tier ?? this.tier,
+      children: children ?? this.children,
+    );
+  }
+
+  void copyFrom(CategoryModel model) {
+    mCategory = model.mCategory;
+    mParent = model.mParent;
+    mDescription = model.mDescription;
+    tCategoryId = model.tCategoryId;
+    mDiscount = model.mDiscount;
+    mDateTimeStart = model.mDateTimeStart;
+    mDateTimeEnd = model.mDateTimeEnd;
+    mPrinter = model.mPrinter;
+    mContinue = model.mContinue;
+    mTimeStart = model.mTimeStart;
+    mTimeEnd = model.mTimeEnd;
+    mTimeZone = model.mTimeZone;
+    mStockCode = model.mStockCode;
+    mHide = model.mHide;
+    mSetColor = model.mSetColor;
+    mPrintType = model.mPrintType;
+    mPrintTemp = model.mPrintTemp;
+    mQty = model.mQty;
+    mHidden = model.mHidden;
+    mNonWebHide = model.mNonWebHide;
+    mBdlPrinter = model.mBdlPrinter;
+    mCustomerSelfHelpHide = model.mCustomerSelfHelpHide;
+    mTakeawayDisplay = model.mTakeawayDisplay;
+    mKiosk = model.mKiosk;
+    mNonContinue = model.mNonContinue;
+    mSort = model.mSort;
+    tier = model.tier;
+    children = model.children;
   }
 }
