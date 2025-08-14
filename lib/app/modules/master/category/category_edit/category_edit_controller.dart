@@ -3,10 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:rest_admin/app/modules/master/category/category_edit/category_fields.dart';
 
 import '../../../../config.dart';
-import '../../../../model/categories_model.dart';
 import '../../../../model/category_model.dart';
 import '../../../../service/dio_api_client.dart';
 import '../../../../service/dio_api_result.dart';
@@ -15,6 +13,7 @@ import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/functions.dart';
 import '../../../../utils/logger.dart';
 import '../category_controller.dart';
+import 'category_fields.dart';
 
 class CategoryEditController extends GetxController {
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();

@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-
 import 'package:get/get.dart';
 import 'package:responsive_grid/responsive_grid.dart';
-import 'package:rest_admin/app/translations/locale_keys.dart';
-import 'package:rest_admin/app/utils/form_help.dart';
-import 'package:rest_admin/app/widgets/no_record.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-import '../../../../utils/logger.dart';
+import '../../../../translations/locale_keys.dart';
+import '../../../../utils/form_help.dart';
+import '../../../../widgets/no_record.dart';
 import 'category_edit_controller.dart';
 import 'category_fields.dart';
 
