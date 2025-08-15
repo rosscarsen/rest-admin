@@ -278,4 +278,8 @@ Map<String, String> get enUS => {
   LocaleKeys.categoryAdd: "Add %s Category",
   LocaleKeys.categoryEdit: "Edit %s Category",
   LocaleKeys.adding: "adding...",
+  LocaleKeys.kitchenBarPrinter: "Kitchen Bar Printer",
+  LocaleKeys.continuePrint: "Continue Print",
+  LocaleKeys.BDLPrinter: "BDL Printer",
+  LocaleKeys.parentCategory: "Parent Category",
 };

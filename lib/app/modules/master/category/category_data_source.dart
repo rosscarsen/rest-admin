@@ -78,7 +78,7 @@ class CategoryDataSource extends DataGridSource with WidgetsBindingObserver {
                         message: LocaleKeys.childrenCategory.tr,
                         child: IconButton(
                           icon: const Icon(Icons.category, color: Colors.blue),
-                          onPressed: () => controller.openChildCategory(row.tCategoryId),
+                          onPressed: () => controller.openChildCategory(row.mCategory),
                         ),
                       ),
                     ),
@@ -129,7 +129,7 @@ class CategoryDataSource extends DataGridSource with WidgetsBindingObserver {
                         onClickMenu: (MenuItemProvider item) {
                           if (item.menuUserInfo == "childrenCategory") {
                             // 子分类
-                            controller.openChildCategory(row.tCategoryId);
+                            controller.openChildCategory(row.mCategory);
                           } else if (item.menuUserInfo == "export") {
                             // 导出
                             controller.exportCategory(id: row.tCategoryId);

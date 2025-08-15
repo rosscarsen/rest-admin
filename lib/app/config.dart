@@ -17,18 +17,17 @@ class Config {
   //static String baseurl = "https://api.friendsclub.com/restAdmin";
   static String baseurl = "http://www.api.cn/restAdmin";
 
-  /// 登录
-  //登录
+  /* 登录模块===================================================================*/
   static String login = "/Login/login";
-  //退出登录
+  // 退出登录
   static String logout = "/Login/logout";
-
-  /// 销售概述
+  // 销售概述
   static String chartData = "/dashboard/chartData";
 
-  /// 主档
+  /// 主档===================================================================
 
-  /* 食品主档操作 start */
+  /* 产品管理模块=======*/
+
   // 图片上传
   static String uploadProductImage = "/Master/uploadImage";
   // 获取产品列表
@@ -61,11 +60,10 @@ class Config {
   static String updateSetMenu = "/Master/updateSetMenu";
   // 更新食品套餐
   static String updateProductSetMeal = "/Master/updateProductSetMeal";
-  /* 食品主档操作 end */
 
-  /* 类目 start */
+  /* 类目管理模块================*/
 
-  // 类目
+  // 类目1列表
   static String categories = "/Master/categories";
   // 类目添加或编辑
   static String categoryAddOrEdit = "/Master/categoryAddOrEdit";
@@ -77,10 +75,16 @@ class Config {
   static String exportCategoryExcel = "/Excel/categoryExport";
   // 导入类目
   static String importCategoryExcel = "/Excel/categoryImport";
+  // 类目1列表
+  static String category2 = "/Master/category2";
+  // 类目2添加或编辑
+  static String category2AddOrEdit = "/Master/category2AddOrEdit";
+  // 类目2保存
+  static String category2Save = "/Master/category2Save";
+  // 类目2删除
+  static String category2Delete = "/Master/category2Delete";
 
-  /* 类目 end */
-
-  /// 打开选择
+  /// 打开选择===================================================================
   // 供应商
   static String openSupplier = "/Open/supplier";
   // 食品

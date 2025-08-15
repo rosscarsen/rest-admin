@@ -278,4 +278,8 @@ Map<String, String> zhHK = {
   LocaleKeys.categoryAdd: "添加%s类目",
   LocaleKeys.categoryEdit: "编辑%s类目",
   LocaleKeys.adding: "添加中...",
+  LocaleKeys.kitchenBarPrinter: "廚房/水吧列印機",
+  LocaleKeys.continuePrint: "繼續列印",
+  LocaleKeys.BDLPrinter: "BDL列印機",
+  LocaleKeys.parentCategory: "父类目",
 };

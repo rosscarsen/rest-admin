@@ -3,6 +3,10 @@ import 'package:get/get.dart';
 import '../Middlewares/auth_middleware.dart';
 import '../modules/dashboard/dashboard_binding.dart';
 import '../modules/dashboard/dashboard_view.dart';
+import '../modules/master/category/category2/category2_binding.dart';
+import '../modules/master/category/category2/category2_edit/category2_edit_binding.dart';
+import '../modules/master/category/category2/category2_edit/category2_edit_view.dart';
+import '../modules/master/category/category2/category2_view.dart';
 import '../modules/master/category/category_binding.dart';
 import '../modules/master/category/category_edit/category_edit_binding.dart';
 import '../modules/master/category/category_edit/category_edit_view.dart';
@@ -113,6 +117,20 @@ class AppPages {
               page: () => const CategoryEditView(),
               binding: CategoryEditBinding(),
               middlewares: [AuthMiddleware()],
+            ),
+            GetPage(
+              name: _Paths.CATEGORY2,
+              page: () => const Category2View(),
+              binding: Category2Binding(),
+              middlewares: [AuthMiddleware()],
+              children: [
+                GetPage(
+                  name: _Paths.CATEGORY2_EDIT,
+                  page: () => const Category2EditView(),
+                  binding: Category2EditBinding(),
+                  middlewares: [AuthMiddleware()],
+                ),
+              ],
             ),
           ],
         ),

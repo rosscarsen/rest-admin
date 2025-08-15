@@ -278,4 +278,8 @@ Map<String, String> get zhCN => {
   LocaleKeys.categoryAdd: "添加%s类目",
   LocaleKeys.categoryEdit: "编辑%s类目",
   LocaleKeys.adding: "添加中...",
+  LocaleKeys.kitchenBarPrinter: "厨房/水吧打印机",
+  LocaleKeys.continuePrint: "连续打印",
+  LocaleKeys.BDLPrinter: "BDL打印机",
+  LocaleKeys.parentCategory: "父类目",
 };

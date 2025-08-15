@@ -46,6 +46,7 @@ class ProductsController extends GetxController {
     dataGridController.dispose();
     searchController.dispose();
     copyNewCodeCtl.dispose();
+    dataSource.dispose();
     super.onClose();
   }
 

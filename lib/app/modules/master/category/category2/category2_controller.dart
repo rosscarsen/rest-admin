@@ -1,39 +1,36 @@
 import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../../config.dart';
-import '../../../model/category_model.dart';
-import '../../../routes/app_pages.dart';
-import '../../../service/dio_api_client.dart';
-import '../../../service/dio_api_result.dart';
-import '../../../translations/locale_keys.dart';
-import '../../../utils/custom_alert.dart';
-import '../../../utils/custom_dialog.dart';
-import '../../../utils/file_storage.dart';
-import '../../../utils/logger.dart';
-import 'category_data_source.dart';
-import 'master_category_model.dart';
+import '../../../../config.dart';
+import '../../../../model/category_model.dart';
+import '../../../../service/dio_api_client.dart';
+import '../../../../service/dio_api_result.dart';
+import '../../../../translations/locale_keys.dart';
+import '../../../../utils/custom_alert.dart';
+import '../../../../utils/custom_dialog.dart';
+import '../master_category_model.dart';
+import 'category2_data_source.dart';
 
-class CategoryController extends GetxController {
+class Category2Controller extends GetxController {
   final DataGridController dataGridController = DataGridController();
-  final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
-  static CategoryController get to => Get.find();
+  static Category2Controller get to => Get.find();
   final isLoading = true.obs;
   final totalPages = 0.obs;
   final currentPage = 1.obs;
   final totalRecords = 0.obs;
   List<CategoryModel> dataList = [];
   final ApiClient apiClient = ApiClient();
-  late CategoryDataSource dataSource;
+  late Category2DataSource dataSource;
   RxBool hasPermission = true.obs;
+
+  /// 第一类目
+  String category1 = "";
   @override
   void onInit() {
+    category1 = Get.parameters["mCategory"] ?? "";
     updateDataGridSource();
     super.onInit();
   }
@@ -57,19 +54,17 @@ class CategoryController extends GetxController {
   void updateDataGridSource() {
     dataGridController.selectedRows = [];
     getCategory().then((_) {
-      dataSource = CategoryDataSource(this);
+      dataSource = Category2DataSource(this);
     });
   }
 
-  /// 获取列表
+  /// 获取分类2列表
   Future<void> getCategory() async {
     isLoading(true);
     dataList.clear();
     try {
-      formKey.currentState?.saveAndValidate();
-      final param = {'page': currentPage.value, ...formKey.currentState?.value ?? {}};
-      final DioApiResult dioApiResult = await apiClient.post(Config.categories, data: param);
-
+      final param = {'page': currentPage.value, 'category1': category1};
+      final DioApiResult dioApiResult = await apiClient.post(Config.category2, data: param);
       if (!dioApiResult.success) {
         if (!dioApiResult.hasPermission) {
           hasPermission.value = false;
@@ -100,10 +95,10 @@ class CategoryController extends GetxController {
 
   /// 编辑
   void edit({CategoryModel? row}) async {
-    Get.toNamed(
+    /* Get.toNamed(
       Routes.CATEGORY_EDIT,
       parameters: row == null ? null : {'row': base64.encode(utf8.encode(jsonEncode(row.toJson())))},
-    );
+    ); */
   }
 
   /// 删除单行数据
@@ -144,59 +139,5 @@ class CategoryController extends GetxController {
         }
       },
     );
-  }
-
-  /// 导出类目
-  Future<void> exportCategory({int? id}) async {
-    CustomDialog.showLoading(LocaleKeys.generating.trArgs(["excel"]));
-    try {
-      final DioApiResult dioApiResult = await apiClient.generateExcel(
-        Config.exportCategoryExcel,
-        queryParameters: {"id": id},
-      );
-      if (!dioApiResult.success) {
-        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
-        return;
-      }
-      if (dioApiResult.data is Uint8List) {
-        FileStorage.saveFileToDownloads(
-          bytes: dioApiResult.data as Uint8List,
-          fileName: dioApiResult.fileName!,
-          fileType: DownloadFileType.Excel,
-        );
-      }
-    } catch (e) {
-      logger.i(e);
-      CustomDialog.errorMessages(LocaleKeys.generateFileFailed.tr);
-    } finally {
-      CustomDialog.dismissDialog();
-    }
-  }
-
-  /// 导入类目
-  Future<void> importCategory({required File file}) async {
-    CustomDialog.showLoading(LocaleKeys.importing.tr);
-    try {
-      final DioApiResult dioApiResult = await apiClient.uploadFile(file: file, uploadUrl: Config.importCategoryExcel);
-      if (!dioApiResult.success) {
-        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.importFailed.tr);
-        return;
-      }
-      reloadData();
-      CustomDialog.successMessages(LocaleKeys.importFileSuccess.tr);
-    } catch (e) {
-      CustomDialog.errorMessages(LocaleKeys.importFailed.tr);
-    } finally {
-      CustomDialog.dismissDialog();
-    }
-  }
-
-  /// 打开类目2
-  void openChildCategory(String? mCategory) {
-    if (mCategory == null) {
-      CustomDialog.errorMessages(LocaleKeys.noOperation.tr);
-      return;
-    }
-    Get.toNamed(Routes.CATEGORY2, parameters: {'mCategory': mCategory});
   }
 }

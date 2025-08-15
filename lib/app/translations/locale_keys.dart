@@ -278,4 +278,8 @@ abstract class LocaleKeys {
   static const String categoryAdd = "categoryAdd";
   static const String categoryEdit = "categoryEdit";
   static const String adding = "adding";
+  static const String kitchenBarPrinter = "kitchenBarPrinter";
+  static const String continuePrint = "continuePrint";
+  static const String BDLPrinter = "BDLPrinter";
+  static const String parentCategory = "parentCategory";
 }

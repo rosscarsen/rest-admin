@@ -31,6 +31,11 @@ abstract class Routes {
       _Paths.COPY_PRODUCT_SET_MEAL;
   static const CATEGORY_EDIT =
       _Paths.MASTER + _Paths.CATEGORY + _Paths.CATEGORY_EDIT;
+  static const CATEGORY2 = _Paths.MASTER + _Paths.CATEGORY + _Paths.CATEGORY2;
+  static const CATEGORY2_EDIT = _Paths.MASTER +
+      _Paths.CATEGORY +
+      _Paths.CATEGORY2 +
+      _Paths.CATEGORY2_EDIT;
 }
 
 abstract class _Paths {
@@ -55,4 +60,6 @@ abstract class _Paths {
   static const OPEN_SET_MEAL = '/open-set-meal';
   static const COPY_PRODUCT_SET_MEAL = '/copy-product-set-meal';
   static const CATEGORY_EDIT = '/category-edit';
+  static const CATEGORY2 = '/category2';
+  static const CATEGORY2_EDIT = '/category2-edit';
 }
