@@ -19,7 +19,7 @@ class CategoryEditController extends GetxController {
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
   // Dio客户端
   final ApiClient apiClient = ApiClient();
-  final title = LocaleKeys.categoryAdd.tr.obs;
+  final title = LocaleKeys.categoryAdd.trArgs(['']).obs;
   // 权限
   final hasPermission = true.obs;
   int? id;
@@ -36,7 +36,7 @@ class CategoryEditController extends GetxController {
       if (oldRowString != null) {
         oldRow = CategoryModel.fromJson(json.decode(utf8.decode(base64.decode(oldRowString))));
         id = oldRow?.tCategoryId;
-        title.value = LocaleKeys.categoryEdit.tr;
+        title.value = LocaleKeys.categoryEdit.trArgs(['']);
       }
     }
     addOrEdit();

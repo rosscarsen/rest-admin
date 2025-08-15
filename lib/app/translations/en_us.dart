@@ -275,7 +275,7 @@ Map<String, String> get enUS => {
   LocaleKeys.description: "Description",
   LocaleKeys.childrenCategory: "Children Category",
   LocaleKeys.moreOperation: "More Operation",
-  LocaleKeys.categoryAdd: "Add Category",
-  LocaleKeys.categoryEdit: "Edit Category",
+  LocaleKeys.categoryAdd: "Add %s Category",
+  LocaleKeys.categoryEdit: "Edit %s Category",
   LocaleKeys.adding: "adding...",
 };

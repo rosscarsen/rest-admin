@@ -275,7 +275,7 @@ Map<String, String> zhHK = {
   LocaleKeys.description: "描述",
   LocaleKeys.childrenCategory: "子类目",
   LocaleKeys.moreOperation: "更多操作",
-  LocaleKeys.categoryAdd: "添加类目",
-  LocaleKeys.categoryEdit: "编辑类目",
+  LocaleKeys.categoryAdd: "添加%s类目",
+  LocaleKeys.categoryEdit: "编辑%s类目",
   LocaleKeys.adding: "添加中...",
 };

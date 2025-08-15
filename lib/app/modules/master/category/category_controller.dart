@@ -191,4 +191,9 @@ class CategoryController extends GetxController {
       CustomDialog.dismissDialog();
     }
   }
+
+  /// 打开类目2
+  void openChildCategory(int? id) {
+    //Get.toNamed(Routes.CATEGORY2, parameters: {'id': id.toString()});
+  }
 }
