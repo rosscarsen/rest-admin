@@ -83,13 +83,13 @@ class CategoryController extends GetxController {
       }
       hasPermission.value = true;
       //logger.f(dioApiResult.data);
-      final categoryModel = CategoryPageModelFromJson(dioApiResult.data.toString());
-      if (categoryModel.status == 200) {
+      final resultModel = CategoryPageModelFromJson(dioApiResult.data.toString());
+      if (resultModel.status == 200) {
         dataList
           ..clear()
-          ..addAll(categoryModel.apiResult?.data ?? []);
-        totalPages.value = (categoryModel.apiResult?.lastPage ?? 0);
-        totalRecords.value = (categoryModel.apiResult?.total ?? 0);
+          ..addAll(resultModel.apiResult?.data ?? []);
+        totalPages.value = (resultModel.apiResult?.lastPage ?? 0);
+        totalRecords.value = (resultModel.apiResult?.total ?? 0);
       } else {
         CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
       }
