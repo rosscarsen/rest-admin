@@ -36,6 +36,14 @@ abstract class Routes {
       _Paths.CATEGORY +
       _Paths.CATEGORY2 +
       _Paths.CATEGORY2_EDIT;
+  static const PRODUCT_REMARKS_EDIT =
+      _Paths.MASTER + _Paths.PRODUCT_REMARKS + _Paths.PRODUCT_REMARKS_EDIT;
+  static const PRODUCT_REMARKS_DETAIL =
+      _Paths.MASTER + _Paths.PRODUCT_REMARKS + _Paths.PRODUCT_REMARKS_DETAIL;
+  static const PRODUCT_REMARKS_DETAIL_EDIT = _Paths.MASTER +
+      _Paths.PRODUCT_REMARKS +
+      _Paths.PRODUCT_REMARKS_DETAIL +
+      _Paths.PRODUCT_REMARKS_DETAIL_EDIT;
 }
 
 abstract class _Paths {
@@ -62,4 +70,7 @@ abstract class _Paths {
   static const CATEGORY_EDIT = '/category-edit';
   static const CATEGORY2 = '/category2';
   static const CATEGORY2_EDIT = '/category2-edit';
+  static const PRODUCT_REMARKS_EDIT = '/product-remarks-edit';
+  static const PRODUCT_REMARKS_DETAIL = '/product-remarks-detail';
+  static const PRODUCT_REMARKS_DETAIL_EDIT = '/product-remarks-detail-edit';
 }

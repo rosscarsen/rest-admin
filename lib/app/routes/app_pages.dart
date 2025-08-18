@@ -14,6 +14,12 @@ import '../modules/master/category/category_view.dart';
 import '../modules/master/master_binding.dart';
 import '../modules/master/master_view.dart';
 import '../modules/master/product_remarks/product_remarks_binding.dart';
+import '../modules/master/product_remarks/product_remarks_detail/product_remarks_detail_binding.dart';
+import '../modules/master/product_remarks/product_remarks_detail/product_remarks_detail_edit/product_remarks_detail_edit_binding.dart';
+import '../modules/master/product_remarks/product_remarks_detail/product_remarks_detail_edit/product_remarks_detail_edit_view.dart';
+import '../modules/master/product_remarks/product_remarks_detail/product_remarks_detail_view.dart';
+import '../modules/master/product_remarks/product_remarks_edit/product_remarks_edit_binding.dart';
+import '../modules/master/product_remarks/product_remarks_edit/product_remarks_edit_view.dart';
 import '../modules/master/product_remarks/product_remarks_view.dart';
 import '../modules/master/products/advancedSearch/advanced_search_binding.dart';
 import '../modules/master/products/advancedSearch/advanced_search_view.dart';
@@ -167,6 +173,28 @@ class AppPages {
           page: () => const ProductRemarksView(),
           binding: ProductRemarksBinding(),
           middlewares: [AuthMiddleware()],
+          children: [
+            GetPage(
+              name: _Paths.PRODUCT_REMARKS_EDIT,
+              page: () => const ProductRemarksEditView(),
+              binding: ProductRemarksEditBinding(),
+              middlewares: [AuthMiddleware()],
+            ),
+            GetPage(
+              name: _Paths.PRODUCT_REMARKS_DETAIL,
+              page: () => const ProductRemarksDetailView(),
+              middlewares: [AuthMiddleware()],
+              binding: ProductRemarksDetailBinding(),
+              children: [
+                GetPage(
+                  name: _Paths.PRODUCT_REMARKS_DETAIL_EDIT,
+                  page: () => const ProductRemarksDetailEditView(),
+                  middlewares: [AuthMiddleware()],
+                  binding: ProductRemarksDetailEditBinding(),
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     ),

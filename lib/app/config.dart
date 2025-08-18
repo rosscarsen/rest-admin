@@ -94,6 +94,16 @@ class Config {
   // 打印机删除
   static String printerDelete = "/Master/printerDelete";
 
+  /* 食品备注管理模块================*/
+  // 食品备注列表
+  static String productRemark = "/Master/productRemark";
+  // 食品备注添加或编辑
+  static String productRemarkAddOrEdit = "/Master/productRemarkAddOrEdit";
+  // 食品备注保存
+  static String productRemarkSave = "/Master/productRemarkSave";
+  // 食品备注删除
+  static String productRemarkDelete = "/Master/productRemarkDelete";
+
   /// 打开选择===================================================================
   // 供应商
   static String openSupplier = "/Open/supplier";

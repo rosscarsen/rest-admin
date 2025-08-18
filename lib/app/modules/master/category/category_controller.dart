@@ -49,20 +49,20 @@ class CategoryController extends GetxController {
   void reloadData() {
     FocusManager.instance.primaryFocus?.unfocus();
     totalPages.value = 0;
-    //currentPage.value = 1;
+    currentPage.value = 1;
     updateDataGridSource();
   }
 
   /// 更新数据源
   void updateDataGridSource() {
     dataGridController.selectedRows = [];
-    getCategory().then((_) {
+    getList().then((_) {
       dataSource = CategoryDataSource(this);
     });
   }
 
   /// 获取列表
-  Future<void> getCategory() async {
+  Future<void> getList() async {
     isLoading(true);
     dataList.clear();
     try {
