@@ -84,6 +84,16 @@ class Config {
   // 类目2删除
   static String category2Delete = "/Master/category2Delete";
 
+  /* 打印机管理模块================*/
+  // 打印机列表
+  static String printer = "/Master/printer";
+  // 打印机添加或编辑
+  static String printerAddOrEdit = "/Master/printerAddOrEdit";
+  // 打印机保存
+  static String printerSave = "/Master/printerSave";
+  // 打印机删除
+  static String printerDelete = "/Master/printerDelete";
+
   /// 打开选择===================================================================
   // 供应商
   static String openSupplier = "/Open/supplier";
