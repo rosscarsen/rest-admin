@@ -8,7 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
-import '../../../model/products_model.dart';
+import '../../../model/product/products_model.dart';
 import '../../../routes/app_pages.dart';
 import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';

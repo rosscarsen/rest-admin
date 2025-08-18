@@ -3,8 +3,8 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 
 import '../../../../config.dart';
-import '../../../../model/advanced_search_model.dart';
-import '../../../../model/category_model.dart';
+import '../../../../model/product/advanced_search_model.dart';
+import '../../../../model/category/category_model.dart';
 import '../../../../model/department_model.dart';
 import '../../../../service/dio_api_client.dart';
 import '../../../../service/dio_api_result.dart';

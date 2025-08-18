@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../../../model/category_model.dart';
+import '../../../../model/category/category_model.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/constants.dart';
 import '../../../../widgets/custom_cell.dart';
@@ -76,7 +76,7 @@ class Category2DataSource extends DataGridSource with WidgetsBindingObserver {
                   message: LocaleKeys.edit.tr,
                   child: IconButton(
                     icon: const Icon(Icons.edit, color: AppColors.editColor),
-                    onPressed: () => controller.edit(row: row),
+                    onPressed: () => controller.edit(id: row.tCategoryId),
                   ),
                 ),
               ),

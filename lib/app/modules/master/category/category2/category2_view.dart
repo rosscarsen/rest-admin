@@ -17,11 +17,27 @@ class Category2View extends GetView<Category2Controller> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Category2View'), centerTitle: true),
+      appBar: AppBar(
+        title: Text("${LocaleKeys.category.tr}2"),
+        centerTitle: true,
+        actions: [
+          Tooltip(
+            message: LocaleKeys.refresh.tr,
+            child: IconButton(
+              icon: const Icon(Icons.refresh),
+              onPressed: controller.hasPermission.value ? () => controller.reloadData() : null,
+            ),
+          ),
+        ],
+      ),
       body: Obx(() {
         return Column(
           spacing: Config.defaultGap,
           children: <Widget>[
+            Align(
+              alignment: Alignment.centerRight,
+              child: ElevatedButton(onPressed: () => controller.edit(), child: Text(LocaleKeys.add.tr)),
+            ),
             Expanded(child: ProgressHUD(child: controller.isLoading.value ? null : _buildDataGrid(context))),
             DataPager(
               totalPages: controller.totalPages,
@@ -61,20 +77,6 @@ class Category2View extends GetView<Category2Controller> {
           showCheckboxColumn: false,
           selectionMode: SelectionMode.none,
           source: controller.dataSource,
-
-          stackedHeaderRows: [
-            StackedHeaderRow(
-              cells: [
-                StackedHeaderCell(
-                  columnNames: controller.dataSource.rows.first.getCells().map((e) => e.columnName).toList(),
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: ElevatedButton(onPressed: () {}, child: Text(LocaleKeys.add.tr)),
-                  ),
-                ),
-              ],
-            ),
-          ],
           columns: <GridColumn>[
             GridColumn(
               columnName: 'mSort',

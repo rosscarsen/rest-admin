@@ -1,26 +1,26 @@
 // To parse this JSON data, do
 //
-//     final masterCategoryModel = masterCategoryModelFromJson(jsonString);
+//     final printerPageModel = printerPageModelFromJson(jsonString);
 
 import 'dart:convert';
 
-import '../../../model/category_model.dart';
+import 'package:rest_admin/app/model/printer/printer_model.dart';
 
-MasterCategoryModel masterCategoryModelFromJson(String str) => MasterCategoryModel.fromJson(json.decode(str));
+PrinterPageModel printerPageModelFromJson(String str) => PrinterPageModel.fromJson(json.decode(str));
 
-String masterCategoryModelToJson(MasterCategoryModel data) => json.encode(data.toJson());
+String printerPageModelToJson(PrinterPageModel data) => json.encode(data.toJson());
 
-class MasterCategoryModel {
+class PrinterPageModel {
   final int? status;
   final String? msg;
   final ApiResult? apiResult;
 
-  MasterCategoryModel({this.status, this.msg, this.apiResult});
+  PrinterPageModel({this.status, this.msg, this.apiResult});
 
-  MasterCategoryModel copyWith({int? status, String? msg, ApiResult? apiResult}) =>
-      MasterCategoryModel(status: status ?? this.status, msg: msg ?? this.msg, apiResult: apiResult ?? this.apiResult);
+  PrinterPageModel copyWith({int? status, String? msg, ApiResult? apiResult}) =>
+      PrinterPageModel(status: status ?? this.status, msg: msg ?? this.msg, apiResult: apiResult ?? this.apiResult);
 
-  factory MasterCategoryModel.fromJson(Map<String, dynamic> json) => MasterCategoryModel(
+  factory PrinterPageModel.fromJson(Map<String, dynamic> json) => PrinterPageModel(
     status: json["status"],
     msg: json["msg"],
     apiResult: json["apiResult"] == null ? null : ApiResult.fromJson(json["apiResult"]),
@@ -34,7 +34,7 @@ class ApiResult {
   final int? perPage;
   final int? currentPage;
   final int? lastPage;
-  final List<CategoryModel>? data;
+  final List<PrinterModel>? data;
   final bool? hasMore;
 
   ApiResult({this.total, this.perPage, this.currentPage, this.lastPage, this.data, this.hasMore});
@@ -44,7 +44,7 @@ class ApiResult {
     int? perPage,
     int? currentPage,
     int? lastPage,
-    List<CategoryModel>? data,
+    List<PrinterModel>? data,
     bool? hasMore,
   }) => ApiResult(
     total: total ?? this.total,
@@ -60,7 +60,7 @@ class ApiResult {
     perPage: json["per_page"],
     currentPage: json["current_page"],
     lastPage: json["last_page"],
-    data: json["data"] == null ? [] : List<CategoryModel>.from(json["data"]!.map((x) => CategoryModel.fromJson(x))),
+    data: json["data"] == null ? [] : List<PrinterModel>.from(json["data"]!.map((x) => PrinterModel.fromJson(x))),
     hasMore: json["has_more"],
   );
 

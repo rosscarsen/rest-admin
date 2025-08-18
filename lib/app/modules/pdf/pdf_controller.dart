@@ -6,7 +6,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
 import '../../config.dart';
-import '../../model/print_barcode_model.dart';
+import '../../model/product/print_barcode_model.dart';
 import '../../service/dio_api_client.dart';
 import '../../service/dio_api_result.dart';
 import '../../translations/locale_keys.dart';

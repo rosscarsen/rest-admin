@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../../../model/product_add_or_edit_model.dart';
+import '../../../../model/product/product_add_or_edit_model.dart';
 
 import '../../../../widgets/custom_cell.dart';
 import 'product_edit_controller.dart';

@@ -4,9 +4,9 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../../config.dart';
-import '../../../../../model/categories_model.dart';
-import '../../../../../model/category_model.dart';
-import '../../../../../model/copy_product_set_meal.dart';
+import '../../../../../model/category/category_all_model.dart';
+import '../../../../../model/category/category_model.dart';
+import '../../../../../model/product/copy_product_set_meal.dart';
 import '../../../../../service/dio_api_client.dart';
 import '../../../../../service/dio_api_result.dart';
 import '../../../../../translations/locale_keys.dart';
@@ -157,7 +157,7 @@ class CopyProductSetMealController extends GetxController {
           if (categoryDioApiResult.data == null) {
             continue;
           }
-          final categoriesModel = categoriesModelFromJson(categoryDioApiResult.data!);
+          final categoriesModel = categoryAllModelFromJson(categoryDioApiResult.data!);
           if (categoriesModel.status == 200) {
             category1.assignAll(categoriesModel.apiResult ?? []);
           } else {

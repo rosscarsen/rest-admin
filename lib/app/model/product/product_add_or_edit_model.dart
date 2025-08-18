@@ -5,8 +5,8 @@
 
 import 'dart:convert';
 
-import 'category_model.dart';
-import 'unit_model.dart';
+import '../category/category_model.dart';
+import '../unit_model.dart';
 
 ProductAddOrEditModel productAddOrEditModelFromJson(String str) => ProductAddOrEditModel.fromJson(json.decode(str));
 

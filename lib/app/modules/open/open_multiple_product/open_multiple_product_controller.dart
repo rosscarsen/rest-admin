@@ -6,10 +6,10 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
-import '../../../model/categories_model.dart';
-import '../../../model/category_model.dart';
-import '../../../model/product_add_or_edit_model.dart';
-import '../../../model/products_model.dart';
+import '../../../model/category/category_all_model.dart';
+import '../../../model/category/category_model.dart';
+import '../../../model/product/product_add_or_edit_model.dart';
+import '../../../model/product/products_model.dart';
 import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
@@ -164,7 +164,7 @@ class OpenMultipleProductController extends GetxController {
           if (categoryDioApiResult.data == null) {
             continue;
           }
-          final categoriesModel = categoriesModelFromJson(categoryDioApiResult.data!);
+          final categoriesModel = categoryAllModelFromJson(categoryDioApiResult.data!);
           if (categoriesModel.status == 200) {
             category1.assignAll(categoriesModel.apiResult ?? []);
           } else {

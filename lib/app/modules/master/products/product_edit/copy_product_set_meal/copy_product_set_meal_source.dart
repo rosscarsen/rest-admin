@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../../../../model/copy_product_set_meal.dart';
+import '../../../../../model/product/copy_product_set_meal.dart';
 import '../../../../../translations/locale_keys.dart';
 import '../../../../../widgets/custom_cell.dart';
 import 'copy_product_set_meal_controller.dart';

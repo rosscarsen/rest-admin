@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../../model/products_model.dart';
+import '../../../model/product/products_model.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../widgets/custom_cell.dart';
 import 'open_product_controller.dart';

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../../model/product_barcode_model.dart';
+import '../../../model/product/product_barcode_model.dart';
 import 'open_product_barcode_controller.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../widgets/custom_cell.dart';

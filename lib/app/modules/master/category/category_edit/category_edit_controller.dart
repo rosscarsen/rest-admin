@@ -5,7 +5,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 
 import '../../../../config.dart';
-import '../../../../model/category_model.dart';
+import '../../../../model/category/category_model.dart';
 import '../../../../service/dio_api_client.dart';
 import '../../../../service/dio_api_result.dart';
 import '../../../../translations/locale_keys.dart';
@@ -19,24 +19,20 @@ class CategoryEditController extends GetxController {
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
   // Dio客户端
   final ApiClient apiClient = ApiClient();
-  final title = LocaleKeys.categoryAdd.trArgs(['']).obs;
+  final title = LocaleKeys.categoryAdd.tr.obs;
   // 权限
   final hasPermission = true.obs;
-  int? id;
+  String? id;
   // 加载标识
   final isLoading = true.obs;
-  CategoryModel? oldRow;
   @override
   void onInit() {
     super.onInit();
     final params = Get.parameters;
     if (params.isNotEmpty) {
-      final oldRowString = params['row'];
-
-      if (oldRowString != null) {
-        oldRow = CategoryModel.fromJson(json.decode(utf8.decode(base64.decode(oldRowString))));
-        id = oldRow?.tCategoryId;
-        title.value = LocaleKeys.categoryEdit.trArgs(['']);
+      id = params['id'];
+      if (id != null) {
+        title.value = LocaleKeys.categoryEdit.tr;
       }
     }
     addOrEdit();
@@ -99,14 +95,18 @@ class CategoryEditController extends GetxController {
   /// 保存
   Future<void> save() async {
     if (formKey.currentState?.saveAndValidate() ?? false) {
-      CustomDialog.showLoading(oldRow == null ? LocaleKeys.adding.tr : LocaleKeys.updating.tr);
+      final categoryCtl = Get.find<CategoryController>();
+      CustomDialog.showLoading(id == null ? LocaleKeys.adding.tr : LocaleKeys.updating.tr);
       final Map<String, dynamic> formData = {CategoryFields.T_Category_ID: id, ...formKey.currentState?.value ?? {}};
-      if (oldRow != null) {
-        final isSame = Functions.compareMap(oldRow!.toJson(), formData);
-        if (isSame) {
-          CustomDialog.dismissDialog();
-          Get.back();
-          return;
+      if (id != null) {
+        final oldRow = categoryCtl.dataList.firstWhereOrNull((e) => e.tCategoryId.toString() == id);
+        if (oldRow != null) {
+          final isSame = Functions.compareMap(oldRow.toJson(), formData);
+          if (isSame) {
+            CustomDialog.dismissDialog();
+            Get.back();
+            return;
+          }
         }
       }
       try {
@@ -116,11 +116,9 @@ class CategoryEditController extends GetxController {
           return;
         }
         final data = json.decode(dioApiResult.data!) as Map<String, dynamic>;
-        logger.e(data);
         switch (data["status"]) {
           case 200:
-            final categoryCtl = Get.find<CategoryController>();
-            CustomDialog.successMessages(oldRow == null ? LocaleKeys.addSuccess.tr : LocaleKeys.updateSuccess.tr);
+            CustomDialog.successMessages(id == null ? LocaleKeys.addSuccess.tr : LocaleKeys.updateSuccess.tr);
             final apiResult = data["apiResult"];
             if (apiResult == null) {
               categoryCtl.reloadData();
@@ -128,10 +126,10 @@ class CategoryEditController extends GetxController {
               return;
             }
             final categoryModel = CategoryModel.fromJson(apiResult);
-            if (oldRow == null) {
+            if (id == null) {
               categoryCtl.dataList.insert(0, categoryModel);
             } else {
-              final index = categoryCtl.dataList.indexWhere((element) => element.tCategoryId == oldRow?.tCategoryId);
+              final index = categoryCtl.dataList.indexWhere((element) => element.tCategoryId.toString() == id);
               if (index != -1) {
                 categoryCtl.dataList[index] = categoryModel;
               }
@@ -145,7 +143,7 @@ class CategoryEditController extends GetxController {
             );
             break;
           case 202:
-            CustomDialog.errorMessages(oldRow == null ? LocaleKeys.addFailed.tr : LocaleKeys.updateFailed.tr);
+            CustomDialog.errorMessages(id == null ? LocaleKeys.addFailed.tr : LocaleKeys.updateFailed.tr);
             break;
           default:
             CustomDialog.errorMessages(LocaleKeys.unknownError.tr);

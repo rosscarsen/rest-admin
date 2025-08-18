@@ -335,6 +335,7 @@ class FormHelper {
       initialValue: initialValue ?? false,
       enabled: enabled,
       onChanged: onChanged,
+      valueTransformer: (value) => value == true ? "1" : "0",
       title: Text(labelText),
     );
   }
@@ -354,6 +355,7 @@ class FormHelper {
       initialValue: initialValue,
       onChanged: onChanged,
       controlAffinity: ListTileControlAffinity.trailing,
+      valueTransformer: (value) => value == true ? "1" : "0",
     );
   }
 
@@ -370,6 +372,7 @@ class FormHelper {
       name: name,
       enabled: enabled,
       initialValue: initialValue,
+      valueTransformer: (value) => (value?.toString() ?? "").trim(),
       decoration: InputDecoration(
         prefixIcon: _buildPrefixIconText(labelText, enabled),
         prefixIconConstraints: const BoxConstraints(maxWidth: _prefixIconMaxWidth),

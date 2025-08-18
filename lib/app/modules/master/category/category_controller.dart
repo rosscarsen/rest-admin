@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
-import '../../../model/category_model.dart';
+import '../../../model/category/category_model.dart';
 import '../../../routes/app_pages.dart';
 import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
@@ -18,7 +18,7 @@ import '../../../utils/custom_dialog.dart';
 import '../../../utils/file_storage.dart';
 import '../../../utils/logger.dart';
 import 'category_data_source.dart';
-import 'master_category_model.dart';
+import '../../../model/category/category_page_model.dart';
 
 class CategoryController extends GetxController {
   final DataGridController dataGridController = DataGridController();
@@ -49,7 +49,7 @@ class CategoryController extends GetxController {
   void reloadData() {
     FocusManager.instance.primaryFocus?.unfocus();
     totalPages.value = 0;
-    currentPage.value = 1;
+    //currentPage.value = 1;
     updateDataGridSource();
   }
 
@@ -83,7 +83,7 @@ class CategoryController extends GetxController {
       }
       hasPermission.value = true;
       //logger.f(dioApiResult.data);
-      final categoryModel = masterCategoryModelFromJson(dioApiResult.data.toString());
+      final categoryModel = CategoryPageModelFromJson(dioApiResult.data.toString());
       if (categoryModel.status == 200) {
         dataList
           ..clear()
@@ -99,11 +99,8 @@ class CategoryController extends GetxController {
   }
 
   /// 编辑
-  void edit({CategoryModel? row}) async {
-    Get.toNamed(
-      Routes.CATEGORY_EDIT,
-      parameters: row == null ? null : {'row': base64.encode(utf8.encode(jsonEncode(row.toJson())))},
-    );
+  void edit({int? id}) async {
+    Get.toNamed(Routes.CATEGORY_EDIT, parameters: id == null ? null : {'id': id.toString()});
   }
 
   /// 删除单行数据
@@ -192,11 +189,10 @@ class CategoryController extends GetxController {
   }
 
   /// 打开类目2
-  void openChildCategory(String? mCategory) {
-    if (mCategory == null) {
-      CustomDialog.errorMessages(LocaleKeys.noOperation.tr);
-      return;
-    }
-    Get.toNamed(Routes.CATEGORY2, parameters: {'mCategory': mCategory});
+  void openChildCategory(CategoryModel? row) {
+    Get.toNamed(
+      Routes.CATEGORY2,
+      parameters: {'mCategory': row?.mCategory ?? "", "categoryID": row?.tCategoryId?.toString() ?? ""},
+    );
   }
 }

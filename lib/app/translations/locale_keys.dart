@@ -282,4 +282,7 @@ abstract class LocaleKeys {
   static const String continuePrint = "continuePrint";
   static const String BDLPrinter = "BDLPrinter";
   static const String parentCategory = "parentCategory";
+  static const String printType = "printType";
+  static const String general = "general";
+  static const String disContinuePrint = "disContinuePrint";
 }

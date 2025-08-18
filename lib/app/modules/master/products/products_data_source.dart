@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../../model/products_model.dart';
+import '../../../model/product/products_model.dart';
 import 'products_controller.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/constants.dart';

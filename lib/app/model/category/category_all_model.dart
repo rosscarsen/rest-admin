@@ -1,24 +1,24 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 // To parse this JSON data, do
 //
-//     final categoriesModel = categoriesModelFromJson(jsonString);
+//     final categoryAllModel = categoryAllModelFromJson(jsonString);
 
 import 'dart:convert';
 
 import 'category_model.dart';
 
-CategoriesModel categoriesModelFromJson(String str) => CategoriesModel.fromJson(json.decode(str));
+CategoryAllModel categoryAllModelFromJson(String str) => CategoryAllModel.fromJson(json.decode(str));
 
-String categoriesModelToJson(CategoriesModel data) => json.encode(data.toJson());
+String categoryAllModelToJson(CategoryAllModel data) => json.encode(data.toJson());
 
-class CategoriesModel {
+class CategoryAllModel {
   final int? status;
   final String? msg;
   final List<CategoryModel>? apiResult;
 
-  CategoriesModel({this.status, this.msg, this.apiResult});
+  CategoryAllModel({this.status, this.msg, this.apiResult});
 
-  factory CategoriesModel.fromJson(Map<String, dynamic> json) => CategoriesModel(
+  factory CategoryAllModel.fromJson(Map<String, dynamic> json) => CategoryAllModel(
     status: json["status"],
     msg: json["msg"],
     apiResult: json["apiResult"] == null
@@ -33,5 +33,5 @@ class CategoriesModel {
   };
 
   @override
-  String toString() => 'CategoriesModel(status: $status, msg: $msg, apiResult: $apiResult)';
+  String toString() => 'CategoryAllModel(status: $status, msg: $msg, apiResult: $apiResult)';
 }

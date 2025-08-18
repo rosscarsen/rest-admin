@@ -7,9 +7,9 @@ import 'package:responsive_grid/responsive_grid.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../config.dart';
-import '../../../../model/category_model.dart';
-import '../../../../model/product_add_or_edit_model.dart';
-import '../../../../model/products_model.dart';
+import '../../../../model/category/category_model.dart';
+import '../../../../model/product/product_add_or_edit_model.dart';
+import '../../../../model/product/products_model.dart';
 import '../../../../model/unit_model.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../service/dio_api_client.dart';

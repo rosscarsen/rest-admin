@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../../model/category_model.dart';
+import '../../../model/category/category_model.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_cell.dart';
@@ -78,7 +78,7 @@ class CategoryDataSource extends DataGridSource with WidgetsBindingObserver {
                         message: LocaleKeys.childrenCategory.tr,
                         child: IconButton(
                           icon: const Icon(Icons.category, color: Colors.blue),
-                          onPressed: () => controller.openChildCategory(row.mCategory),
+                          onPressed: () => controller.openChildCategory(row),
                         ),
                       ),
                     ),
@@ -98,7 +98,7 @@ class CategoryDataSource extends DataGridSource with WidgetsBindingObserver {
                         message: LocaleKeys.edit.tr,
                         child: IconButton(
                           icon: const Icon(Icons.edit, color: AppColors.editColor),
-                          onPressed: () => controller.edit(row: row),
+                          onPressed: () => controller.edit(id: row.tCategoryId),
                         ),
                       ),
                     ),
@@ -129,13 +129,13 @@ class CategoryDataSource extends DataGridSource with WidgetsBindingObserver {
                         onClickMenu: (MenuItemProvider item) {
                           if (item.menuUserInfo == "childrenCategory") {
                             // 子分类
-                            controller.openChildCategory(row.mCategory);
+                            controller.openChildCategory(row);
                           } else if (item.menuUserInfo == "export") {
                             // 导出
                             controller.exportCategory(id: row.tCategoryId);
                           } else if (item.menuUserInfo == "edit") {
                             // 编辑
-                            controller.edit(row: row);
+                            controller.edit(id: row.tCategoryId);
                           } else if (item.menuUserInfo == "delete") {
                             // 删除
                             controller.deleteRow(row.tCategoryId);

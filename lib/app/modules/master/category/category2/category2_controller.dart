@@ -5,14 +5,16 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../config.dart';
-import '../../../../model/category_model.dart';
+import '../../../../model/category/category_model.dart';
 import '../../../../service/dio_api_client.dart';
 import '../../../../service/dio_api_result.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/custom_alert.dart';
 import '../../../../utils/custom_dialog.dart';
-import '../master_category_model.dart';
+import '../../../../utils/logger.dart';
+import '../../../../model/category/category_page_model.dart';
 import 'category2_data_source.dart';
+import 'category2_edit/category2_edit_view.dart';
 
 class Category2Controller extends GetxController {
   final DataGridController dataGridController = DataGridController();
@@ -26,8 +28,9 @@ class Category2Controller extends GetxController {
   late Category2DataSource dataSource;
   RxBool hasPermission = true.obs;
 
-  /// 第一类目
+  // 第一类目编号
   String category1 = "";
+
   @override
   void onInit() {
     category1 = Get.parameters["mCategory"] ?? "";
@@ -78,7 +81,7 @@ class Category2Controller extends GetxController {
       }
       hasPermission.value = true;
       //logger.f(dioApiResult.data);
-      final categoryModel = masterCategoryModelFromJson(dioApiResult.data.toString());
+      final categoryModel = CategoryPageModelFromJson(dioApiResult.data.toString());
       if (categoryModel.status == 200) {
         dataList
           ..clear()
@@ -94,11 +97,8 @@ class Category2Controller extends GetxController {
   }
 
   /// 编辑
-  void edit({CategoryModel? row}) async {
-    /* Get.toNamed(
-      Routes.CATEGORY_EDIT,
-      parameters: row == null ? null : {'row': base64.encode(utf8.encode(jsonEncode(row.toJson())))},
-    ); */
+  void edit({int? id}) async {
+    Get.dialog(Category2EditView(id: id, category1: category1));
   }
 
   /// 删除单行数据
