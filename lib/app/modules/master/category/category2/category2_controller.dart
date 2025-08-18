@@ -11,7 +11,6 @@ import '../../../../service/dio_api_result.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/custom_alert.dart';
 import '../../../../utils/custom_dialog.dart';
-import '../../../../utils/logger.dart';
 import '../../../../model/category/category_page_model.dart';
 import 'category2_data_source.dart';
 import 'category2_edit/category2_edit_view.dart';
