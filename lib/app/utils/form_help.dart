@@ -62,7 +62,6 @@ class FormHelper {
     TextInputType? keyboardType,
     FormFieldValidator<String>? validator,
     List<TextInputFormatter>? inputFormatters,
-    void Function(String?)? onSaved,
     Widget? suffixIcon,
     bool obscureText = false,
     int maxLines = 1,
@@ -77,6 +76,7 @@ class FormHelper {
     String? hintText,
   }) {
     assert(maxLines >= 1, 'maxLines不能小于1');
+    assert(!(controller != null && initialValue != null), 'controller 和 initialValue 不能同时设置');
     return FormBuilderTextField(
       controller: controller,
       onSubmitted: onSubmitted,
@@ -88,7 +88,6 @@ class FormHelper {
       name: name,
       maxLines: maxLines,
       validator: validator,
-      onSaved: onSaved,
       onChanged: onChanged,
       obscureText: obscureText,
       valueTransformer: (value) => (value ?? "").trim(),
@@ -179,8 +178,12 @@ class FormHelper {
           items: safeItems,
           isExpanded: true,
           borderRadius: BorderRadius.circular(8),
-          onChanged: enabled ? (val) => field.didChange(val) : null,
-          onSaved: field.didChange,
+          onChanged: enabled
+              ? (val) {
+                  field.didChange(val);
+                  if (onChanged != null) onChanged(val);
+                }
+              : null,
           decoration: InputDecoration(
             labelText: labelText,
             suffixIcon: suffixIcon,
@@ -209,7 +212,6 @@ class FormHelper {
     bool canClear = true,
     FormFieldValidator<String?>? validator,
     dynamic initialValue, // ✅ 支持 DateTime 或 String
-    void Function(String?)? onSaved,
     void Function(String?)? onChanged,
     DateTime? firstDate,
     DateTime? lastDate,
@@ -243,7 +245,6 @@ class FormHelper {
       name: name,
       enabled: enabled,
       validator: validator,
-      onSaved: onSaved,
       onChanged: onChanged,
       valueTransformer: (value) => (value?.toString() ?? "").trim(),
       initialValue: normalizeInitialValue(initialValue),
@@ -293,7 +294,6 @@ class FormHelper {
           lastDate: lastDate,
           pickerPlatform: DateTimeFieldPickerPlatform.adaptive,
           onChanged: (val) => field.didChange(val != null ? effectiveDateFormat.format(val) : null),
-          onSaved: (val) => field.didChange(val != null ? effectiveDateFormat.format(val) : null),
         );
       },
     );
