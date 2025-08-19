@@ -88,7 +88,7 @@ class CategoryView extends GetView<CategoryController> {
                 DropdownMenuItem(value: "3", child: Text("3")),
                 DropdownMenuItem(value: "5", child: Text("5")),
               ],
-              onChanged: (value) => controller.reloadData(),
+              onChanged: (value) => controller.hasPermission.value ? () => controller.reloadData() : null,
             ),
           ),
           //按钮

@@ -88,7 +88,7 @@ class ProductRemarksView extends GetView<ProductRemarksController> {
                 DropdownMenuItem(value: "1", child: Text(LocaleKeys.address.tr)),
                 DropdownMenuItem(value: "2", child: Text(LocaleKeys.cancel.tr)),
               ],
-              onChanged: (value) => controller.reloadData(),
+              onChanged: (value) => controller.hasPermission.value ? () => controller.reloadData() : null,
             ),
           ),
           //按钮

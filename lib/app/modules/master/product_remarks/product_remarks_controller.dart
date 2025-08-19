@@ -189,12 +189,4 @@ class ProductRemarksController extends GetxController {
       CustomDialog.dismissDialog();
     }
   }
-
-  /*  /// 打开类目2
-  void openChildCategory(CategoryModel? row) {
-    Get.toNamed(
-      Routes.CATEGORY2,
-      parameters: {'mCategory': row?.mCategory ?? "", "categoryID": row?.tCategoryId?.toString() ?? ""},
-    );
-  } */
 }

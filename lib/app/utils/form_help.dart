@@ -414,10 +414,12 @@ class FormHelper {
   /// 按鈕
   static FilledButton button({required void Function()? onPressed, Widget? icon, String? label}) {
     return FilledButton.icon(
-      onPressed: () {
-        FocusManager.instance.primaryFocus?.unfocus();
-        onPressed?.call();
-      },
+      onPressed: onPressed == null
+          ? null
+          : () {
+              FocusManager.instance.primaryFocus?.unfocus();
+              onPressed.call();
+            },
       icon: icon ?? FaIcon(FontAwesomeIcons.floppyDisk),
       label: Text(label ?? LocaleKeys.save.tr, style: TextStyle(fontSize: 16)),
     );

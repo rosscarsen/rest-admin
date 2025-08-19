@@ -74,7 +74,6 @@ class ProductRemarksEditController extends GetxController with GetSingleTickerPr
     isLoading(true);
     try {
       final DioApiResult dioApiResult = await apiClient.post(Config.productRemarkAddOrEdit, data: {'id': id});
-      logger.e(dioApiResult);
       if (!dioApiResult.success) {
         if (!dioApiResult.hasPermission) {
           hasPermission.value = false;
@@ -121,12 +120,22 @@ class ProductRemarksEditController extends GetxController with GetSingleTickerPr
     }
   }
 
-  /// 保存
+  /// 食品备注保存
   Future<void> save() async {
     if (formKey.currentState?.saveAndValidate() ?? false) {
       final productRemarksCtl = Get.find<ProductRemarksController>();
       CustomDialog.showLoading(id == null ? LocaleKeys.adding.tr : LocaleKeys.updating.tr);
-      final Map<String, dynamic> formData = {ProductRemarksFields.mId: id, ...formKey.currentState?.value ?? {}};
+      final Map<String, dynamic> formData = {
+        ProductRemarksFields.mId: id,
+        ...formKey.currentState?.value ?? {},
+        ...{"remarksDetails": dataList.map((e) => e.toJson()).toList()},
+      };
+
+      formData.forEach((key, value) {
+        if (key == ProductRemarksFields.mVisible) {
+          formData[key] = value == "1" ? "0" : "1";
+        }
+      });
       if (id != null) {
         final oldRow = productRemarksCtl.dataList.firstWhereOrNull((e) => e.mId.toString() == id);
         if (oldRow != null) {
