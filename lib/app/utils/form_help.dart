@@ -39,6 +39,8 @@ class FormHelper {
     int? md = 4,
     int? lg = 4,
     int? xl = 4,
+    double horizontal = _horizontalPadding,
+    double vertical = _verticalPadding,
     required Widget child,
   }) {
     return ResponsiveGridCol(
@@ -48,7 +50,7 @@ class FormHelper {
       lg: lg,
       xl: xl,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: _horizontalPadding, vertical: _verticalPadding),
+        padding: EdgeInsets.symmetric(horizontal: horizontal, vertical: vertical),
         child: child,
       ),
     );
