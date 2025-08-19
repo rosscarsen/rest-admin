@@ -124,6 +124,7 @@ class Category2EditController extends GetxController {
               }),
             ),
           );
+          FocusManager.instance.primaryFocus?.unfocus();
         }
       }
     } catch (e) {

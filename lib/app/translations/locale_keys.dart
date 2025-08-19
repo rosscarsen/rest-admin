@@ -285,4 +285,14 @@ abstract class LocaleKeys {
   static const String printType = "printType";
   static const String general = "general";
   static const String disContinuePrint = "disContinuePrint";
+  static const String hide = "hide";
+  static const String addProductRemarks = "addProductRemarks";
+  static const String editProductRemarks = "editProductRemarks";
+  static const String cannotContain = "cannotContain";
+  static const String basicInfo = "basicInfo";
+  static const String productRemarksDetail = "productRemarksDetail";
+  static const String classification = "classification";
+  static const String type = "type";
+  static const String addMoney = "addMoney";
+  static const String multiple = "multiple";
 }

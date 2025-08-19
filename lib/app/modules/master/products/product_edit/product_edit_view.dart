@@ -648,6 +648,7 @@ class ProductEditView extends GetView<ProductEditController> {
                               columnName: 'remarks',
                               label: CustomCell(data: LocaleKeys.remarks.tr),
                               maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
+                              minimumWidth: 200,
                             ),
                             GridColumn(
                               allowSorting: false,

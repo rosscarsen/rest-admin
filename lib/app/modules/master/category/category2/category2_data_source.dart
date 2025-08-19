@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:popup_menu/popup_menu.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../model/category/category_model.dart';
@@ -9,27 +8,11 @@ import '../../../../utils/constants.dart';
 import '../../../../widgets/custom_cell.dart';
 import 'category2_controller.dart';
 
-class Category2DataSource extends DataGridSource with WidgetsBindingObserver {
+class Category2DataSource extends DataGridSource {
   Category2DataSource(this.controller) {
     updateDataSource();
-    WidgetsBinding.instance.addObserver(this);
   }
-  PopupMenu? popupMenu;
   final Category2Controller controller;
-
-  @override
-  void didChangeMetrics() {
-    super.didChangeMetrics();
-    if (popupMenu?.isShow == true) {
-      popupMenu?.dismiss();
-    }
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
 
   void updateDataSource() {
     _dataGridRows = controller.dataList.map(_createDataRow).toList();

@@ -97,12 +97,14 @@ class OpenSupplierView extends GetView<OpenSupplierController> {
               label: CustomCell(data: LocaleKeys.simpleName.tr),
               columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.auto : ColumnWidthMode.fill,
               maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
+              minimumWidth: 200,
             ),
             GridColumn(
               columnName: 'fullName',
               label: CustomCell(data: LocaleKeys.fullName.tr),
               columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.fitByCellValue : ColumnWidthMode.fill,
               maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
+              minimumWidth: 200,
             ),
             GridColumn(
               columnName: 'mobile',

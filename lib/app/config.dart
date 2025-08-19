@@ -103,6 +103,10 @@ class Config {
   static String productRemarkSave = "/Master/productRemarkSave";
   // 食品备注删除
   static String productRemarkDelete = "/Master/productRemarkDelete";
+  // 导出食品备注
+  static String exportProductRemarkExcel = "/Excel/productRemarkExport";
+  // 导入食品备注
+  static String importProductRemarkExcel = "/Excel/productRemarkImport";
 
   /// 打开选择===================================================================
   // 供应商

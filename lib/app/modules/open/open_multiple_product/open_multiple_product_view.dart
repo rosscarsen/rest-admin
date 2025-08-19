@@ -135,6 +135,7 @@ class OpenMultipleProductView extends GetView<OpenMultipleProductController> {
               columnName: 'name',
               columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.auto : ColumnWidthMode.fill,
               maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
+              minimumWidth: 200,
               label: CustomCell(data: LocaleKeys.name.tr),
             ),
             GridColumn(

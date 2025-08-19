@@ -84,6 +84,7 @@ class CategoryEditController extends GetxController {
           resultModel.toJson().entries.where((e) => e.value != null).map((e) => MapEntry(e.key, e.value.toString())),
         ),
       );
+      FocusManager.instance.primaryFocus?.unfocus();
     } catch (e) {
       logger.i(e.toString());
       CustomDialog.errorMessages(LocaleKeys.getDataException.tr);

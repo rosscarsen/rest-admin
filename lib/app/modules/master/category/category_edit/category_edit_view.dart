@@ -20,7 +20,7 @@ class CategoryEditView extends GetView<CategoryEditController> {
         appBar: AppBar(
           title: Text(controller.title.value),
           centerTitle: true,
-          actions: (controller.isLoading.value || !controller.hasPermission.value)
+          actions: controller.isLoading.value
               ? null
               : [
                   Tooltip(

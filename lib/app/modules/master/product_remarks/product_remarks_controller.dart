@@ -17,6 +17,7 @@ import '../../../utils/custom_alert.dart';
 import '../../../utils/custom_dialog.dart';
 import '../../../utils/file_storage.dart';
 import '../../../utils/logger.dart';
+import 'product_remarks_data_source.dart';
 
 class ProductRemarksController extends GetxController {
   final DataGridController dataGridController = DataGridController();
@@ -66,7 +67,7 @@ class ProductRemarksController extends GetxController {
     try {
       formKey.currentState?.saveAndValidate();
       final param = {'page': currentPage.value, ...formKey.currentState?.value ?? {}};
-      final DioApiResult dioApiResult = await apiClient.post(Config.categories, data: param);
+      final DioApiResult dioApiResult = await apiClient.post(Config.productRemark, data: param);
 
       if (!dioApiResult.success) {
         if (!dioApiResult.hasPermission) {
@@ -81,13 +82,13 @@ class ProductRemarksController extends GetxController {
       }
       hasPermission.value = true;
       //logger.f(dioApiResult.data);
-      final categoryModel = CategoryPageModelFromJson(dioApiResult.data.toString());
-      if (categoryModel.status == 200) {
+      final resultModel = productRemarksModelFromJson(dioApiResult.data.toString());
+      if (resultModel.status == 200) {
         dataList
           ..clear()
-          ..addAll(categoryModel.apiResult?.data ?? []);
-        totalPages.value = (categoryModel.apiResult?.lastPage ?? 0);
-        totalRecords.value = (categoryModel.apiResult?.total ?? 0);
+          ..addAll(resultModel.apiResult?.productRemarksInfo ?? []);
+        totalPages.value = (resultModel.apiResult?.lastPage ?? 0);
+        totalRecords.value = (resultModel.apiResult?.total ?? 0);
       } else {
         CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
       }
@@ -98,7 +99,7 @@ class ProductRemarksController extends GetxController {
 
   /// 编辑
   void edit({int? id}) async {
-    Get.toNamed(Routes.CATEGORY_EDIT, parameters: id == null ? null : {'id': id.toString()});
+    Get.toNamed(Routes.PRODUCT_REMARKS_EDIT, parameters: id == null ? null : {'id': id.toString()});
   }
 
   /// 删除单行数据
@@ -109,7 +110,7 @@ class ProductRemarksController extends GetxController {
       onConfirm: () async {
         try {
           CustomDialog.showLoading(LocaleKeys.deleting.tr);
-          final DioApiResult dioApiResult = await apiClient.post(Config.categoryDelete, data: {"id": id});
+          final DioApiResult dioApiResult = await apiClient.post(Config.productRemarkDelete, data: {"id": id});
 
           if (!dioApiResult.success) {
             CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
@@ -123,7 +124,7 @@ class ProductRemarksController extends GetxController {
           switch (data['status']) {
             case 200:
               CustomDialog.successMessages(LocaleKeys.deleteSuccess.tr);
-              //dataList.removeWhere((element) => element.tCategoryId == id);
+              dataList.removeWhere((element) => element.mId == id);
               dataSource.updateDataSource();
               break;
             case 201:
@@ -141,12 +142,12 @@ class ProductRemarksController extends GetxController {
     );
   }
 
-  /// 导出类目
-  Future<void> exportCategory({int? id}) async {
+  /// 导出
+  Future<void> exportProductRemark({int? id}) async {
     CustomDialog.showLoading(LocaleKeys.generating.trArgs(["excel"]));
     try {
       final DioApiResult dioApiResult = await apiClient.generateExcel(
-        Config.exportCategoryExcel,
+        Config.exportProductRemarkExcel,
         queryParameters: {"id": id},
       );
       if (!dioApiResult.success) {
@@ -168,11 +169,14 @@ class ProductRemarksController extends GetxController {
     }
   }
 
-  /// 导入类目
-  Future<void> importCategory({required File file}) async {
+  /// 导入
+  Future<void> importProductRemark({required File file}) async {
     CustomDialog.showLoading(LocaleKeys.importing.tr);
     try {
-      final DioApiResult dioApiResult = await apiClient.uploadFile(file: file, uploadUrl: Config.importCategoryExcel);
+      final DioApiResult dioApiResult = await apiClient.uploadFile(
+        file: file,
+        uploadUrl: Config.importProductRemarkExcel,
+      );
       if (!dioApiResult.success) {
         CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.importFailed.tr);
         return;

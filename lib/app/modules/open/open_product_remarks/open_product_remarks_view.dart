@@ -103,6 +103,7 @@ class OpenProductRemarksView extends GetView<OpenProductRemarksController> {
               label: CustomCell(data: LocaleKeys.detail.tr),
               columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.fitByCellValue : ColumnWidthMode.fill,
               maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
+              minimumWidth: 200,
             ),
           ],
           placeholder: NoRecordPermission(),

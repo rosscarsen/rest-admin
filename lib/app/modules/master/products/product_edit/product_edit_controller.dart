@@ -102,6 +102,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
     tabController = TabController(length: tabs.length, vsync: this);
     tabController.addListener(() {
       tabIndex.value = tabController.index;
+      FocusManager.instance.primaryFocus?.unfocus();
     });
   }
 
@@ -184,6 +185,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
             productEditFormKey.currentState?.patchValue(
               Map.fromEntries(productInfo.toJson().entries.where((e) => e.value != null)),
             );
+            FocusManager.instance.primaryFocus?.unfocus();
           }
           productBarcode = apiResult.productBarcode ?? [];
           productStock = apiResult.productStock ?? [];
