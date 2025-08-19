@@ -77,11 +77,11 @@ class CategoryEditController extends GetxController {
       if (apiResult == null) {
         return;
       }
-      final CategoryModel categoryModel = CategoryModel.fromJson(apiResult);
+      final CategoryModel resultModel = CategoryModel.fromJson(apiResult);
 
       formKey.currentState?.patchValue(
         Map.fromEntries(
-          categoryModel.toJson().entries.where((e) => e.value != null).map((e) => MapEntry(e.key, e.value.toString())),
+          resultModel.toJson().entries.where((e) => e.value != null).map((e) => MapEntry(e.key, e.value.toString())),
         ),
       );
     } catch (e) {
@@ -95,11 +95,11 @@ class CategoryEditController extends GetxController {
   /// 保存
   Future<void> save() async {
     if (formKey.currentState?.saveAndValidate() ?? false) {
-      final categoryCtl = Get.find<CategoryController>();
+      final parentCtl = Get.find<CategoryController>();
       CustomDialog.showLoading(id == null ? LocaleKeys.adding.tr : LocaleKeys.updating.tr);
       final Map<String, dynamic> formData = {CategoryFields.T_Category_ID: id, ...formKey.currentState?.value ?? {}};
       if (id != null) {
-        final oldRow = categoryCtl.dataList.firstWhereOrNull((e) => e.tCategoryId.toString() == id);
+        final oldRow = parentCtl.dataList.firstWhereOrNull((e) => e.tCategoryId.toString() == id);
         if (oldRow != null) {
           final isSame = Functions.compareMap(oldRow.toJson(), formData);
           if (isSame) {
@@ -121,20 +121,20 @@ class CategoryEditController extends GetxController {
             CustomDialog.successMessages(id == null ? LocaleKeys.addSuccess.tr : LocaleKeys.updateSuccess.tr);
             final apiResult = data["apiResult"];
             if (apiResult == null) {
-              categoryCtl.reloadData();
+              parentCtl.reloadData();
               Get.back();
               return;
             }
-            final categoryModel = CategoryModel.fromJson(apiResult);
+            final resultModel = CategoryModel.fromJson(apiResult);
             if (id == null) {
-              categoryCtl.dataList.insert(0, categoryModel);
+              parentCtl.dataList.insert(0, resultModel);
             } else {
-              final index = categoryCtl.dataList.indexWhere((element) => element.tCategoryId.toString() == id);
+              final index = parentCtl.dataList.indexWhere((element) => element.tCategoryId.toString() == id);
               if (index != -1) {
-                categoryCtl.dataList[index] = categoryModel;
+                parentCtl.dataList[index] = resultModel;
               }
             }
-            categoryCtl.dataSource.updateDataSource();
+            parentCtl.dataSource.updateDataSource();
             Get.back();
             break;
           case 201:
