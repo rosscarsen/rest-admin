@@ -143,7 +143,7 @@ class CategoryController extends GetxController {
     );
   }
 
-  /// 导出类目
+  /// 导出
   Future<void> exportCategory({int? id}) async {
     CustomDialog.showLoading(LocaleKeys.generating.trArgs(["excel"]));
     try {
@@ -170,7 +170,7 @@ class CategoryController extends GetxController {
     }
   }
 
-  /// 导入类目
+  /// 导入
   Future<void> importCategory({required File file}) async {
     CustomDialog.showLoading(LocaleKeys.importing.tr);
     try {
