@@ -29,7 +29,7 @@ class OpenProductRemarksDataSource extends DataGridSource {
     final String detailStr = detail?.map((e) => e.mDetail).join(",") ?? "";
     return DataGridRow(
       cells: [
-        DataGridCell<int>(columnName: 'T_Supplier_ID', value: e.mId),
+        DataGridCell<int>(columnName: 'mId', value: e.mId),
         DataGridCell<String>(columnName: 'select', value: e.mRemark ?? ""),
         DataGridCell<int>(columnName: 'sort', value: e.mSort ?? 0),
         DataGridCell<String>(columnName: 'remarks', value: e.mRemark ?? ""),
