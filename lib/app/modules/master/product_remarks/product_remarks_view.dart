@@ -77,7 +77,7 @@ class ProductRemarksView extends GetView<ProductRemarksController> {
               ),
             ),
           ),
-          //层数
+          //类型
           FormHelper.buildGridCol(
             child: FormHelper.selectInput(
               name: "sort",
@@ -126,63 +126,89 @@ class ProductRemarksView extends GetView<ProductRemarksController> {
     );
   }
 
-  // 产品导入
-  void _buildImport() async {
+  // 导入
+  void _buildImport() {
     final TextEditingController fileController = TextEditingController();
+    final TextEditingController overWriteController = TextEditingController();
     File? excelFile;
-    await Get.defaultDialog(
+    int overWrite = 0;
+
+    Get.defaultDialog(
       barrierDismissible: false,
       title: LocaleKeys.importProduct.tr,
       content: StatefulBuilder(
         builder: (BuildContext context, setState) {
-          return GestureDetector(
-            onTap: () async {
-              FilePickerResult? result = await FilePicker.platform.pickFiles(
-                allowMultiple: false,
-                type: FileType.custom,
-                allowedExtensions: ['xlsx', 'xls'],
-                dialogTitle: LocaleKeys.selectFile.trArgs(["excel"]),
-                lockParentWindow: true,
-              );
-              if (result != null) {
-                setState(() {
-                  PlatformFile platformFile = result.files.single;
-                  excelFile = File(platformFile.path!);
-                  fileController.text = platformFile.name;
-                });
-              } else {
-                CustomDialog.showToast(LocaleKeys.userCanceledPicker.tr);
-              }
-            },
-            child: AbsorbPointer(
-              absorbing: fileController.text.isEmpty,
-              child: TextField(
-                readOnly: true,
-                controller: fileController,
-                decoration: InputDecoration(
-                  labelText: LocaleKeys.selectFile.trArgs(["excel"]),
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                  enabled: true,
-                  prefixIcon: Icon(FontAwesomeIcons.fileExcel, color: AppColors.openColor),
-                  suffixIcon: fileController.text.isNotEmpty
-                      ? IconButton(
-                          icon: Icon(Icons.clear),
-                          onPressed: () {
-                            setState(() {
-                              excelFile = null;
-                              fileController.clear();
-                            });
-                          },
-                        )
-                      : null,
+          return SingleChildScrollView(
+            child: Column(
+              spacing: 8.0,
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () async {
+                    FilePickerResult? result = await FilePicker.platform.pickFiles(
+                      allowMultiple: false,
+                      type: FileType.custom,
+                      allowedExtensions: ['xlsx', 'xls'],
+                      dialogTitle: LocaleKeys.selectFile.trArgs(["excel"]),
+                      lockParentWindow: true,
+                    );
+                    if (result != null) {
+                      setState(() {
+                        PlatformFile platformFile = result.files.single;
+                        excelFile = File(platformFile.path!);
+                        fileController.text = platformFile.name;
+                      });
+                    } else {
+                      CustomDialog.showToast(LocaleKeys.userCanceledPicker.tr);
+                    }
+                  },
+                  child: AbsorbPointer(
+                    absorbing: fileController.text.isEmpty,
+                    child: TextField(
+                      readOnly: true,
+                      controller: fileController,
+                      decoration: InputDecoration(
+                        labelText: LocaleKeys.selectFile.trArgs(["excel"]),
+                        floatingLabelBehavior: FloatingLabelBehavior.never,
+                        enabled: true,
+                        prefixIcon: Icon(FontAwesomeIcons.fileExcel, color: AppColors.openColor),
+                        suffixIcon: fileController.text.isNotEmpty
+                            ? IconButton(
+                                icon: Icon(Icons.clear),
+                                onPressed: () {
+                                  setState(() {
+                                    excelFile = null;
+                                    fileController.clear();
+                                  });
+                                },
+                              )
+                            : null,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
+                DropdownButtonFormField<int>(
+                  decoration: InputDecoration(
+                    labelText: LocaleKeys.price.tr,
+                    floatingLabelBehavior: FloatingLabelBehavior.always,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
+                  value: overWrite,
+                  items: [
+                    DropdownMenuItem(value: 0, child: Text(LocaleKeys.no.tr)),
+                    DropdownMenuItem(value: 1, child: Text(LocaleKeys.yes.tr)),
+                  ],
+                  onChanged: (value) {
+                    setState(() => overWrite = value!);
+                  },
+                ),
+              ],
             ),
           );
         },
       ),
       cancel: ElevatedButton(
         onPressed: () {
+          overWriteController.dispose();
           fileController.dispose();
           excelFile = null;
           Get.closeDialog();
@@ -196,8 +222,9 @@ class ProductRemarksView extends GetView<ProductRemarksController> {
             return;
           }
           fileController.dispose();
+          overWriteController.dispose();
           Get.closeDialog();
-          controller.importProductRemark(file: excelFile!);
+          await controller.importProductRemark(file: excelFile!, query: {'overWrite': overWrite});
           excelFile = null;
         },
         child: Text(LocaleKeys.confirm.tr),

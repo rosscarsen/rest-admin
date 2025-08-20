@@ -114,7 +114,7 @@ class RemarksDetail {
   factory RemarksDetail.fromJson(Map<String, dynamic> json) => RemarksDetail(
     mId: json["m_id"],
     mDetail: json["m_detail"],
-    mPrice: json["m_price"],
+    mPrice: json["m_price"] ?? "0.00",
     mRemark: json["m_remark"],
     tId: json["t_id"],
     mOverwrite: json["mOverwrite"],

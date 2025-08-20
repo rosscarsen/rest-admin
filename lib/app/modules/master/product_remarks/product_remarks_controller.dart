@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart' show FormBuilderState;
 import 'package:get/get.dart';
+import 'package:rest_admin/app/utils/ex_empty.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
@@ -146,10 +147,7 @@ class ProductRemarksController extends GetxController {
   Future<void> exportProductRemark({int? id}) async {
     CustomDialog.showLoading(LocaleKeys.generating.trArgs(["excel"]));
     try {
-      final DioApiResult dioApiResult = await apiClient.generateExcel(
-        Config.exportProductRemarkExcel,
-        queryParameters: {"id": id},
-      );
+      final DioApiResult dioApiResult = await apiClient.generateExcel(Config.exportProductRemarkExcel);
       if (!dioApiResult.success) {
         CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
         return;
@@ -169,22 +167,24 @@ class ProductRemarksController extends GetxController {
     }
   }
 
-  /// 导入
-  Future<void> importProductRemark({required File file}) async {
+  /// 导入产品备注
+  Future<void> importProductRemark({required File file, required Map<String, dynamic> query}) async {
     CustomDialog.showLoading(LocaleKeys.importing.tr);
     try {
       final DioApiResult dioApiResult = await apiClient.uploadFile(
         file: file,
         uploadUrl: Config.importProductRemarkExcel,
+        extraData: query,
       );
+
       if (!dioApiResult.success) {
-        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.importFailed.tr);
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.importFailed.tr);
         return;
       }
       reloadData();
       CustomDialog.successMessages(LocaleKeys.importFileSuccess.tr);
     } catch (e) {
-      CustomDialog.errorMessages(LocaleKeys.importFailed.tr);
+      CustomDialog.showToast(LocaleKeys.importFailed.tr);
     } finally {
       CustomDialog.dismissDialog();
     }

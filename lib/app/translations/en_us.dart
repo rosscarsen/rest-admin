@@ -295,4 +295,6 @@ Map<String, String> get enUS => {
   LocaleKeys.type: "Type",
   LocaleKeys.addMoney: "Add Money",
   LocaleKeys.multiple: "Multiple",
+  LocaleKeys.addProductRemarksDetail: "Add Product Remarks Detail",
+  LocaleKeys.editProductRemarksDetail: "Edit Product Remarks Detail",
 };

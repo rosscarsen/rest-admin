@@ -295,4 +295,6 @@ Map<String, String> get zhCN => {
   LocaleKeys.type: "类型",
   LocaleKeys.addMoney: "加钱",
   LocaleKeys.multiple: "倍数",
+  LocaleKeys.addProductRemarksDetail: "添加食品备注明细",
+  LocaleKeys.editProductRemarksDetail: "编辑食品备注明细",
 };
