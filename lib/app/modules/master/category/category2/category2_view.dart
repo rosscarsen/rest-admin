@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:rest_admin/app/config.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../../../config.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/progresshub.dart';
 import '../../../../widgets/custom_cell.dart';
+import '../../../../widgets/data_grid_theme.dart';
 import '../../../../widgets/data_pager.dart';
 import '../../../../widgets/no_record.dart';
 import 'category2_controller.dart';
@@ -56,85 +55,76 @@ class Category2View extends GetView<Category2Controller> {
 
   //数据表格
   Widget _buildDataGrid(BuildContext context) {
-    return SelectionArea(
-      child: SfDataGridTheme(
-        data: SfDataGridThemeData(
-          gridLineColor: Colors.grey.shade300,
-          currentCellStyle: DataGridCurrentCellStyle(
-            borderColor: Colors.transparent, // 避免选中单元格边框影响
-            borderWidth: 0,
+    return DataGridTheme(
+      child: SfDataGrid(
+        isScrollbarAlwaysShown: true,
+        controller: controller.dataGridController,
+        footerFrozenColumnsCount: 1,
+        frozenColumnsCount: 0,
+        gridLinesVisibility: GridLinesVisibility.both,
+        headerGridLinesVisibility: GridLinesVisibility.both,
+        columnWidthMode: ColumnWidthMode.auto,
+        columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
+        showCheckboxColumn: false,
+        selectionMode: SelectionMode.none,
+        source: controller.dataSource,
+        columns: <GridColumn>[
+          GridColumn(
+            columnName: 'mSort',
+            label: CustomCell(data: LocaleKeys.sort.tr),
           ),
-        ),
-        child: SfDataGrid(
-          isScrollbarAlwaysShown: true,
-          controller: controller.dataGridController,
-          footerFrozenColumnsCount: 1,
-          frozenColumnsCount: 0,
-          gridLinesVisibility: GridLinesVisibility.both,
-          headerGridLinesVisibility: GridLinesVisibility.both,
-          columnWidthMode: ColumnWidthMode.auto,
-          columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
-          showCheckboxColumn: false,
-          selectionMode: SelectionMode.none,
-          source: controller.dataSource,
-          columns: <GridColumn>[
-            GridColumn(
-              columnName: 'mSort',
-              label: CustomCell(data: LocaleKeys.sort.tr),
-            ),
-            GridColumn(
-              columnName: 'mCategory',
-              label: CustomCell(data: LocaleKeys.category.tr),
-            ),
-            GridColumn(
-              columnName: 'mParent',
-              label: CustomCell(data: LocaleKeys.parentCategory.tr),
-            ),
-            GridColumn(
-              columnName: 'mDescription',
-              label: CustomCell(data: LocaleKeys.description.tr),
-              columnWidthMode: ColumnWidthMode.fill,
-              minimumWidth: 150,
-              maximumWidth: 300,
-            ),
-            GridColumn(
-              columnName: 'mTimeStart',
-              label: CustomCell(data: LocaleKeys.startTime.tr),
-            ),
-            GridColumn(
-              columnName: 'mTimeEnd',
-              label: CustomCell(data: LocaleKeys.endTime.tr),
-            ),
-            GridColumn(
-              columnName: 'mHide',
-              label: CustomCell(data: LocaleKeys.deactivate.tr),
-            ),
-            GridColumn(
-              columnName: 'mPrinter',
-              label: CustomCell(data: LocaleKeys.kitchenBarPrinter.tr),
-            ),
-            GridColumn(
-              columnName: 'mBDLPrinter',
-              label: CustomCell(data: LocaleKeys.BDLPrinter.tr),
-            ),
-            GridColumn(
-              columnName: 'mContinue',
-              label: CustomCell(data: LocaleKeys.continuePrint.tr),
-            ),
-            GridColumn(
-              columnName: 'mCustomerSelfHelpHide',
-              label: CustomCell(data: LocaleKeys.customerHide.tr),
-            ),
-            GridColumn(
-              allowSorting: false,
-              columnName: 'actions',
-              width: 80,
-              label: CustomCell(data: LocaleKeys.operation.tr),
-            ),
-          ],
-          placeholder: NoRecordPermission(
-            msg: controller.hasPermission.value ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
+          GridColumn(
+            columnName: 'mCategory',
+            label: CustomCell(data: LocaleKeys.category.tr),
           ),
+          GridColumn(
+            columnName: 'mParent',
+            label: CustomCell(data: LocaleKeys.parentCategory.tr),
+          ),
+          GridColumn(
+            columnName: 'mDescription',
+            label: CustomCell(data: LocaleKeys.description.tr),
+            columnWidthMode: ColumnWidthMode.fill,
+            minimumWidth: 150,
+            maximumWidth: 300,
+          ),
+          GridColumn(
+            columnName: 'mTimeStart',
+            label: CustomCell(data: LocaleKeys.startTime.tr),
+          ),
+          GridColumn(
+            columnName: 'mTimeEnd',
+            label: CustomCell(data: LocaleKeys.endTime.tr),
+          ),
+          GridColumn(
+            columnName: 'mHide',
+            label: CustomCell(data: LocaleKeys.deactivate.tr),
+          ),
+          GridColumn(
+            columnName: 'mPrinter',
+            label: CustomCell(data: LocaleKeys.kitchenBarPrinter.tr),
+          ),
+          GridColumn(
+            columnName: 'mBDLPrinter',
+            label: CustomCell(data: LocaleKeys.BDLPrinter.tr),
+          ),
+          GridColumn(
+            columnName: 'mContinue',
+            label: CustomCell(data: LocaleKeys.continuePrint.tr),
+          ),
+          GridColumn(
+            columnName: 'mCustomerSelfHelpHide',
+            label: CustomCell(data: LocaleKeys.customerHide.tr),
+          ),
+          GridColumn(
+            allowSorting: false,
+            columnName: 'actions',
+            width: 80,
+            label: CustomCell(data: LocaleKeys.operation.tr),
+          ),
+        ],
+        placeholder: NoRecordPermission(
+          msg: controller.hasPermission.value ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
         ),
       ),
     );

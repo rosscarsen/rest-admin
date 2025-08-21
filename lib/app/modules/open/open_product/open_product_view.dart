@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_grid/responsive_grid.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/progresshub.dart';
 import '../../../widgets/custom_cell.dart';
+import '../../../widgets/data_grid_theme.dart';
 import '../../../widgets/data_pager.dart';
 import '../../../widgets/no_record.dart';
 import 'open_product_controller.dart';
@@ -50,90 +50,81 @@ class OpenProductView extends GetView<OpenProductController> {
 
   //数据表格
   Widget _buildDataGrid(BuildContext context) {
-    return SelectionArea(
-      child: SfDataGridTheme(
-        data: SfDataGridThemeData(
-          gridLineColor: Colors.grey.shade300,
-          currentCellStyle: DataGridCurrentCellStyle(
-            borderColor: Colors.transparent, // 避免选中单元格边框影响
-            borderWidth: 0,
+    return DataGridTheme(
+      child: SfDataGrid(
+        isScrollbarAlwaysShown: true,
+        controller: controller.dataGridController,
+        footerFrozenColumnsCount: 0,
+        frozenColumnsCount: 3,
+        gridLinesVisibility: GridLinesVisibility.both,
+        headerGridLinesVisibility: GridLinesVisibility.both,
+        columnWidthMode: controller.dataSource.rows.isEmpty
+            ? context.isPhoneOrLess
+                  ? ColumnWidthMode.fitByColumnName
+                  : ColumnWidthMode.fill
+            : ColumnWidthMode.auto,
+        columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
+        allowSorting: false,
+        showCheckboxColumn: false,
+        source: controller.dataSource,
+        columns: <GridColumn>[
+          GridColumn(
+            columnName: "T_Product_ID",
+            visible: false,
+            label: CustomCell(data: "ID"),
           ),
-        ),
-        child: SfDataGrid(
-          isScrollbarAlwaysShown: true,
-          controller: controller.dataGridController,
-          footerFrozenColumnsCount: 0,
-          frozenColumnsCount: 3,
-          gridLinesVisibility: GridLinesVisibility.both,
-          headerGridLinesVisibility: GridLinesVisibility.both,
-          columnWidthMode: controller.dataSource.rows.isEmpty
-              ? context.isPhoneOrLess
-                    ? ColumnWidthMode.fitByColumnName
-                    : ColumnWidthMode.fill
-              : ColumnWidthMode.auto,
-          columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
-          allowSorting: false,
-          showCheckboxColumn: false,
-          source: controller.dataSource,
-          columns: <GridColumn>[
-            GridColumn(
-              columnName: "T_Product_ID",
-              visible: false,
-              label: CustomCell(data: "ID"),
-            ),
-            GridColumn(
-              columnName: 'select',
-              label: CustomCell(data: LocaleKeys.select.tr),
-              width: 85,
-            ),
-            GridColumn(
-              columnName: "code",
-              label: CustomCell(data: LocaleKeys.code.tr),
-            ),
-            GridColumn(
-              columnName: 'name',
-              columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.auto : ColumnWidthMode.fill,
-              maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
-              minimumWidth: 200,
-              label: CustomCell(data: LocaleKeys.name.tr),
-            ),
-            GridColumn(
-              columnName: 'mDesc2',
-              columnWidthMode: ColumnWidthMode.fill,
-              maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
-              minimumWidth: 200,
-              label: CustomCell(data: LocaleKeys.name.tr),
-            ),
-            GridColumn(
-              columnName: 'mRemarks',
-              columnWidthMode: ColumnWidthMode.fill,
-              maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
-              minimumWidth: 200,
-              label: CustomCell(data: LocaleKeys.name.tr),
-            ),
-            GridColumn(
-              columnName: 'unit',
-              label: CustomCell(data: LocaleKeys.unit.tr),
-            ),
-            GridColumn(
-              columnName: 'category',
-              label: CustomCell(data: LocaleKeys.category.tr),
-            ),
-            GridColumn(
-              columnName: 'price',
-              label: CustomCell(data: LocaleKeys.price.tr),
-            ),
-            GridColumn(
-              columnName: 'qty',
-              label: CustomCell(data: LocaleKeys.qty.tr),
-            ),
-            GridColumn(
-              columnName: 'mMeasurement',
-              label: CustomCell(data: LocaleKeys.productRemarks.tr),
-            ),
-          ],
-          placeholder: NoRecordPermission(),
-        ),
+          GridColumn(
+            columnName: 'select',
+            label: CustomCell(data: LocaleKeys.select.tr),
+            width: 85,
+          ),
+          GridColumn(
+            columnName: "code",
+            label: CustomCell(data: LocaleKeys.code.tr),
+          ),
+          GridColumn(
+            columnName: 'name',
+            columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.auto : ColumnWidthMode.fill,
+            maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
+            minimumWidth: 200,
+            label: CustomCell(data: LocaleKeys.name.tr),
+          ),
+          GridColumn(
+            columnName: 'mDesc2',
+            columnWidthMode: ColumnWidthMode.fill,
+            maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
+            minimumWidth: 200,
+            label: CustomCell(data: LocaleKeys.name.tr),
+          ),
+          GridColumn(
+            columnName: 'mRemarks',
+            columnWidthMode: ColumnWidthMode.fill,
+            maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
+            minimumWidth: 200,
+            label: CustomCell(data: LocaleKeys.name.tr),
+          ),
+          GridColumn(
+            columnName: 'unit',
+            label: CustomCell(data: LocaleKeys.unit.tr),
+          ),
+          GridColumn(
+            columnName: 'category',
+            label: CustomCell(data: LocaleKeys.category.tr),
+          ),
+          GridColumn(
+            columnName: 'price',
+            label: CustomCell(data: LocaleKeys.price.tr),
+          ),
+          GridColumn(
+            columnName: 'qty',
+            label: CustomCell(data: LocaleKeys.qty.tr),
+          ),
+          GridColumn(
+            columnName: 'mMeasurement',
+            label: CustomCell(data: LocaleKeys.productRemarks.tr),
+          ),
+        ],
+        placeholder: NoRecordPermission(),
       ),
     );
   }

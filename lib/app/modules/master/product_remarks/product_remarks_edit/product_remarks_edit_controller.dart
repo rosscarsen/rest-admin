@@ -37,7 +37,6 @@ class ProductRemarksEditController extends GetxController with GetSingleTickerPr
     super.onInit();
     tabController.addListener(() {
       tabIndex.value = tabController.index;
-      FocusManager.instance.primaryFocus?.unfocus();
     });
     final params = Get.parameters;
     if (params.isNotEmpty) {
@@ -109,7 +108,6 @@ class ProductRemarksEditController extends GetxController with GetSingleTickerPr
           }),
         ),
       );
-      FocusManager.instance.primaryFocus?.unfocus();
     } catch (e) {
       logger.i(e.toString());
       CustomDialog.errorMessages(LocaleKeys.getDataException.tr);

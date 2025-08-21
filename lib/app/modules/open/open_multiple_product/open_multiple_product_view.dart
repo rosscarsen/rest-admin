@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-
 import 'package:get/get.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
@@ -12,6 +10,7 @@ import '../../../translations/locale_keys.dart';
 import '../../../utils/form_help.dart';
 import '../../../utils/progresshub.dart';
 import '../../../widgets/custom_cell.dart';
+import '../../../widgets/data_grid_theme.dart';
 import '../../../widgets/data_pager.dart';
 import '../../../widgets/no_record.dart';
 import 'open_multiple_product_controller.dart';
@@ -73,90 +72,81 @@ class OpenMultipleProductView extends GetView<OpenMultipleProductController> {
 
   //数据表格
   Widget _buildDataGrid(BuildContext context) {
-    return SelectionArea(
-      child: SfDataGridTheme(
-        data: SfDataGridThemeData(
-          gridLineColor: Colors.grey.shade300,
-          currentCellStyle: DataGridCurrentCellStyle(
-            borderColor: Colors.transparent, // 避免选中单元格边框影响
-            borderWidth: 0,
-          ),
-        ),
-        child: SfDataGrid(
-          isScrollbarAlwaysShown: true,
-          controller: controller.dataGridController,
-          footerFrozenColumnsCount: 0,
-          frozenColumnsCount: 1,
-          gridLinesVisibility: GridLinesVisibility.both,
-          headerGridLinesVisibility: GridLinesVisibility.both,
-          columnWidthMode: controller.dataSource.rows.isEmpty
-              ? context.isPhoneOrLess
-                    ? ColumnWidthMode.fitByColumnName
-                    : ColumnWidthMode.fill
-              : ColumnWidthMode.auto,
-          columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
-          allowSorting: false,
-          showCheckboxColumn: true,
-          selectionMode: SelectionMode.multiple,
-          source: controller.dataSource,
-          stackedHeaderRows: [
-            StackedHeaderRow(
-              cells: [
-                StackedHeaderCell(
-                  columnNames: ['code', 'name', 'unit', 'category', 'price', "qty"],
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: OverflowBar(
-                      spacing: 8.0,
-                      children: [
-                        ElevatedButton(
-                          child: Text(LocaleKeys.join.tr),
-                          onPressed: () async => await controller.joinSetMeal(),
-                        ),
-                        ElevatedButton(
-                          child: Text(LocaleKeys.leave.tr),
-                          onPressed: () {
-                            Get.back();
-                          },
-                        ),
-                      ],
-                    ).paddingOnly(left: 8.0),
-                  ),
+    return DataGridTheme(
+      child: SfDataGrid(
+        isScrollbarAlwaysShown: true,
+        controller: controller.dataGridController,
+        footerFrozenColumnsCount: 0,
+        frozenColumnsCount: 1,
+        gridLinesVisibility: GridLinesVisibility.both,
+        headerGridLinesVisibility: GridLinesVisibility.both,
+        columnWidthMode: controller.dataSource.rows.isEmpty
+            ? context.isPhoneOrLess
+                  ? ColumnWidthMode.fitByColumnName
+                  : ColumnWidthMode.fill
+            : ColumnWidthMode.auto,
+        columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
+        allowSorting: false,
+        showCheckboxColumn: true,
+        selectionMode: SelectionMode.multiple,
+        source: controller.dataSource,
+        stackedHeaderRows: [
+          StackedHeaderRow(
+            cells: [
+              StackedHeaderCell(
+                columnNames: ['code', 'name', 'unit', 'category', 'price', "qty"],
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: OverflowBar(
+                    spacing: 8.0,
+                    children: [
+                      ElevatedButton(
+                        child: Text(LocaleKeys.join.tr),
+                        onPressed: () async => await controller.joinSetMeal(),
+                      ),
+                      ElevatedButton(
+                        child: Text(LocaleKeys.leave.tr),
+                        onPressed: () {
+                          Get.back();
+                        },
+                      ),
+                    ],
+                  ).paddingOnly(left: 8.0),
                 ),
-              ],
-            ),
-          ],
-          columns: <GridColumn>[
-            GridColumn(
-              columnName: "code",
-              label: CustomCell(data: LocaleKeys.code.tr),
-            ),
-            GridColumn(
-              columnName: 'name',
-              columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.auto : ColumnWidthMode.fill,
-              maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
-              minimumWidth: 200,
-              label: CustomCell(data: LocaleKeys.name.tr),
-            ),
-            GridColumn(
-              columnName: 'unit',
-              label: CustomCell(data: LocaleKeys.unit.tr),
-            ),
-            GridColumn(
-              columnName: 'category',
-              label: CustomCell(data: LocaleKeys.category.tr),
-            ),
-            GridColumn(
-              columnName: 'price',
-              label: CustomCell(data: LocaleKeys.price.tr),
-            ),
-            GridColumn(
-              columnName: 'qty',
-              label: CustomCell(data: LocaleKeys.qty.tr),
-            ),
-          ],
-          placeholder: NoRecordPermission(),
-        ),
+              ),
+            ],
+          ),
+        ],
+        columns: <GridColumn>[
+          GridColumn(
+            columnName: "code",
+            label: CustomCell(data: LocaleKeys.code.tr),
+          ),
+          GridColumn(
+            columnName: 'name',
+            columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.auto : ColumnWidthMode.fill,
+            maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
+            minimumWidth: 200,
+            label: CustomCell(data: LocaleKeys.name.tr),
+          ),
+          GridColumn(
+            columnName: 'unit',
+            label: CustomCell(data: LocaleKeys.unit.tr),
+          ),
+          GridColumn(
+            columnName: 'category',
+            label: CustomCell(data: LocaleKeys.category.tr),
+          ),
+          GridColumn(
+            columnName: 'price',
+            label: CustomCell(data: LocaleKeys.price.tr),
+          ),
+          GridColumn(
+            columnName: 'qty',
+            label: CustomCell(data: LocaleKeys.qty.tr),
+          ),
+        ],
+        placeholder: NoRecordPermission(),
       ),
     );
   }

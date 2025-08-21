@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:responsive_grid/responsive_grid.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/progresshub.dart';
 import '../../../widgets/custom_cell.dart';
+import '../../../widgets/data_grid_theme.dart';
 import '../../../widgets/data_pager.dart';
 import '../../../widgets/no_record.dart';
 import 'open_product_barcode_controller.dart';
@@ -50,57 +50,48 @@ class OpenProductBarcodeView extends GetView<OpenProductBarcodeController> {
 
   //数据表格
   Widget _buildDataGrid(BuildContext context) {
-    return SelectionArea(
-      child: SfDataGridTheme(
-        data: SfDataGridThemeData(
-          gridLineColor: Colors.grey.shade300,
-          currentCellStyle: DataGridCurrentCellStyle(
-            borderColor: Colors.transparent, // 避免选中单元格边框影响
-            borderWidth: 0,
+    return DataGridTheme(
+      child: SfDataGrid(
+        isScrollbarAlwaysShown: true,
+        controller: controller.dataGridController,
+        footerFrozenColumnsCount: 0,
+        frozenColumnsCount: 1,
+        gridLinesVisibility: GridLinesVisibility.both,
+        headerGridLinesVisibility: GridLinesVisibility.both,
+        columnWidthMode: controller.dataSource.rows.isEmpty
+            ? context.isPhoneOrLess
+                  ? ColumnWidthMode.fitByColumnName
+                  : ColumnWidthMode.fill
+            : ColumnWidthMode.auto,
+        columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
+        columnSizer: ColumnSizer(),
+        allowSorting: false,
+        showCheckboxColumn: false,
+        source: controller.dataSource,
+        columns: <GridColumn>[
+          GridColumn(
+            columnName: 'select',
+            label: CustomCell(data: LocaleKeys.select.tr),
+            width: 85,
           ),
-        ),
-        child: SfDataGrid(
-          isScrollbarAlwaysShown: true,
-          controller: controller.dataGridController,
-          footerFrozenColumnsCount: 0,
-          frozenColumnsCount: 1,
-          gridLinesVisibility: GridLinesVisibility.both,
-          headerGridLinesVisibility: GridLinesVisibility.both,
-          columnWidthMode: controller.dataSource.rows.isEmpty
-              ? context.isPhoneOrLess
-                    ? ColumnWidthMode.fitByColumnName
-                    : ColumnWidthMode.fill
-              : ColumnWidthMode.auto,
-          columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
-          columnSizer: ColumnSizer(),
-          allowSorting: false,
-          showCheckboxColumn: false,
-          source: controller.dataSource,
-          columns: <GridColumn>[
-            GridColumn(
-              columnName: 'select',
-              label: CustomCell(data: LocaleKeys.select.tr),
-              width: 85,
-            ),
-            GridColumn(
-              columnName: "barcode",
-              label: CustomCell(data: LocaleKeys.barcode.tr),
-            ),
-            GridColumn(
-              columnName: 'code',
-              label: CustomCell(data: LocaleKeys.code.tr),
+          GridColumn(
+            columnName: "barcode",
+            label: CustomCell(data: LocaleKeys.barcode.tr),
+          ),
+          GridColumn(
+            columnName: 'code',
+            label: CustomCell(data: LocaleKeys.code.tr),
 
-              //maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
-            ),
+            //maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
+          ),
 
-            GridColumn(
-              columnName: 'name',
-              label: CustomCell(data: LocaleKeys.name.tr),
-              columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.auto : ColumnWidthMode.fill,
-            ),
-          ],
-          placeholder: NoRecordPermission(),
-        ),
+          GridColumn(
+            columnName: 'name',
+            label: CustomCell(data: LocaleKeys.name.tr),
+            columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.auto : ColumnWidthMode.fill,
+          ),
+        ],
+        placeholder: NoRecordPermission(),
       ),
     );
   }

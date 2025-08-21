@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:responsive_grid/responsive_grid.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
@@ -16,6 +15,7 @@ import '../../../utils/custom_dialog.dart';
 import '../../../utils/progresshub.dart';
 import '../../../widgets/custom_cell.dart';
 import '../../../widgets/custom_scaffold.dart';
+import '../../../widgets/data_grid_theme.dart';
 import '../../../widgets/data_pager.dart';
 import '../../../widgets/no_record.dart';
 import 'products_controller.dart';
@@ -397,105 +397,96 @@ class ProductsView extends GetView<ProductsController> {
 
   //数据表格
   Widget _buildDataGrid(BuildContext context) {
-    return SelectionArea(
-      child: SfDataGridTheme(
-        data: SfDataGridThemeData(
-          gridLineColor: Colors.grey.shade300,
-          currentCellStyle: DataGridCurrentCellStyle(
-            borderColor: Colors.transparent, // 避免选中单元格边框影响
-            borderWidth: 0,
-          ),
-        ),
-        child: SfDataGrid(
-          isScrollbarAlwaysShown: true,
-          controller: controller.dataGridController,
-          footerFrozenColumnsCount: 2,
-          frozenColumnsCount: 1,
-          gridLinesVisibility: GridLinesVisibility.both,
-          headerGridLinesVisibility: GridLinesVisibility.both,
-          columnWidthMode: controller.dataSource.rows.isEmpty ? ColumnWidthMode.fitByColumnName : ColumnWidthMode.auto,
-          columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
-          showCheckboxColumn: true,
-          selectionMode: SelectionMode.multiple,
-          onCellTap: (details) {
-            //print(details.rowColumnIndex);
-          },
-          source: controller.dataSource,
-          /* onQueryRowHeight: (details) {
+    return DataGridTheme(
+      child: SfDataGrid(
+        isScrollbarAlwaysShown: true,
+        controller: controller.dataGridController,
+        footerFrozenColumnsCount: 2,
+        frozenColumnsCount: 1,
+        gridLinesVisibility: GridLinesVisibility.both,
+        headerGridLinesVisibility: GridLinesVisibility.both,
+        columnWidthMode: controller.dataSource.rows.isEmpty ? ColumnWidthMode.fitByColumnName : ColumnWidthMode.auto,
+        columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
+        showCheckboxColumn: true,
+        selectionMode: SelectionMode.multiple,
+        onCellTap: (details) {
+          //print(details.rowColumnIndex);
+        },
+        source: controller.dataSource,
+        /* onQueryRowHeight: (details) {
                 return details.getIntrinsicRowHeight(details.rowIndex);
               }, */
-          columns: <GridColumn>[
-            GridColumn(
-              columnName: "ID",
-              visible: false,
-              label: CustomCell(data: "ID"),
-            ),
-            GridColumn(
-              columnName: "code",
-              label: CustomCell(data: LocaleKeys.code.tr),
-            ),
-            GridColumn(
-              columnName: 'name',
-              label: CustomCell(data: LocaleKeys.name.tr),
-              maximumWidth: 300,
-            ),
-            GridColumn(
-              columnName: 'kitchenList',
-              label: CustomCell(data: LocaleKeys.kitchenList.tr),
-              maximumWidth: 300,
-            ),
-            GridColumn(
-              columnName: 'keyName',
-              label: CustomCell(data: LocaleKeys.keyName.tr),
-              maximumWidth: 300,
-            ),
-            GridColumn(
-              columnName: 'soldOut',
-              label: CustomCell(data: LocaleKeys.soldOut.tr),
-            ),
-            GridColumn(
-              columnName: 'category1',
-              label: CustomCell(data: "${LocaleKeys.category.tr}1"),
-            ),
-            GridColumn(
-              columnName: 'category2',
-              label: CustomCell(data: "${LocaleKeys.category.tr}2"),
-            ),
-            GridColumn(
-              columnName: 'price',
-              label: CustomCell(data: LocaleKeys.price.tr),
-            ),
-            GridColumn(
-              columnName: 'productRemarks',
-              label: CustomCell(data: LocaleKeys.productRemarks.tr),
-            ),
-            GridColumn(
-              columnName: 'discount',
-              label: CustomCell(data: LocaleKeys.discount.tr),
-            ),
-            GridColumn(
-              columnName: 'setMeal',
-              label: CustomCell(data: LocaleKeys.setMeal.tr),
-            ),
-            GridColumn(
-              columnName: 'sort',
-              label: CustomCell(data: LocaleKeys.sort.tr),
-            ),
-            GridColumn(
-              columnName: 'picture',
-              width: 70,
-              label: CustomCell(data: LocaleKeys.picture.tr),
-            ),
-            GridColumn(
-              allowSorting: false,
-              columnName: 'actions',
-              width: context.isPhoneOrWider ? 200 : 60,
-              label: CustomCell(data: LocaleKeys.operation.tr),
-            ),
-          ],
-          placeholder: NoRecordPermission(
-            msg: controller.hasPermission.value ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
+        columns: <GridColumn>[
+          GridColumn(
+            columnName: "ID",
+            visible: false,
+            label: CustomCell(data: "ID"),
           ),
+          GridColumn(
+            columnName: "code",
+            label: CustomCell(data: LocaleKeys.code.tr),
+          ),
+          GridColumn(
+            columnName: 'name',
+            label: CustomCell(data: LocaleKeys.name.tr),
+            maximumWidth: 300,
+          ),
+          GridColumn(
+            columnName: 'kitchenList',
+            label: CustomCell(data: LocaleKeys.kitchenList.tr),
+            maximumWidth: 300,
+          ),
+          GridColumn(
+            columnName: 'keyName',
+            label: CustomCell(data: LocaleKeys.keyName.tr),
+            maximumWidth: 300,
+          ),
+          GridColumn(
+            columnName: 'soldOut',
+            label: CustomCell(data: LocaleKeys.soldOut.tr),
+          ),
+          GridColumn(
+            columnName: 'category1',
+            label: CustomCell(data: "${LocaleKeys.category.tr}1"),
+          ),
+          GridColumn(
+            columnName: 'category2',
+            label: CustomCell(data: "${LocaleKeys.category.tr}2"),
+          ),
+          GridColumn(
+            columnName: 'price',
+            label: CustomCell(data: LocaleKeys.price.tr),
+          ),
+          GridColumn(
+            columnName: 'productRemarks',
+            label: CustomCell(data: LocaleKeys.productRemarks.tr),
+          ),
+          GridColumn(
+            columnName: 'discount',
+            label: CustomCell(data: LocaleKeys.discount.tr),
+          ),
+          GridColumn(
+            columnName: 'setMeal',
+            label: CustomCell(data: LocaleKeys.setMeal.tr),
+          ),
+          GridColumn(
+            columnName: 'sort',
+            label: CustomCell(data: LocaleKeys.sort.tr),
+          ),
+          GridColumn(
+            columnName: 'picture',
+            width: 70,
+            label: CustomCell(data: LocaleKeys.picture.tr),
+          ),
+          GridColumn(
+            allowSorting: false,
+            columnName: 'actions',
+            width: context.isPhoneOrWider ? 200 : 60,
+            label: CustomCell(data: LocaleKeys.operation.tr),
+          ),
+        ],
+        placeholder: NoRecordPermission(
+          msg: controller.hasPermission.value ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
         ),
       ),
     );

@@ -6,7 +6,6 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:responsive_grid/responsive_grid.dart';
-import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
@@ -18,6 +17,7 @@ import '../../../utils/form_help.dart';
 import '../../../utils/progresshub.dart';
 import '../../../widgets/custom_cell.dart';
 import '../../../widgets/custom_scaffold.dart';
+import '../../../widgets/data_grid_theme.dart';
 import '../../../widgets/data_pager.dart';
 import '../../../widgets/no_record.dart';
 import 'category_controller.dart';
@@ -207,83 +207,74 @@ class CategoryView extends GetView<CategoryController> {
 
   //数据表格
   Widget _buildDataGrid(BuildContext context) {
-    return SelectionArea(
-      child: SfDataGridTheme(
-        data: SfDataGridThemeData(
-          gridLineColor: Colors.grey.shade300,
-          currentCellStyle: DataGridCurrentCellStyle(
-            borderColor: Colors.transparent, // 避免选中单元格边框影响
-            borderWidth: 0,
+    return DataGridTheme(
+      child: SfDataGrid(
+        isScrollbarAlwaysShown: true,
+        controller: controller.dataGridController,
+        footerFrozenColumnsCount: 1,
+        frozenColumnsCount: 0,
+        gridLinesVisibility: GridLinesVisibility.both,
+        headerGridLinesVisibility: GridLinesVisibility.both,
+        columnWidthMode: ColumnWidthMode.auto,
+        columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
+        showCheckboxColumn: false,
+        selectionMode: SelectionMode.none,
+        source: controller.dataSource,
+        columns: <GridColumn>[
+          GridColumn(
+            columnName: "ID",
+            visible: false,
+            label: CustomCell(data: "ID"),
           ),
-        ),
-        child: SfDataGrid(
-          isScrollbarAlwaysShown: true,
-          controller: controller.dataGridController,
-          footerFrozenColumnsCount: 1,
-          frozenColumnsCount: 0,
-          gridLinesVisibility: GridLinesVisibility.both,
-          headerGridLinesVisibility: GridLinesVisibility.both,
-          columnWidthMode: ColumnWidthMode.auto,
-          columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
-          showCheckboxColumn: false,
-          selectionMode: SelectionMode.none,
-          source: controller.dataSource,
-          columns: <GridColumn>[
-            GridColumn(
-              columnName: "ID",
-              visible: false,
-              label: CustomCell(data: "ID"),
-            ),
-            GridColumn(
-              columnName: "tier",
-              label: CustomCell(data: LocaleKeys.layer.tr),
-            ),
-            GridColumn(
-              columnName: 'mSort',
-              label: CustomCell(data: LocaleKeys.sort.tr),
-            ),
-            GridColumn(
-              columnName: 'mCategory',
-              label: CustomCell(data: LocaleKeys.category.tr),
-            ),
-            GridColumn(
-              columnName: 'mDescription',
-              label: CustomCell(data: LocaleKeys.description.tr),
-            ),
-            GridColumn(
-              columnName: 'mTimeStart',
-              label: CustomCell(data: LocaleKeys.startTime.tr),
-            ),
-            GridColumn(
-              columnName: 'mTimeEnd',
-              label: CustomCell(data: LocaleKeys.endTime.tr),
-            ),
-            GridColumn(
-              columnName: 'mHide',
-              label: CustomCell(data: LocaleKeys.deactivate.tr),
-            ),
-            GridColumn(
-              columnName: 'mCustomerSelfHelpHide',
-              label: CustomCell(data: LocaleKeys.customerHide.tr),
-            ),
-            GridColumn(
-              columnName: 'mTakeawayDisplay',
-              label: CustomCell(data: LocaleKeys.takeawayHide.tr),
-            ),
-            GridColumn(
-              columnName: 'mKiosk',
-              label: CustomCell(data: LocaleKeys.kiosk.tr),
-            ),
-            GridColumn(
-              allowSorting: false,
-              columnName: 'actions',
-              width: context.isPhoneOrWider ? 170 : 60,
-              label: CustomCell(data: LocaleKeys.operation.tr),
-            ),
-          ],
-          placeholder: NoRecordPermission(
-            msg: controller.hasPermission.value ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
+          GridColumn(
+            columnName: "tier",
+            label: CustomCell(data: LocaleKeys.layer.tr),
           ),
+          GridColumn(
+            columnName: 'mSort',
+            label: CustomCell(data: LocaleKeys.sort.tr),
+          ),
+          GridColumn(
+            columnName: 'mCategory',
+            label: CustomCell(data: LocaleKeys.category.tr),
+          ),
+          GridColumn(
+            columnName: 'mDescription',
+            label: CustomCell(data: LocaleKeys.description.tr),
+          ),
+          GridColumn(
+            columnName: 'mTimeStart',
+            label: CustomCell(data: LocaleKeys.startTime.tr),
+          ),
+          GridColumn(
+            columnName: 'mTimeEnd',
+            label: CustomCell(data: LocaleKeys.endTime.tr),
+          ),
+          GridColumn(
+            columnName: 'mHide',
+            label: CustomCell(data: LocaleKeys.deactivate.tr),
+          ),
+          GridColumn(
+            columnName: 'mCustomerSelfHelpHide',
+            label: CustomCell(data: LocaleKeys.customerHide.tr),
+          ),
+          GridColumn(
+            columnName: 'mTakeawayDisplay',
+            label: CustomCell(data: LocaleKeys.takeawayHide.tr),
+          ),
+          GridColumn(
+            columnName: 'mKiosk',
+            label: CustomCell(data: LocaleKeys.kiosk.tr),
+          ),
+          GridColumn(
+            allowSorting: false,
+            columnName: 'actions',
+            width: context.isPhoneOrWider ? 170 : 60,
+            label: CustomCell(data: LocaleKeys.operation.tr),
+          ),
+        ],
+        placeholder: NoRecordPermission(
+          msg: controller.hasPermission.value ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
         ),
       ),
     );
