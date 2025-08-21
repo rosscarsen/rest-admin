@@ -297,4 +297,5 @@ abstract class LocaleKeys {
   static const String multiple = "multiple";
   static const String addProductRemarksDetail = "addProductRemarksDetail";
   static const String editProductRemarksDetail = "editProductRemarksDetail";
+  static const String exit = "exit";
 }

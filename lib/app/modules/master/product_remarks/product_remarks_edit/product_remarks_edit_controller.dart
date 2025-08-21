@@ -1,14 +1,17 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+import 'package:responsive_grid/responsive_grid.dart' show ResponsiveGridRow;
 import '../../../../config.dart';
 import '../../../../model/product_remarks_model.dart';
 import '../../../../service/dio_api_client.dart';
 import '../../../../service/dio_api_result.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/custom_dialog.dart';
+import '../../../../utils/form_help.dart';
 import '../../../../utils/functions.dart';
 import '../../../../utils/logger.dart';
 import '../product_remarks_controller.dart';
@@ -62,11 +65,6 @@ class ProductRemarksEditController extends GetxController with GetSingleTickerPr
   void onClose() {
     tabController.dispose();
     super.onClose();
-  }
-
-  /// 刷新数据
-  Future<void> refreshData() async {
-    await addOrEdit();
   }
 
   /// 添加或编辑
@@ -124,13 +122,13 @@ class ProductRemarksEditController extends GetxController with GetSingleTickerPr
   Future<void> save() async {
     if (formKey.currentState?.saveAndValidate() ?? false) {
       final productRemarksCtl = Get.find<ProductRemarksController>();
-      CustomDialog.showLoading(id == null ? LocaleKeys.adding.tr : LocaleKeys.updating.tr);
+      // CustomDialog.showLoading(id == null ? LocaleKeys.adding.tr : LocaleKeys.updating.tr);
       final Map<String, dynamic> formData = {
         ProductRemarksFields.mId: id,
         ...formKey.currentState?.value ?? {},
         ...{"remarksDetails": dataList.map((e) => e.toJson()).toList()},
       };
-
+      logger.e(formData);
       formData.forEach((key, value) {
         if (key == ProductRemarksFields.mVisible) {
           formData[key] = value == "1" ? "0" : "1";
@@ -192,5 +190,128 @@ class ProductRemarksEditController extends GetxController with GetSingleTickerPr
         CustomDialog.dismissDialog();
       }
     }
+  }
+
+  /// 编辑详情
+  Future<void> editOrAddDetail({RemarksDetail? row}) async {
+    final formKey = GlobalKey<FormState>();
+    final bool isAdd = row == null;
+    row ??= RemarksDetail(mType: 0, mOverwrite: 0, mDetail: "", mPrice: "0.00");
+    final RemarksDetail oldRow = RemarksDetail.fromJson(row.toJson());
+    Get.dialog(
+      barrierDismissible: false,
+      Scaffold(
+        appBar: AppBar(
+          title: Text(isAdd ? LocaleKeys.addProductRemarksDetail.tr : LocaleKeys.editProductRemarksDetail.tr),
+          leading: BackButton(onPressed: () => Get.closeDialog()),
+        ),
+        persistentFooterButtons: [
+          //取消
+          FormHelper.cancelButton(onPressed: () => Get.closeDialog()),
+          //保存
+          FormHelper.saveButton(
+            onPressed: () async {
+              if (formKey.currentState?.validate() ?? false) {
+                final isSame = Functions.compareMap(row?.toJson() ?? {}, oldRow.toJson());
+                if (isSame) {
+                  Get.closeDialog();
+                  return;
+                }
+                if (isAdd && row != null) {
+                  final maxId = dataList.map((e) => e.mId).nonNulls.maxOrNull ?? 0;
+                  row.mId = maxId + 1;
+                  dataList.add(row);
+                } else {
+                  row?.copyFrom(row);
+                }
+                sortData();
+                Get.closeDialog();
+              }
+            },
+          ),
+        ],
+        body: Form(
+          key: formKey,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              child: ResponsiveGridRow(
+                children: [
+                  //明细
+                  FormHelper.buildGridCol(
+                    child: FormHelper.textInput(
+                      labelText: LocaleKeys.detail.tr,
+                      initialValue: row.mDetail ?? "",
+                      name: "mDetail",
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return LocaleKeys.thisFieldIsRequired.tr;
+                        }
+                        return null;
+                      },
+                      onChanged: (value) {
+                        row?.mDetail = value;
+                      },
+                    ),
+                  ),
+                  //类型
+                  FormHelper.buildGridCol(
+                    child: FormHelper.selectInput(
+                      labelText: LocaleKeys.type.tr,
+                      name: "mType",
+                      initialValue: row.mType,
+                      items: [
+                        DropdownMenuItem(value: 0, child: Text(LocaleKeys.addMoney.tr)),
+                        DropdownMenuItem(value: 1, child: Text("${LocaleKeys.discount.tr}(%)")),
+                        DropdownMenuItem(value: 2, child: Text("${Text(LocaleKeys.multiple.tr)}(*n)")),
+                      ],
+                      onChanged: (value) {
+                        row?.mType = value;
+                      },
+                      suffixIcon: SizedBox(
+                        width: 120,
+                        child: FormHelper.textInput(name: "mPrice", labelText: "", initialValue: row.mPrice),
+                      ),
+                    ),
+                  ),
+                  //分类
+                  FormHelper.buildGridCol(
+                    child: FormHelper.textInput(
+                      name: "mRemarkType",
+                      labelText: LocaleKeys.classification.tr,
+                      initialValue: row.mRemarkType?.toString() ?? "",
+                      onChanged: (value) {
+                        row?.mRemarkType = int.tryParse(value ?? "0");
+                      },
+                      keyboardType: TextInputType.number,
+                      maxDecimalDigits: 0,
+                    ),
+                  ),
+                  //覆盖
+                  FormHelper.buildGridCol(
+                    child: FormHelper.checkbox(
+                      labelText: LocaleKeys.overWrite.tr,
+                      name: "mOverwrite",
+                      initialValue: row.mOverwrite == 1,
+                      onChanged: (value) {
+                        row?.mOverwrite = value == true ? 1 : 0;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// 表格数据排序
+  void sortData() {
+    dataList.asMap().forEach((index, element) {
+      element.mId = index + 1;
+    });
+    dataSource.updateDataSource();
   }
 }

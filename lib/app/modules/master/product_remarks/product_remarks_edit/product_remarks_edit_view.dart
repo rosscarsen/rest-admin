@@ -30,7 +30,10 @@ class ProductRemarksEditView extends GetView<ProductRemarksEditController> {
               : [
                   Tooltip(
                     message: LocaleKeys.refresh.tr,
-                    child: IconButton(icon: const Icon(Icons.refresh), onPressed: () => controller.refreshData()),
+                    child: IconButton(
+                      icon: const Icon(Icons.refresh),
+                      onPressed: () => controller.updateDataGridSource(),
+                    ),
                   ),
                 ],
           bottom: controller.hasPermission.value
@@ -60,7 +63,7 @@ class ProductRemarksEditView extends GetView<ProductRemarksEditController> {
 
         body: controller.hasPermission.value ? buildMain(context) : NoRecordPermission(msg: LocaleKeys.noPermission.tr),
         persistentFooterButtons: [
-          FormHelper.button(
+          FormHelper.saveButton(
             onPressed: controller.isLoading.value || !controller.hasPermission.value ? null : () => controller.save(),
           ),
         ],
@@ -71,15 +74,14 @@ class ProductRemarksEditView extends GetView<ProductRemarksEditController> {
   Widget buildMain(BuildContext context) {
     return IndexedStack(
       index: controller.tabIndex.value.clamp(0, 1),
-      children: [
-        _buildBasicInfo(context),
-        ProgressHUD(child: controller.isLoading.value ? null : _buildProductRemarksDetail(context)),
-      ],
+      children: [_buildBasicInfo(context), _buildProductRemarksDetail(context)],
     );
   }
 
   /// 基本信息
   Widget _buildBasicInfo(BuildContext context) {
+    bool check = false;
+
     return Skeletonizer(
       enabled: controller.isLoading.value,
       child: FormBuilder(
@@ -139,73 +141,79 @@ class ProductRemarksEditView extends GetView<ProductRemarksEditController> {
         children: [
           Align(
             alignment: Alignment.centerRight,
-            child: ElevatedButton(onPressed: null /*  () => controller.edit() */, child: Text(LocaleKeys.add.tr)),
+            child: ElevatedButton(onPressed: () => controller.editOrAddDetail(), child: Text(LocaleKeys.add.tr)),
           ),
           Expanded(
-            child: SelectionArea(
-              child: SfDataGridTheme(
-                data: SfDataGridThemeData(
-                  gridLineColor: Colors.grey.shade300,
-                  currentCellStyle: DataGridCurrentCellStyle(
-                    borderColor: Colors.transparent, // 避免选中单元格边框影响
-                    borderWidth: 0,
-                  ),
-                ),
-                child: SfDataGrid(
-                  isScrollbarAlwaysShown: true,
-                  footerFrozenColumnsCount: 1,
-                  frozenColumnsCount: 0,
-                  gridLinesVisibility: GridLinesVisibility.both,
-                  headerGridLinesVisibility: GridLinesVisibility.both,
-                  columnWidthMode: controller.dataSource.rows.isEmpty
-                      ? context.isPhoneOrLess
-                            ? ColumnWidthMode.auto
-                            : ColumnWidthMode.fill
-                      : ColumnWidthMode.auto,
-                  columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
-                  showCheckboxColumn: false,
-                  selectionMode: SelectionMode.none,
-                  source: controller.dataSource,
-                  columns: <GridColumn>[
-                    GridColumn(
-                      columnName: 'mSort',
-                      label: CustomCell(data: LocaleKeys.sort.tr),
+            child: ProgressHUD(
+              child: controller.isLoading.value
+                  ? null
+                  : SelectionArea(
+                      child: SfDataGridTheme(
+                        data: SfDataGridThemeData(
+                          gridLineColor: Colors.grey.shade300,
+                          currentCellStyle: DataGridCurrentCellStyle(
+                            borderColor: Colors.transparent, // 避免选中单元格边框影响
+                            borderWidth: 0,
+                          ),
+                        ),
+                        child: SfDataGrid(
+                          isScrollbarAlwaysShown: true,
+                          footerFrozenColumnsCount: 1,
+                          frozenColumnsCount: 0,
+                          gridLinesVisibility: GridLinesVisibility.both,
+                          headerGridLinesVisibility: GridLinesVisibility.both,
+                          columnWidthMode: controller.dataSource.rows.isEmpty
+                              ? context.isPhoneOrLess
+                                    ? ColumnWidthMode.auto
+                                    : ColumnWidthMode.fill
+                              : ColumnWidthMode.auto,
+                          columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
+                          showCheckboxColumn: false,
+                          selectionMode: SelectionMode.none,
+                          source: controller.dataSource,
+                          columns: <GridColumn>[
+                            GridColumn(
+                              columnName: 'mSort',
+                              label: CustomCell(data: LocaleKeys.sort.tr),
+                            ),
+                            GridColumn(
+                              columnName: 'mDetail',
+                              label: CustomCell(data: LocaleKeys.detail.tr),
+                              columnWidthMode: ColumnWidthMode.fill,
+                              maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
+                              minimumWidth: 200,
+                            ),
+                            GridColumn(
+                              columnName: 'mType',
+                              label: CustomCell(data: LocaleKeys.type.tr),
+                            ),
+                            GridColumn(
+                              columnName: 'addMoney',
+                              label: CustomCell(data: "${LocaleKeys.addMoney.tr}/${LocaleKeys.discount.tr}"),
+                            ),
+                            GridColumn(
+                              columnName: 'classification',
+                              label: CustomCell(data: LocaleKeys.classification.tr),
+                            ),
+                            GridColumn(
+                              columnName: 'overWrite',
+                              label: CustomCell(data: LocaleKeys.overWrite.tr),
+                            ),
+                            GridColumn(
+                              allowSorting: false,
+                              columnName: 'actions',
+                              width: 80,
+                              label: CustomCell(data: LocaleKeys.operation.tr),
+                            ),
+                          ],
+                          placeholder: NoRecordPermission(
+                            msg: controller.hasPermission.value
+                                ? LocaleKeys.noRecordFound.tr
+                                : LocaleKeys.noPermission.tr,
+                          ),
+                        ),
+                      ),
                     ),
-                    GridColumn(
-                      columnName: 'mDetail',
-                      label: CustomCell(data: LocaleKeys.detail.tr),
-                      columnWidthMode: ColumnWidthMode.fill,
-                      maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
-                      minimumWidth: 200,
-                    ),
-                    GridColumn(
-                      columnName: 'mType',
-                      label: CustomCell(data: LocaleKeys.type.tr),
-                    ),
-                    GridColumn(
-                      columnName: 'addMoney',
-                      label: CustomCell(data: "${LocaleKeys.addMoney.tr}/${LocaleKeys.discount.tr}"),
-                    ),
-                    GridColumn(
-                      columnName: 'classification',
-                      label: CustomCell(data: LocaleKeys.classification.tr),
-                    ),
-                    GridColumn(
-                      columnName: 'overWrite',
-                      label: CustomCell(data: LocaleKeys.overWrite.tr),
-                    ),
-                    GridColumn(
-                      allowSorting: false,
-                      columnName: 'actions',
-                      width: 80,
-                      label: CustomCell(data: LocaleKeys.operation.tr),
-                    ),
-                  ],
-                  placeholder: NoRecordPermission(
-                    msg: controller.hasPermission.value ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
-                  ),
-                ),
-              ),
             ),
           ),
         ],

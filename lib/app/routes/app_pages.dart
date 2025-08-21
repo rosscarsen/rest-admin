@@ -11,13 +11,11 @@ import '../modules/master/category/category_binding.dart';
 import '../modules/master/category/category_edit/category_edit_binding.dart';
 import '../modules/master/category/category_edit/category_edit_view.dart';
 import '../modules/master/category/category_view.dart';
+import '../modules/master/customer/customer_binding.dart';
+import '../modules/master/customer/customer_view.dart';
 import '../modules/master/master_binding.dart';
 import '../modules/master/master_view.dart';
 import '../modules/master/product_remarks/product_remarks_binding.dart';
-import '../modules/master/product_remarks/product_remarks_detail/product_remarks_detail_binding.dart';
-import '../modules/master/product_remarks/product_remarks_detail/product_remarks_detail_edit/product_remarks_detail_edit_binding.dart';
-import '../modules/master/product_remarks/product_remarks_detail/product_remarks_detail_edit/product_remarks_detail_edit_view.dart';
-import '../modules/master/product_remarks/product_remarks_detail/product_remarks_detail_view.dart';
 import '../modules/master/product_remarks/product_remarks_edit/product_remarks_edit_binding.dart';
 import '../modules/master/product_remarks/product_remarks_edit/product_remarks_edit_view.dart';
 import '../modules/master/product_remarks/product_remarks_view.dart';
@@ -56,7 +54,10 @@ class AppPages {
   AppPages._();
 
   static final routes = [
-    GetPage(name: _Paths.SIGNIN, page: () => const SigninView(), binding: SigninBinding()),
+    GetPage(
+        name: _Paths.SIGNIN,
+        page: () => const SigninView(),
+        binding: SigninBinding()),
     GetPage(
       name: _Paths.DASHBOARD,
       page: () => const DashboardView(),
@@ -106,7 +107,11 @@ class AppPages {
         ),
       ],
     ),
-    GetPage(name: _Paths.PDF, page: () => const PdfView(), binding: PdfBinding(), middlewares: [AuthMiddleware()]),
+    GetPage(
+        name: _Paths.PDF,
+        page: () => const PdfView(),
+        binding: PdfBinding(),
+        middlewares: [AuthMiddleware()]),
     GetPage(
       name: _Paths.MASTER,
       page: () => const MasterView(),
@@ -180,21 +185,12 @@ class AppPages {
               binding: ProductRemarksEditBinding(),
               middlewares: [AuthMiddleware()],
             ),
-            GetPage(
-              name: _Paths.PRODUCT_REMARKS_DETAIL,
-              page: () => const ProductRemarksDetailView(),
-              middlewares: [AuthMiddleware()],
-              binding: ProductRemarksDetailBinding(),
-              children: [
-                GetPage(
-                  name: _Paths.PRODUCT_REMARKS_DETAIL_EDIT,
-                  page: () => const ProductRemarksDetailEditView(),
-                  middlewares: [AuthMiddleware()],
-                  binding: ProductRemarksDetailEditBinding(),
-                ),
-              ],
-            ),
           ],
+        ),
+        GetPage(
+          name: _Paths.CUSTOMER,
+          page: () => const CustomerView(),
+          binding: CustomerBinding(),
         ),
       ],
     ),

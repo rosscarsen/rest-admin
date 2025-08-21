@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rest_admin/app/utils/custom_alert.dart';
+import 'package:rest_admin/app/utils/custom_dialog.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../model/product_remarks_model.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/constants.dart';
+import '../../../../utils/logger.dart';
 import '../../../../widgets/custom_cell.dart';
 import 'product_remarks_edit_controller.dart';
 
@@ -41,6 +44,8 @@ class ProductRemarksDetailDataSource extends DataGridSource {
 
   @override
   DataGridRowAdapter buildRow(DataGridRow dataGridRow) {
+    final index = _dataGridRows.indexOf(dataGridRow);
+
     return DataGridRowAdapter(
       cells: dataGridRow.getCells().map<Widget>((e) {
         // 操作列
@@ -54,7 +59,7 @@ class ProductRemarksDetailDataSource extends DataGridSource {
                   message: LocaleKeys.edit.tr,
                   child: IconButton(
                     icon: const Icon(Icons.edit, color: AppColors.editColor),
-                    onPressed: null, //() => controller.edit(id: row.tCategoryId),
+                    onPressed: () => controller.editOrAddDetail(row: row),
                   ),
                 ),
               ),
@@ -64,7 +69,23 @@ class ProductRemarksDetailDataSource extends DataGridSource {
                   message: LocaleKeys.delete.tr,
                   child: IconButton(
                     icon: const Icon(Icons.delete, color: AppColors.deleteColor),
-                    onPressed: null, //() => controller.deleteRow(row.tCategoryId),
+                    onPressed: () async {
+                      await CustomAlert.iosAlert(
+                        LocaleKeys.areYouSureToDelete.tr,
+                        showCancel: true,
+                        onConfirm: () async {
+                          try {
+                            controller.dataList.removeAt(index);
+                            controller.dataList.asMap().forEach((index, element) {
+                              element.mId = index + 1;
+                            });
+                            updateDataSource();
+                          } catch (e) {
+                            CustomDialog.errorMessages(LocaleKeys.exception.tr);
+                          }
+                        },
+                      );
+                    },
                   ),
                 ),
               ),

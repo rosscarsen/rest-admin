@@ -5,7 +5,6 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart' show FormBuilderState;
 import 'package:get/get.dart';
-import 'package:rest_admin/app/utils/ex_empty.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
@@ -41,7 +40,6 @@ class ProductRemarksController extends GetxController {
   @override
   void onClose() {
     dataGridController.dispose();
-    dataSource.dispose();
     super.onClose();
   }
 

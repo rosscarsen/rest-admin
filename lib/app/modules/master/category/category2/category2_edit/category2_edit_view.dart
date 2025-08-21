@@ -37,7 +37,7 @@ class Category2EditView extends GetView<Category2EditController> {
 
           body: controller.hasPermission.value ? _buildMain() : NoRecordPermission(msg: LocaleKeys.noPermission.tr),
           persistentFooterButtons: [
-            FormHelper.button(
+            FormHelper.saveButton(
               onPressed: controller.isLoading.value || !controller.hasPermission.value ? null : () => controller.save(),
             ),
           ],

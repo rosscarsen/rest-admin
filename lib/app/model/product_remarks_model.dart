@@ -123,6 +123,18 @@ class RemarksDetail {
     mSoldOut: json["mSoldOut"],
     mType: json["m_type"],
   );
+  void copyFrom(RemarksDetail detail) {
+    mId = detail.mId;
+    mDetail = detail.mDetail;
+    mPrice = detail.mPrice;
+    mRemark = detail.mRemark;
+    tId = detail.tId;
+    mOverwrite = detail.mOverwrite;
+    mSort = detail.mSort;
+    mRemarkType = detail.mRemarkType;
+    mSoldOut = detail.mSoldOut;
+    mType = detail.mType;
+  }
 
   Map<String, dynamic> toJson() => {
     "m_id": mId,

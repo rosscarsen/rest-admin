@@ -134,10 +134,6 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
     setMealLimitDataGridController.dispose();
     setMealDataGridController.dispose();
     setMealController.dispose();
-    productBarcodeSource.dispose();
-    productStockSource.dispose();
-    setMealLimitSource.dispose();
-    productSetMealSource.dispose();
     super.onClose();
   }
 

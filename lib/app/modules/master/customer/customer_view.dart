@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import 'product_remarks_detail_controller.dart';
+import 'customer_controller.dart';
 
-class ProductRemarksDetailView extends GetView<ProductRemarksDetailController> {
-  const ProductRemarksDetailView({super.key});
+class CustomerView extends GetView<CustomerController> {
+  const CustomerView({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('ProductRemarksDetailView'),
+        title: const Text('CustomerView'),
         centerTitle: true,
       ),
       body: const Center(
         child: Text(
-          'ProductRemarksDetailView is working',
+          'CustomerView is working',
           style: TextStyle(fontSize: 20),
         ),
       ),

@@ -28,7 +28,7 @@ class AdvancedSearchView extends GetView<AdvancedSearchController> {
           ),
         ),
         persistentFooterButtons: [
-          FormHelper.button(
+          FormHelper.saveButton(
             onPressed: () {
               //controller.formKey.currentState?.fields[AdvancedSearchFields.mCategory1]?.didChange("40000");
               if (controller.formKey.currentState?.enabled == false) return;

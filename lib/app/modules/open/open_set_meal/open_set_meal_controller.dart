@@ -31,7 +31,6 @@ class OpenSetMealController extends GetxController {
   void onClose() {
     dataGridController.dispose();
     searchController.dispose();
-    dataSource.dispose();
     super.onClose();
   }
 

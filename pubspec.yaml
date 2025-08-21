@@ -12,7 +12,7 @@ dependencies:
   get: ^5.0.0-release-candidate-9.3.2
   flutter_localizations:
     sdk: flutter
-  dio: ^5.8.0+1
+  dio: ^5.9.0
   logger: ^2.6.1
   flutter_form_builder: ^10.1.0
   form_builder_extra_fields: ^12.1.0
@@ -20,14 +20,14 @@ dependencies:
   rounded_loading_button_plus: ^3.0.1
   flutter_gradient_animation_text: ^1.0.2
   device_info_plus: ^11.5.0
-  syncfusion_flutter_datagrid: ^30.1.42
-  syncfusion_flutter_core: ^30.1.42
+  syncfusion_flutter_datagrid: ^30.2.6
+  syncfusion_flutter_core: ^30.2.6
   get_secure_storage: ^1.0.5
   loading_animation_widget: ^1.3.0
   easy_image_viewer: ^1.5.1
   responsive_grid: ^2.4.4
   popup_menu: ^2.1.0
-  image_picker: ^1.1.2
+  image_picker: ^1.2.0
   path: ^1.9.1
   http_parser: ^4.1.2
   mime: ^2.0.0
@@ -42,11 +42,12 @@ dependencies:
   permission_handler: ^12.0.1
   flutter_file_saver: ^0.9.0
   flutter_admin_scaffold: ^1.4.0
-  font_awesome_flutter: ^10.8.0
+  font_awesome_flutter: ^10.9.1
   fl_chart: ^1.0.0
-  file_picker: ^10.2.0
+  file_picker: ^10.3.2
   flutter_smart_dialog: ^4.9.8+9
   window_manager: ^0.5.1
+  collection: ^1.19.1
 
  
   

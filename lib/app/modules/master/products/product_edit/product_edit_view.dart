@@ -78,7 +78,7 @@ class ProductEditView extends GetView<ProductEditController> {
                 ),
               ),
         persistentFooterButtons: [
-          FormHelper.button(onPressed: controller.hasPermission.value ? controller.productAddOrEditSave : null),
+          FormHelper.saveButton(onPressed: controller.hasPermission.value ? controller.productAddOrEditSave : null),
         ],
       ),
     );

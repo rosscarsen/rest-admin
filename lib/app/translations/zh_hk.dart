@@ -297,4 +297,5 @@ Map<String, String> zhHK = {
   LocaleKeys.multiple: "倍數",
   LocaleKeys.addProductRemarksDetail: "添加食品備注明细",
   LocaleKeys.editProductRemarksDetail: "編輯食品備注明细",
+  LocaleKeys.exit: "退出",
 };

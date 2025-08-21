@@ -45,7 +45,6 @@ class OpenMultipleProductController extends GetxController {
   @override
   void onClose() {
     dataGridController.dispose();
-    dataSource.dispose();
     super.onClose();
   }
 

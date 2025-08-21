@@ -325,7 +325,7 @@ class FormHelper {
   }
 
   /// 单个复选框
-  static FormBuilderCheckbox checkbox({
+  /* static FormBuilderCheckbox checkbox({
     required String name,
     required String labelText,
     bool enabled = true,
@@ -339,6 +339,36 @@ class FormHelper {
       onChanged: onChanged,
       valueTransformer: (value) => value == true ? "1" : "0",
       title: Text(labelText),
+    );
+  } */
+
+  static FormBuilderField<bool?> checkbox({
+    required String name,
+    required String labelText,
+    bool enabled = true,
+    bool? initialValue,
+    ListTileControlAffinity controlAffinity = ListTileControlAffinity.leading,
+    void Function(bool?)? onChanged,
+  }) {
+    return FormBuilderField<bool?>(
+      name: name,
+      enabled: enabled,
+      initialValue: initialValue ?? false,
+      valueTransformer: (value) => value == true ? "1" : "0",
+      builder: (FormFieldState<bool?> field) {
+        return CheckboxListTile(
+          controlAffinity: controlAffinity,
+          contentPadding: EdgeInsets.zero,
+          dense: true,
+          isThreeLine: false,
+          title: Text(labelText),
+          value: field.value,
+          onChanged: (value) {
+            field.didChange(value);
+            onChanged?.call(value);
+          },
+        );
+      },
     );
   }
 
@@ -412,7 +442,7 @@ class FormHelper {
   }
 
   /// 按鈕
-  static FilledButton button({required void Function()? onPressed, Widget? icon, String? label}) {
+  static FilledButton saveButton({required void Function()? onPressed, Widget? icon, String? label}) {
     return FilledButton.icon(
       onPressed: onPressed == null
           ? null
@@ -422,6 +452,19 @@ class FormHelper {
             },
       icon: icon ?? FaIcon(FontAwesomeIcons.floppyDisk),
       label: Text(label ?? LocaleKeys.save.tr, style: TextStyle(fontSize: 16)),
+    );
+  }
+
+  static ElevatedButton cancelButton({required void Function()? onPressed, Widget? icon, String? label}) {
+    return ElevatedButton.icon(
+      onPressed: onPressed == null
+          ? null
+          : () {
+              FocusManager.instance.primaryFocus?.unfocus();
+              onPressed.call();
+            },
+      icon: icon ?? FaIcon(FontAwesomeIcons.deleteLeft),
+      label: Text(label ?? LocaleKeys.cancel.tr, style: TextStyle(fontSize: 16)),
     );
   }
 }
