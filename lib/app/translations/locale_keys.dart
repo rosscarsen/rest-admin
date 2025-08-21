@@ -298,4 +298,7 @@ abstract class LocaleKeys {
   static const String addProductRemarksDetail = "addProductRemarksDetail";
   static const String editProductRemarksDetail = "editProductRemarksDetail";
   static const String exit = "exit";
+  static const String move = "move";
+  static const String moveUp = "moveUp";
+  static const String moveDown = "moveDown";
 }

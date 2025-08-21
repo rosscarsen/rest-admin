@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rest_admin/app/utils/custom_alert.dart';
-import 'package:rest_admin/app/utils/custom_dialog.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../model/product_remarks_model.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/constants.dart';
+import '../../../../utils/custom_alert.dart';
+import '../../../../utils/custom_dialog.dart';
 import '../../../../widgets/custom_cell.dart';
 import 'product_remarks_edit_controller.dart';
 
@@ -36,6 +36,7 @@ class ProductRemarksDetailDataSource extends DataGridSource {
         DataGridCell<String>(columnName: 'addMoney', value: e.mPrice),
         DataGridCell<int>(columnName: 'classification', value: e.mRemarkType),
         DataGridCell<int>(columnName: 'overWrite', value: e.mOverwrite),
+        DataGridCell<dynamic>(columnName: 'move', value: ""),
         DataGridCell<RemarksDetail>(columnName: 'actions', value: e),
       ],
     );
@@ -100,9 +101,30 @@ class ProductRemarksDetailDataSource extends DataGridSource {
                 ? LocaleKeys.discount.tr
                 : LocaleKeys.multiple.tr,
           );
-        } // 覆盖
+        }
+        // 覆盖
         if (e.columnName == "overWrite") {
           return CustomCell(data: e.value == 0 ? LocaleKeys.no.tr : LocaleKeys.yes.tr);
+        }
+        //移动
+        if (e.columnName == "move") {
+          return Align(
+            alignment: Alignment.center,
+            child: OverflowBar(
+              alignment: MainAxisAlignment.center,
+              overflowAlignment: OverflowBarAlignment.center,
+              children: [
+                IconButton(
+                  icon: const Icon(Icons.arrow_upward, color: AppColors.editColor),
+                  onPressed: () {},
+                ),
+                IconButton(
+                  icon: const Icon(Icons.arrow_downward, color: AppColors.editColor),
+                  onPressed: () {},
+                ),
+              ],
+            ),
+          );
         }
         // 其他列
         return CustomCell(data: e.value?.toString() ?? "");

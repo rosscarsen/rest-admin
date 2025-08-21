@@ -59,11 +59,6 @@ class OpenProductRemarksView extends GetView<OpenProductRemarksController> {
         frozenColumnsCount: 2,
         gridLinesVisibility: GridLinesVisibility.both,
         headerGridLinesVisibility: GridLinesVisibility.both,
-        columnWidthMode: controller.dataSource.rows.isEmpty
-            ? context.isPhoneOrLess
-                  ? ColumnWidthMode.fitByColumnName
-                  : ColumnWidthMode.fill
-            : ColumnWidthMode.auto,
         columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
         columnSizer: ColumnSizer(),
         allowSorting: false,

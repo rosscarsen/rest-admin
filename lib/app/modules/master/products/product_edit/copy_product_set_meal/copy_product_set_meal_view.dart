@@ -78,11 +78,6 @@ class CopyProductSetMealView extends GetView<CopyProductSetMealController> {
                   frozenColumnsCount: 1,
                   gridLinesVisibility: GridLinesVisibility.both,
                   headerGridLinesVisibility: GridLinesVisibility.both,
-                  columnWidthMode: controller.dataSource.rows.isEmpty
-                      ? context.isPhoneOrLess
-                            ? ColumnWidthMode.fitByColumnName
-                            : ColumnWidthMode.fill
-                      : ColumnWidthMode.auto,
                   columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
                   allowSorting: false,
                   source: controller.dataSource,

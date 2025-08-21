@@ -58,11 +58,6 @@ class OpenProductView extends GetView<OpenProductController> {
         frozenColumnsCount: 3,
         gridLinesVisibility: GridLinesVisibility.both,
         headerGridLinesVisibility: GridLinesVisibility.both,
-        columnWidthMode: controller.dataSource.rows.isEmpty
-            ? context.isPhoneOrLess
-                  ? ColumnWidthMode.fitByColumnName
-                  : ColumnWidthMode.fill
-            : ColumnWidthMode.auto,
         columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
         allowSorting: false,
         showCheckboxColumn: false,

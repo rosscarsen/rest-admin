@@ -405,7 +405,6 @@ class ProductsView extends GetView<ProductsController> {
         frozenColumnsCount: 1,
         gridLinesVisibility: GridLinesVisibility.both,
         headerGridLinesVisibility: GridLinesVisibility.both,
-        columnWidthMode: controller.dataSource.rows.isEmpty ? ColumnWidthMode.fitByColumnName : ColumnWidthMode.auto,
         columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
         showCheckboxColumn: true,
         selectionMode: SelectionMode.multiple,

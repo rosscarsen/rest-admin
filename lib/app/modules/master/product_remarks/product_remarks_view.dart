@@ -242,11 +242,6 @@ class ProductRemarksView extends GetView<ProductRemarksController> {
         frozenColumnsCount: 0,
         gridLinesVisibility: GridLinesVisibility.both,
         headerGridLinesVisibility: GridLinesVisibility.both,
-        columnWidthMode: controller.dataSource.rows.isEmpty
-            ? context.isPhoneOrLess
-                  ? ColumnWidthMode.auto
-                  : ColumnWidthMode.fill
-            : ColumnWidthMode.auto,
         columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
         showCheckboxColumn: false,
         selectionMode: SelectionMode.none,

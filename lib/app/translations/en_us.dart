@@ -298,4 +298,7 @@ Map<String, String> get enUS => {
   LocaleKeys.addProductRemarksDetail: "Add Product Remarks Detail",
   LocaleKeys.editProductRemarksDetail: "Edit Product Remarks Detail",
   LocaleKeys.exit: "Exit",
+  LocaleKeys.move: "Move",
+  LocaleKeys.moveUp: "Move Up",
+  LocaleKeys.moveDown: "Move Down",
 };
