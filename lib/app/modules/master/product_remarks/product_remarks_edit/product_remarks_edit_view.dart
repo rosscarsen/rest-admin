@@ -8,7 +8,6 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../translations/locale_keys.dart';
-import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/form_help.dart';
 import '../../../../utils/progresshub.dart';
 import '../../../../widgets/custom_cell.dart';
@@ -27,6 +26,10 @@ class ProductRemarksEditView extends GetView<ProductRemarksEditController> {
           leading: BackButton(
             onPressed: () async {
               final checkResult = controller.checkPageDataChange();
+              if (checkResult is bool && checkResult == true) {
+                Get.back();
+                return;
+              }
               if (checkResult is Map<String, dynamic>) {
                 CustomAlert.iosAlert(
                   LocaleKeys.areYouLeave.tr,
