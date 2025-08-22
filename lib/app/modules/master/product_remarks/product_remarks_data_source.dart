@@ -73,7 +73,7 @@ class ProductRemarksDataSource extends DataGridSource with WidgetsBindingObserve
                         message: LocaleKeys.copy.tr,
                         child: IconButton(
                           icon: const Icon(Icons.copy, color: AppColors.copyColor),
-                          onPressed: () => controller.exportProductRemark(id: row.mId),
+                          onPressed: () => controller.copyProductRemark(row: row),
                         ),
                       ),
                     ),
@@ -112,9 +112,9 @@ class ProductRemarksDataSource extends DataGridSource with WidgetsBindingObserve
                           maxColumn: 2,
                         ),
                         onClickMenu: (MenuItemProvider item) {
-                          if (item.menuUserInfo == "export") {
+                          if (item.menuUserInfo == "copy") {
                             // 导出
-                            controller.exportProductRemark(id: row.mId);
+                            controller.copyProductRemark(row: row);
                           } else if (item.menuUserInfo == "edit") {
                             // 编辑
                             controller.edit(id: row.mId);

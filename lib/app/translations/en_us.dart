@@ -240,7 +240,7 @@ Map<String, String> get enUS => {
   LocaleKeys.setMealDelete: "Delete SetMeal",
   LocaleKeys.setMealAdd: "Add SetMeal",
   LocaleKeys.saving: "Saving...",
-  LocaleKeys.codeExists: "Code %s already exists",
+  LocaleKeys.codeExists: "%s already exists",
   LocaleKeys.leave: "Leave",
   LocaleKeys.join: "Join",
   LocaleKeys.joinSuccess: "Join Success",
@@ -302,4 +302,5 @@ Map<String, String> get enUS => {
   LocaleKeys.moveUp: "Move Up",
   LocaleKeys.moveDown: "Move Down",
   LocaleKeys.areYouLeave: "Data is not saved, are you sure to leave?",
+  LocaleKeys.copyProductRemarks: "Copy Product Remarks",
 };

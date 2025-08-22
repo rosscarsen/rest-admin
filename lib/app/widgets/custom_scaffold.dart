@@ -119,7 +119,7 @@ class CustomScaffold extends StatelessWidget {
                 Get.updateLocale(locale);
               } else if (item.route == Routes.SIGNIN) {
                 CustomAlert.iosAlert(
-                  LocaleKeys.confirmLoginOut.tr,
+                  message: LocaleKeys.confirmLoginOut.tr,
                   showCancel: true,
                   onConfirm: () async {
                     final storageManage = StorageManage();

@@ -83,19 +83,19 @@ class SigninController extends GetxController with GetSingleTickerProviderStateM
             await Future.delayed(const Duration(seconds: 1), () => Get.offAndToNamed(Routes.DASHBOARD));
             break;
           case 201:
-            CustomAlert.iosAlert(LocaleKeys.userLoggedIn.tr);
+            CustomAlert.iosAlert(message: LocaleKeys.userLoggedIn.tr);
             break;
           case 202:
-            CustomAlert.iosAlert(LocaleKeys.companyError.tr);
+            CustomAlert.iosAlert(message: LocaleKeys.companyError.tr);
             break;
           case 203:
-            CustomAlert.iosAlert(LocaleKeys.loginLimit.tr);
+            CustomAlert.iosAlert(message: LocaleKeys.loginLimit.tr);
             break;
           case 204:
-            CustomAlert.iosAlert(LocaleKeys.userOrPasswordError.tr);
+            CustomAlert.iosAlert(message: LocaleKeys.userOrPasswordError.tr);
             break;
           default:
-            CustomAlert.iosAlert(LocaleKeys.unknownError.tr);
+            CustomAlert.iosAlert(message: LocaleKeys.unknownError.tr);
             break;
         }
       } finally {

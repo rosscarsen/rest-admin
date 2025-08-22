@@ -32,7 +32,7 @@ class ProductRemarksEditView extends GetView<ProductRemarksEditController> {
               }
               if (checkResult is Map<String, dynamic>) {
                 CustomAlert.iosAlert(
-                  LocaleKeys.areYouLeave.tr,
+                  message: LocaleKeys.areYouLeave.tr,
                   showCancel: true,
                   confirmText: LocaleKeys.leave.tr,
                   onConfirm: () => Get.back(),

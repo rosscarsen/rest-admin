@@ -238,7 +238,7 @@ class ApiClient {
   DioApiResult _handleError(Object e) {
     //logger.d("===>${e.toString()}");
     if (e is DioException && e.response?.statusCode == _loginInvalidCode) {
-      CustomAlert.iosAlert(LocaleKeys.loginInvalid.tr, onConfirm: () => Get.offAllNamed(Routes.SIGNIN));
+      CustomAlert.iosAlert(message: LocaleKeys.loginInvalid.tr, onConfirm: () => Get.offAllNamed(Routes.SIGNIN));
       return DioApiResult(success: false, error: LocaleKeys.loginInvalid.tr);
     } else {
       return DioApiResult(
@@ -279,7 +279,8 @@ class ErrorHandlerInterceptor extends Interceptor {
   Future onError(DioException err, ErrorInterceptorHandler handler) async {
     // 登录失效
     if (err.response?.statusCode == ApiClient._loginInvalidCode) {
-      CustomAlert.iosAlert(LocaleKeys.loginInvalid.tr, onConfirm: () => Get.offAllNamed(Routes.SIGNIN));
+      CustomAlert.iosAlert(message: LocaleKeys.loginInvalid.tr, onConfirm: () => Get.offAllNamed(Routes.SIGNIN));
+
       return handler.resolve(err.response!);
     }
     // 使用定义的超时错误常量

@@ -3,7 +3,8 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart' show FormBuilderState;
+import 'package:flutter_form_builder/flutter_form_builder.dart' show FormBuilderState, FormBuilder;
+import 'package:form_builder_validators/form_builder_validators.dart' show FormBuilderValidators;
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
@@ -16,12 +17,14 @@ import '../../../translations/locale_keys.dart';
 import '../../../utils/custom_alert.dart';
 import '../../../utils/custom_dialog.dart';
 import '../../../utils/file_storage.dart';
+import '../../../utils/form_help.dart';
 import '../../../utils/logger.dart';
 import 'product_remarks_data_source.dart';
 
 class ProductRemarksController extends GetxController {
   final DataGridController dataGridController = DataGridController();
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
+  final GlobalKey<FormBuilderState> copyKey = GlobalKey<FormBuilderState>();
   static ProductRemarksController get to => Get.find();
   final isLoading = true.obs;
   final totalPages = 0.obs;
@@ -105,7 +108,7 @@ class ProductRemarksController extends GetxController {
   void deleteRow(int? id) async {
     CustomAlert.iosAlert(
       showCancel: true,
-      LocaleKeys.deleteConfirmMsg.tr,
+      message: LocaleKeys.deleteConfirmMsg.tr,
       onConfirm: () async {
         try {
           CustomDialog.showLoading(LocaleKeys.deleting.tr);
@@ -142,7 +145,7 @@ class ProductRemarksController extends GetxController {
   }
 
   /// 导出
-  Future<void> exportProductRemark({int? id}) async {
+  Future<void> exportProductRemark() async {
     CustomDialog.showLoading(LocaleKeys.generating.trArgs(["excel"]));
     try {
       final DioApiResult dioApiResult = await apiClient.generateExcel(Config.exportProductRemarkExcel);
@@ -186,5 +189,104 @@ class ProductRemarksController extends GetxController {
     } finally {
       CustomDialog.dismissDialog();
     }
+  }
+
+  /// 复制
+  Future<void> copyProductRemark({required ProductRemarksInfo row}) async {
+    Get.dialog(
+      AlertDialog(
+        title: Text(LocaleKeys.copyProductRemarks.tr),
+        content: FormBuilder(
+          key: copyKey,
+          child: SingleChildScrollView(
+            child: Column(
+              spacing: 8.0,
+              children: [
+                //排序
+                FormHelper.textInput(
+                  initialValue: row.mSort?.toString() ?? "",
+                  name: "mSort",
+                  labelText: LocaleKeys.sort.tr,
+                  keyboardType: TextInputType.number,
+                  maxDecimalDigits: 0,
+                ),
+                //隐藏
+                FormHelper.checkbox(initialValue: row.mVisible == 0, name: "mVisible", labelText: LocaleKeys.hide.tr),
+                //食品备注
+                FormHelper.textInput(
+                  initialValue: row.mRemark ?? "",
+                  name: "m_remark",
+                  labelText: LocaleKeys.productRemarks.tr,
+                  maxLines: 2,
+                  validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.required(errorText: LocaleKeys.thisFieldIsRequired.tr),
+                    FormBuilderValidators.match(RegExp(r'^[^+]*$'), errorText: LocaleKeys.cannotContain.trArgs(['+'])),
+                    FormBuilderValidators.match(RegExp(r'^[^&]*$'), errorText: LocaleKeys.cannotContain.trArgs(['&'])),
+                  ]),
+                ),
+              ],
+            ),
+          ),
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          ElevatedButton(onPressed: () => Get.closeDialog(), child: Text(LocaleKeys.cancel.tr)),
+          ElevatedButton(
+            onPressed: () async {
+              if (copyKey.currentState?.saveAndValidate() ?? false) {
+                CustomDialog.showLoading(LocaleKeys.copying.tr);
+                final Map<String, dynamic> data = copyKey.currentState?.value ?? {};
+                final Map<String, dynamic> param = {"mId": row.mId, ...data};
+                param.forEach((key, value) {
+                  if (key == "mVisible") {
+                    param[key] = value == "1" ? "0" : "1";
+                  }
+                });
+                try {
+                  final DioApiResult dioApiResult = await apiClient.post(Config.productRemarkCopy, data: param);
+                  if (!dioApiResult.success) {
+                    CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+                    return;
+                  }
+                  if (dioApiResult.data == null) {
+                    CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+                    return;
+                  }
+                  final Map<String, dynamic> data = jsonDecode(dioApiResult.data!) as Map<String, dynamic>;
+                  switch (data["status"]) {
+                    case 200:
+                      CustomDialog.successMessages(LocaleKeys.copySuccess.tr);
+                      final apiResult = data["apiResult"];
+                      if (apiResult == null) {
+                        return;
+                      }
+                      final resultModel = ProductRemarksInfo.fromJson(apiResult);
+                      dataList.insert(0, resultModel);
+                      dataSource.updateDataSource();
+                      Get.closeDialog();
+                      break;
+                    case 201:
+                      CustomDialog.errorMessages(
+                        LocaleKeys.codeExists.trArgs([copyKey.currentState?.fields["m_remark"]?.value]),
+                      );
+                      break;
+                    case 202:
+                      CustomDialog.errorMessages(LocaleKeys.copyFailed.tr);
+                      break;
+                    default:
+                      CustomDialog.errorMessages(LocaleKeys.unknownError.tr);
+                  }
+                } catch (e) {
+                  CustomDialog.errorMessages(LocaleKeys.copyFailed.tr);
+                } finally {
+                  CustomDialog.dismissDialog();
+                }
+              }
+            },
+            child: Text(LocaleKeys.copy.tr),
+          ),
+        ],
+      ),
+    );
   }
 }

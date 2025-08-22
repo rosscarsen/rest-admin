@@ -240,7 +240,7 @@ Map<String, String> zhHK = {
   LocaleKeys.setMealDelete: "刪除套餐",
   LocaleKeys.setMealAdd: "添加套餐",
   LocaleKeys.saving: "保存中...",
-  LocaleKeys.codeExists: "編號%s已存在",
+  LocaleKeys.codeExists: "%s已存在",
   LocaleKeys.leave: "離開",
   LocaleKeys.join: "加入",
   LocaleKeys.joinSuccess: "加入成功",
@@ -302,4 +302,5 @@ Map<String, String> zhHK = {
   LocaleKeys.moveUp: "上移",
   LocaleKeys.moveDown: "下移",
   LocaleKeys.areYouLeave: "數據未保存，是否確定離開?",
+  LocaleKeys.copyProductRemarks: "複製食品備註",
 };

@@ -295,7 +295,7 @@ class ProductsController extends GetxController {
     }).toList();
     CustomAlert.iosAlert(
       showCancel: true,
-      LocaleKeys.deleteConfirmMsg.tr,
+      message: LocaleKeys.deleteConfirmMsg.tr,
       onConfirm: () async {
         try {
           CustomDialog.showLoading(LocaleKeys.deleting.tr);
@@ -337,7 +337,7 @@ class ProductsController extends GetxController {
   Future<void> deleteRemoteProduct(List<dynamic> selectedIDS) async {
     CustomAlert.iosAlert(
       showCancel: true,
-      LocaleKeys.deleteConfirmMsg.tr,
+      message: LocaleKeys.deleteConfirmMsg.tr,
       onConfirm: () async {
         try {
           CustomDialog.showLoading(LocaleKeys.deleting.tr);
@@ -367,7 +367,7 @@ class ProductsController extends GetxController {
               break;
             case 202:
               CustomAlert.iosAlert(
-                LocaleKeys.exitsTxCannotDelete.tr.trArgs([data['msg']]),
+                message: LocaleKeys.exitsTxCannotDelete.tr.trArgs([data['msg']]),
                 onConfirm: () {
                   reloadData();
                 },

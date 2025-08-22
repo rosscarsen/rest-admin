@@ -611,8 +611,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
       return;
     }
     await CustomAlert.iosAlert(
-      LocaleKeys.deleteConfirmMsg.tr,
-
+      message: LocaleKeys.deleteConfirmMsg.tr,
       showCancel: true,
       onConfirm: () async {
         // 选中ID
@@ -696,7 +695,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
   // 按钮更新套餐
   Future<void> updateProductSetMeal() async {
     await CustomAlert.iosAlert(
-      LocaleKeys.areYouSureToUpdate.tr,
+      message: LocaleKeys.areYouSureToUpdate.tr,
       showCancel: true,
       onConfirm: () async {
         final String setMenu = setMealController.text;

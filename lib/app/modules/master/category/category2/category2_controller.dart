@@ -103,7 +103,7 @@ class Category2Controller extends GetxController {
   void deleteRow(int? id) async {
     CustomAlert.iosAlert(
       showCancel: true,
-      LocaleKeys.deleteConfirmMsg.tr,
+      message: LocaleKeys.deleteConfirmMsg.tr,
       onConfirm: () async {
         try {
           CustomDialog.showLoading(LocaleKeys.deleting.tr);

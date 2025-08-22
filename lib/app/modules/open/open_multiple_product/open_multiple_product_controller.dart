@@ -204,7 +204,7 @@ class OpenMultipleProductController extends GetxController {
     final lastSelectProductCodes = List.from(selectProductCodes);
     if (commonCodes.isNotEmpty) {
       await CustomAlert.iosAlert(
-        "${LocaleKeys.theSelectedContentAlreadyExists.tr}:${commonCodes.join(",")}",
+        message: "${LocaleKeys.theSelectedContentAlreadyExists.tr}:${commonCodes.join(",")}",
         showCancel: true,
         cancelText: LocaleKeys.ignore.tr,
         confirmText: LocaleKeys.skip.tr,

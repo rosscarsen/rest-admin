@@ -73,7 +73,7 @@ class ProductRemarksDetailDataSource extends DataGridSource {
                     icon: const Icon(Icons.delete, color: AppColors.deleteColor),
                     onPressed: () async {
                       await CustomAlert.iosAlert(
-                        LocaleKeys.areYouSureToDelete.tr,
+                        message: LocaleKeys.areYouSureToDelete.tr,
                         showCancel: true,
                         onConfirm: () async {
                           try {

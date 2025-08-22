@@ -126,7 +126,6 @@ class ProductRemarksEditController extends GetxController with GetSingleTickerPr
         ...formKey.currentState?.value ?? {},
         ...{"remarksDetails": dataList.map((e) => e.toJson()).toList()},
       };
-
       formData.forEach((key, value) {
         if (key == ProductRemarksFields.mVisible) {
           formData[key] = value == "1" ? "0" : "1";
@@ -142,8 +141,9 @@ class ProductRemarksEditController extends GetxController with GetSingleTickerPr
         }
       }
       return formData;
+    } else {
+      return id == null ? true : false;
     }
-    return false;
   }
 
   /// 食品备注保存
@@ -232,6 +232,13 @@ class ProductRemarksEditController extends GetxController with GetSingleTickerPr
                   Get.closeDialog();
                   return;
                 }
+                if (isAdd) {
+                  final String mDetail = row?.mDetail?.trim() ?? "";
+                  if (dataList.any((element) => element.mDetail == mDetail)) {
+                    CustomDialog.errorMessages(LocaleKeys.codeExists.trArgs([mDetail]));
+                    return;
+                  }
+                }
                 if (isAdd && row != null) {
                   final maxId = dataList.map((e) => e.mId).nonNulls.maxOrNull ?? 0;
                   row.mId = maxId + 1;
@@ -278,14 +285,21 @@ class ProductRemarksEditController extends GetxController with GetSingleTickerPr
                       items: [
                         DropdownMenuItem(value: 0, child: Text(LocaleKeys.addMoney.tr)),
                         DropdownMenuItem(value: 1, child: Text("${LocaleKeys.discount.tr}(%)")),
-                        DropdownMenuItem(value: 2, child: Text("${Text(LocaleKeys.multiple.tr)}(*n)")),
+                        DropdownMenuItem(value: 2, child: Text("${LocaleKeys.multiple.tr}(*n)")),
                       ],
                       onChanged: (value) {
                         row?.mType = value;
                       },
                       suffixIcon: SizedBox(
                         width: 120,
-                        child: FormHelper.textInput(name: "mPrice", labelText: "", initialValue: row.mPrice),
+                        child: FormHelper.textInput(
+                          name: "mPrice",
+                          labelText: "",
+                          initialValue: row.mPrice,
+                          onChanged: (value) {
+                            row?.mPrice = value?.trim() ?? "0.00";
+                          },
+                        ),
                       ),
                     ),
                   ),
