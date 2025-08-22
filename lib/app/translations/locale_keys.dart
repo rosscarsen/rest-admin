@@ -301,4 +301,5 @@ abstract class LocaleKeys {
   static const String move = "move";
   static const String moveUp = "moveUp";
   static const String moveDown = "moveDown";
+  static const String areYouLeave = "areYouLeave";
 }

@@ -358,7 +358,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
     final ProductSetMeal oldRow = ProductSetMeal.fromJson(row.toJson());
     final formKey = GlobalKey<FormState>();
     Get.dialog(
-      barrierDismissible: false,
+      barrierDismissible: true,
       Dialog(
         child: Scaffold(
           appBar: AppBar(
@@ -437,7 +437,11 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
                         name: "mBarcode",
                         suffixIcon: IconButton(
                           onPressed: () {
-                            Get.toNamed(Routes.OPEN_MULTIPLE_PRODUCT);
+                            Get.closeDialog();
+                            Get.toNamed(
+                              Routes.OPEN_MULTIPLE_PRODUCT,
+                              parameters: {"productId": row.tProductId?.toString() ?? ""},
+                            );
                           },
                           tooltip: LocaleKeys.selectProduct.tr,
                           icon: Icon(Icons.file_open, color: AppColors.openColor),

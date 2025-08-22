@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -16,13 +18,13 @@ class ProductRemarksDetailDataSource extends DataGridSource {
   }
   final ProductRemarksEditController controller;
 
+  List<DataGridRow> _dataGridRows = [];
+  int? _highlightRowIndex; // 高亮行索引
+  Timer? _highlightTimer;
   void updateDataSource() {
     _dataGridRows = controller.dataList.map(_createDataRow).toList();
-
     notifyListeners();
   }
-
-  List<DataGridRow> _dataGridRows = [];
 
   @override
   List<DataGridRow> get rows => _dataGridRows;
@@ -47,13 +49,14 @@ class ProductRemarksDetailDataSource extends DataGridSource {
     final index = _dataGridRows.indexOf(dataGridRow);
 
     return DataGridRowAdapter(
+      // 设置行颜色
+      color: index == _highlightRowIndex ? Colors.yellow.shade100 : null,
       cells: dataGridRow.getCells().map<Widget>((e) {
         // 操作列
         if (e.columnName == "actions") {
           final RemarksDetail row = e.value as RemarksDetail;
           return Row(
             children: [
-              // 编辑
               Flexible(
                 child: Tooltip(
                   message: LocaleKeys.edit.tr,
@@ -63,7 +66,6 @@ class ProductRemarksDetailDataSource extends DataGridSource {
                   ),
                 ),
               ),
-              // 删除
               Flexible(
                 child: Tooltip(
                   message: LocaleKeys.delete.tr,
@@ -106,7 +108,7 @@ class ProductRemarksDetailDataSource extends DataGridSource {
         if (e.columnName == "overWrite") {
           return CustomCell(data: e.value == 0 ? LocaleKeys.no.tr : LocaleKeys.yes.tr);
         }
-        //移动
+        // 移动
         if (e.columnName == "move") {
           return Align(
             alignment: Alignment.center,
@@ -114,14 +116,46 @@ class ProductRemarksDetailDataSource extends DataGridSource {
               alignment: MainAxisAlignment.center,
               overflowAlignment: OverflowBarAlignment.center,
               children: [
-                IconButton(
-                  icon: const Icon(Icons.arrow_upward, color: AppColors.editColor),
-                  onPressed: () {},
-                ),
-                IconButton(
-                  icon: const Icon(Icons.arrow_downward, color: AppColors.editColor),
-                  onPressed: () {},
-                ),
+                if (index > 0)
+                  IconButton(
+                    tooltip: LocaleKeys.moveUp.tr,
+                    icon: const Icon(Icons.arrow_upward, color: AppColors.editColor),
+                    onPressed: () {
+                      final temp = controller.dataList[index];
+                      controller.dataList[index] = controller.dataList[index - 1];
+                      controller.dataList[index - 1] = temp;
+                      for (var i = 0; i < controller.dataList.length; i++) {
+                        controller.dataList[i].mId = i + 1;
+                      }
+                      _highlightRowIndex = index - 1;
+                      updateDataSource();
+                      _highlightTimer?.cancel();
+                      _highlightTimer = Timer(const Duration(seconds: 3), () {
+                        _highlightRowIndex = null;
+                        notifyListeners();
+                      });
+                    },
+                  ),
+                if (index < _dataGridRows.length - 1)
+                  IconButton(
+                    tooltip: LocaleKeys.moveDown.tr,
+                    icon: const Icon(Icons.arrow_downward, color: AppColors.editColor),
+                    onPressed: () {
+                      final temp = controller.dataList[index];
+                      controller.dataList[index] = controller.dataList[index + 1];
+                      controller.dataList[index + 1] = temp;
+                      for (var i = 0; i < controller.dataList.length; i++) {
+                        controller.dataList[i].mId = i + 1;
+                      }
+                      _highlightRowIndex = index + 1;
+                      updateDataSource();
+                      _highlightTimer?.cancel();
+                      _highlightTimer = Timer(const Duration(seconds: 3), () {
+                        _highlightRowIndex = null;
+                        notifyListeners();
+                      });
+                    },
+                  ),
               ],
             ),
           );

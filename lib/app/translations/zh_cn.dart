@@ -241,7 +241,7 @@ Map<String, String> get zhCN => {
   LocaleKeys.setMealAdd: "添加套餐",
   LocaleKeys.saving: "保存中...",
   LocaleKeys.codeExists: "编号%s已存在",
-  LocaleKeys.leave: "退出",
+  LocaleKeys.leave: "离开",
   LocaleKeys.join: "加入",
   LocaleKeys.joinSuccess: "加入成功",
   LocaleKeys.joinFailed: "加入失败",
@@ -301,4 +301,5 @@ Map<String, String> get zhCN => {
   LocaleKeys.move: "移动",
   LocaleKeys.moveUp: "上移",
   LocaleKeys.moveDown: "下移",
+  LocaleKeys.areYouLeave: "数据未保存，是否确定离开?",
 };

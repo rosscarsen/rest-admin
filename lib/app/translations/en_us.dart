@@ -301,4 +301,5 @@ Map<String, String> get enUS => {
   LocaleKeys.move: "Move",
   LocaleKeys.moveUp: "Move Up",
   LocaleKeys.moveDown: "Move Down",
+  LocaleKeys.areYouLeave: "Data is not saved, are you sure to leave?",
 };

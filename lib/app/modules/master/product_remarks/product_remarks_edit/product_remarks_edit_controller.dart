@@ -33,6 +33,7 @@ class ProductRemarksEditController extends GetxController with GetSingleTickerPr
   final tabIndex = 0.obs;
   late ProductRemarksDetailDataSource dataSource;
   List<RemarksDetail> dataList = [];
+  final productRemarksCtl = Get.find<ProductRemarksController>();
   @override
   void onInit() {
     super.onInit();
@@ -117,17 +118,15 @@ class ProductRemarksEditController extends GetxController with GetSingleTickerPr
     }
   }
 
-  /// 食品备注保存
-  Future<void> save() async {
+  /// 检测页面数据是否发生变化
+  Object checkPageDataChange() {
     if (formKey.currentState?.saveAndValidate() ?? false) {
-      final productRemarksCtl = Get.find<ProductRemarksController>();
-      // CustomDialog.showLoading(id == null ? LocaleKeys.adding.tr : LocaleKeys.updating.tr);
       final Map<String, dynamic> formData = {
         ProductRemarksFields.mId: id,
         ...formKey.currentState?.value ?? {},
         ...{"remarksDetails": dataList.map((e) => e.toJson()).toList()},
       };
-      logger.e(formData);
+
       formData.forEach((key, value) {
         if (key == ProductRemarksFields.mVisible) {
           formData[key] = value == "1" ? "0" : "1";
@@ -138,14 +137,31 @@ class ProductRemarksEditController extends GetxController with GetSingleTickerPr
         if (oldRow != null) {
           final isSame = Functions.compareMap(oldRow.toJson(), formData);
           if (isSame) {
-            CustomDialog.dismissDialog();
-            Get.back();
-            return;
+            return true;
           }
         }
       }
+      return formData;
+    }
+    return false;
+  }
+
+  /// 食品备注保存
+  Future<void> save() async {
+    final checkResult = checkPageDataChange();
+    if (checkResult is bool) {
+      if (checkResult) {
+        // 数据未发生变化
+        Get.back();
+      }
+      // 表单未验证通过
+      return;
+    }
+
+    if (checkResult is Map<String, dynamic>) {
+      CustomDialog.showLoading(id == null ? LocaleKeys.adding.tr : LocaleKeys.updating.tr);
       try {
-        final DioApiResult dioApiResult = await apiClient.post(Config.productRemarkSave, data: formData);
+        final DioApiResult dioApiResult = await apiClient.post(Config.productRemarkSave, data: checkResult);
         if (!dioApiResult.success) {
           CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
           return;

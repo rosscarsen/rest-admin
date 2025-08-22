@@ -3,10 +3,12 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:responsive_grid/responsive_grid.dart';
+import 'package:rest_admin/app/utils/custom_alert.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../translations/locale_keys.dart';
+import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/form_help.dart';
 import '../../../../utils/progresshub.dart';
 import '../../../../widgets/custom_cell.dart';
@@ -22,6 +24,19 @@ class ProductRemarksEditView extends GetView<ProductRemarksEditController> {
     return Obx(
       () => Scaffold(
         appBar: AppBar(
+          leading: BackButton(
+            onPressed: () async {
+              final checkResult = controller.checkPageDataChange();
+              if (checkResult is Map<String, dynamic>) {
+                CustomAlert.iosAlert(
+                  LocaleKeys.areYouLeave.tr,
+                  showCancel: true,
+                  confirmText: LocaleKeys.leave.tr,
+                  onConfirm: () => Get.back(),
+                );
+              }
+            },
+          ),
           title: Text(controller.title.value),
           centerTitle: true,
           actions: controller.isLoading.value

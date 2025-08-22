@@ -301,4 +301,5 @@ Map<String, String> zhHK = {
   LocaleKeys.move: "移動",
   LocaleKeys.moveUp: "上移",
   LocaleKeys.moveDown: "下移",
+  LocaleKeys.areYouLeave: "數據未保存，是否確定離開?",
 };
