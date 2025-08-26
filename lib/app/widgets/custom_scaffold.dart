@@ -65,6 +65,8 @@ class CustomScaffold extends StatelessWidget {
                   route: Routes.PRODUCT_REMARKS,
                   icon: FontAwesomeIcons.mars,
                 ),
+                //客户
+                AdminMenuItem(title: LocaleKeys.customer.tr, route: Routes.CUSTOMER, icon: FontAwesomeIcons.user),
               ],
             ),
             // 供应商发票

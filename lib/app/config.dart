@@ -110,6 +110,22 @@ class Config {
   // 导入食品备注
   static String importProductRemarkExcel = "/Excel/productRemarkImport";
 
+  /* 客户管理模块================*/
+  // 客户列表
+  static String customer = "/Master/customer";
+  // 客户添加或编辑
+  static String customerAddOrEdit = "/Master/customerAddOrEdit";
+  // 客户保存
+  static String customerSave = "/Master/customerSave";
+  // 客户删除
+  static String customerDelete = "/Master/customerDelete";
+  // 复制
+  static String customerCopy = "/Master/customerCopy";
+  // 导出客户
+  static String exportCustomerExcel = "/Excel/customerExport";
+  // 导入客户
+  static String importCustomerExcel = "/Excel/customerImport";
+
   /// 打开选择===================================================================
   // 供应商
   static String openSupplier = "/Open/supplier";

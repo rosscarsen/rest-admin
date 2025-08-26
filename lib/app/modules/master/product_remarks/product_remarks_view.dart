@@ -192,7 +192,7 @@ class ProductRemarksView extends GetView<ProductRemarksController> {
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                   ),
                   borderRadius: BorderRadius.circular(8),
-                  value: overWrite,
+                  initialValue: overWrite,
                   items: [
                     DropdownMenuItem(value: 0, child: Text(LocaleKeys.no.tr)),
                     DropdownMenuItem(value: 1, child: Text(LocaleKeys.yes.tr)),

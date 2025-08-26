@@ -176,7 +176,7 @@ class FormHelper {
         }
         return DropdownButtonFormField<T>(
           style: displayTextStyle,
-          value: currentValue,
+          initialValue: currentValue,
           items: safeItems,
           isExpanded: true,
           borderRadius: BorderRadius.circular(8),

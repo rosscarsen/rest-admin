@@ -302,7 +302,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
               },
             ),
             DropdownButtonFormField(
-              value: row.mNonActived?.toString() ?? "0",
+              initialValue: row.mNonActived?.toString() ?? "0",
               decoration: InputDecoration(labelText: LocaleKeys.nonEnable.tr),
               items: [
                 DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
