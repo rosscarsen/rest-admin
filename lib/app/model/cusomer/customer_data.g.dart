@@ -1,0 +1,96 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'customer_data.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+CustomerData _$CustomerDataFromJson(Map<String, dynamic> json) => CustomerData(
+  mAddress: json['mAddress'] as String?,
+  mAnsBack: json['mAns_Back'] as String?,
+  mCode: json['mCode'] as String?,
+  mEmail: json['mEmail'] as String?,
+  mFullName: json['mFullName'] as String?,
+  mPhoneNo: json['mPhone_No'] as String?,
+  mShippingMarks: json['mShipping_Marks'] as String?,
+  mSimpleName: json['mSimpleName'] as String?,
+  mSiteMarks: json['mSite_Marks'] as String?,
+  mStCreditLimit: json['mST_Credit_Limit'] as String?,
+  mStCurrency: json['mST_Currency'] as String? ?? 'HKD',
+  mStDiscount: json['mST_Discount'] as String?,
+  mStPaymentDays: json['mST_Payment_Days'] as String?,
+  mStPaymentMethod: (json['mST_Payment_Method'] as num?)?.toInt() ?? 0,
+  mStPaymentTerm: json['mST_Payment_Term'] as String?,
+  mStPriceTerm: json['mST_Price_Term'] as String?,
+  mTelex: json['mTelex'] as String?,
+  mFaxNo: json['mFax_No'] as String?,
+  tCustomerId: (json['T_Customer_ID'] as num?)?.toInt(),
+  mRemarks: json['mRemarks'] as String?,
+  mBirthday: json['mBirthday'] as String?,
+  mOccupation: json['mOccupation'] as String?,
+  mMarried: (json['mMarried'] as num?)?.toInt() ?? 0,
+  mBirthdayYear: (json['mBirthday_Year'] as num?)?.toInt(),
+  mBirthdayMonth: (json['mBirthday_Month'] as num?)?.toInt(),
+  mBirthdayDay: (json['mBirthday_Day'] as num?)?.toInt(),
+  mSex: (json['mSex'] as num?)?.toInt() ?? 0,
+  mNonActive: (json['mNon_Active'] as num?)?.toInt() ?? 0,
+  mExpiryDate: json['mExpiry_Date'] == null
+      ? null
+      : DateTime.parse(json['mExpiry_Date'] as String),
+  mSimpleDiscount: (json['mSimple_Discount'] as num?)?.toInt() ?? 0,
+  mDeposit: json['mDeposit'],
+  mCustomerType: json['mCustomer_Type'] as String?,
+  mCustomerNote: json['mCustomer_Note'],
+  mCreateDate: json['mCreateDate'] == null
+      ? null
+      : DateTime.parse(json['mCreateDate'] as String),
+  mCustomerReference: json['mCustomer_Reference'],
+  mInfoNa: (json['mInfoNA'] as num?)?.toInt(),
+  mCardNo: json['mCardNo'],
+  mPassword: json['mPassword'] as String?,
+  pushinfo: (json['pushinfo'] as num?)?.toInt() ?? 0,
+);
+
+Map<String, dynamic> _$CustomerDataToJson(CustomerData instance) =>
+    <String, dynamic>{
+      'mAddress': instance.mAddress,
+      'mAns_Back': instance.mAnsBack,
+      'mCode': instance.mCode,
+      'mEmail': instance.mEmail,
+      'mFullName': instance.mFullName,
+      'mPhone_No': instance.mPhoneNo,
+      'mShipping_Marks': instance.mShippingMarks,
+      'mSimpleName': instance.mSimpleName,
+      'mSite_Marks': instance.mSiteMarks,
+      'mST_Credit_Limit': instance.mStCreditLimit,
+      'mST_Currency': instance.mStCurrency,
+      'mST_Discount': instance.mStDiscount,
+      'mST_Payment_Days': instance.mStPaymentDays,
+      'mST_Payment_Method': instance.mStPaymentMethod,
+      'mST_Payment_Term': instance.mStPaymentTerm,
+      'mST_Price_Term': instance.mStPriceTerm,
+      'mTelex': instance.mTelex,
+      'mFax_No': instance.mFaxNo,
+      'T_Customer_ID': instance.tCustomerId,
+      'mRemarks': instance.mRemarks,
+      'mBirthday': instance.mBirthday,
+      'mOccupation': instance.mOccupation,
+      'mMarried': instance.mMarried,
+      'mBirthday_Year': instance.mBirthdayYear,
+      'mBirthday_Month': instance.mBirthdayMonth,
+      'mBirthday_Day': instance.mBirthdayDay,
+      'mSex': instance.mSex,
+      'mNon_Active': instance.mNonActive,
+      'mExpiry_Date': instance.mExpiryDate?.toIso8601String(),
+      'mSimple_Discount': instance.mSimpleDiscount,
+      'mDeposit': instance.mDeposit,
+      'mCustomer_Type': instance.mCustomerType,
+      'mCustomer_Note': instance.mCustomerNote,
+      'mCreateDate': instance.mCreateDate?.toIso8601String(),
+      'mCustomer_Reference': instance.mCustomerReference,
+      'mInfoNA': instance.mInfoNa,
+      'mCardNo': instance.mCardNo,
+      'mPassword': instance.mPassword,
+      'pushinfo': instance.pushinfo,
+    };

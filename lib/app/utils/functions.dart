@@ -140,4 +140,10 @@ class Functions {
     const eq = DeepCollectionEquality();
     return eq.equals(normalizedSource, normalizedTarget);
   }
+
+  String? asString(Object? value) {
+    if (value == null) return null;
+    if (value is String && value.trim().isEmpty) return null;
+    return value.toString();
+  }
 }
