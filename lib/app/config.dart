@@ -113,6 +113,8 @@ class Config {
   /* 客户管理模块================*/
   // 客户列表
   static String customer = "/Master/customer";
+  // 客户积分列表
+  static String customerDeposit = "/Master/customerDeposit";
   // 客户添加或编辑
   static String customerAddOrEdit = "/Master/customerAddOrEdit";
   // 客户保存
