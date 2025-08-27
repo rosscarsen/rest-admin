@@ -17,16 +17,23 @@ class Config {
   //static String baseurl = "https://api.friendsclub.com/restAdmin";
   static String baseurl = "http://www.api.cn/restAdmin";
 
-  /* 登录模块===================================================================*/
+  // **************************************************************************
+  // 登录模块
+  // **************************************************************************
+  // 登录
   static String login = "/Login/login";
   // 退出登录
   static String logout = "/Login/logout";
   // 销售概述
   static String chartData = "/dashboard/chartData";
 
-  /// 主档===================================================================
+  // **************************************************************************
+  // 主档模块
+  // **************************************************************************
 
-  /* 产品管理模块=======*/
+  // ==========================================================================
+  // 产品管理模块
+  // ==========================================================================
 
   // 图片上传
   static String uploadProductImage = "/Master/uploadImage";
@@ -60,8 +67,16 @@ class Config {
   static String updateSetMenu = "/Master/updateSetMenu";
   // 更新食品套餐
   static String updateProductSetMeal = "/Master/updateProductSetMeal";
+  // 导出产品
+  static String exportProductExcel = "/Excel/exportProduct";
+  // 导入产品
+  static String importProductExcel = "/Excel/importProduct";
+  // 导出套餐
+  static String exportSetMealExcel = "/Excel/setMealExport";
 
-  /* 类目管理模块================*/
+  // ==========================================================================
+  // 类目管理模块
+  // ==========================================================================
 
   // 类目1列表
   static String categories = "/Master/categories";
@@ -84,7 +99,10 @@ class Config {
   // 类目2删除
   static String category2Delete = "/Master/category2Delete";
 
-  /* 打印机管理模块================*/
+  // ==========================================================================
+  // 打印机管理模块
+  // ==========================================================================
+
   // 打印机列表
   static String printer = "/Master/printer";
   // 打印机添加或编辑
@@ -94,7 +112,10 @@ class Config {
   // 打印机删除
   static String printerDelete = "/Master/printerDelete";
 
-  /* 食品备注管理模块================*/
+  // ==========================================================================
+  // 食品备注管理模块
+  // ==========================================================================
+
   // 食品备注列表
   static String productRemark = "/Master/productRemark";
   // 食品备注添加或编辑
@@ -110,11 +131,16 @@ class Config {
   // 导入食品备注
   static String importProductRemarkExcel = "/Excel/productRemarkImport";
 
-  /* 客户管理模块================*/
+  // ==========================================================================
+  // 客户管理模块
+  // ==========================================================================
+
   // 客户列表
   static String customer = "/Master/customer";
   // 客户积分列表
   static String customerDeposit = "/Master/customerDeposit";
+  // 客户类型
+  static String customerType = "/Master/customerType";
   // 客户添加或编辑
   static String customerAddOrEdit = "/Master/customerAddOrEdit";
   // 客户保存
@@ -128,7 +154,10 @@ class Config {
   // 导入客户
   static String importCustomerExcel = "/Excel/customerImport";
 
-  /// 打开选择===================================================================
+  // ==========================================================================
+  // 打开选择
+  // ==========================================================================
+
   // 供应商
   static String openSupplier = "/Open/supplier";
   // 食品
@@ -142,11 +171,7 @@ class Config {
   // 打开食品套餐
   static String openProductSetMeal = "/open/productSetMeal";
 
-  /// excel
-  // 导出产品
-  static String exportProductExcel = "/Excel/exportProduct";
-  // 导入产品
-  static String importProductExcel = "/Excel/importProduct";
-  // 导出套餐
-  static String exportSetMealExcel = "/Excel/setMealExport";
+  // **************************************************************************
+  // excel
+  // **************************************************************************
 }
