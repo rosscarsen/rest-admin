@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:responsive_grid/responsive_grid.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
 import '../../../translations/locale_keys.dart';
+import '../../../utils/form_help.dart';
 import '../../../utils/progresshub.dart';
 import '../../../widgets/custom_cell.dart';
 import '../../../widgets/data_pager.dart';
@@ -105,9 +105,9 @@ class OpenSetMealView extends GetView<OpenSetMealController> {
   Widget _buildSearch(BuildContext context, OpenSetMealController controller) {
     return Skeletonizer(
       enabled: controller.isLoading.value,
-      child: ResponsiveGridRow(
+      child: FormHelper.buildGridRow(
         children: [
-          ResponsiveGridCol(
+          FormHelper.buildGridCol(
             xs: 12,
             sm: 6,
             md: 4,

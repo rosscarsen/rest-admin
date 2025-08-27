@@ -4,7 +4,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:responsive_grid/responsive_grid.dart' show ResponsiveGridRow;
 
 import '../../../../config.dart';
 import '../../../../model/product_remarks_model.dart';
@@ -257,7 +256,7 @@ class ProductRemarksEditController extends GetxController with GetSingleTickerPr
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: SingleChildScrollView(
-              child: ResponsiveGridRow(
+              child: FormHelper.buildGridRow(
                 children: [
                   //明细
                   FormHelper.buildGridCol(

@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:responsive_grid/responsive_grid.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -110,7 +109,7 @@ class ProductEditView extends GetView<ProductEditController> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: FocusTraversalGroup(
-            child: ResponsiveGridRow(
+            child: FormHelper.buildGridRow(
               children: [
                 //类目1
                 FormHelper.buildGridCol(
@@ -327,7 +326,7 @@ class ProductEditView extends GetView<ProductEditController> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: FocusTraversalGroup(
-            child: ResponsiveGridRow(
+            child: FormHelper.buildGridRow(
               children: [
                 //非库存食品
                 FormHelper.buildGridCol(
@@ -478,7 +477,7 @@ class ProductEditView extends GetView<ProductEditController> {
                   ),
                 ),
                 // 多类别
-                ResponsiveGridCol(
+                FormHelper.buildGridCol(
                   sm: 12,
                   md: 12,
                   lg: 12,
@@ -494,7 +493,7 @@ class ProductEditView extends GetView<ProductEditController> {
                 ),
                 ...controller.categories.map((item) {
                   final ScrollController scrollController = ScrollController();
-                  return ResponsiveGridCol(
+                  return FormHelper.buildGridCol(
                     sm: 12,
                     md: 6,
                     lg: 4,
@@ -801,7 +800,7 @@ class ProductEditView extends GetView<ProductEditController> {
           child: FocusTraversalGroup(
             child: Padding(
               padding: EdgeInsets.all(8),
-              child: ResponsiveGridRow(
+              child: FormHelper.buildGridRow(
                 children: [
                   // 选择
                   FormHelper.buildGridCol(

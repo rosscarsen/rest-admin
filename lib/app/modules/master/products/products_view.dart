@@ -4,7 +4,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:responsive_grid/responsive_grid.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
@@ -12,6 +11,7 @@ import '../../../routes/app_pages.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/custom_dialog.dart';
+import '../../../utils/form_help.dart';
 import '../../../utils/progresshub.dart';
 import '../../../widgets/custom_cell.dart';
 import '../../../widgets/custom_scaffold.dart';
@@ -87,10 +87,10 @@ class ProductsView extends GetView<ProductsController> {
 
   //toolbar
   Widget _buildToolBar(BuildContext context) {
-    return ResponsiveGridRow(
+    return FormHelper.buildGridRow(
       children: [
         //搜索
-        ResponsiveGridCol(
+        FormHelper.buildGridCol(
           xs: 12,
           sm: 6,
           md: 4,
@@ -111,7 +111,7 @@ class ProductsView extends GetView<ProductsController> {
           ).paddingSymmetric(vertical: 2.0),
         ),
         //按钮
-        ResponsiveGridCol(
+        FormHelper.buildGridCol(
           xs: 12,
           sm: 6,
           md: 8,

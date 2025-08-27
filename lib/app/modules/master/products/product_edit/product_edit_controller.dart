@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:responsive_grid/responsive_grid.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../config.dart';
@@ -427,7 +426,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: SingleChildScrollView(
-                child: ResponsiveGridRow(
+                child: FormHelper.buildGridRow(
                   children: [
                     //编号
                     FormHelper.buildGridCol(

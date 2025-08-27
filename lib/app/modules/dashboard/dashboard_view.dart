@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:responsive_grid/responsive_grid.dart';
 
 import '../../config.dart';
 import '../../model/chart_model.dart';
@@ -32,7 +31,7 @@ class DashboardView extends GetView<DashboardController> {
               // 搜索框
               FormBuilder(
                 key: controller.formKey,
-                child: ResponsiveGridRow(
+                child: FormHelper.buildGridRow(
                   children: [
                     FormHelper.buildGridCol(
                       child: FormHelper.dateInput(
@@ -138,10 +137,10 @@ class DashboardView extends GetView<DashboardController> {
     final monthEverySale = apiResult.value.monthEverySale;
     final topSaleQty = apiResult.value.topSaleQty;
     final topSaleAmount = apiResult.value.topSaleAmount;
-    return ResponsiveGridRow(
+    return FormHelper.buildGridRow(
       children: [
         // 饼图
-        ResponsiveGridCol(
+        FormHelper.buildGridCol(
           xs: 12,
           sm: 4,
           md: 4,
@@ -180,7 +179,7 @@ class DashboardView extends GetView<DashboardController> {
           ),
         ),
         // 七日销售额柱状图
-        ResponsiveGridCol(
+        FormHelper.buildGridCol(
           xs: 12,
           sm: 4,
           md: 4,
@@ -219,7 +218,7 @@ class DashboardView extends GetView<DashboardController> {
           ),
         ),
         // 七日销售额
-        ResponsiveGridCol(
+        FormHelper.buildGridCol(
           xs: 12,
           sm: 4,
           md: 4,
@@ -258,7 +257,7 @@ class DashboardView extends GetView<DashboardController> {
           ),
         ),
         // 线图
-        ResponsiveGridCol(
+        FormHelper.buildGridCol(
           xs: 12,
           sm: 12,
           md: 12,
@@ -297,7 +296,7 @@ class DashboardView extends GetView<DashboardController> {
           ),
         ),
         // top5销售数量
-        ResponsiveGridCol(
+        FormHelper.buildGridCol(
           xs: 12,
           sm: 6,
           md: 6,
@@ -336,7 +335,7 @@ class DashboardView extends GetView<DashboardController> {
           ),
         ),
         // top5销售金额
-        ResponsiveGridCol(
+        FormHelper.buildGridCol(
           xs: 12,
           sm: 6,
           md: 6,

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-
 import 'package:get/get.dart';
-import 'package:responsive_grid/responsive_grid.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../../translations/locale_keys.dart';
@@ -54,7 +52,7 @@ class Category2EditView extends GetView<Category2EditController> {
         key: controller.formKey,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(8.0),
-          child: ResponsiveGridRow(
+          child: FormHelper.buildGridRow(
             children: [
               //类目
               FormHelper.buildGridCol(

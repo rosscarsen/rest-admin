@@ -39,6 +39,8 @@ abstract class Routes {
   static const PRODUCT_REMARKS_EDIT =
       _Paths.MASTER + _Paths.PRODUCT_REMARKS + _Paths.PRODUCT_REMARKS_EDIT;
   static const CUSTOMER = _Paths.MASTER + _Paths.CUSTOMER;
+  static const CUSTOMER_EDIT =
+      _Paths.MASTER + _Paths.CUSTOMER + _Paths.CUSTOMER_EDIT;
 }
 
 abstract class _Paths {
@@ -67,4 +69,5 @@ abstract class _Paths {
   static const CATEGORY2_EDIT = '/category2-edit';
   static const PRODUCT_REMARKS_EDIT = '/product-remarks-edit';
   static const CUSTOMER = '/customer';
+  static const CUSTOMER_EDIT = '/customer-edit';
 }

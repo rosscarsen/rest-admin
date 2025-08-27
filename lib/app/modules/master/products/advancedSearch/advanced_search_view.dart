@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:responsive_grid/responsive_grid.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../config.dart';
@@ -50,7 +49,7 @@ class AdvancedSearchView extends GetView<AdvancedSearchController> {
   // Search form
   SingleChildScrollView _buildSearchForm() {
     return SingleChildScrollView(
-      child: ResponsiveGridRow(
+      child: FormHelper.buildGridRow(
         children: [
           //类目1
           FormHelper.buildGridCol(

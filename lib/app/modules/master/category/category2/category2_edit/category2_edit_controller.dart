@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:rest_admin/app/model/printer/printer_all_model.dart';
-import 'package:rest_admin/app/model/printer/printer_model.dart';
 
 import '../../../../../config.dart';
 import '../../../../../model/category/category_model.dart';
+import '../../../../../model/printer/printer_all_model.dart';
+import '../../../../../model/printer/printer_model.dart';
 import '../../../../../service/dio_api_client.dart';
 import '../../../../../service/dio_api_result.dart';
 import '../../../../../translations/locale_keys.dart';

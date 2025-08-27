@@ -32,6 +32,11 @@ class FormHelper {
     );
   }
 
+  /// 构建网格行
+  static ResponsiveGridRow buildGridRow({required List<ResponsiveGridCol> children}) {
+    return ResponsiveGridRow(children: children);
+  }
+
   /// 网格列
   static ResponsiveGridCol buildGridCol({
     int xs = 12,

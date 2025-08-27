@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:responsive_grid/responsive_grid.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
 import '../../../translations/locale_keys.dart';
+import '../../../utils/form_help.dart';
 import '../../../utils/progresshub.dart';
 import '../../../widgets/custom_cell.dart';
 import '../../../widgets/data_grid_theme.dart';
@@ -93,9 +93,9 @@ class OpenProductBarcodeView extends GetView<OpenProductBarcodeController> {
 
   //搜索框
   Widget _buildSearch(BuildContext context) {
-    return ResponsiveGridRow(
+    return FormHelper.buildGridRow(
       children: [
-        ResponsiveGridCol(
+        FormHelper.buildGridCol(
           xs: 12,
           sm: 6,
           md: 4,

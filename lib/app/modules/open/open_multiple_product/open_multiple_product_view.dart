@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:responsive_grid/responsive_grid.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
@@ -30,7 +29,7 @@ class OpenMultipleProductView extends GetView<OpenMultipleProductController> {
         children: <Widget>[
           _buildSearch(context),
           if (Get.parameters["isShowOption"] != null)
-            ResponsiveGridRow(
+            FormHelper.buildGridRow(
               children: [
                 FormHelper.buildGridCol(
                   child: FormHelper.selectInput(
@@ -153,7 +152,7 @@ class OpenMultipleProductView extends GetView<OpenMultipleProductController> {
         enabled: controller.isLoading.value,
         child: FormBuilder(
           key: controller.openMultipleProductFormKey,
-          child: ResponsiveGridRow(
+          child: FormHelper.buildGridRow(
             children: [
               FormHelper.buildGridCol(
                 child: FormHelper.textInput(name: "search", labelText: LocaleKeys.keyWord.tr),

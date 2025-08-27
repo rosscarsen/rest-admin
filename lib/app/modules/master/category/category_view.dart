@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:responsive_grid/responsive_grid.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
@@ -63,7 +62,7 @@ class CategoryView extends GetView<CategoryController> {
   Widget _buildToolBar(BuildContext context) {
     return FormBuilder(
       key: controller.formKey,
-      child: ResponsiveGridRow(
+      child: FormHelper.buildGridRow(
         children: [
           //关键字
           FormHelper.buildGridCol(

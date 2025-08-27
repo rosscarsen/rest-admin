@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:responsive_grid/responsive_grid.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -146,7 +145,7 @@ class CopyProductSetMealView extends GetView<CopyProductSetMealController> {
       enabled: controller.isLoading.value,
       child: FormBuilder(
         key: controller.formKey,
-        child: ResponsiveGridRow(
+        child: FormHelper.buildGridRow(
           children: [
             FormHelper.buildGridCol(
               child: ValueListenableBuilder(

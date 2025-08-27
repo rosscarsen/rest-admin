@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import 'package:rest_admin/app/model/printer/printer_model.dart';
+import 'printer_model.dart';
 
 PrinterPageModel printerPageModelFromJson(String str) => PrinterPageModel.fromJson(json.decode(str));
 
