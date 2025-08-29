@@ -15,22 +15,22 @@ enum DateInputType { time, date, dateAndTime }
 class FormHelper {
   static const double _horizontalPadding = 4.0;
   static const double _verticalPadding = 4.0;
-  static const double _prefixIconMaxWidth = 110;
+  //static const double _prefixIconMaxWidth = 110;
   static const displayTextStyle = TextStyle(fontSize: 16, color: Colors.black87);
 
   /// 构建左侧 label 样式
-  static Widget _buildPrefixIconText(String text, bool enabled) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 8.0),
-      child: SelectableText(
-        "$text :",
-        style: TextStyle(
-          color: enabled ? AppColors.enableColor : AppColors.disableColor,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ),
-    );
-  }
+  // static Widget _buildPrefixIconText(String text, bool enabled) {
+  //   return Padding(
+  //     padding: const EdgeInsets.only(left: 8.0),
+  //     child: SelectableText(
+  //       "$text :",
+  //       style: TextStyle(
+  //         color: enabled ? AppColors.enableColor : AppColors.disableColor,
+  //         overflow: TextOverflow.ellipsis,
+  //       ),
+  //     ),
+  //   );
+  // }
 
   /// 构建网格行
   static ResponsiveGridRow buildGridRow({required List<ResponsiveGridCol> children}) {
@@ -101,8 +101,7 @@ class FormHelper {
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,
-        //prefixIcon: prefixIcon ?? buildPrefixIconText(labelText, enabled),
-        prefixIconConstraints: const BoxConstraints(maxWidth: _prefixIconMaxWidth),
+        prefixIcon: prefixIcon,
         floatingLabelBehavior: FloatingLabelBehavior.always,
         focusedBorder: !enabled || readOnly
             ? OutlineInputBorder(
@@ -193,8 +192,7 @@ class FormHelper {
           decoration: InputDecoration(
             labelText: labelText,
             suffixIcon: suffixIcon,
-            //prefixIcon: prefixIcon ?? buildPrefixIconText(labelText, enabled),
-            prefixIconConstraints: const BoxConstraints(maxWidth: _prefixIconMaxWidth),
+            prefixIcon: prefixIcon,
             floatingLabelBehavior: FloatingLabelBehavior.always,
             focusedBorder: !enabled
                 ? OutlineInputBorder(
@@ -289,7 +287,6 @@ class FormHelper {
           decoration: InputDecoration(
             labelText: labelText,
             prefixIcon: prefixIcon,
-            prefixIconConstraints: const BoxConstraints(maxWidth: _prefixIconMaxWidth),
             fillColor: enabled ? Colors.transparent : Colors.grey.shade200,
             filled: !enabled,
             floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -313,16 +310,13 @@ class FormHelper {
     bool enabled = true,
     List<String>? initialValue,
     void Function(List<String>?)? onChanged,
+    InputDecoration decoration = const InputDecoration(),
   }) {
     return FormBuilderCheckboxGroup<String>(
       name: name,
       enabled: enabled,
       initialValue: initialValue,
-      decoration: InputDecoration(
-        prefixIcon: _buildPrefixIconText(labelText, enabled),
-        prefixIconConstraints: const BoxConstraints(maxWidth: _prefixIconMaxWidth),
-        border: InputBorder.none,
-      ),
+      decoration: decoration,
       options: options,
       onChanged: onChanged,
     );
@@ -403,17 +397,14 @@ class FormHelper {
     bool enabled = true,
     String? initialValue,
     void Function(String?)? onChanged,
+    InputDecoration decoration = const InputDecoration(),
   }) {
     return FormBuilderRadioGroup<String>(
       name: name,
       enabled: enabled,
       initialValue: initialValue,
       valueTransformer: (value) => (value?.toString() ?? "").trim(),
-      decoration: InputDecoration(
-        prefixIcon: _buildPrefixIconText(labelText, enabled),
-        prefixIconConstraints: const BoxConstraints(maxWidth: _prefixIconMaxWidth),
-        border: InputBorder.none,
-      ),
+      decoration: decoration,
       options: options,
       onChanged: onChanged,
     );
@@ -429,6 +420,7 @@ class FormHelper {
     double? initialValue,
     bool enabled = true,
     void Function(double?)? onChanged,
+    InputDecoration decoration = const InputDecoration(),
   }) {
     return FormBuilderSlider(
       name: name,
@@ -437,10 +429,7 @@ class FormHelper {
       max: max,
       divisions: divisions,
       enabled: enabled,
-      decoration: InputDecoration(
-        prefixIcon: _buildPrefixIconText(labelText, enabled),
-        prefixIconConstraints: const BoxConstraints(maxWidth: _prefixIconMaxWidth),
-      ),
+      decoration: decoration,
       onChanged: onChanged,
     );
   }
