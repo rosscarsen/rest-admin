@@ -231,7 +231,7 @@ abstract class LocaleKeys {
   static const String updateSetMeal = "updateSetMeal";
   static const String batchDelete = "batchDelete";
   static const String scorePrice = "scorePrice";
-  static const String choose = "choose";
+  static const String choice = "choice";
   static const String clearText = "clearText";
   static const String option = "option";
   static const String defaultSelect = "defaultSelect";
@@ -329,4 +329,11 @@ abstract class LocaleKeys {
   static const String creditLimit = "creditLimit";
   static const String paymentDays = "paymentDays";
   static const String status = "status";
+  static const String from = "from";
+  static const String to = "to";
+  static const String exportParam = "exportParam";
+  static const String importParam = "importParam";
+  static const String openChoice = "openChoice";
+  static const String clearContent = "clearContent";
+  static const String choiceParam = "choiceParam";
 }

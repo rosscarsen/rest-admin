@@ -30,6 +30,8 @@ import '../modules/master/products/product_edit/product_edit_view.dart';
 import '../modules/master/products/products_binding.dart';
 import '../modules/master/products/products_view.dart';
 import '../modules/open/open_binding.dart';
+import '../modules/open/open_customer/open_customer_binding.dart';
+import '../modules/open/open_customer/open_customer_view.dart';
 import '../modules/open/open_multiple_product/open_multiple_product_binding.dart';
 import '../modules/open/open_multiple_product/open_multiple_product_view.dart';
 import '../modules/open/open_product/open_product_binding.dart';
@@ -102,6 +104,12 @@ class AppPages {
           name: _Paths.OPEN_SET_MEAL,
           page: () => const OpenSetMealView(),
           binding: OpenSetMealBinding(),
+          middlewares: [AuthMiddleware()],
+        ),
+        GetPage(
+          name: _Paths.OPEN_CUSTOMER,
+          page: () => const OpenCustomerView(),
+          binding: OpenCustomerBinding(),
           middlewares: [AuthMiddleware()],
         ),
       ],

@@ -65,6 +65,7 @@ class CustomerController extends GetxController {
   /// 获取列表
   Future<void> getList() async {
     isLoading(true);
+    dataList.clear();
     try {
       formKey.currentState?.saveAndValidate();
       final param = {'page': currentPage.value, ...formKey.currentState?.value ?? {}};
@@ -84,7 +85,6 @@ class CustomerController extends GetxController {
       if (!customerResult.success) {
         if (!customerResult.hasPermission) {
           hasPermission.value = false;
-          dataList.clear();
         }
         CustomDialog.errorMessages(customerResult.error ?? LocaleKeys.unknownError.tr);
         return;
@@ -123,7 +123,7 @@ class CustomerController extends GetxController {
       onConfirm: () async {
         try {
           CustomDialog.showLoading(LocaleKeys.deleting.tr);
-          final DioApiResult dioApiResult = await apiClient.post(Config.productRemarkDelete, data: {"id": id});
+          final DioApiResult dioApiResult = await apiClient.post(Config.customerDelete, data: {"id": id});
 
           if (!dioApiResult.success) {
             CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);

@@ -41,6 +41,7 @@ abstract class Routes {
   static const CUSTOMER = _Paths.MASTER + _Paths.CUSTOMER;
   static const CUSTOMER_EDIT =
       _Paths.MASTER + _Paths.CUSTOMER + _Paths.CUSTOMER_EDIT;
+  static const OPEN_CUSTOMER = _Paths.OPEN + _Paths.OPEN_CUSTOMER;
 }
 
 abstract class _Paths {
@@ -70,4 +71,5 @@ abstract class _Paths {
   static const PRODUCT_REMARKS_EDIT = '/product-remarks-edit';
   static const CUSTOMER = '/customer';
   static const CUSTOMER_EDIT = '/customer-edit';
+  static const OPEN_CUSTOMER = '/open-customer';
 }

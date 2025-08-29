@@ -126,7 +126,7 @@ class CustomerView extends GetView<CustomerController> {
                 ),
                 //导出
                 ElevatedButton(
-                  onPressed: controller.hasPermission.value ? () => controller.exportProductRemark() : null,
+                  onPressed: controller.hasPermission.value ? () => _buildExport() : null,
                   child: Text(LocaleKeys.export.tr),
                 ),
                 //新增
@@ -142,79 +142,39 @@ class CustomerView extends GetView<CustomerController> {
     );
   }
 
-  // 导入
-  void _buildImport() {
-    final TextEditingController fileController = TextEditingController();
-    final TextEditingController overWriteController = TextEditingController();
-    File? excelFile;
-    int overWrite = 0;
-
+  // 导出
+  void _buildExport() {
+    final TextEditingController startCtl = TextEditingController();
+    final TextEditingController endCtl = TextEditingController();
     Get.defaultDialog(
       barrierDismissible: false,
-      title: LocaleKeys.importProduct.tr,
+      title: LocaleKeys.export.tr,
       content: StatefulBuilder(
         builder: (BuildContext context, setState) {
           return SingleChildScrollView(
             child: Column(
               spacing: 8.0,
               children: <Widget>[
-                GestureDetector(
-                  onTap: () async {
-                    FilePickerResult? result = await FilePicker.platform.pickFiles(
-                      allowMultiple: false,
-                      type: FileType.custom,
-                      allowedExtensions: ['xlsx', 'xls'],
-                      dialogTitle: LocaleKeys.selectFile.trArgs(["excel"]),
-                      lockParentWindow: true,
-                    );
-                    if (result != null) {
-                      setState(() {
-                        PlatformFile platformFile = result.files.single;
-                        excelFile = File(platformFile.path!);
-                        fileController.text = platformFile.name;
-                      });
-                    } else {
-                      CustomDialog.showToast(LocaleKeys.userCanceledPicker.tr);
+                FormHelper.openInput(
+                  name: "startCode",
+                  labelText: LocaleKeys.from.trArgs([LocaleKeys.customer.tr]),
+                  controller: startCtl,
+                  onPressed: () async {
+                    var ret = await Get.toNamed(Routes.OPEN_CUSTOMER);
+                    if (ret != null) {
+                      startCtl.text = ret;
                     }
                   },
-                  child: AbsorbPointer(
-                    absorbing: fileController.text.isEmpty,
-                    child: TextField(
-                      readOnly: true,
-                      controller: fileController,
-                      decoration: InputDecoration(
-                        labelText: LocaleKeys.selectFile.trArgs(["excel"]),
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        enabled: true,
-                        prefixIcon: Icon(FontAwesomeIcons.fileExcel, color: AppColors.openColor),
-                        suffixIcon: fileController.text.isNotEmpty
-                            ? IconButton(
-                                icon: Icon(Icons.clear),
-                                onPressed: () {
-                                  setState(() {
-                                    excelFile = null;
-                                    fileController.clear();
-                                  });
-                                },
-                              )
-                            : null,
-                      ),
-                    ),
-                  ),
                 ),
-                DropdownButtonFormField<int>(
-                  decoration: InputDecoration(
-                    labelText: LocaleKeys.price.tr,
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                  initialValue: overWrite,
-                  items: [
-                    DropdownMenuItem(value: 0, child: Text(LocaleKeys.no.tr)),
-                    DropdownMenuItem(value: 1, child: Text(LocaleKeys.yes.tr)),
-                  ],
-                  onChanged: (value) {
-                    setState(() => overWrite = value!);
+                FormHelper.openInput(
+                  name: "endCode",
+                  controller: endCtl,
+                  labelText: LocaleKeys.from.trArgs([LocaleKeys.customer.tr]),
+                  onPressed: () async {
+                    var ret = await Get.toNamed(Routes.OPEN_CUSTOMER);
+                    if (ret != null) {
+                      endCtl.text = ret;
+                    }
                   },
                 ),
               ],
@@ -224,7 +184,51 @@ class CustomerView extends GetView<CustomerController> {
       ),
       cancel: ElevatedButton(
         onPressed: () {
-          overWriteController.dispose();
+          startCtl.clear();
+          endCtl.clear();
+          Get.closeDialog();
+        },
+        child: Text(LocaleKeys.cancel.tr),
+      ),
+      confirm: ElevatedButton(onPressed: () async {}, child: Text(LocaleKeys.confirm.tr)),
+    );
+  }
+
+  // 导入
+  void _buildImport() {
+    final TextEditingController fileController = TextEditingController();
+
+    File? excelFile;
+    int overWrite = 0;
+
+    Get.defaultDialog(
+      barrierDismissible: false,
+      title: LocaleKeys.importProduct.tr,
+      content: Column(
+        children: [
+          FormHelper.openFileInput(
+            name: "excel",
+            labelText: LocaleKeys.selectFile.trArgs(["excel"]),
+            controller: fileController,
+            onFileSelected: (file) {
+              excelFile = file;
+            },
+          ),
+          FormHelper.selectInput(
+            name: "overWrite",
+            labelText: LocaleKeys.overWrite.tr,
+            items: [
+              DropdownMenuItem(value: 0, child: Text(LocaleKeys.no.tr)),
+              DropdownMenuItem(value: 1, child: Text(LocaleKeys.yes.tr)),
+            ],
+            onChanged: (value) {
+              overWrite = value!;
+            },
+          ),
+        ],
+      ),
+      cancel: ElevatedButton(
+        onPressed: () {
           fileController.dispose();
           excelFile = null;
           Get.closeDialog();
@@ -233,7 +237,7 @@ class CustomerView extends GetView<CustomerController> {
       ),
       confirm: ElevatedButton(
         onPressed: () async {
-          if (excelFile == null) {
+          /* if (excelFile == null) {
             CustomDialog.showToast(LocaleKeys.pleaseSelectFile.tr);
             return;
           }
@@ -241,7 +245,7 @@ class CustomerView extends GetView<CustomerController> {
           overWriteController.dispose();
           Get.closeDialog();
           await controller.importProductRemark(file: excelFile!, query: {'overWrite': overWrite});
-          excelFile = null;
+          excelFile = null; */
         },
         child: Text(LocaleKeys.confirm.tr),
       ),

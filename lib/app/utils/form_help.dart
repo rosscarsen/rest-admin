@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:date_field/date_field.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -9,6 +12,7 @@ import 'package:responsive_grid/responsive_grid.dart';
 
 import '../translations/locale_keys.dart';
 import 'constants.dart';
+import 'custom_dialog.dart';
 
 enum DateInputType { time, date, dateAndTime }
 
@@ -138,6 +142,124 @@ class FormHelper {
       enableInteractiveSelection: true,
       contextMenuBuilder: (context, editableTextState) {
         return AdaptiveTextSelectionToolbar.editableText(editableTextState: editableTextState);
+      },
+    );
+  }
+
+  /// 打开选择器
+  static Widget openInput({
+    required String name,
+    required String labelText,
+    required void Function()? onPressed,
+    TextEditingController? controller,
+    bool readOnly = true,
+  }) {
+    final effectiveController = controller ?? TextEditingController();
+    return ValueListenableBuilder(
+      valueListenable: effectiveController,
+      builder: (BuildContext context, dynamic value, Widget? child) {
+        return GestureDetector(
+          onTap: onPressed,
+          child: AbsorbPointer(
+            absorbing: effectiveController.text.isEmpty,
+            child: FormBuilderTextField(
+              controller: effectiveController,
+              readOnly: readOnly,
+              style: displayTextStyle,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              name: name,
+              valueTransformer: (value) => (value ?? "").trim(),
+              decoration: InputDecoration(
+                labelText: labelText,
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.grey.shade400, width: 1.0),
+                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                ),
+                suffixIcon: effectiveController.text.isNotEmpty
+                    ? IconButton(
+                        tooltip: LocaleKeys.clearContent.tr,
+                        onPressed: () => effectiveController.clear(),
+                        icon: Icon(Icons.cancel),
+                      )
+                    : IconButton(
+                        tooltip: LocaleKeys.openChoice.tr,
+                        onPressed: onPressed,
+                        icon: Icon(Icons.file_open, color: AppColors.openColor),
+                      ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  /// 打开选择文件
+  static Widget openFileInput({
+    required String name,
+    required String labelText,
+    required TextEditingController controller,
+    required void Function(File? file)? onFileSelected,
+    List<String> allowedExtensions = const ['xlsx', 'xls'],
+    IconData prefixIcon = FontAwesomeIcons.fileExcel,
+    bool readOnly = true,
+  }) {
+    return StatefulBuilder(
+      builder: (BuildContext context, setState) {
+        File? selectedFile;
+
+        Future<void> pickFile() async {
+          FilePickerResult? result = await FilePicker.platform.pickFiles(
+            allowMultiple: false,
+            type: FileType.custom,
+            allowedExtensions: allowedExtensions,
+            dialogTitle: LocaleKeys.selectFile.trArgs(["excel"]),
+            lockParentWindow: true,
+          );
+          if (result != null) {
+            setState(() {
+              PlatformFile platformFile = result.files.single;
+              selectedFile = File(platformFile.path!);
+              controller.text = platformFile.name;
+            });
+            onFileSelected?.call(selectedFile);
+          } else {
+            CustomDialog.showToast(LocaleKeys.userCanceledPicker.tr);
+          }
+        }
+
+        return GestureDetector(
+          onTap: pickFile,
+          child: AbsorbPointer(
+            absorbing: controller.text.isEmpty,
+            child: TextField(
+              readOnly: readOnly,
+              controller: controller,
+              decoration: InputDecoration(
+                labelText: labelText,
+                floatingLabelBehavior: FloatingLabelBehavior.never,
+                prefixIcon: Icon(prefixIcon, color: AppColors.openColor),
+                suffixIcon: controller.text.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          setState(() {
+                            selectedFile = null;
+                            controller.clear();
+                          });
+                          onFileSelected?.call(null);
+                        },
+                      )
+                    : IconButton(
+                        tooltip: LocaleKeys.openChoice.tr,
+                        onPressed: pickFile,
+                        icon: Icon(Icons.file_open, color: AppColors.openColor),
+                      ),
+              ),
+            ),
+          ),
+        );
       },
     );
   }

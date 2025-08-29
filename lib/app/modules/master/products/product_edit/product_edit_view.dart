@@ -806,7 +806,7 @@ class ProductEditView extends GetView<ProductEditController> {
                   FormHelper.buildGridCol(
                     child: FormHelper.selectInput(
                       name: ProductEditFields.mSetOption,
-                      labelText: LocaleKeys.choose.tr,
+                      labelText: LocaleKeys.choice.tr,
                       items: [
                         DropdownMenuItem(value: "0", child: Text(LocaleKeys.selectItemByItem.tr)),
                         DropdownMenuItem(value: "1", child: Text(LocaleKeys.listAll.tr)),
@@ -817,7 +817,7 @@ class ProductEditView extends GetView<ProductEditController> {
                   FormHelper.buildGridCol(
                     child: FormHelper.selectInput(
                       name: "setMealStep",
-                      labelText: LocaleKeys.choose.tr,
+                      labelText: LocaleKeys.choice.tr,
                       initialValue: "0",
                       items: List.generate(
                         10,
