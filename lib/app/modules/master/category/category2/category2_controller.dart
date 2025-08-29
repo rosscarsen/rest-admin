@@ -107,7 +107,7 @@ class Category2Controller extends GetxController {
       onConfirm: () async {
         try {
           CustomDialog.showLoading(LocaleKeys.deleting.tr);
-          final DioApiResult dioApiResult = await apiClient.post(Config.categoryDelete, data: {"id": id});
+          final DioApiResult dioApiResult = await apiClient.post(Config.category2Delete, data: {"id": id});
 
           if (!dioApiResult.success) {
             CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
@@ -125,7 +125,7 @@ class Category2Controller extends GetxController {
               dataSource.updateDataSource();
               break;
             case 201:
-              CustomDialog.errorMessages(LocaleKeys.ftpConnectFailed.tr);
+              CustomDialog.errorMessages(LocaleKeys.deleteFailed.tr);
               break;
             default:
               CustomDialog.errorMessages(LocaleKeys.unknownError.tr);

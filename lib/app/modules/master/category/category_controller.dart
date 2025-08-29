@@ -128,7 +128,7 @@ class CategoryController extends GetxController {
               dataSource.updateDataSource();
               break;
             case 201:
-              CustomDialog.errorMessages(LocaleKeys.ftpConnectFailed.tr);
+              CustomDialog.errorMessages(LocaleKeys.deleteFailed.tr);
               break;
             default:
               CustomDialog.errorMessages(LocaleKeys.unknownError.tr);

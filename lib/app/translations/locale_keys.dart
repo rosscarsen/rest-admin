@@ -328,4 +328,5 @@ abstract class LocaleKeys {
   static const String paymentTerm = "paymentTerm";
   static const String creditLimit = "creditLimit";
   static const String paymentDays = "paymentDays";
+  static const String status = "status";
 }

@@ -67,18 +67,17 @@ class ProductRemarksView extends GetView<ProductRemarksController> {
           //关键字
           FormHelper.buildGridCol(
             child: FormHelper.textInput(
+              enabled: controller.hasPermission.value,
               name: "search",
               labelText: LocaleKeys.keyWord.tr,
-              onSubmitted: controller.hasPermission.value ? (value) => controller.reloadData() : null,
-              suffixIcon: TextButton(
-                onPressed: controller.hasPermission.value ? () => controller.reloadData() : null,
-                child: Text(LocaleKeys.search.tr),
-              ),
+              onSubmitted: (value) => controller.reloadData(),
+              suffixIcon: TextButton(onPressed: () => controller.reloadData(), child: Text(LocaleKeys.search.tr)),
             ),
           ),
           //类型
           FormHelper.buildGridCol(
             child: FormHelper.selectInput(
+              enabled: controller.hasPermission.value,
               name: "sort",
               labelText: "",
               initialValue: "0",
@@ -87,7 +86,7 @@ class ProductRemarksView extends GetView<ProductRemarksController> {
                 DropdownMenuItem(value: "1", child: Text(LocaleKeys.address.tr)),
                 DropdownMenuItem(value: "2", child: Text(LocaleKeys.cancel.tr)),
               ],
-              onChanged: (value) => controller.hasPermission.value ? () => controller.reloadData() : null,
+              onChanged: (value) => controller.hasPermission.value ? controller.reloadData() : null,
             ),
           ),
           //按钮

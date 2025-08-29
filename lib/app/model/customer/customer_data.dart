@@ -1,86 +1,88 @@
 import 'package:json_annotation/json_annotation.dart';
+
+import '../../utils/functions.dart';
 part 'customer_data.g.dart';
 
 @JsonSerializable()
 class CustomerData {
-  @JsonKey(name: "mAddress")
+  @JsonKey(name: "mAddress", fromJson: Functions.asString)
   final String? mAddress;
-  @JsonKey(name: "mAns_Back")
+  @JsonKey(name: "mAns_Back", fromJson: Functions.asString)
   final String? mAnsBack;
-  @JsonKey(name: "mCode")
+  @JsonKey(name: "mCode", fromJson: Functions.asString)
   final String? mCode;
-  @JsonKey(name: "mEmail")
+  @JsonKey(name: "mEmail", fromJson: Functions.asString)
   final String? mEmail;
-  @JsonKey(name: "mFullName")
+  @JsonKey(name: "mFullName", fromJson: Functions.asString)
   final String? mFullName;
-  @JsonKey(name: "mPhone_No")
+  @JsonKey(name: "mPhone_No", fromJson: Functions.asString)
   final String? mPhoneNo;
-  @JsonKey(name: "mShipping_Marks")
+  @JsonKey(name: "mShipping_Marks", fromJson: Functions.asString)
   final String? mShippingMarks;
-  @JsonKey(name: "mSimpleName")
+  @JsonKey(name: "mSimpleName", fromJson: Functions.asString)
   final String? mSimpleName;
-  @JsonKey(name: "mSite_Marks")
+  @JsonKey(name: "mSite_Marks", fromJson: Functions.asString)
   final String? mSiteMarks;
-  @JsonKey(name: "mST_Credit_Limit")
+  @JsonKey(name: "mST_Credit_Limit", fromJson: Functions.asString)
   final String? mStCreditLimit;
-  @JsonKey(name: "mST_Currency", defaultValue: "HKD")
+  @JsonKey(name: "mST_Currency", defaultValue: "HKD", fromJson: Functions.asString)
   final String? mStCurrency;
-  @JsonKey(name: "mST_Discount")
+  @JsonKey(name: "mST_Discount", fromJson: Functions.asString)
   final String? mStDiscount;
-  @JsonKey(name: "mST_Payment_Days")
+  @JsonKey(name: "mST_Payment_Days", fromJson: Functions.asString)
   final String? mStPaymentDays;
-  @JsonKey(name: "mST_Payment_Method", defaultValue: 0)
-  final int? mStPaymentMethod;
-  @JsonKey(name: "mST_Payment_Term")
+  @JsonKey(name: "mST_Payment_Method", defaultValue: "0", fromJson: Functions.asString)
+  final String? mStPaymentMethod;
+  @JsonKey(name: "mST_Payment_Term", fromJson: Functions.asString)
   final String? mStPaymentTerm;
-  @JsonKey(name: "mST_Price_Term")
+  @JsonKey(name: "mST_Price_Term", fromJson: Functions.asString)
   final String? mStPriceTerm;
-  @JsonKey(name: "mTelex")
+  @JsonKey(name: "mTelex", fromJson: Functions.asString)
   final String? mTelex;
-  @JsonKey(name: "mFax_No")
+  @JsonKey(name: "mFax_No", fromJson: Functions.asString)
   final String? mFaxNo;
-  @JsonKey(name: "T_Customer_ID")
-  final int? tCustomerId;
-  @JsonKey(name: "mRemarks")
+  @JsonKey(name: "T_Customer_ID", fromJson: Functions.asString)
+  final String? tCustomerId;
+  @JsonKey(name: "mRemarks", fromJson: Functions.asString)
   final String? mRemarks;
-  @JsonKey(name: "mBirthday")
+  @JsonKey(name: "mBirthday", fromJson: Functions.asString)
   final String? mBirthday;
-  @JsonKey(name: "mOccupation")
+  @JsonKey(name: "mOccupation", fromJson: Functions.asString)
   final String? mOccupation;
-  @JsonKey(name: "mMarried", defaultValue: 0)
-  final int? mMarried;
-  @JsonKey(name: "mBirthday_Year")
-  final int? mBirthdayYear;
-  @JsonKey(name: "mBirthday_Month")
-  final int? mBirthdayMonth;
-  @JsonKey(name: "mBirthday_Day")
-  final int? mBirthdayDay;
-  @JsonKey(name: "mSex", defaultValue: 0)
-  final int? mSex;
-  @JsonKey(name: "mNon_Active", defaultValue: 0)
-  final int? mNonActive;
-  @JsonKey(name: "mExpiry_Date")
-  final DateTime? mExpiryDate;
-  @JsonKey(name: "mSimple_Discount", defaultValue: 0)
-  final int? mSimpleDiscount;
-  @JsonKey(name: "mDeposit")
+  @JsonKey(name: "mMarried", defaultValue: "0", fromJson: Functions.asString)
+  final String? mMarried;
+  @JsonKey(name: "mBirthday_Year", fromJson: Functions.asString)
+  final String? mBirthdayYear;
+  @JsonKey(name: "mBirthday_Month", fromJson: Functions.asString)
+  final String? mBirthdayMonth;
+  @JsonKey(name: "mBirthday_Day", fromJson: Functions.asString)
+  final String? mBirthdayDay;
+  @JsonKey(name: "mSex", defaultValue: "0", fromJson: Functions.asString)
+  final String? mSex;
+  @JsonKey(name: "mNon_Active", defaultValue: "0", fromJson: Functions.asString)
+  final String? mNonActive;
+  @JsonKey(name: "mExpiry_Date", fromJson: Functions.asString)
+  final String? mExpiryDate;
+  @JsonKey(name: "mSimple_Discount", defaultValue: "0", fromJson: Functions.asString)
+  final String? mSimpleDiscount;
+  @JsonKey(name: "mDeposit", fromJson: Functions.asString)
   final dynamic mDeposit;
-  @JsonKey(name: "mCustomer_Type")
+  @JsonKey(name: "mCustomer_Type", fromJson: Functions.asString)
   final String? mCustomerType;
-  @JsonKey(name: "mCustomer_Note")
+  @JsonKey(name: "mCustomer_Note", fromJson: Functions.asString)
   final dynamic mCustomerNote;
-  @JsonKey(name: "mCreateDate")
-  final DateTime? mCreateDate;
-  @JsonKey(name: "mCustomer_Reference")
+  @JsonKey(name: "mCreateDate", fromJson: Functions.asString)
+  final String? mCreateDate;
+  @JsonKey(name: "mCustomer_Reference", fromJson: Functions.asString)
   final dynamic mCustomerReference;
-  @JsonKey(name: "mInfoNA")
-  final int? mInfoNa;
-  @JsonKey(name: "mCardNo")
-  final dynamic mCardNo;
-  @JsonKey(name: "mPassword")
+  @JsonKey(name: "mInfoNA", fromJson: Functions.asString)
+  final String? mInfoNa;
+  @JsonKey(name: "mCardNo", fromJson: Functions.asString)
+  final String? mCardNo;
+  @JsonKey(name: "mPassword", fromJson: Functions.asString)
   final String? mPassword;
-  @JsonKey(name: "pushinfo", defaultValue: 0)
-  final int? pushinfo;
+  @JsonKey(name: "pushinfo", defaultValue: "0", fromJson: Functions.asString)
+  final String? pushinfo;
 
   CustomerData({
     this.mAddress,
@@ -125,45 +127,45 @@ class CustomerData {
   });
 
   CustomerData copyWith({
-    dynamic mAddress,
-    dynamic mAnsBack,
+    String? mAddress,
+    String? mAnsBack,
     String? mCode,
     String? mEmail,
-    dynamic mFullName,
+    String? mFullName,
     String? mPhoneNo,
-    dynamic mShippingMarks,
+    String? mShippingMarks,
     String? mSimpleName,
-    dynamic mSiteMarks,
-    dynamic mStCreditLimit,
-    dynamic mStCurrency,
-    dynamic mStDiscount,
-    dynamic mStPaymentDays,
-    dynamic mStPaymentMethod,
-    dynamic mStPaymentTerm,
-    dynamic mStPriceTerm,
-    dynamic mTelex,
-    dynamic mFaxNo,
-    int? tCustomerId,
-    dynamic mRemarks,
-    dynamic mBirthday,
-    dynamic mOccupation,
-    dynamic mMarried,
-    int? mBirthdayYear,
-    int? mBirthdayMonth,
-    int? mBirthdayDay,
-    int? mSex,
-    dynamic mNonActive,
-    dynamic mExpiryDate,
-    dynamic mSimpleDiscount,
-    dynamic mDeposit,
-    dynamic mCustomerType,
-    dynamic mCustomerNote,
-    DateTime? mCreateDate,
-    dynamic mCustomerReference,
-    int? mInfoNa,
-    dynamic mCardNo,
+    String? mSiteMarks,
+    String? mStCreditLimit,
+    String? mStCurrency,
+    String? mStDiscount,
+    String? mStPaymentDays,
+    String? mStPaymentMethod,
+    String? mStPaymentTerm,
+    String? mStPriceTerm,
+    String? mTelex,
+    String? mFaxNo,
+    String? tCustomerId,
+    String? mRemarks,
+    String? mBirthday,
+    String? mOccupation,
+    String? mMarried,
+    String? mBirthdayYear,
+    String? mBirthdayMonth,
+    String? mBirthdayDay,
+    String? mSex,
+    String? mNonActive,
+    String? mExpiryDate,
+    String? mSimpleDiscount,
+    String? mDeposit,
+    String? mCustomerType,
+    String? mCustomerNote,
+    String? mCreateDate,
+    String? mCustomerReference,
+    String? mInfoNa,
+    String? mCardNo,
     String? mPassword,
-    int? pushinfo,
+    String? pushinfo,
   }) => CustomerData(
     mAddress: mAddress ?? this.mAddress,
     mAnsBack: mAnsBack ?? this.mAnsBack,

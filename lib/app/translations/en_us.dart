@@ -328,4 +328,5 @@ Map<String, String> get enUS => {
   LocaleKeys.paymentTerm: "Payment Term",
   LocaleKeys.creditLimit: "Credit Limit",
   LocaleKeys.paymentDays: "Payment Days",
+  LocaleKeys.status: "Status",
 };

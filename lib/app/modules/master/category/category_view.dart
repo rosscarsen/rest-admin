@@ -67,9 +67,10 @@ class CategoryView extends GetView<CategoryController> {
           //关键字
           FormHelper.buildGridCol(
             child: FormHelper.textInput(
+              enabled: controller.hasPermission.value,
               name: "search",
               labelText: LocaleKeys.keyWord.tr,
-              onSubmitted: controller.hasPermission.value ? (value) => controller.reloadData() : null,
+              onSubmitted: (value) => controller.reloadData(),
               suffixIcon: TextButton(
                 onPressed: controller.hasPermission.value ? () => controller.reloadData() : null,
                 child: Text(LocaleKeys.search.tr),
@@ -80,6 +81,7 @@ class CategoryView extends GetView<CategoryController> {
           FormHelper.buildGridCol(
             child: FormHelper.selectInput(
               name: "tier",
+              enabled: controller.hasPermission.value,
               labelText: LocaleKeys.layer.tr,
               items: [
                 DropdownMenuItem(value: "", child: Text("")),
@@ -87,7 +89,7 @@ class CategoryView extends GetView<CategoryController> {
                 DropdownMenuItem(value: "3", child: Text("3")),
                 DropdownMenuItem(value: "5", child: Text("5")),
               ],
-              onChanged: (value) => controller.hasPermission.value ? () => controller.reloadData() : null,
+              onChanged: (value) => controller.reloadData(),
             ),
           ),
           //按钮

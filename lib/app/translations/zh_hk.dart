@@ -328,4 +328,5 @@ Map<String, String> zhHK = {
   LocaleKeys.paymentTerm: "支付條款",
   LocaleKeys.creditLimit: "信用额度",
   LocaleKeys.paymentDays: "支付天數",
+  LocaleKeys.status: "狀態",
 };

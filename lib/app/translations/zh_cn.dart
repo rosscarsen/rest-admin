@@ -328,4 +328,5 @@ Map<String, String> get zhCN => {
   LocaleKeys.paymentTerm: "支付条款",
   LocaleKeys.creditLimit: "信用额度",
   LocaleKeys.paymentDays: "支付天数",
+  LocaleKeys.status: "状态",
 };

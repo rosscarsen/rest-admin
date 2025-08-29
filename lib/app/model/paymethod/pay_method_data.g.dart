@@ -8,16 +8,21 @@ part of 'pay_method_data.dart';
 
 PayMethodData _$PayMethodDataFromJson(Map<String, dynamic> json) =>
     PayMethodData(
-      mPayType: json['mPayType'] as String?,
-      tPayTypeId: (json['T_PayType_ID'] as num?)?.toInt(),
-      mSort: (json['mSort'] as num?)?.toInt(),
-      mPrePaid: (json['mPrePaid'] as num?)?.toInt() ?? 0,
-      mCreditCart: (json['mCreditCart'] as num?)?.toInt(),
-      mCardType: (json['mCardType'] as num?)?.toInt() ?? 0,
-      mCom: json['mCom'] as String?,
-      mNoDrawer: (json['mNoDrawer'] as num?)?.toInt() ?? 0,
-      tPaytypeOnline: json['t_paytype_online'] as String?,
-      mHide: (json['mHide'] as num?)?.toInt() ?? 0,
+      mPayType: Functions.asString(json['mPayType']),
+      tPayTypeId: Functions.asString(json['T_PayType_ID']),
+      mSort: Functions.asString(json['mSort']),
+      mPrePaid: json['mPrePaid'] == null
+          ? '0'
+          : Functions.asString(json['mPrePaid']),
+      mCreditCart: Functions.asString(json['mCreditCart']),
+      mCardType: json['mCardType'] == null
+          ? '0'
+          : Functions.asString(json['mCardType']),
+      mCom: Functions.asString(json['mCom']),
+      mNoDrawer:
+          json['mNoDrawer'] as String? ?? '0, fromJson: Functions.asString',
+      tPaytypeOnline: Functions.asString(json['t_paytype_online']),
+      mHide: json['mHide'] == null ? '0' : Functions.asString(json['mHide']),
     );
 
 Map<String, dynamic> _$PayMethodDataToJson(PayMethodData instance) =>

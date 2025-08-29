@@ -7,49 +7,57 @@ part of 'customer_data.dart';
 // **************************************************************************
 
 CustomerData _$CustomerDataFromJson(Map<String, dynamic> json) => CustomerData(
-  mAddress: json['mAddress'] as String?,
-  mAnsBack: json['mAns_Back'] as String?,
-  mCode: json['mCode'] as String?,
-  mEmail: json['mEmail'] as String?,
-  mFullName: json['mFullName'] as String?,
-  mPhoneNo: json['mPhone_No'] as String?,
-  mShippingMarks: json['mShipping_Marks'] as String?,
-  mSimpleName: json['mSimpleName'] as String?,
-  mSiteMarks: json['mSite_Marks'] as String?,
-  mStCreditLimit: json['mST_Credit_Limit'] as String?,
-  mStCurrency: json['mST_Currency'] as String? ?? 'HKD',
-  mStDiscount: json['mST_Discount'] as String?,
-  mStPaymentDays: json['mST_Payment_Days'] as String?,
-  mStPaymentMethod: (json['mST_Payment_Method'] as num?)?.toInt() ?? 0,
-  mStPaymentTerm: json['mST_Payment_Term'] as String?,
-  mStPriceTerm: json['mST_Price_Term'] as String?,
-  mTelex: json['mTelex'] as String?,
-  mFaxNo: json['mFax_No'] as String?,
-  tCustomerId: (json['T_Customer_ID'] as num?)?.toInt(),
-  mRemarks: json['mRemarks'] as String?,
-  mBirthday: json['mBirthday'] as String?,
-  mOccupation: json['mOccupation'] as String?,
-  mMarried: (json['mMarried'] as num?)?.toInt() ?? 0,
-  mBirthdayYear: (json['mBirthday_Year'] as num?)?.toInt(),
-  mBirthdayMonth: (json['mBirthday_Month'] as num?)?.toInt(),
-  mBirthdayDay: (json['mBirthday_Day'] as num?)?.toInt(),
-  mSex: (json['mSex'] as num?)?.toInt() ?? 0,
-  mNonActive: (json['mNon_Active'] as num?)?.toInt() ?? 0,
-  mExpiryDate: json['mExpiry_Date'] == null
-      ? null
-      : DateTime.parse(json['mExpiry_Date'] as String),
-  mSimpleDiscount: (json['mSimple_Discount'] as num?)?.toInt() ?? 0,
-  mDeposit: json['mDeposit'],
-  mCustomerType: json['mCustomer_Type'] as String?,
-  mCustomerNote: json['mCustomer_Note'],
-  mCreateDate: json['mCreateDate'] == null
-      ? null
-      : DateTime.parse(json['mCreateDate'] as String),
-  mCustomerReference: json['mCustomer_Reference'],
-  mInfoNa: (json['mInfoNA'] as num?)?.toInt(),
-  mCardNo: json['mCardNo'],
-  mPassword: json['mPassword'] as String?,
-  pushinfo: (json['pushinfo'] as num?)?.toInt() ?? 0,
+  mAddress: Functions.asString(json['mAddress']),
+  mAnsBack: Functions.asString(json['mAns_Back']),
+  mCode: Functions.asString(json['mCode']),
+  mEmail: Functions.asString(json['mEmail']),
+  mFullName: Functions.asString(json['mFullName']),
+  mPhoneNo: Functions.asString(json['mPhone_No']),
+  mShippingMarks: Functions.asString(json['mShipping_Marks']),
+  mSimpleName: Functions.asString(json['mSimpleName']),
+  mSiteMarks: Functions.asString(json['mSite_Marks']),
+  mStCreditLimit: Functions.asString(json['mST_Credit_Limit']),
+  mStCurrency: json['mST_Currency'] == null
+      ? 'HKD'
+      : Functions.asString(json['mST_Currency']),
+  mStDiscount: Functions.asString(json['mST_Discount']),
+  mStPaymentDays: Functions.asString(json['mST_Payment_Days']),
+  mStPaymentMethod: json['mST_Payment_Method'] == null
+      ? '0'
+      : Functions.asString(json['mST_Payment_Method']),
+  mStPaymentTerm: Functions.asString(json['mST_Payment_Term']),
+  mStPriceTerm: Functions.asString(json['mST_Price_Term']),
+  mTelex: Functions.asString(json['mTelex']),
+  mFaxNo: Functions.asString(json['mFax_No']),
+  tCustomerId: Functions.asString(json['T_Customer_ID']),
+  mRemarks: Functions.asString(json['mRemarks']),
+  mBirthday: Functions.asString(json['mBirthday']),
+  mOccupation: Functions.asString(json['mOccupation']),
+  mMarried: json['mMarried'] == null
+      ? '0'
+      : Functions.asString(json['mMarried']),
+  mBirthdayYear: Functions.asString(json['mBirthday_Year']),
+  mBirthdayMonth: Functions.asString(json['mBirthday_Month']),
+  mBirthdayDay: Functions.asString(json['mBirthday_Day']),
+  mSex: json['mSex'] == null ? '0' : Functions.asString(json['mSex']),
+  mNonActive: json['mNon_Active'] == null
+      ? '0'
+      : Functions.asString(json['mNon_Active']),
+  mExpiryDate: Functions.asString(json['mExpiry_Date']),
+  mSimpleDiscount: json['mSimple_Discount'] == null
+      ? '0'
+      : Functions.asString(json['mSimple_Discount']),
+  mDeposit: Functions.asString(json['mDeposit']),
+  mCustomerType: Functions.asString(json['mCustomer_Type']),
+  mCustomerNote: Functions.asString(json['mCustomer_Note']),
+  mCreateDate: Functions.asString(json['mCreateDate']),
+  mCustomerReference: Functions.asString(json['mCustomer_Reference']),
+  mInfoNa: Functions.asString(json['mInfoNA']),
+  mCardNo: Functions.asString(json['mCardNo']),
+  mPassword: Functions.asString(json['mPassword']),
+  pushinfo: json['pushinfo'] == null
+      ? '0'
+      : Functions.asString(json['pushinfo']),
 );
 
 Map<String, dynamic> _$CustomerDataToJson(CustomerData instance) =>
@@ -82,12 +90,12 @@ Map<String, dynamic> _$CustomerDataToJson(CustomerData instance) =>
       'mBirthday_Day': instance.mBirthdayDay,
       'mSex': instance.mSex,
       'mNon_Active': instance.mNonActive,
-      'mExpiry_Date': instance.mExpiryDate?.toIso8601String(),
+      'mExpiry_Date': instance.mExpiryDate,
       'mSimple_Discount': instance.mSimpleDiscount,
       'mDeposit': instance.mDeposit,
       'mCustomer_Type': instance.mCustomerType,
       'mCustomer_Note': instance.mCustomerNote,
-      'mCreateDate': instance.mCreateDate?.toIso8601String(),
+      'mCreateDate': instance.mCreateDate,
       'mCustomer_Reference': instance.mCustomerReference,
       'mInfoNA': instance.mInfoNa,
       'mCardNo': instance.mCardNo,

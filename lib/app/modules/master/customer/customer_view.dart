@@ -67,58 +67,75 @@ class CustomerView extends GetView<CustomerController> {
           //关键字
           FormHelper.buildGridCol(
             child: FormHelper.textInput(
-              name: "search",
+              enabled: controller.hasPermission.value,
+              name: "keyword",
               labelText: LocaleKeys.keyWord.tr,
-              onSubmitted: controller.hasPermission.value ? (value) => controller.reloadData() : null,
-              suffixIcon: TextButton(
-                onPressed: controller.hasPermission.value ? () => controller.reloadData() : null,
-                child: Text(LocaleKeys.search.tr),
-              ),
+              onSubmitted: (value) => controller.reloadData(),
             ),
           ),
           //类型
           FormHelper.buildGridCol(
             child: FormHelper.selectInput(
-              name: "sort",
-              labelText: "",
-              initialValue: "0",
+              name: "mCustomer_Type",
+              labelText: LocaleKeys.type.tr,
+              enabled: controller.hasPermission.value,
+              initialValue: "",
               items: [
-                DropdownMenuItem(value: "0", child: Text(LocaleKeys.productRemarks.tr)),
-                DropdownMenuItem(value: "1", child: Text(LocaleKeys.address.tr)),
-                DropdownMenuItem(value: "2", child: Text(LocaleKeys.cancel.tr)),
+                DropdownMenuItem(value: "", child: Text("")),
+                ...controller.customerTypes.map((e) => DropdownMenuItem(value: e, child: Text(e))),
               ],
-              onChanged: (value) => controller.hasPermission.value ? () => controller.reloadData() : null,
+              onChanged: (value) => controller.reloadData(),
+            ),
+          ),
+          //类型
+          FormHelper.buildGridCol(
+            child: FormHelper.selectInput(
+              name: "mInfoNA",
+              labelText: LocaleKeys.status.tr,
+              initialValue: "",
+              items: [
+                DropdownMenuItem(value: "", child: Text("")),
+                DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+              ],
+              enabled: controller.hasPermission.value,
+              onChanged: (value) => controller.reloadData(),
             ),
           ),
           //按钮
           FormHelper.buildGridCol(
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: context.isPhoneOrLess ? Alignment.centerLeft : Alignment.centerRight,
-              child: Wrap(
-                crossAxisAlignment: WrapCrossAlignment.center,
-                alignment: context.isPhoneOrLess ? WrapAlignment.start : WrapAlignment.end,
-                spacing: 5,
-                runSpacing: 5,
-                children: [
-                  //导入
-                  ElevatedButton(
-                    onPressed: controller.hasPermission.value ? () => _buildImport() : null,
-                    child: Text(LocaleKeys.import.tr),
-                  ),
-                  //导出
-                  ElevatedButton(
-                    onPressed: controller.hasPermission.value ? () => controller.exportProductRemark() : null,
-                    child: Text(LocaleKeys.export.tr),
-                  ),
-                  //新增
-                  ElevatedButton(
-                    onPressed: controller.hasPermission.value ? () => controller.edit() : null,
-                    child: Text(LocaleKeys.add.tr),
-                  ),
-                ],
-              ).paddingSymmetric(vertical: 2.0).paddingOnly(left: context.isPhoneOrLess ? 0 : 5),
-            ),
+            sm: 12,
+            md: 12,
+            lg: 12,
+            xl: 12,
+            child: Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              alignment: context.isPhoneOrLess ? WrapAlignment.start : WrapAlignment.end,
+              spacing: 5,
+              runSpacing: 5,
+              children: [
+                //搜索
+                ElevatedButton(
+                  onPressed: controller.hasPermission.value ? () => controller.reloadData() : null,
+                  child: Text(LocaleKeys.search.tr),
+                ),
+                //导入
+                ElevatedButton(
+                  onPressed: controller.hasPermission.value ? () => _buildImport() : null,
+                  child: Text(LocaleKeys.import.tr),
+                ),
+                //导出
+                ElevatedButton(
+                  onPressed: controller.hasPermission.value ? () => controller.exportProductRemark() : null,
+                  child: Text(LocaleKeys.export.tr),
+                ),
+                //新增
+                ElevatedButton(
+                  onPressed: controller.hasPermission.value ? () => controller.edit() : null,
+                  child: Text(LocaleKeys.add.tr),
+                ),
+              ],
+            ).paddingSymmetric(vertical: 2.0).paddingOnly(left: context.isPhoneOrLess ? 0 : 5),
           ),
         ],
       ),
@@ -242,33 +259,41 @@ class CustomerView extends GetView<CustomerController> {
         gridLinesVisibility: GridLinesVisibility.both,
         headerGridLinesVisibility: GridLinesVisibility.both,
         columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
+        columnWidthMode: ColumnWidthMode.auto,
         showCheckboxColumn: false,
         selectionMode: SelectionMode.none,
         source: controller.dataSource,
         columns: <GridColumn>[
           GridColumn(
-            columnName: 'mSort',
-            label: CustomCell(data: LocaleKeys.sort.tr),
+            columnName: 'mCode',
+            label: CustomCell(data: LocaleKeys.code.tr),
           ),
           GridColumn(
-            columnName: 'mRemark',
-            label: CustomCell(data: LocaleKeys.remarks.tr),
+            columnName: 'mSimpleName',
+            label: CustomCell(data: LocaleKeys.simpleName.tr),
+            columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.auto : ColumnWidthMode.fill,
           ),
           GridColumn(
-            columnName: 'mDetail',
-            label: CustomCell(data: LocaleKeys.detail.tr),
-            columnWidthMode: ColumnWidthMode.fill,
-            maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
-            minimumWidth: 200,
+            columnName: 'mFullName',
+            label: CustomCell(data: LocaleKeys.fullName.tr),
+            columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.auto : ColumnWidthMode.fill,
           ),
           GridColumn(
-            columnName: 'mVisible',
-            label: CustomCell(data: LocaleKeys.hide.tr),
+            columnName: 'mPhoneNo',
+            label: CustomCell(data: LocaleKeys.mobile.tr),
+          ),
+          GridColumn(
+            columnName: 'mFaxNo',
+            label: CustomCell(data: LocaleKeys.fax.tr),
+          ),
+          GridColumn(
+            columnName: 'mStDiscount',
+            label: CustomCell(data: LocaleKeys.discount.tr),
           ),
           GridColumn(
             allowSorting: false,
             columnName: 'actions',
-            width: context.isPhoneOrWider ? 120 : 60,
+            width: 80,
             label: CustomCell(data: LocaleKeys.operation.tr),
           ),
         ],

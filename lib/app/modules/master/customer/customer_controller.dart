@@ -9,6 +9,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
 import '../../../model/customer/customer_data.dart';
+import '../../../model/customer/customer_page_model.dart';
 import '../../../routes/app_pages.dart';
 import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
@@ -22,7 +23,6 @@ import 'customer_data_source.dart';
 class CustomerController extends GetxController {
   final DataGridController dataGridController = DataGridController();
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
-  final GlobalKey<FormBuilderState> copyKey = GlobalKey<FormBuilderState>();
   static DataGridController get to => Get.find();
   final isLoading = true.obs;
   final totalPages = 0.obs;
@@ -32,6 +32,8 @@ class CustomerController extends GetxController {
   final ApiClient apiClient = ApiClient();
   late CustomerDataSource dataSource;
   RxBool hasPermission = true.obs;
+  // 客户类型
+  final customerTypes = <String>[].obs;
   @override
   void onInit() {
     updateDataGridSource();
@@ -63,28 +65,37 @@ class CustomerController extends GetxController {
   /// 获取列表
   Future<void> getList() async {
     isLoading(true);
-    formKey.currentState?.saveAndValidate();
-    final param = {'page': currentPage.value, ...formKey.currentState?.value ?? {}};
-
-    final futures = [apiClient.post(Config.customerType), apiClient.post(Config.customer, data: param)];
-    /* try {
+    try {
       formKey.currentState?.saveAndValidate();
       final param = {'page': currentPage.value, ...formKey.currentState?.value ?? {}};
-      final DioApiResult dioApiResult = await apiClient.post(Config.customer, data: param);
-      if (!dioApiResult.success) {
-        if (!dioApiResult.hasPermission) {
-          hasPermission.value = false;
+      final futures = [apiClient.post(Config.customerType), apiClient.post(Config.customer, data: param)];
+      final results = await Future.wait(futures);
+      // 客户类型
+      final DioApiResult customerTypeResult = results[0];
+      if (customerTypeResult.success) {
+        final customerTypeApiData = json.decode(customerTypeResult.data) as Map<String, dynamic>;
+        final customerTypeApiResult = customerTypeApiData["apiResult"];
+        if (customerTypeApiResult != null) {
+          customerTypes.assignAll((customerTypeApiResult as List<dynamic>).map((e) => e.toString()).toList());
         }
-        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+      }
+      // 客户列表
+      final DioApiResult customerResult = results[1];
+      if (!customerResult.success) {
+        if (!customerResult.hasPermission) {
+          hasPermission.value = false;
+          dataList.clear();
+        }
+        CustomDialog.errorMessages(customerResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
-      if (dioApiResult.data == null) {
-        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+      if (customerResult.data == null) {
+        CustomDialog.errorMessages(customerResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
       hasPermission.value = true;
-      //logger.f(dioApiResult.data);
-      final resultModel = customerPageModelFromJson(dioApiResult.data.toString());
+
+      final resultModel = customerPageModelFromJson(customerResult.data.toString());
       if (resultModel.status == 200) {
         dataList
           ..clear()
@@ -96,16 +107,16 @@ class CustomerController extends GetxController {
       }
     } finally {
       isLoading(false);
-    } */
+    }
   }
 
   /// 编辑
-  void edit({int? id}) async {
+  void edit({String? id}) async {
     Get.toNamed(Routes.CUSTOMER_EDIT, parameters: id == null ? null : {'id': id.toString()});
   }
 
   /// 删除单行数据
-  void deleteRow(int? id) async {
+  void deleteRow(String? id) async {
     CustomAlert.iosAlert(
       showCancel: true,
       message: LocaleKeys.deleteConfirmMsg.tr,
@@ -130,7 +141,7 @@ class CustomerController extends GetxController {
               dataSource.updateDataSource();
               break;
             case 201:
-              CustomDialog.errorMessages(LocaleKeys.ftpConnectFailed.tr);
+              CustomDialog.errorMessages(LocaleKeys.deleteFailed.tr);
               break;
             default:
               CustomDialog.errorMessages(LocaleKeys.unknownError.tr);

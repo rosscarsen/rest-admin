@@ -1,16 +1,32 @@
-class PrinterModel {
-  final int? mItem;
+import 'package:json_annotation/json_annotation.dart';
+
+import '../../utils/functions.dart';
+part 'printer_data.g.dart';
+
+@JsonSerializable()
+class PrinterData {
+  @JsonKey(name: "mItem", fromJson: Functions.asString)
+  final String? mItem;
+  @JsonKey(name: "mName", fromJson: Functions.asString)
   final String? mName;
+  @JsonKey(name: "mDeviceName", fromJson: Functions.asString)
   final String? mDeviceName;
+  @JsonKey(name: "mNetworkPrint", fromJson: Functions.asString)
   final String? mNetworkPrint;
+  @JsonKey(name: "mRemarks", fromJson: Functions.asString)
   final String? mRemarks;
+  @JsonKey(name: "mLanIP", fromJson: Functions.asString)
   final String? mLanIp;
+  @JsonKey(name: "mPrinterType", fromJson: Functions.asString)
   final String? mPrinterType;
+  @JsonKey(name: "mBackupPrinter", fromJson: Functions.asString)
   final String? mBackupPrinter;
+  @JsonKey(name: "mBackupPrinter1", fromJson: Functions.asString)
   final String? mBackupPrinter1;
+  @JsonKey(name: "mBackupPrinter2", fromJson: Functions.asString)
   final String? mBackupPrinter2;
 
-  PrinterModel({
+  PrinterData({
     this.mItem,
     this.mName,
     this.mDeviceName,
@@ -23,8 +39,8 @@ class PrinterModel {
     this.mBackupPrinter2,
   });
 
-  PrinterModel copyWith({
-    int? mItem,
+  PrinterData copyWith({
+    String? mItem,
     String? mName,
     String? mDeviceName,
     String? mNetworkPrint,
@@ -34,7 +50,7 @@ class PrinterModel {
     String? mBackupPrinter,
     String? mBackupPrinter1,
     String? mBackupPrinter2,
-  }) => PrinterModel(
+  }) => PrinterData(
     mItem: mItem ?? this.mItem,
     mName: mName ?? this.mName,
     mDeviceName: mDeviceName ?? this.mDeviceName,
@@ -47,29 +63,7 @@ class PrinterModel {
     mBackupPrinter2: mBackupPrinter2 ?? this.mBackupPrinter2,
   );
 
-  factory PrinterModel.fromJson(Map<String, dynamic> json) => PrinterModel(
-    mItem: json["mItem"],
-    mName: json["mName"],
-    mDeviceName: json["mDeviceName"],
-    mNetworkPrint: json["mNetworkPrint"],
-    mRemarks: json["mRemarks"],
-    mLanIp: json["mLanIP"],
-    mPrinterType: json["mPrinterType"],
-    mBackupPrinter: json["mBackupPrinter"],
-    mBackupPrinter1: json["mBackupPrinter1"],
-    mBackupPrinter2: json["mBackupPrinter2"],
-  );
+  factory PrinterData.fromJson(Map<String, dynamic> json) => _$PrinterDataFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-    "mItem": mItem,
-    "mName": mName,
-    "mDeviceName": mDeviceName,
-    "mNetworkPrint": mNetworkPrint,
-    "mRemarks": mRemarks,
-    "mLanIP": mLanIp,
-    "mPrinterType": mPrinterType,
-    "mBackupPrinter": mBackupPrinter,
-    "mBackupPrinter1": mBackupPrinter1,
-    "mBackupPrinter2": mBackupPrinter2,
-  };
+  Map<String, dynamic> toJson() => _$PrinterDataToJson(this);
 }

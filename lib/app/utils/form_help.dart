@@ -186,9 +186,8 @@ class FormHelper {
           isExpanded: true,
           borderRadius: BorderRadius.circular(8),
           onChanged: enabled
-              ? (val) {
-                  field.didChange(val);
-                  if (onChanged != null) onChanged(val);
+              ? (value) {
+                  field.didChange(value);
                 }
               : null,
           decoration: InputDecoration(

@@ -141,7 +141,8 @@ class Functions {
     return eq.equals(normalizedSource, normalizedTarget);
   }
 
-  String? asString(Object? value) {
+  /// 转换为字符串
+  static String? asString(Object? value) {
     if (value == null) return null;
     if (value is String && value.trim().isEmpty) return null;
     return value.toString();

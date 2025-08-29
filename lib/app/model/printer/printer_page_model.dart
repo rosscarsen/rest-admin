@@ -2,17 +2,24 @@
 //
 //     final printerPageModel = printerPageModelFromJson(jsonString);
 
+import 'package:json_annotation/json_annotation.dart';
 import 'dart:convert';
 
-import 'printer_model.dart';
+import 'printer_data.dart';
+
+part 'printer_page_model.g.dart';
 
 PrinterPageModel printerPageModelFromJson(String str) => PrinterPageModel.fromJson(json.decode(str));
 
 String printerPageModelToJson(PrinterPageModel data) => json.encode(data.toJson());
 
+@JsonSerializable()
 class PrinterPageModel {
+  @JsonKey(name: "status")
   final int? status;
+  @JsonKey(name: "msg")
   final String? msg;
+  @JsonKey(name: "apiResult")
   final ApiResult? apiResult;
 
   PrinterPageModel({this.status, this.msg, this.apiResult});
@@ -20,21 +27,24 @@ class PrinterPageModel {
   PrinterPageModel copyWith({int? status, String? msg, ApiResult? apiResult}) =>
       PrinterPageModel(status: status ?? this.status, msg: msg ?? this.msg, apiResult: apiResult ?? this.apiResult);
 
-  factory PrinterPageModel.fromJson(Map<String, dynamic> json) => PrinterPageModel(
-    status: json["status"],
-    msg: json["msg"],
-    apiResult: json["apiResult"] == null ? null : ApiResult.fromJson(json["apiResult"]),
-  );
+  factory PrinterPageModel.fromJson(Map<String, dynamic> json) => _$PrinterPageModelFromJson(json);
 
-  Map<String, dynamic> toJson() => {"status": status, "msg": msg, "apiResult": apiResult?.toJson()};
+  Map<String, dynamic> toJson() => _$PrinterPageModelToJson(this);
 }
 
+@JsonSerializable()
 class ApiResult {
+  @JsonKey(name: "total")
   final int? total;
+  @JsonKey(name: "per_page")
   final int? perPage;
+  @JsonKey(name: "current_page")
   final int? currentPage;
+  @JsonKey(name: "last_page")
   final int? lastPage;
-  final List<PrinterModel>? data;
+  @JsonKey(name: "data")
+  final List<PrinterData>? data;
+  @JsonKey(name: "has_more")
   final bool? hasMore;
 
   ApiResult({this.total, this.perPage, this.currentPage, this.lastPage, this.data, this.hasMore});
@@ -44,7 +54,7 @@ class ApiResult {
     int? perPage,
     int? currentPage,
     int? lastPage,
-    List<PrinterModel>? data,
+    List<PrinterData>? data,
     bool? hasMore,
   }) => ApiResult(
     total: total ?? this.total,
@@ -55,21 +65,7 @@ class ApiResult {
     hasMore: hasMore ?? this.hasMore,
   );
 
-  factory ApiResult.fromJson(Map<String, dynamic> json) => ApiResult(
-    total: json["total"],
-    perPage: json["per_page"],
-    currentPage: json["current_page"],
-    lastPage: json["last_page"],
-    data: json["data"] == null ? [] : List<PrinterModel>.from(json["data"]!.map((x) => PrinterModel.fromJson(x))),
-    hasMore: json["has_more"],
-  );
+  factory ApiResult.fromJson(Map<String, dynamic> json) => _$ApiResultFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-    "total": total,
-    "per_page": perPage,
-    "current_page": currentPage,
-    "last_page": lastPage,
-    "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
-    "has_more": hasMore,
-  };
+  Map<String, dynamic> toJson() => _$ApiResultToJson(this);
 }

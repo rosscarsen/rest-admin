@@ -97,16 +97,14 @@ class ProductsView extends GetView<ProductsController> {
           lg: 3,
           xl: 2,
           child: TextField(
+            enabled: controller.hasPermission.value,
             controller: controller.searchController,
             textInputAction: TextInputAction.search,
-            onSubmitted: controller.hasPermission.value ? (value) => controller.reloadData() : null,
+            onSubmitted: (value) => controller.reloadData(),
             decoration: InputDecoration(
               enabled: controller.hasPermission.value,
               hintText: LocaleKeys.keyWord.tr,
-              suffixIcon: TextButton(
-                onPressed: controller.hasPermission.value ? () => controller.reloadData() : null,
-                child: Text(LocaleKeys.search.tr),
-              ),
+              suffixIcon: TextButton(onPressed: () => controller.reloadData(), child: Text(LocaleKeys.search.tr)),
             ),
           ).paddingSymmetric(vertical: 2.0),
         ),

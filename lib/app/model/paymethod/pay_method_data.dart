@@ -1,28 +1,30 @@
 import 'package:json_annotation/json_annotation.dart';
+
+import '../../utils/functions.dart';
 part 'pay_method_data.g.dart';
 
 @JsonSerializable()
 class PayMethodData {
-  @JsonKey(name: "mPayType")
+  @JsonKey(name: "mPayType", fromJson: Functions.asString)
   final String? mPayType;
-  @JsonKey(name: "T_PayType_ID")
-  final int? tPayTypeId;
-  @JsonKey(name: "mSort")
-  final int? mSort;
-  @JsonKey(name: "mPrePaid", defaultValue: 0)
-  final int? mPrePaid;
-  @JsonKey(name: "mCreditCart")
-  final int? mCreditCart;
-  @JsonKey(name: "mCardType", defaultValue: 0)
-  final int? mCardType;
-  @JsonKey(name: "mCom")
+  @JsonKey(name: "T_PayType_ID", fromJson: Functions.asString)
+  final String? tPayTypeId;
+  @JsonKey(name: "mSort", fromJson: Functions.asString)
+  final String? mSort;
+  @JsonKey(name: "mPrePaid", defaultValue: "0", fromJson: Functions.asString)
+  final String? mPrePaid;
+  @JsonKey(name: "mCreditCart", fromJson: Functions.asString)
+  final String? mCreditCart;
+  @JsonKey(name: "mCardType", defaultValue: "0", fromJson: Functions.asString)
+  final String? mCardType;
+  @JsonKey(name: "mCom", fromJson: Functions.asString)
   final String? mCom;
-  @JsonKey(name: "mNoDrawer", defaultValue: 0)
-  final int? mNoDrawer;
-  @JsonKey(name: "t_paytype_online")
+  @JsonKey(name: "mNoDrawer", defaultValue: "0, fromJson: Functions.asString")
+  final String? mNoDrawer;
+  @JsonKey(name: "t_paytype_online", fromJson: Functions.asString)
   final String? tPaytypeOnline;
-  @JsonKey(name: "mHide", defaultValue: 0)
-  final int? mHide;
+  @JsonKey(name: "mHide", defaultValue: "0", fromJson: Functions.asString)
+  final String? mHide;
 
   PayMethodData({
     this.mPayType,
@@ -39,15 +41,15 @@ class PayMethodData {
 
   PayMethodData copyWith({
     String? mPayType,
-    int? tPayTypeId,
-    int? mSort,
-    int? mPrePaid,
-    int? mCreditCart,
-    int? mCardType,
+    String? tPayTypeId,
+    String? mSort,
+    String? mPrePaid,
+    String? mCreditCart,
+    String? mCardType,
     String? mCom,
-    int? mNoDrawer,
+    String? mNoDrawer,
     String? tPaytypeOnline,
-    int? mHide,
+    String? mHide,
   }) => PayMethodData(
     mPayType: mPayType ?? this.mPayType,
     tPayTypeId: tPayTypeId ?? this.tPayTypeId,

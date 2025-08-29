@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import '../../../../../config.dart';
 import '../../../../../model/category/category_model.dart';
 import '../../../../../model/printer/printer_all_model.dart';
-import '../../../../../model/printer/printer_model.dart';
+import '../../../../../model/printer/printer_data.dart';
 import '../../../../../service/dio_api_client.dart';
 import '../../../../../service/dio_api_result.dart';
 import '../../../../../translations/locale_keys.dart';
@@ -29,7 +29,7 @@ class Category2EditController extends GetxController {
   // 加载标识
   final isLoading = true.obs;
 
-  final printerList = <PrinterModel>[].obs;
+  final printerList = <PrinterData>[].obs;
   @override
   void onInit() {
     super.onInit();
