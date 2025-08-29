@@ -134,52 +134,12 @@ class CategoryView extends GetView<CategoryController> {
     await Get.defaultDialog(
       barrierDismissible: false,
       title: LocaleKeys.importProduct.tr,
-      content: StatefulBuilder(
-        builder: (BuildContext context, setState) {
-          return GestureDetector(
-            onTap: () async {
-              FilePickerResult? result = await FilePicker.platform.pickFiles(
-                allowMultiple: false,
-                type: FileType.custom,
-                allowedExtensions: ['xlsx', 'xls'],
-                dialogTitle: LocaleKeys.selectFile.trArgs(["excel"]),
-                lockParentWindow: true,
-              );
-              if (result != null) {
-                setState(() {
-                  PlatformFile platformFile = result.files.single;
-                  excelFile = File(platformFile.path!);
-                  fileController.text = platformFile.name;
-                });
-              } else {
-                CustomDialog.showToast(LocaleKeys.userCanceledPicker.tr);
-              }
-            },
-            child: AbsorbPointer(
-              absorbing: fileController.text.isEmpty,
-              child: TextField(
-                readOnly: true,
-                controller: fileController,
-                decoration: InputDecoration(
-                  labelText: LocaleKeys.selectFile.trArgs(["excel"]),
-                  floatingLabelBehavior: FloatingLabelBehavior.never,
-                  enabled: true,
-                  prefixIcon: Icon(FontAwesomeIcons.fileExcel, color: AppColors.openColor),
-                  suffixIcon: fileController.text.isNotEmpty
-                      ? IconButton(
-                          icon: Icon(Icons.clear),
-                          onPressed: () {
-                            setState(() {
-                              excelFile = null;
-                              fileController.clear();
-                            });
-                          },
-                        )
-                      : null,
-                ),
-              ),
-            ),
-          );
+      content: FormHelper.openFileInput(
+        name: "file",
+        labelText: LocaleKeys.selectFile.trArgs(["excel"]),
+        controller: fileController,
+        onFileSelected: (file) {
+          excelFile = file;
         },
       ),
       cancel: ElevatedButton(

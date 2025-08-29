@@ -205,6 +205,7 @@ class CustomerView extends GetView<CustomerController> {
       barrierDismissible: false,
       title: LocaleKeys.importProduct.tr,
       content: Column(
+        spacing: 8,
         children: [
           FormHelper.openFileInput(
             name: "excel",
@@ -237,15 +238,14 @@ class CustomerView extends GetView<CustomerController> {
       ),
       confirm: ElevatedButton(
         onPressed: () async {
-          /* if (excelFile == null) {
+          if (excelFile == null) {
             CustomDialog.showToast(LocaleKeys.pleaseSelectFile.tr);
             return;
           }
           fileController.dispose();
-          overWriteController.dispose();
           Get.closeDialog();
           await controller.importProductRemark(file: excelFile!, query: {'overWrite': overWrite});
-          excelFile = null; */
+          excelFile = null;
         },
         child: Text(LocaleKeys.confirm.tr),
       ),

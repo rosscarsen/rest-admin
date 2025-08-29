@@ -297,76 +297,32 @@ class ProductsView extends GetView<ProductsController> {
     Get.defaultDialog(
       barrierDismissible: false,
       title: LocaleKeys.importProduct.tr,
-      content: StatefulBuilder(
-        builder: (BuildContext context, setState) {
-          return SingleChildScrollView(
-            child: Column(
-              spacing: 8.0,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () async {
-                    FilePickerResult? result = await FilePicker.platform.pickFiles(
-                      allowMultiple: false,
-                      type: FileType.custom,
-                      allowedExtensions: ['xlsx', 'xls'],
-                      dialogTitle: LocaleKeys.selectFile.trArgs(["excel"]),
-                      lockParentWindow: true,
-                    );
-                    if (result != null) {
-                      setState(() {
-                        PlatformFile platformFile = result.files.single;
-                        excelFile = File(platformFile.path!);
-                        fileController.text = platformFile.name;
-                      });
-                    } else {
-                      CustomDialog.showToast(LocaleKeys.userCanceledPicker.tr);
-                    }
-                  },
-                  child: AbsorbPointer(
-                    absorbing: fileController.text.isEmpty,
-                    child: TextField(
-                      readOnly: true,
-                      controller: fileController,
-                      decoration: InputDecoration(
-                        labelText: LocaleKeys.selectFile.trArgs(["excel"]),
-                        floatingLabelBehavior: FloatingLabelBehavior.never,
-                        enabled: true,
-                        prefixIcon: Icon(FontAwesomeIcons.fileExcel, color: AppColors.openColor),
-                        suffixIcon: fileController.text.isNotEmpty
-                            ? IconButton(
-                                icon: Icon(Icons.clear),
-                                onPressed: () {
-                                  setState(() {
-                                    excelFile = null;
-                                    fileController.clear();
-                                  });
-                                },
-                              )
-                            : null,
-                      ),
-                    ),
-                  ),
-                ),
-                DropdownButtonFormField<int>(
-                  decoration: InputDecoration(
-                    labelText: LocaleKeys.price.tr,
-                    floatingLabelBehavior: FloatingLabelBehavior.always,
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                  initialValue: overWrite,
-                  items: [
-                    DropdownMenuItem(value: 0, child: Text(LocaleKeys.no.tr)),
-                    DropdownMenuItem(value: 1, child: Text(LocaleKeys.yes.tr)),
-                  ],
-                  onChanged: (value) {
-                    setState(() => overWrite = value!);
-                  },
-                ),
-              ],
-            ),
-          );
-        },
+      content: Column(
+        spacing: 8.0,
+        children: <Widget>[
+          FormHelper.openFileInput(
+            name: "file",
+            labelText: LocaleKeys.selectFile.trArgs(["excel"]),
+            controller: fileController,
+            onFileSelected: (file) {
+              excelFile = file;
+            },
+          ),
+          FormHelper.selectInput(
+            name: "overWrite",
+            labelText: LocaleKeys.overWrite.tr,
+            initialValue: 0,
+            items: [
+              DropdownMenuItem(value: 0, child: Text(LocaleKeys.no.tr)),
+              DropdownMenuItem(value: 1, child: Text(LocaleKeys.yes.tr)),
+            ],
+            onChanged: (value) {
+              overWrite = value!;
+            },
+          ),
+        ],
       ),
+
       cancel: ElevatedButton(
         onPressed: () {
           overWriteController.dispose();
