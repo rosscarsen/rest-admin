@@ -156,10 +156,13 @@ class CustomerController extends GetxController {
   }
 
   /// 导出
-  Future<void> exportProductRemark() async {
+  Future<void> exportProductRemark({required Map<String, dynamic> query}) async {
     CustomDialog.showLoading(LocaleKeys.generating.trArgs(["excel"]));
     try {
-      final DioApiResult dioApiResult = await apiClient.generateExcel(Config.exportProductRemarkExcel);
+      final DioApiResult dioApiResult = await apiClient.generateExcel(
+        Config.exportCustomerExcel,
+        queryParameters: query,
+      );
       if (!dioApiResult.success) {
         CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
         return;
@@ -185,7 +188,7 @@ class CustomerController extends GetxController {
     try {
       final DioApiResult dioApiResult = await apiClient.uploadFile(
         file: file,
-        uploadUrl: Config.importProductRemarkExcel,
+        uploadUrl: Config.importCustomerExcel,
         extraData: query,
       );
 

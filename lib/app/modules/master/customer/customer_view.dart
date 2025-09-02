@@ -1,16 +1,13 @@
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
 import '../../../routes/app_pages.dart';
 import '../../../translations/locale_keys.dart';
-import '../../../utils/constants.dart';
 import '../../../utils/custom_dialog.dart';
 import '../../../utils/form_help.dart';
 import '../../../utils/progresshub.dart';
@@ -184,13 +181,21 @@ class CustomerView extends GetView<CustomerController> {
       ),
       cancel: ElevatedButton(
         onPressed: () {
-          startCtl.clear();
-          endCtl.clear();
+          startCtl.dispose();
+          endCtl.dispose();
           Get.closeDialog();
         },
         child: Text(LocaleKeys.cancel.tr),
       ),
-      confirm: ElevatedButton(onPressed: () async {}, child: Text(LocaleKeys.confirm.tr)),
+      confirm: ElevatedButton(
+        onPressed: () async {
+          startCtl.dispose();
+          endCtl.dispose();
+          Get.closeDialog();
+          await controller.exportProductRemark(query: {'startCode': startCtl.text, 'endCode': endCtl.text});
+        },
+        child: Text(LocaleKeys.confirm.tr),
+      ),
     );
   }
 

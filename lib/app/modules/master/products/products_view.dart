@@ -1,8 +1,6 @@
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
@@ -378,11 +376,13 @@ class ProductsView extends GetView<ProductsController> {
           GridColumn(
             columnName: "code",
             label: CustomCell(data: LocaleKeys.code.tr),
+            columnWidthMode: ColumnWidthMode.auto,
           ),
           GridColumn(
             columnName: 'name',
             label: CustomCell(data: LocaleKeys.name.tr),
             maximumWidth: 300,
+            columnWidthMode: ColumnWidthMode.auto,
           ),
           GridColumn(
             columnName: 'kitchenList',
