@@ -6,7 +6,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'dart:convert';
 
 import '../currency/currency_data.dart';
-import '../paymethod/pay_method_data.dart';
+import '../pay_method/pay_method_data.dart';
 import 'customer_data.dart';
 
 part 'customer_edit_model.g.dart';

@@ -7,7 +7,6 @@ import 'package:skeletonizer/skeletonizer.dart';
 import '../../../../config.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../translations/locale_keys.dart';
-import '../../../../utils/constants.dart';
 import '../../../../utils/form_help.dart';
 import 'advanced_search_controller.dart';
 import 'advanced_search_fields.dart';
