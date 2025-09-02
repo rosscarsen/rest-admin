@@ -117,10 +117,7 @@ class OpenMultipleProductController extends GetxController {
   Future<void> fetchMultipleData() async {
     isLoading(true);
     Map<String, Object> search = {'page': currentPage.value, "byCode": "asc"};
-    final futures = [
-      apiClient.post(Config.openProduct, data: search),
-      apiClient.post(Config.categories, data: {"checkPermission": false}),
-    ];
+    final futures = [apiClient.post(Config.openProduct, data: search), apiClient.post(Config.categories)];
 
     try {
       final results = await Future.wait(futures);

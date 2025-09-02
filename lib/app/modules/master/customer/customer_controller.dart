@@ -156,7 +156,7 @@ class CustomerController extends GetxController {
   }
 
   /// 导出
-  Future<void> exportProductRemark({required Map<String, dynamic> query}) async {
+  Future<void> exportExcel({required Map<String, dynamic> query}) async {
     CustomDialog.showLoading(LocaleKeys.generating.trArgs(["excel"]));
     try {
       final DioApiResult dioApiResult = await apiClient.generateExcel(
@@ -183,7 +183,7 @@ class CustomerController extends GetxController {
   }
 
   /// 导入
-  Future<void> importProductRemark({required File file, required Map<String, dynamic> query}) async {
+  Future<void> importExcel({required File file, required Map<String, dynamic> query}) async {
     CustomDialog.showLoading(LocaleKeys.importing.tr);
     try {
       final DioApiResult dioApiResult = await apiClient.uploadFile(

@@ -192,7 +192,7 @@ class CustomerView extends GetView<CustomerController> {
           startCtl.dispose();
           endCtl.dispose();
           Get.closeDialog();
-          await controller.exportProductRemark(query: {'startCode': startCtl.text, 'endCode': endCtl.text});
+          await controller.exportExcel(query: {'startCode': startCtl.text, 'endCode': endCtl.text});
         },
         child: Text(LocaleKeys.confirm.tr),
       ),
@@ -249,7 +249,7 @@ class CustomerView extends GetView<CustomerController> {
           }
           fileController.dispose();
           Get.closeDialog();
-          await controller.importProductRemark(file: excelFile!, query: {'overWrite': overWrite});
+          await controller.importExcel(file: excelFile!, query: {'overWrite': overWrite});
           excelFile = null;
         },
         child: Text(LocaleKeys.confirm.tr),

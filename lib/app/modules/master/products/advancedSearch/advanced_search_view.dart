@@ -128,16 +128,13 @@ class AdvancedSearchView extends GetView<AdvancedSearchController> {
           ),
           //编号
           FormHelper.buildGridCol(
-            child: FormHelper.textInput(
+            child: FormHelper.openInput(
               name: AdvancedSearchFields.mCode,
               labelText: LocaleKeys.code.tr,
-              suffixIcon: IconButton(
-                onPressed: () async {
-                  var result = await Get.toNamed(Routes.OPEN_PRODUCT);
-                  controller.formKey.currentState?.fields[AdvancedSearchFields.mCode]?.didChange(result);
-                },
-                icon: Icon(Icons.file_open, color: AppColors.openColor),
-              ),
+              onPressed: () async {
+                var result = await Get.toNamed(Routes.OPEN_PRODUCT);
+                controller.formKey.currentState?.fields[AdvancedSearchFields.mCode]?.didChange(result);
+              },
             ),
           ),
           //条形码
@@ -146,30 +143,24 @@ class AdvancedSearchView extends GetView<AdvancedSearchController> {
           ),
           //开始编号
           FormHelper.buildGridCol(
-            child: FormHelper.textInput(
+            child: FormHelper.openInput(
               name: AdvancedSearchFields.startNo,
               labelText: LocaleKeys.startCode.tr,
-              suffixIcon: IconButton(
-                onPressed: () async {
-                  var result = await Get.toNamed(Routes.OPEN_PRODUCT);
-                  controller.formKey.currentState?.fields[AdvancedSearchFields.startNo]?.didChange(result);
-                },
-                icon: Icon(Icons.file_open, color: AppColors.openColor),
-              ),
+              onPressed: () async {
+                var result = await Get.toNamed(Routes.OPEN_PRODUCT);
+                controller.formKey.currentState?.fields[AdvancedSearchFields.startNo]?.didChange(result);
+              },
             ),
           ),
           //结束编号
           FormHelper.buildGridCol(
-            child: FormHelper.textInput(
+            child: FormHelper.openInput(
               name: AdvancedSearchFields.endNo,
               labelText: LocaleKeys.endCode.tr,
-              suffixIcon: IconButton(
-                onPressed: () async {
-                  var result = await Get.toNamed(Routes.OPEN_PRODUCT);
-                  controller.formKey.currentState?.fields[AdvancedSearchFields.endNo]?.didChange(result);
-                },
-                icon: Icon(Icons.file_open, color: AppColors.openColor),
-              ),
+              onPressed: () async {
+                var result = await Get.toNamed(Routes.OPEN_PRODUCT);
+                controller.formKey.currentState?.fields[AdvancedSearchFields.endNo]?.didChange(result);
+              },
             ),
           ),
           //名称
@@ -186,16 +177,13 @@ class AdvancedSearchView extends GetView<AdvancedSearchController> {
           ),
           //供应商
           FormHelper.buildGridCol(
-            child: FormHelper.textInput(
+            child: FormHelper.openInput(
               name: AdvancedSearchFields.mSupplierCode,
               labelText: LocaleKeys.supplier.tr,
-              suffixIcon: IconButton(
-                onPressed: () async {
-                  var result = await Get.toNamed(Routes.OPEN_SUPPLIER);
-                  controller.formKey.currentState?.fields[AdvancedSearchFields.mSupplierCode]?.didChange(result);
-                },
-                icon: Icon(Icons.file_open, color: AppColors.openColor),
-              ),
+              onPressed: () async {
+                var result = await Get.toNamed(Routes.OPEN_SUPPLIER);
+                controller.formKey.currentState?.fields[AdvancedSearchFields.mSupplierCode]?.didChange(result);
+              },
             ),
           ),
 

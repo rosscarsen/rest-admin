@@ -61,7 +61,7 @@ class OpenCustomerController extends GetxController {
       formKey.currentState?.saveAndValidate();
       final param = {'page': currentPage.value, "checkPermission": false, ...formKey.currentState?.value ?? {}};
 
-      final DioApiResult dioApiResult = await apiClient.post(Config.customer, data: param);
+      final DioApiResult dioApiResult = await apiClient.post(Config.openCustomer, data: param);
 
       if (!dioApiResult.success) {
         CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);

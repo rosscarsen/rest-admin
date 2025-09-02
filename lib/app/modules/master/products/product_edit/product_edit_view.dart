@@ -234,21 +234,17 @@ class ProductEditView extends GetView<ProductEditController> {
                 ),
                 //食品备注
                 FormHelper.buildGridCol(
-                  child: FormHelper.textInput(
+                  child: FormHelper.openInput(
                     name: ProductEditFields.mMeasurement,
                     labelText: LocaleKeys.productRemarks.tr,
-                    suffixIcon: IconButton(
-                      tooltip: LocaleKeys.selectProductRemarks.tr,
-                      onPressed: () async {
-                        String? result = await Get.toNamed(Routes.OPEN_PRODUCT_REMARKS);
-                        if (result?.isNotEmpty ?? false) {
-                          controller.productEditFormKey.currentState?.fields[ProductEditFields.mMeasurement]?.didChange(
-                            result,
-                          );
-                        }
-                      },
-                      icon: Icon(Icons.file_open, color: AppColors.openColor),
-                    ),
+                    onPressed: () async {
+                      String? result = await Get.toNamed(Routes.OPEN_PRODUCT_REMARKS);
+                      if (result?.isNotEmpty ?? false) {
+                        controller.productEditFormKey.currentState?.fields[ProductEditFields.mMeasurement]?.didChange(
+                          result,
+                        );
+                      }
+                    },
                   ),
                 ),
                 //单位
@@ -388,19 +384,15 @@ class ProductEditView extends GetView<ProductEditController> {
                 ),
                 //供应商
                 FormHelper.buildGridCol(
-                  child: FormHelper.textInput(
+                  child: FormHelper.openInput(
                     name: ProductEditFields.mSupplier_Code,
                     labelText: LocaleKeys.supplier.tr,
-                    suffixIcon: IconButton(
-                      tooltip: LocaleKeys.selectSupplier.tr,
-                      onPressed: () async {
-                        var result = await Get.toNamed(Routes.OPEN_SUPPLIER);
-                        controller.productEditFormKey.currentState?.fields[ProductEditFields.mSupplier_Code]?.didChange(
-                          result,
-                        );
-                      },
-                      icon: Icon(Icons.file_open, color: AppColors.openColor),
-                    ),
+                    onPressed: () async {
+                      var result = await Get.toNamed(Routes.OPEN_SUPPLIER);
+                      controller.productEditFormKey.currentState?.fields[ProductEditFields.mSupplier_Code]?.didChange(
+                        result,
+                      );
+                    },
                   ),
                 ),
                 // 预支付

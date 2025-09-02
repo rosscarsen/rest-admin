@@ -104,7 +104,7 @@ class Config {
   // ==========================================================================
 
   // 打印机列表
-  static String printer = "/Master/printer";
+  // static String printer = "/Master/printer";
   // 打印机添加或编辑
   static String printerAddOrEdit = "/Master/printerAddOrEdit";
   // 打印机保存
@@ -170,6 +170,12 @@ class Config {
   static String openSetMeal = "/Open/setMeal";
   // 打开食品套餐
   static String openProductSetMeal = "/open/productSetMeal";
+  // 打开打印机列表
+  static String openPrinter = "/open/printer";
+  // 打开客户列表
+  static String openCustomer = "/open/customer";
+  // 打开类目
+  static String openCategory = "/open/category";
 
   // **************************************************************************
   // excel

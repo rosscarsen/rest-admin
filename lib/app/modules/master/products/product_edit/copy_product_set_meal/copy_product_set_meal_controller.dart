@@ -111,10 +111,7 @@ class CopyProductSetMealController extends GetxController {
   Future<void> fetchMultipleData() async {
     isLoading(true);
     Map<String, Object> search = {'page': currentPage.value};
-    final futures = [
-      apiClient.post(Config.openProductSetMeal, data: search),
-      apiClient.post(Config.categories, data: {"checkPermission": false}),
-    ];
+    final futures = [apiClient.post(Config.openProductSetMeal, data: search), apiClient.post(Config.openCategory)];
 
     try {
       final results = await Future.wait(futures);

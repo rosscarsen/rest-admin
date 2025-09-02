@@ -154,41 +154,56 @@ class FormHelper {
     TextEditingController? controller,
     bool readOnly = true,
   }) {
-    final effectiveController = controller ?? TextEditingController();
-    return ValueListenableBuilder(
-      valueListenable: effectiveController,
-      builder: (BuildContext context, dynamic value, Widget? child) {
-        return GestureDetector(
-          onTap: onPressed,
-          child: AbsorbPointer(
-            absorbing: effectiveController.text.isEmpty,
-            child: FormBuilderTextField(
-              controller: effectiveController,
-              readOnly: readOnly,
-              style: displayTextStyle,
-              autovalidateMode: AutovalidateMode.onUserInteraction,
-              name: name,
-              valueTransformer: (value) => (value ?? "").trim(),
-              decoration: InputDecoration(
-                labelText: labelText,
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey.shade400, width: 1.0),
-                  borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+    return FormBuilderField<String>(
+      name: name,
+      builder: (FormFieldState<String?> field) {
+        // 如果外部没传 controller，就内部创建并初始化
+        final effectiveController = controller ?? TextEditingController(text: field.value ?? "");
+
+        // 保证 controller.text 与 field.value 同步
+        if (effectiveController.text != field.value) {
+          effectiveController.text = field.value ?? "";
+        }
+
+        return Shortcuts(
+          shortcuts: <LogicalKeySet, Intent>{
+            LogicalKeySet(LogicalKeyboardKey.altLeft): DoNothingIntent(),
+            LogicalKeySet(LogicalKeyboardKey.altRight): DoNothingIntent(),
+          },
+          child: ValueListenableBuilder<TextEditingValue>(
+            valueListenable: effectiveController,
+            builder: (context, value, child) {
+              return TextField(
+                controller: effectiveController,
+                readOnly: readOnly,
+                enableInteractiveSelection: !readOnly,
+                style: displayTextStyle,
+                onTap: onPressed,
+                decoration: InputDecoration(
+                  labelText: labelText,
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey.shade400, width: 1.0),
+                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                  ),
+                  suffixIcon: value.text.isNotEmpty
+                      ? IconButton(
+                          tooltip: LocaleKeys.clearContent.tr,
+                          onPressed: () {
+                            effectiveController.clear();
+                            field.didChange(""); // 同步表单
+                          },
+                          icon: const Icon(Icons.cancel),
+                        )
+                      : IconButton(
+                          tooltip: LocaleKeys.openChoice.tr,
+                          onPressed: onPressed,
+                          icon: Icon(Icons.file_open, color: AppColors.openColor),
+                        ),
                 ),
-                suffixIcon: effectiveController.text.isNotEmpty
-                    ? IconButton(
-                        tooltip: LocaleKeys.clearContent.tr,
-                        onPressed: () => effectiveController.clear(),
-                        icon: Icon(Icons.cancel),
-                      )
-                    : IconButton(
-                        tooltip: LocaleKeys.openChoice.tr,
-                        onPressed: onPressed,
-                        icon: Icon(Icons.file_open, color: AppColors.openColor),
-                      ),
-              ),
-            ),
+                onChanged: field.didChange, // 保证输入同步表单
+              );
+            },
           ),
         );
       },
@@ -199,16 +214,16 @@ class FormHelper {
   static Widget openFileInput({
     required String name,
     required String labelText,
-    required TextEditingController controller,
+    TextEditingController? controller,
     required void Function(File? file)? onFileSelected,
     List<String> allowedExtensions = const ['xlsx', 'xls'],
     IconData prefixIcon = FontAwesomeIcons.fileExcel,
     bool readOnly = true,
   }) {
+    final effectiveController = controller ?? TextEditingController();
     return StatefulBuilder(
       builder: (BuildContext context, setState) {
         File? selectedFile;
-
         Future<void> pickFile() async {
           FilePickerResult? result = await FilePicker.platform.pickFiles(
             allowMultiple: false,
@@ -221,7 +236,7 @@ class FormHelper {
             setState(() {
               PlatformFile platformFile = result.files.single;
               selectedFile = File(platformFile.path!);
-              controller.text = platformFile.name;
+              effectiveController.text = platformFile.name;
             });
             onFileSelected?.call(selectedFile);
           } else {
@@ -232,7 +247,7 @@ class FormHelper {
         return GestureDetector(
           onTap: pickFile,
           child: AbsorbPointer(
-            absorbing: controller.text.isEmpty,
+            absorbing: effectiveController.text.isEmpty,
             child: TextField(
               readOnly: readOnly,
               controller: controller,
@@ -240,13 +255,13 @@ class FormHelper {
                 labelText: labelText,
                 floatingLabelBehavior: FloatingLabelBehavior.never,
                 prefixIcon: Icon(prefixIcon, color: AppColors.openColor),
-                suffixIcon: controller.text.isNotEmpty
+                suffixIcon: effectiveController.text.isNotEmpty
                     ? IconButton(
                         icon: const Icon(Icons.clear),
                         onPressed: () {
                           setState(() {
                             selectedFile = null;
-                            controller.clear();
+                            effectiveController.clear();
                           });
                           onFileSelected?.call(null);
                         },

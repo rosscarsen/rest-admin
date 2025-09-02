@@ -60,7 +60,7 @@ class Category2EditController extends GetxController {
     isLoading(true);
     try {
       final futures = [
-        apiClient.post(Config.printer, data: {"checkPermission": false}),
+        apiClient.post(Config.openPrinter),
         apiClient.post(Config.category2AddOrEdit, data: {'id': id}),
       ];
 
