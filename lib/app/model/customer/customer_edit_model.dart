@@ -48,8 +48,6 @@ class ApiResult {
   final String? customerPoint;
   @JsonKey(name: "currency")
   final List<CurrencyData>? currency;
-  @JsonKey(name: "payment")
-  final List<PayMethodData>? payment;
 
   ApiResult({
     this.customerInfo,
@@ -58,7 +56,6 @@ class ApiResult {
     this.invoiceAmount,
     this.customerPoint,
     this.currency,
-    this.payment,
   });
 
   ApiResult copyWith({
@@ -76,7 +73,6 @@ class ApiResult {
     invoiceAmount: invoiceAmount ?? this.invoiceAmount,
     customerPoint: customerPoint ?? this.customerPoint,
     currency: currency ?? this.currency,
-    payment: payment ?? this.payment,
   );
 
   factory ApiResult.fromJson(Map<String, dynamic> json) => _$ApiResultFromJson(json);
