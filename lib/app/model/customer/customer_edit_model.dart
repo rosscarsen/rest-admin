@@ -7,7 +7,9 @@ import 'dart:convert';
 
 import '../currency/currency_data.dart';
 import '../pay_method/pay_method_data.dart';
+import 'customer_contact.dart';
 import 'customer_data.dart';
+import 'deposit_list.dart';
 
 part 'customer_edit_model.g.dart';
 
@@ -15,7 +17,7 @@ CustomerEditModel customerEditModelFromJson(String str) => CustomerEditModel.fro
 
 String customerEditModelToJson(CustomerEditModel data) => json.encode(data.toJson());
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class CustomerEditModel {
   @JsonKey(name: "status")
   final int? status;
@@ -34,14 +36,14 @@ class CustomerEditModel {
   Map<String, dynamic> toJson() => _$CustomerEditModelToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class ApiResult {
   @JsonKey(name: "customerInfo")
   final CustomerData? customerInfo;
   @JsonKey(name: "customerType")
   final List<String>? customerType;
   @JsonKey(name: "customerContact")
-  final dynamic customerContact;
+  final List<CustomerContact>? customerContact;
   @JsonKey(name: "invoiceAmount")
   final String? invoiceAmount;
   @JsonKey(name: "customerPoint")
@@ -66,6 +68,7 @@ class ApiResult {
     String? customerPoint,
     List<CurrencyData>? currency,
     List<PayMethodData>? payment,
+    DepositList? depositList,
   }) => ApiResult(
     customerInfo: customerInfo ?? this.customerInfo,
     customerType: customerType ?? this.customerType,

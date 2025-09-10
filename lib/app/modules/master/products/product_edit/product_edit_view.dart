@@ -12,7 +12,7 @@ import '../../../../translations/locale_keys.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/form_help.dart';
-import '../../../../utils/progresshub.dart';
+import '../../../../utils/progress_hub.dart';
 import '../../../../widgets/custom_cell.dart';
 import '../../../../widgets/no_record.dart';
 import '../../../open/open_set_meal/open_set_meal_view.dart';

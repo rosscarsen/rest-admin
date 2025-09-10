@@ -336,4 +336,5 @@ Map<String, String> get zhCN => {
   LocaleKeys.openChoice: "打开选择",
   LocaleKeys.clearContent: "清除內容",
   LocaleKeys.choiceParam: "选择%s",
+  LocaleKeys.invoiceNo: "发票编号",
 };

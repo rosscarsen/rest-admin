@@ -5,7 +5,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../config.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/form_help.dart';
-import '../../../utils/progresshub.dart';
+import '../../../utils/progress_hub.dart';
 import '../../../widgets/custom_cell.dart';
 import '../../../widgets/data_grid_theme.dart';
 import '../../../widgets/data_pager.dart';

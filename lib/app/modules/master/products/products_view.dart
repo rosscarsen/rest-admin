@@ -10,7 +10,7 @@ import '../../../translations/locale_keys.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/custom_dialog.dart';
 import '../../../utils/form_help.dart';
-import '../../../utils/progresshub.dart';
+import '../../../utils/progress_hub.dart';
 import '../../../widgets/custom_cell.dart';
 import '../../../widgets/custom_scaffold.dart';
 import '../../../widgets/data_grid_theme.dart';

@@ -277,29 +277,35 @@ class ProductRemarksEditController extends GetxController with GetSingleTickerPr
                   ),
                   //类型
                   FormHelper.buildGridCol(
-                    child: FormHelper.selectInput(
-                      labelText: LocaleKeys.type.tr,
-                      name: "mType",
-                      initialValue: row.mType,
-                      items: [
-                        DropdownMenuItem(value: 0, child: Text(LocaleKeys.addMoney.tr)),
-                        DropdownMenuItem(value: 1, child: Text("${LocaleKeys.discount.tr}(%)")),
-                        DropdownMenuItem(value: 2, child: Text("${LocaleKeys.multiple.tr}(*n)")),
-                      ],
-                      onChanged: (value) {
-                        row?.mType = value;
-                      },
-                      suffixIcon: SizedBox(
-                        width: 120,
-                        child: FormHelper.textInput(
-                          name: "mPrice",
-                          labelText: "",
-                          initialValue: row.mPrice,
-                          onChanged: (value) {
-                            row?.mPrice = value?.trim() ?? "0.00";
-                          },
+                    child: Row(
+                      spacing: 4.0,
+                      children: [
+                        Expanded(
+                          child: FormHelper.selectInput(
+                            labelText: LocaleKeys.type.tr,
+                            name: "mType",
+                            initialValue: row.mType,
+                            items: [
+                              DropdownMenuItem(value: 0, child: Text(LocaleKeys.addMoney.tr)),
+                              DropdownMenuItem(value: 1, child: Text("${LocaleKeys.discount.tr}(%)")),
+                              DropdownMenuItem(value: 2, child: Text("${LocaleKeys.multiple.tr}(*n)")),
+                            ],
+                            onChanged: (value) {
+                              row?.mType = value;
+                            },
+                          ),
                         ),
-                      ),
+                        Expanded(
+                          child: FormHelper.textInput(
+                            name: "mPrice",
+                            labelText: "",
+                            initialValue: row.mPrice,
+                            onChanged: (value) {
+                              row?.mPrice = value?.trim() ?? "0.00";
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   //分类

@@ -8,7 +8,7 @@ import '../../model/chart_model.dart';
 import '../../routes/app_pages.dart';
 import '../../translations/locale_keys.dart';
 import '../../utils/form_help.dart';
-import '../../utils/progresshub.dart';
+import '../../utils/progress_hub.dart';
 import '../../widgets/custom_scaffold.dart';
 import 'custom_bar_chart.dart';
 import 'custom_line_chart.dart';

@@ -336,4 +336,5 @@ Map<String, String> get enUS => {
   LocaleKeys.openChoice: "Open Choose",
   LocaleKeys.clearContent: "Clear Content",
   LocaleKeys.choiceParam: "Choice %s",
+  LocaleKeys.invoiceNo: "Invoice No.",
 };

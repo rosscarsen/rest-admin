@@ -16,13 +16,15 @@ import 'app/utils/storage_manage.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent, 
-    statusBarIconBrightness: Brightness.light,
-    statusBarBrightness: Brightness.dark,
-    systemNavigationBarColor: Colors.transparent,
-    systemNavigationBarIconBrightness: Brightness.light,
-  ));
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ),
+  );
   await findSystemLocale(); //date_field使用
 
   await StorageManage.init();
@@ -86,6 +88,7 @@ class MyApp extends StatelessWidget {
           supportedLocales.contains(locale) ? locale : initialLocale,
 
       theme: ThemeData(
+        scaffoldBackgroundColor: const Color(0xFFFEFEFE),
         useMaterial3: true,
         appBarTheme: AppBarTheme(
           backgroundColor: Theme.of(context).colorScheme.primary,

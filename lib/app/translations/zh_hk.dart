@@ -336,4 +336,5 @@ Map<String, String> zhHK = {
   LocaleKeys.openChoice: "打開選擇",
   LocaleKeys.clearContent: "清除內容",
   LocaleKeys.choiceParam: "選擇%s",
+  LocaleKeys.invoiceNo: "發票編號",
 };
