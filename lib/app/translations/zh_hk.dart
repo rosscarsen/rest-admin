@@ -337,4 +337,7 @@ Map<String, String> zhHK = {
   LocaleKeys.clearContent: "清除內容",
   LocaleKeys.choiceParam: "選擇%s",
   LocaleKeys.invoiceNo: "發票編號",
+  LocaleKeys.noDataFound: "未找到數據",
+  LocaleKeys.invalidMobileNumber: "無效手機號碼",
+  LocaleKeys.selectCountry: "選擇國家",
 };

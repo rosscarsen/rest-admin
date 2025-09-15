@@ -161,6 +161,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.1.2"
+  country_code_picker:
+    dependency: "direct main"
+    description:
+      name: country_code_picker
+      sha256: c9e8c012472c8060f5a705dabef223677801cd9eb49e684aecee705edeceacc8
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "3.4.0"
   cross_file:
     dependency: transitive
     description:
@@ -233,6 +241,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "7.0.3"
+  diacritic:
+    dependency: transitive
+    description:
+      name: diacritic
+      sha256: "12981945ec38931748836cd76f2b38773118d0baef3c68404bdfde9566147876"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "0.1.6"
   dio:
     dependency: "direct main"
     description:
@@ -725,6 +741,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.20.2"
+  intl_mobile_field:
+    dependency: "direct main"
+    description:
+      name: intl_mobile_field
+      sha256: "91f9fcb65daf7fa12d0937f399a5d83ca63832b482a52ff910d9a8c255a50fc7"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.1.2"
   io:
     dependency: transitive
     description:
@@ -989,6 +1013,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "7.0.1"
+  phone_numbers_parser:
+    dependency: "direct main"
+    description:
+      name: phone_numbers_parser
+      sha256: "87b2c344e1ae28bc92ee9e534b30ef85a16d4e7279a770c222aaefe2eeac6f02"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "9.0.11"
   platform:
     dependency: transitive
     description:
@@ -1411,5 +1443,5 @@ packages:
     source: hosted
     version: "3.1.3"
 sdks:
-  dart: ">=3.9.0 <4.0.0"
+  dart: ">=3.9.2 <4.0.0"
   flutter: ">=3.35.0"

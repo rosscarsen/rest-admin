@@ -147,4 +147,21 @@ class Functions {
     if (value is String && value.trim().isEmpty) return null;
     return value.toString();
   }
+
+  static String colorToHex(Color color) {
+    int alpha = (color.a * 255.0).round() & 0xff;
+    int red = (color.r * 255.0).round() & 0xff;
+    int green = (color.g * 255.0).round() & 0xff;
+    int blue = (color.b * 255.0).round() & 0xff;
+    return '${alpha.toRadixString(16).padLeft(2, '0')}${red.toRadixString(16).padLeft(2, '0')}${green.toRadixString(16).padLeft(2, '0')}${blue.toRadixString(16).padLeft(2, '0')}'
+        .toUpperCase();
+  }
+
+  /// 转换为颜色
+  static Color hexToColor(String hex) {
+    final buffer = StringBuffer();
+    if (hex.length == 6 || hex.length == 7) buffer.write('ff');
+    buffer.write(hex.replaceFirst('#', ''));
+    return Color(int.parse(buffer.toString(), radix: 16));
+  }
 }

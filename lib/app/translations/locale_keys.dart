@@ -337,4 +337,7 @@ abstract class LocaleKeys {
   static const String clearContent = "clearContent";
   static const String choiceParam = "choiceParam";
   static const String invoiceNo = "invoiceNo";
+  static const String noDataFound = "noDataFound";
+  static const String invalidMobileNumber = "invalidMobileNumber";
+  static const String selectCountry = "selectCountry";
 }

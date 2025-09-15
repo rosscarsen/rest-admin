@@ -1,18 +1,23 @@
+import 'dart:async';
 import 'dart:io';
 
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:date_field/date_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:form_builder_extra_fields/form_builder_extra_fields.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 
 import '../translations/locale_keys.dart';
 import 'constants.dart';
 import 'custom_dialog.dart';
+import 'functions.dart';
 
 enum DateInputType { time, date, dateAndTime }
 
@@ -193,7 +198,7 @@ class FormHelper {
                             effectiveController.clear();
                             field.didChange(""); // 同步表单
                           },
-                          icon: const Icon(Icons.cancel),
+                          icon: const Icon(Icons.clear),
                         )
                       : IconButton(
                           tooltip: LocaleKeys.openChoice.tr,
@@ -296,6 +301,7 @@ class FormHelper {
       name: name,
       enabled: enabled,
       initialValue: initialValue,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: validator,
       onChanged: onChanged,
       valueTransformer: (value) => (value?.toString() ?? "").trim(),
@@ -387,6 +393,7 @@ class FormHelper {
       enabled: enabled,
       validator: validator,
       onChanged: onChanged,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       valueTransformer: (value) => (value?.toString() ?? "").trim(),
       initialValue: normalizeInitialValue(initialValue),
       builder: (field) {
@@ -419,7 +426,7 @@ class FormHelper {
           initialValue: getDateTimeFromValue(field.value),
           enabled: enabled,
           canClear: canClear,
-          clearIconData: Icons.cancel,
+          clearIconData: Icons.clear,
           style: displayTextStyle,
           decoration: InputDecoration(
             labelText: labelText,
@@ -455,6 +462,7 @@ class FormHelper {
       initialValue: initialValue,
       decoration: decoration,
       options: options,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       onChanged: onChanged,
     );
   }
@@ -490,6 +498,7 @@ class FormHelper {
       enabled: enabled,
       initialValue: initialValue ?? false,
       valueTransformer: (value) => value == true ? "1" : "0",
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       builder: (FormFieldState<bool?> field) {
         return CheckboxListTile(
           controlAffinity: controlAffinity,
@@ -544,6 +553,7 @@ class FormHelper {
       decoration: decoration,
       options: options,
       onChanged: onChanged,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }
 
@@ -568,6 +578,238 @@ class FormHelper {
       enabled: enabled,
       decoration: decoration,
       onChanged: onChanged,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+    );
+  }
+
+  /// 自动完成输入框
+  static FormBuilderTypeAhead<String> autoCompleteInput({
+    required String name,
+    required String labelText,
+    required List<String> items,
+    bool enabled = true,
+    String? initialValue,
+    void Function(String?)? onChanged,
+    String? Function(String?)? validator,
+    bool showNoItem = false,
+    TextEditingController? controller,
+  }) {
+    final effectiveController = controller ?? TextEditingController(text: initialValue ?? '');
+    return FormBuilderTypeAhead<String>(
+      name: name,
+      enabled: enabled,
+      initialValue: initialValue,
+      validator: validator,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      valueTransformer: (value) => (value?.toString() ?? "").trim(),
+      onChanged: (value) {
+        effectiveController.text = value ?? '';
+        onChanged?.call(value);
+      },
+      decoration: InputDecoration(
+        labelText: labelText,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: ValueListenableBuilder<TextEditingValue>(
+          valueListenable: effectiveController,
+          builder: (context, value, child) {
+            return value.text.isNotEmpty
+                ? IconButton(
+                    icon: const Icon(Icons.clear),
+                    onPressed: () {
+                      effectiveController.clear();
+                      final field = FormBuilder.of(context)?.fields[name];
+                      field?.didChange(null);
+                      onChanged?.call(null);
+                    },
+                  )
+                : const SizedBox.shrink();
+          },
+        ),
+      ),
+      itemBuilder: (context, item) {
+        return ListTile(title: Text(item));
+      },
+      emptyBuilder: (context) {
+        return !showNoItem
+            ? const SizedBox.shrink()
+            : SizedBox(
+                height: 50,
+                child: Center(
+                  child: Text(LocaleKeys.noDataFound.tr, style: const TextStyle(color: Colors.grey)),
+                ),
+              );
+      },
+      suggestionsCallback: (query) {
+        if (query.isNotEmpty) {
+          final lowercaseQuery = query.toLowerCase();
+          return items.where((item) => item.toLowerCase().contains(lowercaseQuery)).toList(growable: false)..sort(
+            (a, b) => a.toLowerCase().indexOf(lowercaseQuery).compareTo(b.toLowerCase().indexOf(lowercaseQuery)),
+          );
+        } else {
+          return items;
+        }
+      },
+    );
+  }
+
+  /// 搜索下拉选择框
+  static FormBuilderSearchableDropdown<String> searchableDropdownInput({
+    required String name,
+    required String labelText,
+    required List<String> items,
+    bool enabled = true,
+    String? initialValue,
+    void Function(String?)? onChanged,
+    String? Function(String?)? validator,
+    bool showClearButton = true,
+  }) {
+    return FormBuilderSearchableDropdown<String>(
+      name: name,
+      enabled: enabled,
+      initialValue: initialValue,
+      autoValidateMode: AutovalidateMode.onUserInteraction,
+      validator: validator,
+      onChanged: onChanged,
+      valueTransformer: (value) => (value?.toString() ?? "").trim(),
+      decoration: InputDecoration(labelText: labelText, floatingLabelBehavior: FloatingLabelBehavior.always),
+      dropdownSearchDecoration: InputDecoration(labelText: labelText),
+      asyncItems: (filter, _) async {
+        await Future.delayed(const Duration(milliseconds: 300));
+        return items.where((element) => element.toLowerCase().contains(filter.toLowerCase())).toList();
+      },
+      popupProps: PopupProps.menu(
+        showSearchBox: true,
+        fit: FlexFit.loose,
+        emptyBuilder: (context, searchEntry) => SizedBox(
+          height: 50,
+          child: Center(
+            child: Text(LocaleKeys.noDataFound.tr, style: const TextStyle(color: Colors.grey)),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// 搜索下拉选择框
+  static FormBuilderColorPickerField colorInput({
+    required String name,
+    required String labelText,
+    bool enabled = true,
+    Color? initialValue,
+    void Function(String?)? onChanged,
+    String? Function(Color?)? validator,
+    bool showClearButton = true,
+    bool readOnly = false,
+    ColorPickerType colorPickerType = ColorPickerType.colorPicker,
+  }) {
+    return FormBuilderColorPickerField(
+      name: name,
+      enabled: enabled,
+      readOnly: readOnly,
+      initialValue: initialValue ?? Colors.deepPurple,
+      colorPickerType: colorPickerType,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      valueTransformer: (value) => Functions.colorToHex(value ?? Colors.deepPurple),
+      validator: validator,
+      onChanged: (Color? color) {
+        if (color != null) {
+          onChanged?.call(Functions.colorToHex(color));
+        } else {
+          onChanged?.call(null);
+        }
+      },
+      decoration: InputDecoration(labelText: labelText, floatingLabelBehavior: FloatingLabelBehavior.always),
+    );
+  }
+
+  /// 手机输入框
+  static Widget phoneInput({
+    required String name,
+    String? labelText,
+    bool enabled = true,
+    void Function(PhoneNumber?)? onChanged,
+    TextEditingController? controller,
+    String? initialSelection = "HK",
+    bool isRequired = false,
+  }) {
+    final effectiveController = controller ?? TextEditingController();
+
+    return FormBuilderField<PhoneNumber>(
+      name: name,
+      enabled: enabled,
+      autovalidateMode: AutovalidateMode.onUserInteraction, // 自动验证
+      validator: (PhoneNumber? value) {
+        if (isRequired && (value == null || value.nsn.isEmpty)) {
+          return LocaleKeys.thisFieldIsRequired.tr;
+        }
+
+        if (value != null && value.nsn.isNotEmpty && !value.isValid()) {
+          return LocaleKeys.invalidMobileNumber.tr;
+        }
+
+        return null;
+      },
+
+      valueTransformer: (value) => (value == null || value.nsn.isEmpty) ? "" : value.international,
+      builder: (FormFieldState<PhoneNumber> field) {
+        final selectedIsoCode = field.value?.isoCode ?? IsoCode.fromJson(initialSelection!);
+        final selectedPhoneNumber = field.value?.nsn ?? "";
+
+        if (field.value != null && effectiveController.text != selectedPhoneNumber) {
+          effectiveController.text = selectedPhoneNumber;
+        }
+
+        return TextField(
+          enabled: enabled,
+          controller: effectiveController,
+          keyboardType: TextInputType.phone,
+          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+          onChanged: (value) {
+            if (value.isEmpty) {
+              final phoneNumber = PhoneNumber(isoCode: selectedIsoCode, nsn: "");
+              field.didChange(phoneNumber);
+              onChanged?.call(phoneNumber);
+              return;
+            }
+
+            final regex = RegExp(r'^[0-9]+$');
+            if (regex.hasMatch(value)) {
+              final phoneNumber = PhoneNumber(isoCode: selectedIsoCode, nsn: value);
+              field.didChange(phoneNumber);
+              onChanged?.call(phoneNumber);
+            }
+          },
+          decoration: InputDecoration(
+            labelText: labelText ?? LocaleKeys.mobile.tr,
+            errorText: field.errorText, // 关键：显示错误
+            prefixIcon: IgnorePointer(
+              ignoring: !enabled,
+              child: CountryCodePicker(
+                onChanged: (code) {
+                  final nsn = effectiveController.text;
+                  final iso = IsoCode.fromJson(code.code ?? "HK");
+                  final phoneNumber = PhoneNumber(isoCode: iso, nsn: nsn);
+                  field.didChange(phoneNumber);
+                  onChanged?.call(phoneNumber);
+                },
+                initialSelection: selectedIsoCode.name,
+                favorite: ['+852', '+86', '+853', '+886', 'US'],
+                showCountryOnly: false,
+                showOnlyCountryWhenClosed: false,
+                alignLeft: false,
+                headerText: LocaleKeys.selectCountry.tr,
+                searchDecoration: InputDecoration(hintText: LocaleKeys.search.tr),
+                emptySearchBuilder: (context) {
+                  return Center(
+                    child: Text(LocaleKeys.noDataFound.tr, style: TextStyle(color: Colors.grey)),
+                  );
+                },
+              ),
+            ),
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+          ),
+        );
+      },
     );
   }
 
@@ -585,6 +827,7 @@ class FormHelper {
     );
   }
 
+  /// 取消按鈕
   static ElevatedButton cancelButton({required void Function()? onPressed, Widget? icon, String? label}) {
     return ElevatedButton.icon(
       onPressed: onPressed == null

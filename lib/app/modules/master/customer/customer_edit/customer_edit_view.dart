@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
+import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../translations/locale_keys.dart';
-import '../../../../utils/custom_alert.dart';
 import '../../../../utils/form_help.dart';
 import '../../../../utils/progress_hub.dart';
 import '../../../../widgets/custom_cell.dart';
@@ -81,6 +81,15 @@ class CustomerEditView extends GetView<CustomerEditController> {
 
         body: controller.hasPermission.value ? buildMain(context) : NoRecordPermission(msg: LocaleKeys.noPermission.tr),
         persistentFooterButtons: [
+          TextButton(
+            onPressed: () {
+              // print(controller.formKey.currentState?.fields);
+              controller.formKey.currentState?.fields[CustomerFields.mPhone_No]?.didChange(
+                PhoneNumber.parse("+8619587400420"),
+              );
+            },
+            child: Text("赋值"),
+          ),
           FormHelper.saveButton(
             onPressed: controller.isLoading.value || !controller.hasPermission.value ? null : () => controller.save(),
           ),
@@ -106,26 +115,85 @@ class CustomerEditView extends GetView<CustomerEditController> {
           padding: const EdgeInsets.all(8.0),
           child: FormHelper.buildGridRow(
             children: [
-              //名称
-              FormHelper.buildGridCol(
-                child: FormHelper.selectInput(
-                  labelText: LocaleKeys.type.tr,
-                  name: "mType",
-
-                  items: [
-                    DropdownMenuItem(value: 0, child: Text(LocaleKeys.addMoney.tr)),
-                    DropdownMenuItem(value: 1, child: Text("${LocaleKeys.discount.tr}(%)")),
-                    DropdownMenuItem(value: 2, child: Text("${LocaleKeys.multiple.tr}(*n)")),
-                  ],
-                ),
-              ),
               //类型
               FormHelper.buildGridCol(
-                child: FormHelper.textInput(name: CustomerFields.mCustomer_Type, labelText: LocaleKeys.type.tr),
+                child: FormHelper.autoCompleteInput(
+                  name: CustomerFields.mCustomer_Type,
+                  labelText: LocaleKeys.type.tr,
+                  items: controller.customerTypeList,
+                ),
               ),
               //编号
               FormHelper.buildGridCol(
-                child: FormHelper.textInput(name: CustomerFields.mCode, labelText: LocaleKeys.code.tr),
+                child: FormHelper.textInput(
+                  name: CustomerFields.mCode,
+                  labelText: LocaleKeys.code.tr,
+                  enabled: controller.id == null,
+                  validator: FormBuilderValidators.required(errorText: LocaleKeys.thisFieldIsRequired.tr),
+                ),
+              ),
+              //简称
+              FormHelper.buildGridCol(
+                child: FormHelper.textInput(name: CustomerFields.mSimpleName, labelText: LocaleKeys.simpleName.tr),
+              ),
+              //卡号
+              FormHelper.buildGridCol(
+                child: FormHelper.textInput(name: CustomerFields.mCardNo, labelText: LocaleKeys.cardNo.tr),
+              ),
+              //手机
+              FormHelper.buildGridCol(
+                child: FormHelper.phoneInput(name: CustomerFields.mPhone_No, labelText: LocaleKeys.mobile.tr),
+                /* child: FormBuilderField<String>(
+                  name: "name",
+                  builder: (FormFieldState<dynamic> field) {
+                    final initCountryCode = '+852';
+                    final text = field.value ?? initCountryCode;
+                    logger.f("初始化值$text");
+                    final phoneNumber = PhoneNumber.parse(text);
+                    final countryCodeName = phoneNumber.isoCode.name; //eg:HK
+                    final countryCodeText = phoneNumber.countryCode; //eg:852
+                    final number = phoneNumber.nsn.replaceFirst(countryCodeText, ""); //eg:64871403
+                    final lastNumber = number.replaceFirst(countryCodeText, "");
+                    logger.f(["地區名:$countryCodeName", "地區編號:$countryCodeText", "電話號碼:$number"]);
+                    if (phoneController.text != lastNumber) {
+                      phoneController.text = lastNumber;
+                    }
+                    return TextField(
+                      controller: phoneController,
+                      keyboardType: TextInputType.phone,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                      onChanged: (value) {
+                        final regex = RegExp(r'^[0-9]+$');
+                        if (regex.hasMatch(value)) {
+                          field.didChange("$countryCodeText$value");
+                        }
+                      },
+                      decoration: InputDecoration(
+                        labelText: LocaleKeys.mobile.tr,
+                        hintText: LocaleKeys.mobile.tr,
+                        prefixIcon: CountryCodePicker(
+                          onChanged: (code) {
+                            field.didChange("${code.dialCode}$number");
+                          },
+                          initialSelection: countryCodeName,
+                          favorite: ['+852', '+86', '+853', '+886', 'US'],
+                          showCountryOnly: false,
+                          showOnlyCountryWhenClosed: false,
+                          alignLeft: false,
+                          headerText: LocaleKeys.selectCountry.tr,
+                          searchDecoration: InputDecoration(hintText: LocaleKeys.search.tr),
+                          emptySearchBuilder: (context) {
+                            return Center(
+                              child: Text(LocaleKeys.noDataFound.tr, style: TextStyle(color: Colors.grey)),
+                            );
+                          },
+                        ),
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                      ),
+                    );
+                  },
+                ),
+               */
               ),
             ],
           ),
@@ -133,6 +201,57 @@ class CustomerEditView extends GetView<CustomerEditController> {
       ),
     );
   }
+  /*   IntlMobileField(
+                      initialCountryCode: "GB",
+                      decoration: const InputDecoration(
+                        labelText: 'Mobile Number',
+                        border: OutlineInputBorder(borderSide: BorderSide()),
+                      ),
+                      onCountryChanged: (country) {},
+                      invalidNumberMessage: "",
+                      favorite: ["BD", "US", "MY"],
+                      //countries: ['BD', 'MY', 'US', 'AE', 'UK', 'NL', 'GB'],
+                      favoriteCountryCodePosition: Position.trailing,
+                      favoriteIcon: Icon(Icons.favorite),
+                      onChanged: (number) {
+                        print("${number.countryCode}${number.number}");
+                      },
+                      validator: (mobileNumber) {
+                        if (mobileNumber == null || mobileNumber.number.isEmpty) {
+                          return 'Please, Enter a mobile number';
+                        }
+                        if (!RegExp(r'^[0-9]+$').hasMatch(mobileNumber.number)) {
+                          return 'Only digits are allowed';
+                        }
+                        return null;
+                      },
+                      lengthCounterTextStyle: TextStyle(color: Colors.black, fontSize: 12),
+                    );
+ */
+
+  /*  PhoneFormField(
+                      enabled: true,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: PhoneValidator.compose([
+                        PhoneValidator.required(context, errorText: LocaleKeys.thisFieldIsRequired.tr),
+                        PhoneValidator.validMobile(context, errorText: LocaleKeys.invalidMobileNumber.tr),
+                      ]),
+                      countrySelectorNavigator: CountrySelectorNavigator.dialog(
+                        noResultMessage: LocaleKeys.noDataFound.tr,
+                        searchBoxDecoration: InputDecoration(hintText: LocaleKeys.search.tr),
+                      ),
+                      onChanged: (phoneNumber) => field.didChange(phoneNumber),
+                      onSubmitted: (phoneNumber) => field.didChange(phoneNumber),
+                      isCountrySelectionEnabled: true,
+                      isCountryButtonPersistent: true,
+                      countryButtonStyle: const CountryButtonStyle(
+                        showDialCode: true,
+                        showIsoCode: true,
+                        showFlag: true,
+                        flagSize: 16,
+                      ),
+                    );
+                   */
 
   /// 联络人
   Widget _buildContact(BuildContext context) {

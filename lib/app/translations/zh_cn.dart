@@ -337,4 +337,7 @@ Map<String, String> get zhCN => {
   LocaleKeys.clearContent: "清除內容",
   LocaleKeys.choiceParam: "选择%s",
   LocaleKeys.invoiceNo: "发票编号",
+  LocaleKeys.noDataFound: "未找到数据",
+  LocaleKeys.invalidMobileNumber: "无效手机号码",
+  LocaleKeys.selectCountry: "选择国家",
 };

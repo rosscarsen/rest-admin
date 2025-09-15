@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rest_admin/app/model/customer/deposit_list.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../../../model/customer/deposit_list.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/custom_alert.dart';

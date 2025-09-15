@@ -3,11 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:rest_admin/app/model/customer/customer_edit_model.dart';
+import '../../../../model/customer/customer_edit_model.dart';
 
 import '../../../../config.dart';
 import '../../../../model/customer/customer_contact.dart';
-import '../../../../model/customer/customer_data.dart';
 import '../../../../model/customer/deposit_list.dart';
 import '../../../../service/dio_api_client.dart';
 import '../../../../service/dio_api_result.dart';
@@ -15,7 +14,6 @@ import '../../../../translations/locale_keys.dart';
 import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/logger.dart';
 import '../customer_controller.dart';
-import '../customer_fields.dart';
 import 'deposit_data_source.dart';
 
 class CustomerEditController extends GetxController with GetSingleTickerProviderStateMixin {
@@ -39,6 +37,7 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
   final totalPages = 0.obs;
   final currentPage = 1.obs;
   final totalRecords = 0.obs;
+  final customerTypeList = <String>[];
 
   @override
   void onInit() {
@@ -120,6 +119,10 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
       final resultModel = customerEditModelFromJson(customerResult.data);
       customerRet = resultModel.apiResult;
 
+      customerTypeList
+        ..clear()
+        ..addAll(resultModel.apiResult?.customerType ?? []);
+
       // customerData = customerRet?.customerInfo ?? CustomerData();
       //customerContactList.addAll(customerRet?.customerContact ?? []);
 
@@ -179,6 +182,10 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
 
   /// 食品备注保存
   Future<void> save() async {
+    if (formKey.currentState?.saveAndValidate() ?? false) {
+      logger.f(formKey.currentState?.value);
+    }
+    return;
     final checkResult = checkPageDataChange();
     if (checkResult is bool) {
       if (checkResult) {
