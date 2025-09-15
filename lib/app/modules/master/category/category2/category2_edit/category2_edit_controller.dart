@@ -110,20 +110,22 @@ class Category2EditController extends GetxController {
             return;
           }
           final CategoryModel category2Model = CategoryModel.fromJson(apiResult);
-          formKey.currentState?.patchValue(
-            Map.fromEntries(
-              category2Model.toJson().entries.where((e) => e.value != null).map((e) {
-                final key = e.key;
-                var value = e.value;
-                if (['mNonContinue', 'mContinue'].contains(key)) {
-                  value = (value == 1 || value == '1');
-                } else if (value != null) {
-                  value = value.toString();
-                }
-                return MapEntry(key, value);
-              }),
-            ),
-          );
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            formKey.currentState?.patchValue(
+              Map.fromEntries(
+                category2Model.toJson().entries.where((e) => e.value != null).map((e) {
+                  final key = e.key;
+                  var value = e.value;
+                  if (['mNonContinue', 'mContinue'].contains(key)) {
+                    value = (value == 1 || value == '1');
+                  } else if (value != null) {
+                    value = value.toString();
+                  }
+                  return MapEntry(key, value);
+                }),
+              ),
+            );
+          });
           FocusManager.instance.primaryFocus?.unfocus();
         }
       }

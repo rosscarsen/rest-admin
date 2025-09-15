@@ -143,57 +143,31 @@ class CustomerEditView extends GetView<CustomerEditController> {
               //手机
               FormHelper.buildGridCol(
                 child: FormHelper.phoneInput(name: CustomerFields.mPhone_No, labelText: LocaleKeys.mobile.tr),
-                /* child: FormBuilderField<String>(
-                  name: "name",
-                  builder: (FormFieldState<dynamic> field) {
-                    final initCountryCode = '+852';
-                    final text = field.value ?? initCountryCode;
-                    logger.f("初始化值$text");
-                    final phoneNumber = PhoneNumber.parse(text);
-                    final countryCodeName = phoneNumber.isoCode.name; //eg:HK
-                    final countryCodeText = phoneNumber.countryCode; //eg:852
-                    final number = phoneNumber.nsn.replaceFirst(countryCodeText, ""); //eg:64871403
-                    final lastNumber = number.replaceFirst(countryCodeText, "");
-                    logger.f(["地區名:$countryCodeName", "地區編號:$countryCodeText", "電話號碼:$number"]);
-                    if (phoneController.text != lastNumber) {
-                      phoneController.text = lastNumber;
-                    }
-                    return TextField(
-                      controller: phoneController,
-                      keyboardType: TextInputType.phone,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      onChanged: (value) {
-                        final regex = RegExp(r'^[0-9]+$');
-                        if (regex.hasMatch(value)) {
-                          field.didChange("$countryCodeText$value");
-                        }
-                      },
-                      decoration: InputDecoration(
-                        labelText: LocaleKeys.mobile.tr,
-                        hintText: LocaleKeys.mobile.tr,
-                        prefixIcon: CountryCodePicker(
-                          onChanged: (code) {
-                            field.didChange("${code.dialCode}$number");
-                          },
-                          initialSelection: countryCodeName,
-                          favorite: ['+852', '+86', '+853', '+886', 'US'],
-                          showCountryOnly: false,
-                          showOnlyCountryWhenClosed: false,
-                          alignLeft: false,
-                          headerText: LocaleKeys.selectCountry.tr,
-                          searchDecoration: InputDecoration(hintText: LocaleKeys.search.tr),
-                          emptySearchBuilder: (context) {
-                            return Center(
-                              child: Text(LocaleKeys.noDataFound.tr, style: TextStyle(color: Colors.grey)),
-                            );
-                          },
-                        ),
-                        floatingLabelBehavior: FloatingLabelBehavior.always,
-                      ),
-                    );
-                  },
+              ),
+              //非启用状态
+              FormHelper.buildGridCol(
+                child: FormHelper.selectInput(
+                  name: CustomerFields.mNon_Active,
+                  labelText: LocaleKeys.nonEnable.tr,
+                  initialValue: "0",
+                  items: [
+                    DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                    DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+                  ],
                 ),
-               */
+              ),
+              //全称
+              FormHelper.buildGridCol(
+                child: FormHelper.textInput(name: CustomerFields.mFullName, labelText: LocaleKeys.fullName.tr),
+              ),
+              //密码
+              FormHelper.buildGridCol(
+                child: FormHelper.textInput(
+                  name: CustomerFields.mPassword,
+                  labelText: LocaleKeys.password.tr,
+                  keyboardType: TextInputType.visiblePassword,
+                  obscureText: true,
+                ),
               ),
             ],
           ),

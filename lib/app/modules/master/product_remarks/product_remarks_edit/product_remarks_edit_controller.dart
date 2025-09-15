@@ -95,20 +95,22 @@ class ProductRemarksEditController extends GetxController with GetSingleTickerPr
       dataList
         ..clear()
         ..addAll(resultModel.remarksDetails ?? []);
-      formKey.currentState?.patchValue(
-        Map.fromEntries(
-          resultModel.toJson().entries.where((e) => e.value != null).map((e) {
-            final key = e.key;
-            var value = e.value;
-            if (['mVisible'].contains(key)) {
-              value = !(value == 1 || value == '1');
-            } else if (value != null) {
-              value = value.toString();
-            }
-            return MapEntry(key, value);
-          }),
-        ),
-      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        formKey.currentState?.patchValue(
+          Map.fromEntries(
+            resultModel.toJson().entries.where((e) => e.value != null).map((e) {
+              final key = e.key;
+              var value = e.value;
+              if (['mVisible'].contains(key)) {
+                value = !(value == 1 || value == '1');
+              } else if (value != null) {
+                value = value.toString();
+              }
+              return MapEntry(key, value);
+            }),
+          ),
+        );
+      });
     } catch (e) {
       logger.i(e.toString());
       CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
