@@ -114,98 +114,178 @@ class CustomerEditView extends GetView<CustomerEditController> {
         key: controller.formKey,
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(8.0),
-          child: FormHelper.buildGridRow(
+          child: Column(
             children: [
-              //类型
-              FormHelper.buildGridCol(
-                child: FormHelper.autoCompleteInput(
-                  name: CustomerFields.mCustomer_Type,
-                  labelText: LocaleKeys.type.tr,
-                  items: controller.customerTypeList,
-                ),
+              FormHelper.buildGridRow(
+                children: [
+                  //类型
+                  FormHelper.buildGridCol(
+                    child: FormHelper.autoCompleteInput(
+                      name: CustomerFields.mCustomer_Type,
+                      labelText: LocaleKeys.type.tr,
+                      items: controller.customerTypeList,
+                    ),
+                  ),
+                  //编号
+                  FormHelper.buildGridCol(
+                    child: FormHelper.textInput(
+                      name: CustomerFields.mCode,
+                      labelText: LocaleKeys.code.tr,
+                      enabled: controller.id == null,
+                      validator: FormBuilderValidators.required(errorText: LocaleKeys.thisFieldIsRequired.tr),
+                    ),
+                  ),
+                  //简称
+                  FormHelper.buildGridCol(
+                    child: FormHelper.textInput(name: CustomerFields.mSimpleName, labelText: LocaleKeys.simpleName.tr),
+                  ),
+                  //卡号
+                  FormHelper.buildGridCol(
+                    child: FormHelper.textInput(name: CustomerFields.mCardNo, labelText: LocaleKeys.cardNo.tr),
+                  ),
+                  //手机
+                  FormHelper.buildGridCol(
+                    child: FormHelper.phoneInput(name: CustomerFields.mPhone_No, labelText: LocaleKeys.mobile.tr),
+                  ),
+                  //非启用状态
+                  FormHelper.buildGridCol(
+                    child: FormHelper.selectInput(
+                      name: CustomerFields.mNon_Active,
+                      labelText: LocaleKeys.nonEnable.tr,
+                      initialValue: "0",
+                      items: [
+                        DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                        DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+                      ],
+                    ),
+                  ),
+                  //全称
+                  FormHelper.buildGridCol(
+                    child: FormHelper.textInput(name: CustomerFields.mFullName, labelText: LocaleKeys.fullName.tr),
+                  ),
+                  //密码
+                  FormHelper.buildGridCol(
+                    child: StatefulBuilder(
+                      builder: (BuildContext context, setState) {
+                        return FormBuilderTextField(
+                          readOnly: false,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration: InputDecoration(
+                            hintText: LocaleKeys.password.tr,
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  visibility = true;
+                                  controller.formKey.currentState?.fields[CustomerFields.mPassword]?.didChange("");
+                                });
+                              },
+                              icon: Icon(Icons.edit),
+                            ),
+                          ),
+                          name: CustomerFields.mPassword,
+                          obscureText: !visibility,
+                        );
+                      },
+                    ),
+                  ),
+                  //创建日期
+                  FormHelper.buildGridCol(
+                    child: FormHelper.dateInput(
+                      initialValue: DateTime.now(),
+                      name: CustomerFields.mCreateDate,
+                      labelText: LocaleKeys.createDate.tr,
+                      enabled: false,
+                    ),
+                  ),
+                  //地址
+                  FormHelper.buildGridCol(
+                    sm: 12,
+                    md: 12,
+                    lg: 12,
+                    xl: 12,
+                    child: FormHelper.textInput(
+                      name: CustomerFields.mAddress,
+                      labelText: LocaleKeys.address.tr,
+                      keyboardType: TextInputType.streetAddress,
+                      maxLines: 2,
+                    ),
+                  ),
+                  // 过期日
+                  FormHelper.buildGridCol(
+                    child: FormHelper.dateInput(
+                      name: CustomerFields.mExpiry_Date,
+                      labelText: LocaleKeys.expiredDate.tr,
+                    ),
+                  ),
+                  //传真
+                  FormHelper.buildGridCol(
+                    child: FormHelper.textInput(name: CustomerFields.mFax_No, labelText: LocaleKeys.fax.tr),
+                  ),
+                  //电邮
+                  FormHelper.buildGridCol(
+                    child: FormHelper.textInput(name: CustomerFields.mEmail, labelText: LocaleKeys.email.tr),
+                  ),
+                ],
               ),
-              //编号
-              FormHelper.buildGridCol(
-                child: FormHelper.textInput(
-                  name: CustomerFields.mCode,
-                  labelText: LocaleKeys.code.tr,
-                  enabled: controller.id == null,
-                  validator: FormBuilderValidators.required(errorText: LocaleKeys.thisFieldIsRequired.tr),
-                ),
-              ),
-              //简称
-              FormHelper.buildGridCol(
-                child: FormHelper.textInput(name: CustomerFields.mSimpleName, labelText: LocaleKeys.simpleName.tr),
-              ),
-              //卡号
-              FormHelper.buildGridCol(
-                child: FormHelper.textInput(name: CustomerFields.mCardNo, labelText: LocaleKeys.cardNo.tr),
-              ),
-              //手机
-              FormHelper.buildGridCol(
-                child: FormHelper.phoneInput(name: CustomerFields.mPhone_No, labelText: LocaleKeys.mobile.tr),
-              ),
-              //非启用状态
-              FormHelper.buildGridCol(
-                child: FormHelper.selectInput(
-                  name: CustomerFields.mNon_Active,
-                  labelText: LocaleKeys.nonEnable.tr,
-                  initialValue: "0",
-                  items: [
-                    DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
-                    DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
-                  ],
-                ),
-              ),
-              //全称
-              FormHelper.buildGridCol(
-                child: FormHelper.textInput(name: CustomerFields.mFullName, labelText: LocaleKeys.fullName.tr),
-              ),
-              //密码
-              FormHelper.buildGridCol(
-                child: StatefulBuilder(
-                  builder: (BuildContext context, setState) {
-                    return FormBuilderTextField(
-                      readOnly: false,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      decoration: InputDecoration(
-                        hintText: LocaleKeys.password.tr,
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              visibility = true;
-                              controller.formKey.currentState?.fields[CustomerFields.mPassword]?.didChange("");
-                            });
-                          },
-                          icon: Icon(Icons.edit),
-                        ),
-                      ),
-                      name: CustomerFields.mPassword,
-                      obscureText: !visibility,
-                    );
-                  },
-                ),
-              ),
-              //创建日期
-              FormHelper.buildGridCol(
-                child: FormHelper.dateInput(
-                  name: CustomerFields.mCreateDate,
-                  labelText: LocaleKeys.createDate.tr,
-                  enabled: false,
-                ),
-              ),
-              //地址
-              FormHelper.buildGridCol(
-                sm: 12,
-                md: 12,
-                lg: 12,
-                xl: 12,
-                child: FormHelper.textInput(
-                  name: CustomerFields.mAddress,
-                  labelText: LocaleKeys.address.tr,
-                  keyboardType: TextInputType.streetAddress,
-                  maxLines: 2,
-                ),
+              Divider(indent: 4, endIndent: 4),
+              FormHelper.buildGridRow(
+                children: [
+                  //激活
+                  FormHelper.buildGridCol(
+                    child: FormHelper.selectInput(
+                      name: CustomerFields.mInfoNA,
+                      labelText: LocaleKeys.active.tr,
+                      initialValue: "0",
+                      items: [
+                        DropdownMenuItem(value: "0", child: Text(LocaleKeys.yes.tr)),
+                        DropdownMenuItem(value: "1", child: Text(LocaleKeys.no.tr)),
+                      ],
+                    ),
+                  ),
+                  //折扣(0-100)
+                  FormHelper.buildGridCol(
+                    child: FormHelper.textInput(
+                      name: CustomerFields.mST_Discount,
+                      labelText: LocaleKeys.discount.tr,
+                      keyboardType: TextInputType.number,
+                      maxDecimalDigits: 2,
+                    ),
+                  ),
+                  //貨幣
+                  FormHelper.buildGridCol(
+                    child: FormHelper.selectInput(
+                      name: CustomerFields.mST_Currency,
+                      labelText: LocaleKeys.currency.tr,
+                      initialValue: "HKD",
+                      items: [
+                        DropdownMenuItem(value: "HKD", child: Text("HKD")),
+                        ...controller.currencyList.where((e) => (e.mCode?.toUpperCase() ?? "") != "HKD").map((e) {
+                          return DropdownMenuItem(value: e.mCode, child: Text(e.mCode ?? ""));
+                        }),
+                      ],
+                    ),
+                  ),
+                  //性別
+                  FormHelper.buildGridCol(
+                    child: FormHelper.selectInput(
+                      name: CustomerFields.mSex,
+                      labelText: LocaleKeys.gender.tr,
+                      initialValue: "0",
+                      items: [
+                        DropdownMenuItem(value: "0", child: Text(LocaleKeys.male.tr)),
+                        DropdownMenuItem(value: "1", child: Text(LocaleKeys.female.tr)),
+                      ],
+                    ),
+                  ),
+                  //積分
+                  FormHelper.buildGridCol(
+                    child: FormHelper.textInput(
+                      name: CustomerFields.mDeposit,
+                      labelText: LocaleKeys.deposit.tr,
+                      enabled: false,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

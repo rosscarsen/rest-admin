@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 import '../../utils/functions.dart';
+
 part 'customer_data.g.dart';
 
 @JsonSerializable()
@@ -15,7 +16,7 @@ class CustomerData {
   final String? mEmail;
   @JsonKey(name: "mFullName", fromJson: Functions.asString)
   final String? mFullName;
-  @JsonKey(name: "mPhone_No", fromJson: Functions.asString)
+  @JsonKey(name: "mPhone_No", fromJson: Functions.asString, toJson: Functions.stringToPhoneNumber)
   final String? mPhoneNo;
   @JsonKey(name: "mShipping_Marks", fromJson: Functions.asString)
   final String? mShippingMarks;
@@ -65,8 +66,8 @@ class CustomerData {
   final String? mExpiryDate;
   @JsonKey(name: "mSimple_Discount", defaultValue: "0", fromJson: Functions.asString)
   final String? mSimpleDiscount;
-  @JsonKey(name: "mDeposit", fromJson: Functions.asString)
-  final dynamic mDeposit;
+  @JsonKey(name: "mDeposit", fromJson: Functions.asString, toJson: Functions.formatAmount)
+  final String? mDeposit;
   @JsonKey(name: "mCustomer_Type", fromJson: Functions.asString)
   final String? mCustomerType;
   @JsonKey(name: "mCustomer_Note", fromJson: Functions.asString)

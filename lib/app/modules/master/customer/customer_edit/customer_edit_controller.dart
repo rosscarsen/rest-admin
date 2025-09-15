@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 
 import '../../../../config.dart';
+import '../../../../model/currency/currency_data.dart';
 import '../../../../model/customer/customer_contact.dart';
 import '../../../../model/customer/customer_edit_model.dart';
 import '../../../../model/customer/deposit_list.dart';
@@ -15,7 +15,6 @@ import '../../../../translations/locale_keys.dart';
 import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/logger.dart';
 import '../customer_controller.dart';
-import '../customer_fields.dart';
 import 'deposit_data_source.dart';
 
 class CustomerEditController extends GetxController with GetSingleTickerProviderStateMixin {
@@ -33,6 +32,7 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
   late DepositDetailDataSource depositDataSource;
   List<DepositData> depositList = [];
   List<CustomerContact> customerContactList = [];
+  List<CurrencyData> currencyList = [];
   ApiResult? customerRet;
   final customerCtl = Get.find<CustomerController>();
 
@@ -125,24 +125,14 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
         ..clear()
         ..addAll(resultModel.apiResult?.customerType ?? []);
       final customerInfo = customerRet?.customerInfo;
-      if (customerInfo != null) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          formKey.currentState?.patchValue(
-            Map.fromEntries(
-              customerInfo.toJson().entries.where((e) => e.value != null).map((e) {
-                final key = e.key;
-                var value = e.value;
-                if ([CustomerFields.mPhone_No].contains(key)) {
-                  value = PhoneNumber.parse(value == null ? "+852" : value.toString());
-                } else if (value != null) {
-                  value = value.toString();
-                }
-                return MapEntry(key, value);
-              }),
-            ),
-          );
-        });
-      }
+      currencyList
+        ..clear()
+        ..addAll(customerRet?.currency ?? []);
+      logger.f(customerInfo?.toJson());
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        formKey.currentState?.patchValue(customerInfo?.toJson() ?? {});
+      });
 
       // customerData = customerRet?.customerInfo ?? CustomerData();
       //customerContactList.addAll(customerRet?.customerContact ?? []);
@@ -203,6 +193,7 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
 
   /// 食品备注保存
   Future<void> save() async {
+    //提交的时候去掉创建日期
     if (formKey.currentState?.saveAndValidate() ?? false) {
       logger.f(formKey.currentState?.value);
     }

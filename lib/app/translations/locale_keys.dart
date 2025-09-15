@@ -28,6 +28,7 @@ abstract class LocaleKeys {
   static const String copy = "copy";
   static const String edit = "edit";
   static const String delete = "delete";
+  static const String active = "active";
   static const String uploadPicture = "uploadPicture";
   static const String add = "add";
   static const String confirm = "confirm";

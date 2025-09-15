@@ -340,4 +340,5 @@ Map<String, String> get zhCN => {
   LocaleKeys.noDataFound: "未找到数据",
   LocaleKeys.invalidMobileNumber: "无效手机号码",
   LocaleKeys.selectCountry: "选择国家",
+  LocaleKeys.active: "激活",
 };

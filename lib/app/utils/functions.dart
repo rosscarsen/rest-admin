@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:phone_numbers_parser/phone_numbers_parser.dart' show PhoneNumber;
 
 import '../config.dart';
 import '../translations/locale_keys.dart';
@@ -163,5 +165,16 @@ class Functions {
     if (hex.length == 6 || hex.length == 7) buffer.write('ff');
     buffer.write(hex.replaceFirst('#', ''));
     return Color(int.parse(buffer.toString(), radix: 16));
+  }
+
+  /// 字符串转PhoneNumber
+  static PhoneNumber? stringToPhoneNumber(String? value) {
+    return PhoneNumber.parse(value == null ? "+852" : value.toString());
+  }
+
+  /// 格式化金额
+  static String formatAmount(String? value) {
+    final formatter = NumberFormat("#,##0.00", "en_US");
+    return formatter.format(double.parse(value?.toString() ?? "0"));
   }
 }

@@ -340,4 +340,5 @@ Map<String, String> zhHK = {
   LocaleKeys.noDataFound: "未找到數據",
   LocaleKeys.invalidMobileNumber: "無效手機號碼",
   LocaleKeys.selectCountry: "選擇國家",
+  LocaleKeys.active: "激活",
 };

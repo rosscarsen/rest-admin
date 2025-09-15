@@ -340,4 +340,5 @@ Map<String, String> get enUS => {
   LocaleKeys.noDataFound: "No Data Found!",
   LocaleKeys.invalidMobileNumber: "Invalid mobile number!",
   LocaleKeys.selectCountry: "Select Country",
+  LocaleKeys.active: "Active",
 };
