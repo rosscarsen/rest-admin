@@ -107,6 +107,7 @@ class CustomerEditView extends GetView<CustomerEditController> {
 
   /// 基本信息
   Widget _buildBasicInfo(BuildContext context) {
+    bool visibility = false;
     return Skeletonizer(
       enabled: controller.isLoading.value,
       child: FormBuilder(
@@ -162,11 +163,48 @@ class CustomerEditView extends GetView<CustomerEditController> {
               ),
               //密码
               FormHelper.buildGridCol(
+                child: StatefulBuilder(
+                  builder: (BuildContext context, setState) {
+                    return FormBuilderTextField(
+                      readOnly: false,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: InputDecoration(
+                        hintText: LocaleKeys.password.tr,
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              visibility = true;
+                              controller.formKey.currentState?.fields[CustomerFields.mPassword]?.didChange("");
+                            });
+                          },
+                          icon: Icon(Icons.edit),
+                        ),
+                      ),
+                      name: CustomerFields.mPassword,
+                      obscureText: !visibility,
+                    );
+                  },
+                ),
+              ),
+              //创建日期
+              FormHelper.buildGridCol(
+                child: FormHelper.dateInput(
+                  name: CustomerFields.mCreateDate,
+                  labelText: LocaleKeys.createDate.tr,
+                  enabled: false,
+                ),
+              ),
+              //地址
+              FormHelper.buildGridCol(
+                sm: 12,
+                md: 12,
+                lg: 12,
+                xl: 12,
                 child: FormHelper.textInput(
-                  name: CustomerFields.mPassword,
-                  labelText: LocaleKeys.password.tr,
-                  keyboardType: TextInputType.visiblePassword,
-                  obscureText: true,
+                  name: CustomerFields.mAddress,
+                  labelText: LocaleKeys.address.tr,
+                  keyboardType: TextInputType.streetAddress,
+                  maxLines: 2,
                 ),
               ),
             ],
@@ -175,57 +213,6 @@ class CustomerEditView extends GetView<CustomerEditController> {
       ),
     );
   }
-  /*   IntlMobileField(
-                      initialCountryCode: "GB",
-                      decoration: const InputDecoration(
-                        labelText: 'Mobile Number',
-                        border: OutlineInputBorder(borderSide: BorderSide()),
-                      ),
-                      onCountryChanged: (country) {},
-                      invalidNumberMessage: "",
-                      favorite: ["BD", "US", "MY"],
-                      //countries: ['BD', 'MY', 'US', 'AE', 'UK', 'NL', 'GB'],
-                      favoriteCountryCodePosition: Position.trailing,
-                      favoriteIcon: Icon(Icons.favorite),
-                      onChanged: (number) {
-                        print("${number.countryCode}${number.number}");
-                      },
-                      validator: (mobileNumber) {
-                        if (mobileNumber == null || mobileNumber.number.isEmpty) {
-                          return 'Please, Enter a mobile number';
-                        }
-                        if (!RegExp(r'^[0-9]+$').hasMatch(mobileNumber.number)) {
-                          return 'Only digits are allowed';
-                        }
-                        return null;
-                      },
-                      lengthCounterTextStyle: TextStyle(color: Colors.black, fontSize: 12),
-                    );
- */
-
-  /*  PhoneFormField(
-                      enabled: true,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      validator: PhoneValidator.compose([
-                        PhoneValidator.required(context, errorText: LocaleKeys.thisFieldIsRequired.tr),
-                        PhoneValidator.validMobile(context, errorText: LocaleKeys.invalidMobileNumber.tr),
-                      ]),
-                      countrySelectorNavigator: CountrySelectorNavigator.dialog(
-                        noResultMessage: LocaleKeys.noDataFound.tr,
-                        searchBoxDecoration: InputDecoration(hintText: LocaleKeys.search.tr),
-                      ),
-                      onChanged: (phoneNumber) => field.didChange(phoneNumber),
-                      onSubmitted: (phoneNumber) => field.didChange(phoneNumber),
-                      isCountrySelectionEnabled: true,
-                      isCountryButtonPersistent: true,
-                      countryButtonStyle: const CountryButtonStyle(
-                        showDialCode: true,
-                        showIsoCode: true,
-                        showFlag: true,
-                        flagSize: 16,
-                      ),
-                    );
-                   */
 
   /// 联络人
   Widget _buildContact(BuildContext context) {

@@ -49,7 +49,6 @@ dependencies:
   window_manager: ^0.5.1
   collection: ^1.19.1
   json_annotation: ^4.9.0
-  intl_mobile_field: ^2.1.2
   phone_numbers_parser: ^9.0.11
   country_code_picker: ^3.4.0
 dev_dependencies:

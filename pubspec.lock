@@ -741,14 +741,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "0.20.2"
-  intl_mobile_field:
-    dependency: "direct main"
-    description:
-      name: intl_mobile_field
-      sha256: "91f9fcb65daf7fa12d0937f399a5d83ca63832b482a52ff910d9a8c255a50fc7"
-      url: "https://pub.flutter-io.cn"
-    source: hosted
-    version: "2.1.2"
   io:
     dependency: transitive
     description:

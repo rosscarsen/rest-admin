@@ -79,7 +79,6 @@ class FormHelper {
     FormFieldValidator<String>? validator,
     List<TextInputFormatter>? inputFormatters,
     Widget? suffixIcon,
-    bool obscureText = false,
     int maxLines = 1,
     String? initialValue,
     void Function(String?)? onChanged,
@@ -93,74 +92,59 @@ class FormHelper {
   }) {
     assert(maxLines >= 1, 'maxLines不能小于1');
     assert(!(controller != null && initialValue != null), 'controller 和 initialValue 不能同时设置');
-    bool visibility = false;
-    return StatefulBuilder(
-      builder: (BuildContext context, setState) {
-        return FormBuilderTextField(
-          controller: controller,
-          onSubmitted: onSubmitted,
-          style: displayTextStyle,
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          enabled: enabled,
-          initialValue: initialValue,
-          readOnly: readOnly,
-          name: name,
-          maxLines: maxLines,
-          validator: validator,
-          onChanged: onChanged,
-          obscureText: !visibility,
-          valueTransformer: (value) => (value ?? "").trim(),
-          decoration: InputDecoration(
-            labelText: labelText,
-            hintText: hintText,
-            prefixIcon: prefixIcon,
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            focusedBorder: !enabled || readOnly
-                ? OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey.shade400, width: 1.0),
-                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                  )
-                : null,
-            suffixIcon: obscureText
-                ? IconButton(
-                    onPressed: () {
-                      setState(() {
-                        visibility = !visibility;
-                      });
-                    },
-                    icon: Icon(!visibility ? Icons.visibility : Icons.visibility_off),
-                  )
-                : suffixIcon,
-            fillColor: Colors.grey.shade200,
-            filled: !enabled || readOnly,
-            errorText: errorText,
-          ),
-          keyboardType: keyboardType ?? (maxLines > 1 ? TextInputType.multiline : TextInputType.text),
-          inputFormatters: keyboardType == TextInputType.number
-              ? inputFormatters ??
-                    (maxDecimalDigits == 0
-                        ? [FilteringTextInputFormatter.digitsOnly]
-                        : [
-                            TextInputFormatter.withFunction((oldValue, newValue) {
-                              final text = newValue.text;
+    return FormBuilderTextField(
+      controller: controller,
+      onSubmitted: onSubmitted,
+      style: displayTextStyle,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      enabled: enabled,
+      initialValue: initialValue,
+      readOnly: readOnly,
+      name: name,
+      maxLines: maxLines,
+      validator: validator,
+      onChanged: onChanged,
+      valueTransformer: (value) => (value ?? "").trim(),
+      decoration: InputDecoration(
+        labelText: labelText,
+        hintText: hintText,
+        prefixIcon: prefixIcon,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        focusedBorder: !enabled || readOnly
+            ? OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey.shade400, width: 1.0),
+                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+              )
+            : null,
+        suffixIcon: suffixIcon,
+        fillColor: Colors.grey.shade200,
+        filled: !enabled || readOnly,
+        errorText: errorText,
+      ),
+      keyboardType: keyboardType ?? (maxLines > 1 ? TextInputType.multiline : TextInputType.text),
+      inputFormatters: keyboardType == TextInputType.number
+          ? inputFormatters ??
+                (maxDecimalDigits == 0
+                    ? [FilteringTextInputFormatter.digitsOnly]
+                    : [
+                        TextInputFormatter.withFunction((oldValue, newValue) {
+                          final text = newValue.text;
 
-                              if (text.isEmpty) return newValue;
-                              if (text == '.') return oldValue; // 禁止首个字符为小数点
-                              final regex = RegExp(r'^\d+(\.\d{0,' + maxDecimalDigits.toString() + r'})?$');
-                              if (regex.hasMatch(text)) {
-                                return newValue;
-                              }
-                              return oldValue;
-                            }),
-                          ])
-              : null,
-          //textInputAction: maxLines > 1 ? TextInputAction.newline : TextInputAction.done,
-          enableSuggestions: true,
-          enableInteractiveSelection: true,
-          contextMenuBuilder: (context, editableTextState) {
-            return AdaptiveTextSelectionToolbar.editableText(editableTextState: editableTextState);
-          },
-        );
+                          if (text.isEmpty) return newValue;
+                          if (text == '.') return oldValue; // 禁止首个字符为小数点
+                          final regex = RegExp(r'^\d+(\.\d{0,' + maxDecimalDigits.toString() + r'})?$');
+                          if (regex.hasMatch(text)) {
+                            return newValue;
+                          }
+                          return oldValue;
+                        }),
+                      ])
+          : null,
+      //textInputAction: maxLines > 1 ? TextInputAction.newline : TextInputAction.done,
+      enableSuggestions: true,
+      enableInteractiveSelection: true,
+      contextMenuBuilder: (context, editableTextState) {
+        return AdaptiveTextSelectionToolbar.editableText(editableTextState: editableTextState);
       },
     );
   }
