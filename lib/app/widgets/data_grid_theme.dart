@@ -18,7 +18,7 @@ class DataGridTheme extends StatelessWidget {
             borderWidth: 0,
           ),
         ),
-        child: child,
+        child: Padding(padding: const EdgeInsets.symmetric(horizontal: 4.0), child: child),
       ),
     );
   }
