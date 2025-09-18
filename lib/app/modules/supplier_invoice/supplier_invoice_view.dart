@@ -138,7 +138,6 @@ class SupplierInvoiceView extends GetView<SupplierInvoiceController> {
           gridLinesVisibility: GridLinesVisibility.both,
           headerGridLinesVisibility: GridLinesVisibility.both,
           columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
-          columnWidthMode: ColumnWidthMode.auto,
           showCheckboxColumn: false,
           selectionMode: SelectionMode.none,
           source: controller.dataSource,
@@ -147,6 +146,7 @@ class SupplierInvoiceView extends GetView<SupplierInvoiceController> {
               columnName: 'mSupplierInvoiceInNo',
               label: CustomCell(data: LocaleKeys.receiptNo.tr),
               columnWidthMode: ColumnWidthMode.fill,
+              minimumWidth: 150,
             ),
             GridColumn(
               columnName: 'mRevised',

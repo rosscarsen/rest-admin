@@ -199,6 +199,8 @@ class CategoryView extends GetView<CategoryController> {
           GridColumn(
             columnName: 'mDescription',
             label: CustomCell(data: LocaleKeys.description.tr),
+            columnWidthMode: ColumnWidthMode.fill,
+            minimumWidth: 150,
           ),
           GridColumn(
             columnName: 'mTimeStart',

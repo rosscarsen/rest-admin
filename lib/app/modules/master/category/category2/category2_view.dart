@@ -86,7 +86,6 @@ class Category2View extends GetView<Category2Controller> {
             label: CustomCell(data: LocaleKeys.description.tr),
             columnWidthMode: ColumnWidthMode.fill,
             minimumWidth: 150,
-            maximumWidth: 300,
           ),
           GridColumn(
             columnName: 'mTimeStart',

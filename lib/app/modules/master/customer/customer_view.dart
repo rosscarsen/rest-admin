@@ -280,12 +280,14 @@ class CustomerView extends GetView<CustomerController> {
           GridColumn(
             columnName: 'mSimpleName',
             label: CustomCell(data: LocaleKeys.simpleName.tr),
-            columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.auto : ColumnWidthMode.fill,
+            columnWidthMode: ColumnWidthMode.fill,
+            minimumWidth: 150,
           ),
           GridColumn(
             columnName: 'mFullName',
             label: CustomCell(data: LocaleKeys.fullName.tr),
-            columnWidthMode: context.isPhoneOrLess ? ColumnWidthMode.auto : ColumnWidthMode.fill,
+            columnWidthMode: ColumnWidthMode.fill,
+            minimumWidth: 150,
           ),
           GridColumn(
             columnName: 'mPhoneNo',
