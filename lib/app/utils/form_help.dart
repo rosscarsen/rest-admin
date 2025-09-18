@@ -104,7 +104,10 @@ class FormHelper {
       maxLines: maxLines,
       validator: validator,
       onChanged: onChanged,
-      valueTransformer: (value) => (value ?? "").trim(),
+      valueTransformer: (value) {
+        final raw = (value ?? "").trim();
+        return raw.replaceAll(RegExp(r'[,\s]'), '');
+      },
       decoration: InputDecoration(
         labelText: labelText,
         hintText: hintText,
@@ -124,21 +127,45 @@ class FormHelper {
       keyboardType: keyboardType ?? (maxLines > 1 ? TextInputType.multiline : TextInputType.text),
       inputFormatters: keyboardType == TextInputType.number
           ? inputFormatters ??
-                (maxDecimalDigits == 0
-                    ? [FilteringTextInputFormatter.digitsOnly]
-                    : [
-                        TextInputFormatter.withFunction((oldValue, newValue) {
-                          final text = newValue.text;
+                [
+                  TextInputFormatter.withFunction((oldValue, newValue) {
+                    final text = newValue.text;
 
-                          if (text.isEmpty) return newValue;
-                          if (text == '.') return oldValue; // 禁止首个字符为小数点
-                          final regex = RegExp(r'^\d+(\.\d{0,' + maxDecimalDigits.toString() + r'})?$');
-                          if (regex.hasMatch(text)) {
-                            return newValue;
-                          }
-                          return oldValue;
-                        }),
-                      ])
+                    // 允许删除
+                    if (text.isEmpty) return newValue;
+
+                    // 当不允许小数时
+                    if (maxDecimalDigits == 0) {
+                      // 允许单独负号
+                      if (text == '-') return newValue;
+
+                      // 不允许小数点
+                      final regex = RegExp(r'^-?\d+$'); // 只允许整数(含负数)
+                      if (regex.hasMatch(text)) {
+                        return newValue;
+                      }
+                      return oldValue;
+                    }
+
+                    // 当允许小数时
+                    // 允许单独输入负号
+                    if (text == '-') return newValue;
+
+                    // 允许 "-." 输入后再补数字
+                    if (text == '-.') return newValue;
+
+                    // 允许单独小数点（仅限正数输入）
+                    if (text == '.') return newValue;
+
+                    // 允许负数带小数
+                    final regex = RegExp(r'^-?\d+(\.\d{0,' + maxDecimalDigits.toString() + r'})?$');
+                    if (regex.hasMatch(text)) {
+                      return newValue;
+                    }
+
+                    return oldValue;
+                  }),
+                ]
           : null,
       //textInputAction: maxLines > 1 ? TextInputAction.newline : TextInputAction.done,
       enableSuggestions: true,
@@ -542,6 +569,7 @@ class FormHelper {
     String? initialValue,
     void Function(String?)? onChanged,
     InputDecoration decoration = const InputDecoration(),
+    String? Function(String?)? validator,
   }) {
     return FormBuilderRadioGroup<String>(
       name: name,
@@ -549,6 +577,7 @@ class FormHelper {
       initialValue: initialValue,
       valueTransformer: (value) => (value?.toString() ?? "").trim(),
       decoration: decoration,
+      validator: validator,
       options: options,
       onChanged: onChanged,
       autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -729,12 +758,14 @@ class FormHelper {
     TextEditingController? controller,
     String? initialSelection = "HK",
     bool isRequired = false,
+    String? initialValue,
   }) {
     final effectiveController = controller ?? TextEditingController();
 
     return FormBuilderField<PhoneNumber>(
       name: name,
       enabled: enabled,
+      initialValue: initialValue != null ? PhoneNumber.parse(initialValue) : PhoneNumber.parse("+852"),
       autovalidateMode: AutovalidateMode.onUserInteraction, // 自动验证
       validator: (PhoneNumber? value) {
         if (isRequired && (value == null || value.nsn.isEmpty)) {

@@ -6,15 +6,15 @@ part 'currency_data.g.dart';
 @JsonSerializable()
 class CurrencyData {
   @JsonKey(name: "mDescription", fromJson: Functions.asString)
-  final String? mDescription;
+  String? mDescription;
   @JsonKey(name: "mCode", fromJson: Functions.asString)
-  final String? mCode;
+  String? mCode;
   @JsonKey(name: "mRate", fromJson: Functions.asString)
-  final String? mRate;
+  String? mRate;
   @JsonKey(name: "mDefault", defaultValue: "0", fromJson: Functions.asString)
-  final String? mDefault;
+  String? mDefault;
   @JsonKey(name: "T_MoneyCurrency_ID", fromJson: Functions.asString)
-  final String? tMoneyCurrencyId;
+  String? tMoneyCurrencyId;
 
   CurrencyData({this.mDescription, this.mCode, this.mRate, this.mDefault, this.tMoneyCurrencyId});
 

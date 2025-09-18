@@ -7,83 +7,83 @@ part 'customer_data.g.dart';
 @JsonSerializable()
 class CustomerData {
   @JsonKey(name: "mAddress", fromJson: Functions.asString)
-  final String? mAddress;
+  String? mAddress;
   @JsonKey(name: "mAns_Back", fromJson: Functions.asString)
-  final String? mAnsBack;
+  String? mAnsBack;
   @JsonKey(name: "mCode", fromJson: Functions.asString)
-  final String? mCode;
+  String? mCode;
   @JsonKey(name: "mEmail", fromJson: Functions.asString)
-  final String? mEmail;
+  String? mEmail;
   @JsonKey(name: "mFullName", fromJson: Functions.asString)
-  final String? mFullName;
+  String? mFullName;
   @JsonKey(name: "mPhone_No", fromJson: Functions.asString, toJson: Functions.stringToPhoneNumber)
-  final String? mPhoneNo;
+  String? mPhoneNo;
   @JsonKey(name: "mShipping_Marks", fromJson: Functions.asString)
-  final String? mShippingMarks;
+  String? mShippingMarks;
   @JsonKey(name: "mSimpleName", fromJson: Functions.asString)
-  final String? mSimpleName;
+  String? mSimpleName;
   @JsonKey(name: "mSite_Marks", fromJson: Functions.asString)
-  final String? mSiteMarks;
+  String? mSiteMarks;
   @JsonKey(name: "mST_Credit_Limit", fromJson: Functions.asString)
-  final String? mStCreditLimit;
+  String? mStCreditLimit;
   @JsonKey(name: "mST_Currency", defaultValue: "HKD", fromJson: Functions.asString)
-  final String? mStCurrency;
+  String? mStCurrency;
   @JsonKey(name: "mST_Discount", fromJson: Functions.asString)
-  final String? mStDiscount;
+  String? mStDiscount;
   @JsonKey(name: "mST_Payment_Days", fromJson: Functions.asString)
-  final String? mStPaymentDays;
+  String? mStPaymentDays;
   @JsonKey(name: "mST_Payment_Method", defaultValue: "0", fromJson: Functions.asString)
-  final String? mStPaymentMethod;
+  String? mStPaymentMethod;
   @JsonKey(name: "mST_Payment_Term", fromJson: Functions.asString)
-  final String? mStPaymentTerm;
+  String? mStPaymentTerm;
   @JsonKey(name: "mST_Price_Term", fromJson: Functions.asString)
-  final String? mStPriceTerm;
+  String? mStPriceTerm;
   @JsonKey(name: "mTelex", fromJson: Functions.asString)
-  final String? mTelex;
+  String? mTelex;
   @JsonKey(name: "mFax_No", fromJson: Functions.asString)
-  final String? mFaxNo;
+  String? mFaxNo;
   @JsonKey(name: "T_Customer_ID", fromJson: Functions.asString)
-  final String? tCustomerId;
+  String? tCustomerId;
   @JsonKey(name: "mRemarks", fromJson: Functions.asString)
-  final String? mRemarks;
+  String? mRemarks;
   @JsonKey(name: "mBirthday", fromJson: Functions.asString)
-  final String? mBirthday;
+  String? mBirthday;
   @JsonKey(name: "mOccupation", fromJson: Functions.asString)
-  final String? mOccupation;
+  String? mOccupation;
   @JsonKey(name: "mMarried", defaultValue: "0", fromJson: Functions.asString)
-  final String? mMarried;
+  String? mMarried;
   @JsonKey(name: "mBirthday_Year", fromJson: Functions.asString)
-  final String? mBirthdayYear;
+  String? mBirthdayYear;
   @JsonKey(name: "mBirthday_Month", fromJson: Functions.asString)
-  final String? mBirthdayMonth;
+  String? mBirthdayMonth;
   @JsonKey(name: "mBirthday_Day", fromJson: Functions.asString)
-  final String? mBirthdayDay;
+  String? mBirthdayDay;
   @JsonKey(name: "mSex", defaultValue: "0", fromJson: Functions.asString)
-  final String? mSex;
+  String? mSex;
   @JsonKey(name: "mNon_Active", defaultValue: "0", fromJson: Functions.asString)
-  final String? mNonActive;
+  String? mNonActive;
   @JsonKey(name: "mExpiry_Date", fromJson: Functions.asString)
-  final String? mExpiryDate;
+  String? mExpiryDate;
   @JsonKey(name: "mSimple_Discount", defaultValue: "0", fromJson: Functions.asString)
-  final String? mSimpleDiscount;
+  String? mSimpleDiscount;
   @JsonKey(name: "mDeposit", fromJson: Functions.asString, toJson: Functions.formatAmount)
-  final String? mDeposit;
+  String? mDeposit;
   @JsonKey(name: "mCustomer_Type", fromJson: Functions.asString)
-  final String? mCustomerType;
+  String? mCustomerType;
   @JsonKey(name: "mCustomer_Note", fromJson: Functions.asString)
-  final dynamic mCustomerNote;
+  dynamic mCustomerNote;
   @JsonKey(name: "mCreateDate", fromJson: Functions.asString)
-  final String? mCreateDate;
+  String? mCreateDate;
   @JsonKey(name: "mCustomer_Reference", fromJson: Functions.asString)
-  final dynamic mCustomerReference;
+  dynamic mCustomerReference;
   @JsonKey(name: "mInfoNA", fromJson: Functions.asString)
-  final String? mInfoNa;
+  String? mInfoNa;
   @JsonKey(name: "mCardNo", fromJson: Functions.asString)
-  final String? mCardNo;
+  String? mCardNo;
   @JsonKey(name: "mPassword", fromJson: Functions.asString)
-  final String? mPassword;
+  String? mPassword;
   @JsonKey(name: "pushinfo", defaultValue: "0", fromJson: Functions.asString)
-  final String? pushinfo;
+  String? pushinfo;
 
   CustomerData({
     this.mAddress,

@@ -309,7 +309,7 @@ abstract class LocaleKeys {
   static const String editCustomer = "editCustomer";
   static const String deleteCustomer = "deleteCustomer";
   static const String contact = "contact";
-  static const String deposit = "deposit";
+  static const String point = "point";
   static const String cardNo = "cardNo";
   static const String expiredDate = "expiredDate";
   static const String gender = "gender";
@@ -341,4 +341,10 @@ abstract class LocaleKeys {
   static const String noDataFound = "noDataFound";
   static const String invalidMobileNumber = "invalidMobileNumber";
   static const String selectCountry = "selectCountry";
+  static const String birthday = "birthday";
+  static const String addParam = "addParam";
+  static const String editParam = "editParam";
+  static const String tel = "tel";
+  static const String pleaseEnterAValidEmailAddress = "pleaseEnterAValidEmailAddress";
+  static const String invoiceAmount = "invoiceAmount";
 }

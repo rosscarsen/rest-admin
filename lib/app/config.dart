@@ -138,7 +138,7 @@ class Config {
   // 客户列表
   static String customer = "/Master/customer";
   // 客户积分列表
-  static String customerDeposit = "/Master/customerDeposit";
+  static String customerPoint = "/Master/customerPoint";
   // 客户类型
   static String customerType = "/Master/customerType";
   // 客户添加或编辑
@@ -153,6 +153,10 @@ class Config {
   static String exportCustomerExcel = "/Excel/customerExport";
   // 导入客户
   static String importCustomerExcel = "/Excel/customerImport";
+  // 保存客户积分
+  static String customerPointSave = "/Master/customerPointSave";
+  // 删除客户积分
+  static String customerPointDelete = "/Master/customerPointDelete";
 
   // ==========================================================================
   // 打开选择

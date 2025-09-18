@@ -23,7 +23,7 @@ import 'customer_data_source.dart';
 class CustomerController extends GetxController {
   final DataGridController dataGridController = DataGridController();
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
-  static DataGridController get to => Get.find();
+  static CustomerController get to => Get.find();
   final isLoading = true.obs;
   final totalPages = 0.obs;
   final currentPage = 1.obs;
@@ -69,7 +69,7 @@ class CustomerController extends GetxController {
     try {
       formKey.currentState?.saveAndValidate();
       final param = {'page': currentPage.value, ...formKey.currentState?.value ?? {}};
-      final futures = [apiClient.post(Config.customerType), apiClient.post(Config.customer, data: param)];
+      final futures = [apiClient.get(Config.customerType), apiClient.get(Config.customer, data: param)];
       final results = await Future.wait(futures);
       // 客户类型
       final DioApiResult customerTypeResult = results[0];

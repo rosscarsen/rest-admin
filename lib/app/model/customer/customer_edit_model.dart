@@ -1,15 +1,17 @@
 // To parse this JSON data, do
 //
-//     final customerEditModel = customerEditModelFromJson(jsonString);
+//      customerEditModel = customerEditModelFromJson(jsonString);
 
-import 'package:json_annotation/json_annotation.dart';
 import 'dart:convert';
 
+import 'package:json_annotation/json_annotation.dart';
+
+import '../../utils/functions.dart';
 import '../currency/currency_data.dart';
 import '../pay_method/pay_method_data.dart';
 import 'customer_contact.dart';
 import 'customer_data.dart';
-import 'deposit_list.dart';
+import 'point_list.dart';
 
 part 'customer_edit_model.g.dart';
 
@@ -20,11 +22,11 @@ String customerEditModelToJson(CustomerEditModel data) => json.encode(data.toJso
 @JsonSerializable(explicitToJson: true)
 class CustomerEditModel {
   @JsonKey(name: "status")
-  final int? status;
+  int? status;
   @JsonKey(name: "msg")
-  final String? msg;
+  String? msg;
   @JsonKey(name: "apiResult")
-  final ApiResult? apiResult;
+  ApiResult? apiResult;
 
   CustomerEditModel({this.status, this.msg, this.apiResult});
 
@@ -39,17 +41,19 @@ class CustomerEditModel {
 @JsonSerializable(explicitToJson: true)
 class ApiResult {
   @JsonKey(name: "customerInfo")
-  final CustomerData? customerInfo;
+  CustomerData? customerInfo;
   @JsonKey(name: "customerType")
-  final List<String>? customerType;
+  List<String>? customerType;
   @JsonKey(name: "customerContact")
-  final List<CustomerContact>? customerContact;
-  @JsonKey(name: "invoiceAmount")
-  final String? invoiceAmount;
-  @JsonKey(name: "customerPoint")
-  final String? customerPoint;
+  List<CustomerContact>? customerContact;
+  @JsonKey(name: "invoiceAmount", fromJson: Functions.formatAmount)
+  String? invoiceAmount;
+  @JsonKey(name: "customerPoint", fromJson: Functions.formatAmount)
+  String? customerPoint;
   @JsonKey(name: "currency")
-  final List<CurrencyData>? currency;
+  List<CurrencyData>? currency;
+  @JsonKey(name: "customerDiscount")
+  List<CustomerDiscount>? customerDiscount;
 
   ApiResult({
     this.customerInfo,
@@ -58,6 +62,7 @@ class ApiResult {
     this.invoiceAmount,
     this.customerPoint,
     this.currency,
+    this.customerDiscount,
   });
 
   ApiResult copyWith({
@@ -68,7 +73,8 @@ class ApiResult {
     String? customerPoint,
     List<CurrencyData>? currency,
     List<PayMethodData>? payment,
-    DepositList? depositList,
+    PointList? pointList,
+    List<CustomerDiscount>? customerDiscount,
   }) => ApiResult(
     customerInfo: customerInfo ?? this.customerInfo,
     customerType: customerType ?? this.customerType,
@@ -76,9 +82,48 @@ class ApiResult {
     invoiceAmount: invoiceAmount ?? this.invoiceAmount,
     customerPoint: customerPoint ?? this.customerPoint,
     currency: currency ?? this.currency,
+    customerDiscount: customerDiscount ?? this.customerDiscount,
   );
 
   factory ApiResult.fromJson(Map<String, dynamic> json) => _$ApiResultFromJson(json);
 
   Map<String, dynamic> toJson() => _$ApiResultToJson(this);
+}
+
+@JsonSerializable(explicitToJson: true)
+class CustomerDiscount {
+  @JsonKey(name: "t_customer_id", fromJson: Functions.asString)
+  String? tCustomerId;
+  @JsonKey(name: "mItem", fromJson: Functions.asString)
+  String? mItem;
+  @JsonKey(name: "mCategory", fromJson: Functions.asString)
+  String? mCategory;
+  @JsonKey(name: "mDiscount", fromJson: Functions.asString)
+  String? mDiscount;
+  @JsonKey(name: "mExpiry_Date", fromJson: Functions.asString)
+  String? mExpiryDate;
+  @JsonKey(name: "mNon_Active", fromJson: Functions.asString)
+  String? mNonActive;
+
+  CustomerDiscount({this.tCustomerId, this.mItem, this.mCategory, this.mDiscount, this.mExpiryDate, this.mNonActive});
+
+  CustomerDiscount copyWith({
+    String? tCustomerId,
+    String? mItem,
+    String? mCategory,
+    String? mDiscount,
+    String? mExpiryDate,
+    String? mNonActive,
+  }) => CustomerDiscount(
+    tCustomerId: tCustomerId ?? this.tCustomerId,
+    mItem: mItem ?? this.mItem,
+    mCategory: mCategory ?? this.mCategory,
+    mDiscount: mDiscount ?? this.mDiscount,
+    mExpiryDate: mExpiryDate ?? this.mExpiryDate,
+    mNonActive: mNonActive ?? this.mNonActive,
+  );
+
+  factory CustomerDiscount.fromJson(Map<String, dynamic> json) => _$CustomerDiscountFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CustomerDiscountToJson(this);
 }

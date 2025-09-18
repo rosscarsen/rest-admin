@@ -143,6 +143,11 @@ class Functions {
     return eq.equals(normalizedSource, normalizedTarget);
   }
 
+  static bool deepEqual(dynamic a, dynamic b) {
+    const eq = DeepCollectionEquality();
+    return eq.equals(a, b);
+  }
+
   /// 转换为字符串
   static String? asString(Object? value) {
     if (value == null) return null;
@@ -173,8 +178,9 @@ class Functions {
   }
 
   /// 格式化金额
-  static String formatAmount(String? value) {
+  static String formatAmount(Object? value) {
+    final str = (asString(value) ?? "0").replaceAll(RegExp(r'[,\s]'), '');
     final formatter = NumberFormat("#,##0.00", "en_US");
-    return formatter.format(double.parse(value?.toString() ?? "0"));
+    return formatter.format(double.parse(str.toString()));
   }
 }

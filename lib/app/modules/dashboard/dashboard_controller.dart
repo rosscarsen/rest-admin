@@ -32,7 +32,7 @@ class DashboardController extends GetxController {
       search.putIfAbsent("startDate", () => formatter.format(DateTime.now().subtract(Duration(days: 7))));
       search.putIfAbsent("endDate", () => formatter.format(DateTime.now().subtract(Duration(days: 1))));
 
-      final DioApiResult dioApiResult = await apiClient.post(Config.chartData, data: search);
+      final DioApiResult dioApiResult = await apiClient.get(Config.chartData, data: search);
 
       if (dioApiResult.success == false) {
         CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);

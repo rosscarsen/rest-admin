@@ -399,7 +399,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
                     if (dioApiResult.success) {
                       if (dioApiResult.data != null) {
                         final data = jsonDecode(dioApiResult.data) as Map<String, dynamic>;
-                        logger.e([data["status"], data["status"].runtimeType]);
+                        //logger.e([data["status"], data["status"].runtimeType]);
                         if (data["status"] == 200) {
                           CustomDialog.successMessages(LocaleKeys.editSuccess.tr);
                           productSetMealSource.updateDataSource();

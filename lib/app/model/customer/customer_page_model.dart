@@ -1,9 +1,10 @@
 // To parse this JSON data, do
 //
-//     final customerPageModel = customerPageModelFromJson(jsonString);
+//      customerPageModel = customerPageModelFromJson(jsonString);
+
+import 'dart:convert';
 
 import 'package:json_annotation/json_annotation.dart';
-import 'dart:convert';
 
 import 'customer_data.dart';
 
@@ -16,11 +17,11 @@ String customerPageModelToJson(CustomerPageModel data) => json.encode(data.toJso
 @JsonSerializable()
 class CustomerPageModel {
   @JsonKey(name: "status")
-  final int? status;
+  int? status;
   @JsonKey(name: "msg")
-  final String? msg;
+  String? msg;
   @JsonKey(name: "apiResult")
-  final ApiResult? apiResult;
+  ApiResult? apiResult;
 
   CustomerPageModel({this.status, this.msg, this.apiResult});
 
@@ -35,17 +36,17 @@ class CustomerPageModel {
 @JsonSerializable()
 class ApiResult {
   @JsonKey(name: "total")
-  final int? total;
+  int? total;
   @JsonKey(name: "per_page")
-  final int? perPage;
+  int? perPage;
   @JsonKey(name: "current_page")
-  final int? currentPage;
+  int? currentPage;
   @JsonKey(name: "last_page")
-  final int? lastPage;
+  int? lastPage;
   @JsonKey(name: "data")
-  final List<CustomerData>? data;
+  List<CustomerData>? data;
   @JsonKey(name: "has_more")
-  final bool? hasMore;
+  bool? hasMore;
 
   ApiResult({this.total, this.perPage, this.currentPage, this.lastPage, this.data, this.hasMore});
 

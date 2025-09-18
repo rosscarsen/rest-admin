@@ -7,18 +7,26 @@ import 'package:get/get.dart';
 import '../../../../config.dart';
 import '../../../../model/currency/currency_data.dart';
 import '../../../../model/customer/customer_contact.dart';
+import '../../../../model/customer/customer_data.dart';
 import '../../../../model/customer/customer_edit_model.dart';
-import '../../../../model/customer/deposit_list.dart';
+import '../../../../model/customer/point_list.dart';
 import '../../../../service/dio_api_client.dart';
 import '../../../../service/dio_api_result.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/custom_dialog.dart';
+import '../../../../utils/functions.dart';
 import '../../../../utils/logger.dart';
 import '../customer_controller.dart';
-import 'deposit_data_source.dart';
+import '../customer_fields.dart';
+import 'contact_add_or_edit_view.dart';
+import 'contact_data_source.dart';
+import 'point_add_or_edit_view.dart';
+import 'point_data_source.dart';
 
 class CustomerEditController extends GetxController with GetSingleTickerProviderStateMixin {
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
+  final ScrollController scrollController = ScrollController();
+  static CustomerEditController get to => Get.find();
   // Dio客户端
   final ApiClient apiClient = ApiClient();
   final title = LocaleKeys.addCustomer.tr.obs;
@@ -27,12 +35,14 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
   String? id;
   // 加载标识
   final isLoading = true.obs;
-  late final TabController tabController = TabController(vsync: this, length: 3);
+  late TabController tabController;
   final tabIndex = 0.obs;
-  late DepositDetailDataSource depositDataSource;
-  List<DepositData> depositList = [];
+  late PointDetailDataSource pointDataSource;
+  late ContactDataSource contactDataSource;
+  List<PointData> pointList = [];
   List<CustomerContact> customerContactList = [];
   List<CurrencyData> currencyList = [];
+  List<CustomerDiscount> customerDiscountList = [];
   ApiResult? customerRet;
   final customerCtl = Get.find<CustomerController>();
 
@@ -41,26 +51,46 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
   final totalRecords = 0.obs;
   final customerTypeList = <String>[];
 
+  String? invoiceAmount;
+  String? get getInvoiceAmount => invoiceAmount;
+  set setInvoiceAmount(String invoiceAmount) {
+    this.invoiceAmount = Functions.formatAmount(invoiceAmount);
+    update(["amount"]);
+  }
+
+  String? customerPoint;
+  String? get getCustomerPoint => customerPoint;
+  set setCustomerPoint(String customerPoint) {
+    this.customerPoint = Functions.formatAmount(customerPoint);
+    update(["amount"]);
+  }
+
+  //记录编辑前的积分
+  String beforeEditPoint = "0.00";
+
   @override
   void onInit() {
     super.onInit();
+    final params = Get.parameters;
+
+    id = params['id'];
+    if (id != null) {
+      title.value = LocaleKeys.editCustomer.tr;
+      tabController = TabController(vsync: this, length: 3);
+    } else {
+      tabController = TabController(vsync: this, length: 2);
+    }
     tabController.addListener(() {
       tabIndex.value = tabController.index;
     });
-    final params = Get.parameters;
-    if (params.isNotEmpty) {
-      id = params['id'];
-      if (id != null) {
-        title.value = LocaleKeys.editCustomer.tr;
-      }
-    }
     updateDataGridSource();
   }
 
   /// 更新数据源
   void updateDataGridSource() {
     addOrEdit().then((_) {
-      depositDataSource = DepositDetailDataSource(this);
+      pointDataSource = PointDetailDataSource(this);
+      contactDataSource = ContactDataSource(this);
     });
   }
 
@@ -72,32 +102,68 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
   @override
   void onClose() {
     tabController.dispose();
+    scrollController.dispose();
     super.onClose();
+  }
+
+  /// 更新积分数据源
+  void updateDepositDataSource() {
+    totalPages.value = 0;
+    currentPage.value = 1;
+    getDepositList().then((_) {
+      pointDataSource = PointDetailDataSource(this);
+    });
+  }
+
+  /// 获取积分列表
+  Future<void> getDepositList() async {
+    isLoading(true);
+    pointList.clear();
+    try {
+      final DioApiResult pointResult = await apiClient.get(
+        Config.customerPoint,
+        data: {'page': currentPage.value, 'id': id},
+      );
+      if (pointResult.success) {
+        final pointData = pointResult.data;
+        if (pointData != null) {
+          final pointListModel = pointListFromJson(pointData);
+          if (pointListModel.status == 200) {
+            pointList.addAll(pointListModel.pointResult?.pointData ?? []);
+          }
+        }
+      }
+    } finally {
+      isLoading(false);
+    }
   }
 
   /// 添加或编辑
   Future<void> addOrEdit() async {
     isLoading(true);
     customerContactList.clear();
+    customerTypeList.clear();
+    currencyList.clear();
+    customerDiscountList.clear();
     customerRet = null;
-    depositList.clear();
+    pointList.clear();
 
     final futures = [
-      apiClient.post(Config.customerDeposit, data: {'page': currentPage.value, 'id': id}),
-      apiClient.post(Config.customerAddOrEdit, data: {'id': id}),
+      apiClient.get(Config.customerPoint, data: {'page': currentPage.value, 'id': id}),
+      apiClient.get(Config.customerAddOrEdit, data: {'id': id}),
     ];
     try {
       final results = await Future.wait(futures);
       // 积分列表
-      final DioApiResult depositResult = results[0];
-      if (depositResult.success) {
-        final depositData = depositResult.data;
-        if (depositData != null) {
-          final depositListModel = depositListFromJson(depositData);
-          if (depositListModel.status == 200) {
-            depositList.addAll(depositListModel.depositResult?.depositData ?? []);
-            totalPages.value = depositListModel.depositResult?.lastPage ?? 0;
-            totalRecords.value = depositListModel.depositResult?.total ?? 0;
+      final DioApiResult pointResult = results[0];
+      if (pointResult.success) {
+        final pointData = pointResult.data;
+        if (pointData != null) {
+          final pointListModel = pointListFromJson(pointData);
+          if (pointListModel.status == 200) {
+            pointList.addAll(pointListModel.pointResult?.pointData ?? []);
+            totalPages.value = pointListModel.pointResult?.lastPage ?? 0;
+            totalRecords.value = pointListModel.pointResult?.total ?? 0;
           }
         }
       }
@@ -120,40 +186,19 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
 
       final resultModel = customerEditModelFromJson(customerResult.data);
       customerRet = resultModel.apiResult;
-
-      customerTypeList
-        ..clear()
-        ..addAll(resultModel.apiResult?.customerType ?? []);
+      customerTypeList.addAll(customerRet?.customerType ?? []);
+      currencyList.addAll(customerRet?.currency ?? []);
+      customerContactList.addAll(customerRet?.customerContact ?? []);
+      customerDiscountList.addAll(customerRet?.customerDiscount ?? []);
+      setInvoiceAmount = customerRet?.invoiceAmount ?? "";
+      setCustomerPoint = customerRet?.customerPoint ?? "";
       final customerInfo = customerRet?.customerInfo;
-      currencyList
-        ..clear()
-        ..addAll(customerRet?.currency ?? []);
-      logger.f(customerInfo?.toJson());
+
+      //logger.f(customerInfo?.toJson());
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         formKey.currentState?.patchValue(customerInfo?.toJson() ?? {});
       });
-
-      // customerData = customerRet?.customerInfo ?? CustomerData();
-      //customerContactList.addAll(customerRet?.customerContact ?? []);
-
-      /* dataList
-        ..clear()
-        ..addAll(resultModel.remarksDetails ?? []);
-      formKey.currentState?.patchValue(
-        Map.fromEntries(
-          resultModel.toJson().entries.where((e) => e.value != null).map((e) {
-            final key = e.key;
-            var value = e.value;
-            if (['mVisible'].contains(key)) {
-              value = !(value == 1 || value == '1');
-            } else if (value != null) {
-              value = value.toString();
-            }
-            return MapEntry(key, value);
-          }),
-        ),
-      ); */
     } catch (e) {
       logger.i(e.toString());
       CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
@@ -163,93 +208,54 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
   }
 
   /// 检测页面数据是否发生变化
-  Object checkPageDataChange() {
-    if (formKey.currentState?.saveAndValidate() ?? false) {
-      /* final Map<String, dynamic> formData = {
-        ProductRemarksFields.mId: id,
-        ...formKey.currentState?.value ?? {},
-        ...{"remarksDetails": dataList.map((e) => e.toJson()).toList()},
-      };
-      formData.forEach((key, value) {
-        if (key == ProductRemarksFields.mVisible) {
-          formData[key] = value == "1" ? "0" : "1";
-        }
-      });
-      if (id != null) {
-        final oldRow = productRemarksCtl.dataList.firstWhereOrNull((e) => e.mId.toString() == id);
-        if (oldRow != null) {
-          final isSame = Functions.compareMap(oldRow.toJson(), formData);
-          if (isSame) {
-            return true;
-          }
-        }
-      } 
-      return formData;*/
-      return {};
-    } else {
-      return id == null ? true : false;
-    }
-  }
 
-  /// 食品备注保存
+  /// 保存
   Future<void> save() async {
-    //提交的时候去掉创建日期
+    CustomDialog.showLoading(LocaleKeys.saving.tr);
     if (formKey.currentState?.saveAndValidate() ?? false) {
-      logger.f(formKey.currentState?.value);
-    }
-    return;
-    final checkResult = checkPageDataChange();
-    if (checkResult is bool) {
-      if (checkResult) {
-        // 数据未发生变化
-        Get.back();
-      }
-      // 表单未验证通过
-      return;
-    }
-
-    if (checkResult is Map<String, dynamic>) {
-      CustomDialog.showLoading(id == null ? LocaleKeys.adding.tr : LocaleKeys.updating.tr);
+      final formData = Map<String, dynamic>.from(formKey.currentState?.value ?? {})
+        ..addAll({"T_Customer_ID": id})
+        ..addAll({"customerContact": customerContactList})
+        ..addAll({"customerDiscount": customerDiscountList});
+      logger.f(formData);
       try {
-        final DioApiResult dioApiResult = await apiClient.post(Config.productRemarkSave, data: checkResult);
+        final DioApiResult dioApiResult = await apiClient.post(Config.customerSave, data: formData);
         if (!dioApiResult.success) {
           CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
           return;
         }
         final data = json.decode(dioApiResult.data!) as Map<String, dynamic>;
-        /* switch (data["status"]) {
+        switch (data["status"]) {
           case 200:
             CustomDialog.successMessages(id == null ? LocaleKeys.addSuccess.tr : LocaleKeys.updateSuccess.tr);
             final apiResult = data["apiResult"];
             if (apiResult == null) {
-              productRemarksCtl.reloadData();
+              CustomerController.to.reloadData();
               Get.back();
               return;
             }
-            final resultModel = ProductRemarksInfo.fromJson(apiResult);
+            final resultModel = CustomerData.fromJson(apiResult);
+            final customerCtl = Get.find<CustomerController>();
             if (id == null) {
-              productRemarksCtl.dataList.insert(0, resultModel);
+              customerCtl.dataList.insert(0, resultModel);
             } else {
-              final index = productRemarksCtl.dataList.indexWhere((element) => element.mId.toString() == id);
+              final index = customerCtl.dataList.indexWhere((element) => element.tCustomerId.toString() == id);
               if (index != -1) {
-                productRemarksCtl.dataList[index] = resultModel;
+                customerCtl.dataList[index] = resultModel;
               }
             }
-            productRemarksCtl.dataSource.updateDataSource();
+            customerCtl.dataSource.updateDataSource();
             Get.back();
             break;
           case 201:
-            CustomDialog.errorMessages(
-              LocaleKeys.codeExists.trArgs([formKey.currentState?.fields[CustomerFields.mCode]?.value]),
-            );
+            CustomDialog.errorMessages(LocaleKeys.codeExists.trArgs([LocaleKeys.code.tr]));
             break;
           case 202:
-            CustomDialog.errorMessages(id == null ? LocaleKeys.addFailed.tr : LocaleKeys.updateFailed.tr);
+            CustomDialog.errorMessages(LocaleKeys.codeExists.trArgs([LocaleKeys.mobile.tr]));
             break;
           default:
             CustomDialog.errorMessages(LocaleKeys.unknownError.tr);
         }
-       */
       } catch (e) {
         CustomDialog.errorMessages(e.toString());
       } finally {
@@ -258,133 +264,120 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
     }
   }
 
-  /// 编辑详情
-  Future<void> editOrAddDetail({DepositData? row}) async {
-    /*  final formKey = GlobalKey<FormState>();
-    final bool isAdd = row == null;
-    row ??= RemarksDetail(mType: 0, mOverwrite: 0, mDetail: "", mPrice: "0.00");
-    final RemarksDetail oldRow = RemarksDetail.fromJson(row.toJson());
+  /// 编辑联络人
+  Future<void> editOrAddContact({CustomerContact? row}) async {
+    Get.dialog(Dialog(child: ContactAddOrEditView(contactData: row)));
+  }
+
+  /// 编辑积分
+  Future<void> editOrAddPoint({required PointData row, required bool isAdd}) async {
+    beforeEditPoint = "0.00";
+    beforeEditPoint = row.mAmount ?? "0.00";
     Get.dialog(
-      barrierDismissible: false,
-      Scaffold(
-        appBar: AppBar(
-          title: Text(isAdd ? LocaleKeys.addProductRemarksDetail.tr : LocaleKeys.editProductRemarksDetail.tr),
-          leading: BackButton(onPressed: () => Get.closeDialog()),
-        ),
-        persistentFooterButtons: [
-          //取消
-          FormHelper.cancelButton(onPressed: () => Get.closeDialog()),
-          //保存
-          FormHelper.saveButton(
-            onPressed: () async {
-              if (formKey.currentState?.validate() ?? false) {
-                final isSame = Functions.compareMap(row?.toJson() ?? {}, oldRow.toJson());
-                if (isSame) {
-                  Get.closeDialog();
-                  return;
-                }
-                if (isAdd) {
-                  final String mDetail = row?.mDetail?.trim() ?? "";
-                  if (dataList.any((element) => element.mDetail == mDetail)) {
-                    CustomDialog.errorMessages(LocaleKeys.codeExists.trArgs([mDetail]));
-                    return;
-                  }
-                }
-                if (isAdd && row != null) {
-                  final maxId = dataList.map((e) => e.mId).nonNulls.maxOrNull ?? 0;
-                  row.mId = maxId + 1;
-                  dataList.add(row);
-                } else {
-                  row?.copyFrom(row);
-                }
-                sortData();
-                Get.closeDialog();
-              }
-            },
-          ),
-        ],
-        body: Form(
-          key: formKey,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SingleChildScrollView(
-              child: FormHelper.buildGridRow(
-                children: [
-                  //明细
-                  FormHelper.buildGridCol(
-                    child: FormHelper.textInput(
-                      labelText: LocaleKeys.detail.tr,
-                      initialValue: row.mDetail ?? "",
-                      name: "mDetail",
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return LocaleKeys.thisFieldIsRequired.tr;
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {
-                        row?.mDetail = value?.trim() ?? "";
-                      },
-                    ),
-                  ),
-                  //类型
-                  FormHelper.buildGridCol(
-                    child: FormHelper.selectInput(
-                      labelText: LocaleKeys.type.tr,
-                      name: "mType",
-                      initialValue: row.mType,
-                      items: [
-                        DropdownMenuItem(value: 0, child: Text(LocaleKeys.addMoney.tr)),
-                        DropdownMenuItem(value: 1, child: Text("${LocaleKeys.discount.tr}(%)")),
-                        DropdownMenuItem(value: 2, child: Text("${LocaleKeys.multiple.tr}(*n)")),
-                      ],
-                      onChanged: (value) {
-                        row?.mType = value;
-                      },
-                      suffixIcon: SizedBox(
-                        width: 120,
-                        child: FormHelper.textInput(
-                          name: "mPrice",
-                          labelText: "",
-                          initialValue: row.mPrice,
-                          onChanged: (value) {
-                            row?.mPrice = value?.trim() ?? "0.00";
-                          },
-                        ),
-                      ),
-                    ),
-                  ),
-                  //分类
-                  FormHelper.buildGridCol(
-                    child: FormHelper.textInput(
-                      name: "mRemarkType",
-                      labelText: LocaleKeys.classification.tr,
-                      initialValue: row.mRemarkType?.toString() ?? "",
-                      onChanged: (value) {
-                        row?.mRemarkType = int.tryParse(value ?? "0");
-                      },
-                      keyboardType: TextInputType.number,
-                      maxDecimalDigits: 0,
-                    ),
-                  ),
-                  //覆盖
-                  FormHelper.buildGridCol(
-                    child: FormHelper.checkbox(
-                      labelText: LocaleKeys.overWrite.tr,
-                      name: "mOverwrite",
-                      initialValue: row.mOverwrite == 1,
-                      onChanged: (value) {
-                        row?.mOverwrite = value == true ? 1 : 0;
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+      Dialog(
+        child: PointAddOrEditView(pointData: row, isAdd: isAdd),
       ),
     );
-   */
+  }
+
+  /// 保存客户积分
+  Future<void> saveCustomerPoint({required PointData row, required bool isAdd}) async {
+    CustomDialog.showLoading(isAdd ? LocaleKeys.adding.tr : LocaleKeys.updating.tr);
+
+    try {
+      final DioApiResult dioApiResult = await apiClient.post(Config.customerPointSave, data: row.toJson());
+      logger.f(dioApiResult);
+      if (!dioApiResult.success) {
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        return;
+      }
+      final data = json.decode(dioApiResult.data!) as Map<String, dynamic>;
+      switch (data["status"]) {
+        case 200:
+          CustomDialog.successMessages(isAdd ? LocaleKeys.addSuccess.tr : LocaleKeys.updateSuccess.tr);
+          final apiResult = data["apiResult"];
+          final resultModel = PointData.fromJson(apiResult);
+          if (isAdd) {
+            pointList.insert(0, resultModel);
+          } else {
+            final index = pointList.indexWhere((element) => element.mRefNo == row.mRefNo);
+            if (index != -1) {
+              pointList[index] = resultModel;
+            }
+          }
+          pointDataSource.updateDataSource();
+          final oldPoint = double.tryParse(beforeEditPoint);
+          final newPoint = double.tryParse(resultModel.mAmount ?? "0.00");
+          final tempCustomerPoint = double.tryParse(getCustomerPoint?.replaceAll(RegExp(r'[,\s]'), '') ?? "0.00");
+          final newCustomerPoint = (tempCustomerPoint ?? 0.0) - (oldPoint ?? 0.0) + (newPoint ?? 0.0);
+          setCustomerPoint = newCustomerPoint.toStringAsFixed(2);
+          update(["amount"]);
+          break;
+        default:
+          CustomDialog.errorMessages(LocaleKeys.unknownError.tr);
+      }
+    } catch (e) {
+      CustomDialog.errorMessages(e.toString());
+    } finally {
+      CustomDialog.dismissDialog();
+    }
+  }
+
+  /// 删除客户积分
+  Future<void> deleteCustomerPoint({PointData? row}) async {
+    if (row == null) {
+      return;
+    }
+    try {
+      CustomDialog.showLoading(LocaleKeys.deleting.tr);
+      final DioApiResult dioApiResult = await apiClient.post(
+        Config.customerPointDelete,
+        data: {"t_customer_id": row.tCustomerId, "mItem": row.mItem},
+      );
+      if (!dioApiResult.success) {
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        return;
+      }
+      final data = json.decode(dioApiResult.data!) as Map<String, dynamic>;
+      switch (data["status"]) {
+        case 200:
+          CustomDialog.successMessages(LocaleKeys.deleteSuccess.tr);
+          pointList.remove(row);
+          pointDataSource.updateDataSource();
+          final oldPoint = double.tryParse(row.mAmount ?? "0.00");
+          final newCustomerPoint =
+              (double.tryParse(getCustomerPoint?.replaceAll(RegExp(r'[,\s]'), '') ?? "0.00") ?? 0.0) -
+              (oldPoint ?? 0.0);
+          setCustomerPoint = newCustomerPoint.toStringAsFixed(2);
+          update(["amount"]);
+          break;
+        default:
+          CustomDialog.errorMessages(LocaleKeys.unknownError.tr);
+      }
+    } catch (e) {
+      CustomDialog.errorMessages(e.toString());
+    } finally {
+      CustomDialog.dismissDialog();
+    }
+  }
+
+  /// 添加或修改客户折扣
+  Future<void> addOrEditCustomerDiscount({CustomerDiscount? row, bool isAdd = true}) async {
+    if (row == null) {
+      return;
+    }
+    if (isAdd) {
+      customerDiscountList.add(row);
+    }
+    update(["customerDiscountList"]);
+  }
+
+  /// 删除客户折扣
+  Future<void> deleteCustomerDiscount({CustomerDiscount? row}) async {
+    if (row == null) {
+      return;
+    }
+    customerDiscountList.remove(row);
+    update(["customerDiscountList"]);
   }
 }

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
-import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../../../model/customer/customer_edit_model.dart';
+import '../../../../model/customer/point_list.dart';
 import '../../../../translations/locale_keys.dart';
+import '../../../../utils/constants.dart';
 import '../../../../utils/form_help.dart';
 import '../../../../utils/progress_hub.dart';
 import '../../../../widgets/custom_cell.dart';
@@ -23,23 +25,6 @@ class CustomerEditView extends GetView<CustomerEditController> {
     return Obx(
       () => Scaffold(
         appBar: AppBar(
-          /* leading: BackButton(
-            onPressed: () async {
-              final checkResult = controller.checkPageDataChange();
-              if (checkResult is bool && checkResult == true) {
-                Get.back();
-                return;
-              }
-              if (checkResult is Map<String, dynamic>) {
-                CustomAlert.iosAlert(
-                  message: LocaleKeys.areYouLeave.tr,
-                  showCancel: true,
-                  confirmText: LocaleKeys.leave.tr,
-                  onConfirm: () => Get.back(),
-                );
-              }
-            },
-          ) ,*/
           title: Text(controller.title.value),
           centerTitle: true,
           actions: controller.isLoading.value
@@ -64,7 +49,7 @@ class CustomerEditView extends GetView<CustomerEditController> {
                       tabs: [
                         Tab(text: LocaleKeys.basicInfo.tr),
                         Tab(text: LocaleKeys.contact.tr),
-                        Tab(text: LocaleKeys.deposit.tr),
+                        if (controller.id != null) Tab(text: LocaleKeys.point.tr),
                       ],
                       labelColor: Colors.blueAccent,
                       indicatorColor: Colors.blueAccent,
@@ -81,15 +66,6 @@ class CustomerEditView extends GetView<CustomerEditController> {
 
         body: controller.hasPermission.value ? buildMain(context) : NoRecordPermission(msg: LocaleKeys.noPermission.tr),
         persistentFooterButtons: [
-          TextButton(
-            onPressed: () {
-              // print(controller.formKey.currentState?.fields);
-              controller.formKey.currentState?.fields[CustomerFields.mPhone_No]?.didChange(
-                PhoneNumber.parse("+8619587400420"),
-              );
-            },
-            child: Text("赋值"),
-          ),
           FormHelper.saveButton(
             onPressed: controller.isLoading.value || !controller.hasPermission.value ? null : () => controller.save(),
           ),
@@ -101,13 +77,13 @@ class CustomerEditView extends GetView<CustomerEditController> {
   Widget buildMain(BuildContext context) {
     return IndexedStack(
       index: controller.tabIndex.value.clamp(0, 2),
-      children: [_buildBasicInfo(context), _buildContact(context), _buildPoints(context)],
+      children: [_buildBasicInfo(context), _buildContact(context), if (controller.id != null) _buildPoints(context)],
     );
   }
 
   /// 基本信息
   Widget _buildBasicInfo(BuildContext context) {
-    bool visibility = false;
+    bool visibility = controller.id != null;
     return Skeletonizer(
       enabled: controller.isLoading.value,
       child: FormBuilder(
@@ -115,6 +91,9 @@ class CustomerEditView extends GetView<CustomerEditController> {
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(8.0),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               FormHelper.buildGridRow(
                 children: [
@@ -145,7 +124,11 @@ class CustomerEditView extends GetView<CustomerEditController> {
                   ),
                   //手机
                   FormHelper.buildGridCol(
-                    child: FormHelper.phoneInput(name: CustomerFields.mPhone_No, labelText: LocaleKeys.mobile.tr),
+                    child: FormHelper.phoneInput(
+                      name: CustomerFields.mPhone_No,
+                      labelText: LocaleKeys.mobile.tr,
+                      isRequired: true,
+                    ),
                   ),
                   //非启用状态
                   FormHelper.buildGridCol(
@@ -168,22 +151,26 @@ class CustomerEditView extends GetView<CustomerEditController> {
                     child: StatefulBuilder(
                       builder: (BuildContext context, setState) {
                         return FormBuilderTextField(
-                          readOnly: false,
+                          readOnly: visibility,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           decoration: InputDecoration(
                             hintText: LocaleKeys.password.tr,
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  visibility = true;
-                                  controller.formKey.currentState?.fields[CustomerFields.mPassword]?.didChange("");
-                                });
-                              },
-                              icon: Icon(Icons.edit),
-                            ),
+                            suffixIcon: controller.id == null
+                                ? null
+                                : IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        visibility = false;
+                                        controller.formKey.currentState?.fields[CustomerFields.mPassword]?.didChange(
+                                          "",
+                                        );
+                                      });
+                                    },
+                                    icon: Icon(Icons.edit),
+                                  ),
                           ),
                           name: CustomerFields.mPassword,
-                          obscureText: !visibility,
+                          obscureText: visibility,
                         );
                       },
                     ),
@@ -206,7 +193,6 @@ class CustomerEditView extends GetView<CustomerEditController> {
                     child: FormHelper.textInput(
                       name: CustomerFields.mAddress,
                       labelText: LocaleKeys.address.tr,
-                      keyboardType: TextInputType.streetAddress,
                       maxLines: 2,
                     ),
                   ),
@@ -281,12 +267,216 @@ class CustomerEditView extends GetView<CustomerEditController> {
                   FormHelper.buildGridCol(
                     child: FormHelper.textInput(
                       name: CustomerFields.mDeposit,
-                      labelText: LocaleKeys.deposit.tr,
+                      labelText: LocaleKeys.point.tr,
                       enabled: false,
+                    ),
+                  ),
+                  //支付條款
+                  FormHelper.buildGridCol(
+                    child: FormHelper.selectInput(
+                      initialValue: "",
+                      name: CustomerFields.mST_Payment_Term,
+                      labelText: LocaleKeys.paymentTerm.tr,
+                      items: [DropdownMenuItem(value: "", child: Text(""))],
+                    ),
+                  ),
+                  //婚姻狀況
+                  FormHelper.buildGridCol(
+                    child: FormHelper.selectInput(
+                      initialValue: "0",
+                      name: CustomerFields.mMarried,
+                      labelText: LocaleKeys.maritalStatus.tr,
+                      items: [
+                        DropdownMenuItem(value: "0", child: Text(LocaleKeys.unmarried.tr)),
+                        DropdownMenuItem(value: "1", child: Text(LocaleKeys.married.tr)),
+                      ],
+                    ),
+                  ),
+                  // 价格条款
+                  FormHelper.buildGridCol(
+                    child: FormHelper.textInput(
+                      initialValue: "",
+                      name: CustomerFields.mST_Price_Term,
+                      labelText: LocaleKeys.priceTerm.tr,
+                    ),
+                  ),
+                  //信用额
+                  FormHelper.buildGridCol(
+                    child: FormHelper.textInput(
+                      name: CustomerFields.mST_Credit_Limit,
+                      labelText: LocaleKeys.creditLimit.tr,
+                      keyboardType: TextInputType.number,
+                      maxDecimalDigits: 0,
+                    ),
+                  ),
+                  // 生日
+                  FormHelper.buildGridCol(
+                    child: FormHelper.dateInput(
+                      name: CustomerFields.mBirthday_Year,
+                      labelText: LocaleKeys.birthday.tr,
+                      inputType: DateInputType.date,
+                    ),
+                  ),
+                  //支付方式
+                  FormHelper.buildGridCol(
+                    child: FormHelper.selectInput(
+                      name: CustomerFields.mST_Payment_Method,
+                      labelText: LocaleKeys.paymentMethod.tr,
+                      initialValue: "0",
+                      items: [
+                        DropdownMenuItem(value: "0", child: Text(LocaleKeys.actualDay.tr)),
+                        DropdownMenuItem(value: "1", child: Text(LocaleKeys.monthly.tr)),
+                      ],
+                    ),
+                  ),
+                  // 支付日数
+                  FormHelper.buildGridCol(
+                    child: FormHelper.textInput(
+                      name: CustomerFields.mST_Payment_Days,
+                      labelText: LocaleKeys.paymentDays.tr,
+                      keyboardType: TextInputType.number,
+                      maxDecimalDigits: 0,
                     ),
                   ),
                 ],
               ),
+              Divider(indent: 4, endIndent: 4),
+              FormHelper.buildGridRow(
+                children: [
+                  // 折扣
+                  FormHelper.buildGridCol(
+                    child: FormHelper.radioGroup(
+                      name: CustomerFields.mSimple_Discount,
+                      labelText: LocaleKeys.discount.tr,
+                      decoration: InputDecoration(
+                        label: Text(LocaleKeys.discount.tr),
+                        border: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        errorBorder: InputBorder.none,
+                        disabledBorder: InputBorder.none,
+                        focusedErrorBorder: InputBorder.none,
+                        contentPadding: EdgeInsets.zero,
+                      ),
+                      initialValue: "0",
+                      options: [
+                        FormBuilderFieldOption(value: "0", child: Text(LocaleKeys.no.tr)),
+                        FormBuilderFieldOption(value: "1", child: Text(LocaleKeys.yes.tr)),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              // 折扣 table
+              Scrollbar(
+                controller: controller.scrollController,
+                thumbVisibility: true,
+                child: SingleChildScrollView(
+                  controller: controller.scrollController,
+                  scrollDirection: Axis.horizontal,
+                  child: GetBuilder<CustomerEditController>(
+                    init: CustomerEditController(),
+                    initState: (_) {},
+                    id: "customerDiscountList",
+                    builder: (controller) {
+                      return DataTable(
+                        border: TableBorder.all(
+                          color: const Color.fromARGB(255, 220, 220, 221),
+                          width: 1.0,
+                          style: BorderStyle.solid,
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        columns: [
+                          DataColumn(label: Text(LocaleKeys.category.tr)),
+                          DataColumn(label: Text(LocaleKeys.discount.tr)),
+                          DataColumn(label: Text(LocaleKeys.expiredDate.tr)),
+                          DataColumn(label: Text(LocaleKeys.nonEnable.tr)),
+                          DataColumn(
+                            label: Row(
+                              spacing: 8.0,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(LocaleKeys.operation.tr),
+                                IconButton(
+                                  tooltip: LocaleKeys.add.tr,
+                                  icon: Icon(Icons.add, color: AppColors.addColor),
+                                  onPressed: () {
+                                    _buildCustomerDiscount(context, null);
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                        rows: controller.customerDiscountList
+                            .map(
+                              (e) => DataRow(
+                                cells: [
+                                  DataCell(Text(e.mCategory ?? "")),
+                                  DataCell(Text(e.mDiscount ?? "")),
+                                  DataCell(Text(e.mExpiryDate ?? "")),
+                                  DataCell(Text((e.mNonActive ?? "") == "0" ? LocaleKeys.no.tr : LocaleKeys.yes.tr)),
+                                  DataCell(
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        IconButton(
+                                          tooltip: LocaleKeys.edit.tr,
+                                          icon: Icon(Icons.edit, color: AppColors.editColor),
+                                          onPressed: () {
+                                            _buildCustomerDiscount(context, e);
+                                          },
+                                        ),
+                                        IconButton(
+                                          tooltip: LocaleKeys.delete.tr,
+                                          icon: Icon(Icons.delete, color: AppColors.deleteColor),
+                                          onPressed: () {
+                                            controller.deleteCustomerDiscount(row: e);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                            .toList(),
+                      );
+                    },
+                  ),
+                ),
+              ),
+
+              FormHelper.buildGridRow(
+                children: [
+                  FormHelper.buildGridCol(
+                    sm: 6,
+                    md: 6,
+                    lg: 6,
+                    xl: 6,
+                    child: FormHelper.textInput(
+                      name: CustomerFields.mCustomer_Note,
+                      labelText: "${LocaleKeys.remarks.tr}1",
+                      maxLines: 2,
+                    ),
+                  ),
+                  FormHelper.buildGridCol(
+                    sm: 6,
+                    md: 6,
+                    lg: 6,
+                    xl: 6,
+                    child: FormHelper.textInput(
+                      name: CustomerFields.mRemarks,
+                      labelText: "${LocaleKeys.remarks.tr}2",
+                      maxLines: 2,
+                    ),
+                  ),
+                ],
+              ).paddingOnly(top: 10.0),
             ],
           ),
         ),
@@ -294,9 +484,71 @@ class CustomerEditView extends GetView<CustomerEditController> {
     );
   }
 
+  /// 编辑或新增客户折扣
+  Future _buildCustomerDiscount(BuildContext context, CustomerDiscount? row) {
+    final bool isNew = row == null;
+    row ??= CustomerDiscount();
+    return Get.dialog(
+      AlertDialog(
+        title: Text(isNew ? LocaleKeys.add.tr : LocaleKeys.edit.tr),
+        content: SingleChildScrollView(
+          child: Column(
+            spacing: 8.0,
+            children: [
+              //类目
+              FormHelper.textInput(
+                initialValue: row.mCategory ?? "",
+                name: "mCategory",
+                labelText: LocaleKeys.category.tr,
+                onChanged: (v) => row?.mCategory = v,
+              ),
+              //折扣
+              FormHelper.textInput(
+                initialValue: row.mDiscount ?? "",
+                name: "mDiscount",
+                labelText: LocaleKeys.discount.tr,
+                keyboardType: TextInputType.number,
+                maxDecimalDigits: 2,
+                onChanged: (v) => row?.mDiscount = v,
+              ),
+              //过期日
+              FormHelper.dateInput(
+                initialValue: row.mExpiryDate ?? "",
+                name: "mExpiryDate",
+                labelText: LocaleKeys.expiredDate.tr,
+                onChanged: (v) => row?.mExpiryDate = v,
+              ),
+              //非启用
+              FormHelper.selectInput(
+                initialValue: row.mNonActive ?? "0",
+                name: "mNonActive",
+                labelText: LocaleKeys.nonEnable.tr,
+                items: [
+                  DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                  DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+                ],
+                onChanged: (v) => row?.mNonActive = v,
+              ),
+            ],
+          ),
+        ),
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          ElevatedButton(onPressed: () => Get.closeDialog(), child: Text(LocaleKeys.cancel.tr)),
+          ElevatedButton(
+            onPressed: () async {
+              Get.closeDialog();
+              controller.addOrEditCustomerDiscount(row: row, isAdd: isNew);
+            },
+            child: Text(LocaleKeys.save.tr),
+          ),
+        ],
+      ),
+    );
+  }
+
   /// 联络人
   Widget _buildContact(BuildContext context) {
-    return Container();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(
@@ -304,7 +556,7 @@ class CustomerEditView extends GetView<CustomerEditController> {
         children: [
           Align(
             alignment: Alignment.centerRight,
-            child: ElevatedButton(onPressed: () => controller.editOrAddDetail(), child: Text(LocaleKeys.add.tr)),
+            child: ElevatedButton(onPressed: () => controller.editOrAddContact(), child: Text(LocaleKeys.add.tr)),
           ),
           Expanded(
             child: ProgressHUD(
@@ -318,40 +570,34 @@ class CustomerEditView extends GetView<CustomerEditController> {
                         gridLinesVisibility: GridLinesVisibility.both,
                         headerGridLinesVisibility: GridLinesVisibility.both,
                         columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
+                        columnWidthMode: ColumnWidthMode.auto,
                         showCheckboxColumn: false,
                         selectionMode: SelectionMode.none,
-                        source: controller.depositDataSource,
+                        source: controller.contactDataSource,
                         columns: <GridColumn>[
                           GridColumn(
-                            columnName: 'mSort',
-                            label: CustomCell(data: LocaleKeys.sort.tr),
+                            columnName: 'mName',
+                            label: CustomCell(data: LocaleKeys.name.tr),
                           ),
                           GridColumn(
-                            columnName: 'mDetail',
-                            label: CustomCell(data: LocaleKeys.detail.tr),
+                            columnName: 'mEmail',
+                            label: CustomCell(data: LocaleKeys.email.tr),
                             columnWidthMode: ColumnWidthMode.fill,
                             maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
                           ),
                           GridColumn(
-                            columnName: 'mType',
-                            label: CustomCell(data: LocaleKeys.type.tr),
+                            columnName: 'mMobilePhone',
+                            label: CustomCell(data: LocaleKeys.mobile.tr),
+                            columnWidthMode: ColumnWidthMode.fill,
+                            maximumWidth: context.isPhoneOrLess ? 500 : double.nan,
                           ),
                           GridColumn(
-                            columnName: 'addMoney',
-                            label: CustomCell(data: "${LocaleKeys.addMoney.tr}/${LocaleKeys.discount.tr}"),
+                            columnName: 'mFax',
+                            label: CustomCell(data: LocaleKeys.fax.tr),
                           ),
                           GridColumn(
-                            columnName: 'classification',
-                            label: CustomCell(data: LocaleKeys.classification.tr),
-                          ),
-                          GridColumn(
-                            columnName: 'overWrite',
-                            label: CustomCell(data: LocaleKeys.overWrite.tr),
-                          ),
-                          GridColumn(
-                            width: 100,
-                            columnName: 'move',
-                            label: CustomCell(data: LocaleKeys.move.tr),
+                            columnName: 'mDepartment',
+                            label: CustomCell(data: LocaleKeys.department.tr),
                           ),
                           GridColumn(
                             allowSorting: false,
@@ -381,9 +627,33 @@ class CustomerEditView extends GetView<CustomerEditController> {
       child: Column(
         spacing: 8.0,
         children: [
-          Align(
-            alignment: Alignment.centerRight,
-            child: ElevatedButton(onPressed: () => controller.editOrAddDetail(), child: Text(LocaleKeys.add.tr)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              DefaultTextStyle(
+                style: TextStyle(fontSize: 18, color: Colors.grey.shade700, fontWeight: FontWeight.w500),
+                child: GetBuilder<CustomerEditController>(
+                  init: CustomerEditController(),
+                  id: "amount",
+                  initState: (_) {},
+                  builder: (controller) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("${LocaleKeys.invoiceAmount.tr} : ${controller.getInvoiceAmount}"),
+                        Text("${LocaleKeys.point.tr} : ${controller.getCustomerPoint ?? ""}"),
+                      ],
+                    );
+                  },
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () => controller.editOrAddPoint(row: PointData(tCustomerId: controller.id), isAdd: true),
+                child: Text(LocaleKeys.add.tr),
+              ),
+            ],
           ),
           Expanded(
             child: ProgressHUD(
@@ -400,7 +670,7 @@ class CustomerEditView extends GetView<CustomerEditController> {
                         columnWidthMode: ColumnWidthMode.fill,
                         showCheckboxColumn: false,
                         selectionMode: SelectionMode.none,
-                        source: controller.depositDataSource,
+                        source: controller.pointDataSource,
                         columns: <GridColumn>[
                           GridColumn(
                             columnName: 'mRef_No',
@@ -413,7 +683,7 @@ class CustomerEditView extends GetView<CustomerEditController> {
                           ),
                           GridColumn(
                             columnName: 'mAmount',
-                            label: CustomCell(data: LocaleKeys.deposit.tr),
+                            label: CustomCell(data: LocaleKeys.point.tr),
                           ),
                           GridColumn(
                             columnName: 'mRemark',
@@ -441,7 +711,7 @@ class CustomerEditView extends GetView<CustomerEditController> {
             currentPage: controller.currentPage,
             onPageChanged: (int pageNumber) {
               controller.currentPage.value = pageNumber;
-              controller.updateDataGridSource();
+              controller.updateDepositDataSource();
             },
           ),
         ],

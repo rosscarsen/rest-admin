@@ -32,10 +32,13 @@ ApiResult _$ApiResultFromJson(Map<String, dynamic> json) => ApiResult(
   customerContact: (json['customerContact'] as List<dynamic>?)
       ?.map((e) => CustomerContact.fromJson(e as Map<String, dynamic>))
       .toList(),
-  invoiceAmount: json['invoiceAmount'] as String?,
-  customerPoint: json['customerPoint'] as String?,
+  invoiceAmount: Functions.formatAmount(json['invoiceAmount']),
+  customerPoint: Functions.formatAmount(json['customerPoint']),
   currency: (json['currency'] as List<dynamic>?)
       ?.map((e) => CurrencyData.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  customerDiscount: (json['customerDiscount'] as List<dynamic>?)
+      ?.map((e) => CustomerDiscount.fromJson(e as Map<String, dynamic>))
       .toList(),
 );
 
@@ -46,4 +49,27 @@ Map<String, dynamic> _$ApiResultToJson(ApiResult instance) => <String, dynamic>{
   'invoiceAmount': instance.invoiceAmount,
   'customerPoint': instance.customerPoint,
   'currency': instance.currency?.map((e) => e.toJson()).toList(),
+  'customerDiscount': instance.customerDiscount
+      ?.map((e) => e.toJson())
+      .toList(),
 };
+
+CustomerDiscount _$CustomerDiscountFromJson(Map<String, dynamic> json) =>
+    CustomerDiscount(
+      tCustomerId: Functions.asString(json['t_customer_id']),
+      mItem: Functions.asString(json['mItem']),
+      mCategory: Functions.asString(json['mCategory']),
+      mDiscount: Functions.asString(json['mDiscount']),
+      mExpiryDate: Functions.asString(json['mExpiry_Date']),
+      mNonActive: Functions.asString(json['mNon_Active']),
+    );
+
+Map<String, dynamic> _$CustomerDiscountToJson(CustomerDiscount instance) =>
+    <String, dynamic>{
+      't_customer_id': instance.tCustomerId,
+      'mItem': instance.mItem,
+      'mCategory': instance.mCategory,
+      'mDiscount': instance.mDiscount,
+      'mExpiry_Date': instance.mExpiryDate,
+      'mNon_Active': instance.mNonActive,
+    };
