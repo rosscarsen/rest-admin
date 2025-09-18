@@ -107,7 +107,7 @@ class CustomerView extends GetView<CustomerController> {
             xl: 12,
             child: Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
-              alignment: context.isPhoneOrLess ? WrapAlignment.start : WrapAlignment.end,
+              alignment: WrapAlignment.end,
               spacing: 5,
               runSpacing: 5,
               children: [
