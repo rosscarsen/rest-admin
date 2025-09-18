@@ -347,4 +347,11 @@ abstract class LocaleKeys {
   static const String tel = "tel";
   static const String pleaseEnterAValidEmailAddress = "pleaseEnterAValidEmailAddress";
   static const String invoiceAmount = "invoiceAmount";
+  static const String other = "Other";
+  static const String revised = "revised";
+  static const String receiptNo = "receiptNo";
+  static const String flag = "flag";
+  static const String posting = "posting";
+  static const String supplierCode = "supplierCode";
+  static const String supplierName = "supplierName";
 }

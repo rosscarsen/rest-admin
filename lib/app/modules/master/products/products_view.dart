@@ -53,34 +53,6 @@ class ProductsView extends GetView<ProductsController> {
       }),
       title: LocaleKeys.product.tr,
     );
-    /* Scaffold(
-      appBar: AppBar(
-        title: Text(LocaleKeys.product.tr),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: controller.hasPermission.value ? () => controller.reloadData() : null,
-          ),
-        ],
-      ),
-      body: Obx(() {
-        return Column(
-          spacing: Config.defaultGap,
-          children: <Widget>[
-            _buildToolBar(context),
-            Expanded(child: ProgressHUD(child: controller.isLoading.value ? null : _buildDataGrid(context))),
-            DataPager(
-              totalPages: controller.totalPages,
-              currentPage: controller.currentPage,
-              onPageChanged: (int pageNumber) {
-                controller.currentPage.value = pageNumber;
-                controller.updateDataGridSource();
-              },
-            ),
-          ],
-        ).paddingAll(Config.defaultPadding);
-      }),
-    ); */
   }
 
   //toolbar

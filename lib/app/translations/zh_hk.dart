@@ -347,4 +347,11 @@ Map<String, String> zhHK = {
   LocaleKeys.tel: "電話",
   LocaleKeys.pleaseEnterAValidEmailAddress: "請輸入有效的郵箱地址",
   LocaleKeys.invoiceAmount: "發票金額",
+  LocaleKeys.other: "其它",
+  LocaleKeys.revised: "修訂",
+  LocaleKeys.receiptNo: "收貨單編號",
+  LocaleKeys.flag: "標記",
+  LocaleKeys.posting: "過賬",
+  LocaleKeys.supplierCode: "供應商代碼",
+  LocaleKeys.supplierName: "供應商名稱",
 };

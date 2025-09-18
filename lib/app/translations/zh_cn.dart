@@ -347,4 +347,11 @@ Map<String, String> get zhCN => {
   LocaleKeys.tel: "电话",
   LocaleKeys.pleaseEnterAValidEmailAddress: "请输入有效的邮箱地址",
   LocaleKeys.invoiceAmount: "发票金额",
+  LocaleKeys.other: "其它",
+  LocaleKeys.revised: "修订",
+  LocaleKeys.receiptNo: "收货单编号",
+  LocaleKeys.flag: "标记",
+  LocaleKeys.posting: "过账",
+  LocaleKeys.supplierCode: "供应商代码",
+  LocaleKeys.supplierName: "供应商名称",
 };

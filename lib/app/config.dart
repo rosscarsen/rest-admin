@@ -159,6 +159,20 @@ class Config {
   static String customerPointDelete = "/Master/customerPointDelete";
 
   // ==========================================================================
+  // 供应商品发票
+  // ==========================================================================
+  // 发票列表
+  static String supplierInvoice = "/SupplierInvoice/invoice";
+  // 发票添加或编辑
+  static String supplierInvoiceAddOrEdit = "/SupplierInvoice/invoiceAddOrEdit";
+  // 发票保存
+  static String supplierInvoiceSave = "/SupplierInvoice/invoiceSave";
+  // 发票删除
+  static String supplierInvoiceDelete = "/SupplierInvoice/invoiceDelete";
+  // 过账
+  static String supplierInvoicePosting = "/SupplierInvoice/invoicePosting";
+
+  // ==========================================================================
   // 打开选择
   // ==========================================================================
 

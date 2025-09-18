@@ -347,4 +347,11 @@ Map<String, String> get enUS => {
   LocaleKeys.tel: "Tel",
   LocaleKeys.pleaseEnterAValidEmailAddress: "Please enter a valid email address",
   LocaleKeys.invoiceAmount: "Invoice Amount",
+  LocaleKeys.other: "Other",
+  LocaleKeys.revised: "Revised",
+  LocaleKeys.receiptNo: "Receipt No.",
+  LocaleKeys.flag: "Flag",
+  LocaleKeys.posting: "Posting",
+  LocaleKeys.supplierCode: "Supplier Code",
+  LocaleKeys.supplierName: "Supplier Name",
 };
