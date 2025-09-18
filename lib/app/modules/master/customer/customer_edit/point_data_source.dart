@@ -6,7 +6,6 @@ import '../../../../model/customer/point_list.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/constants.dart';
 import '../../../../utils/custom_alert.dart';
-import '../../../../utils/custom_dialog.dart';
 import '../../../../widgets/custom_cell.dart';
 import 'customer_edit_controller.dart';
 

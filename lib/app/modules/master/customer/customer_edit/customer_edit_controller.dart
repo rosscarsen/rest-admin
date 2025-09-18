@@ -17,7 +17,6 @@ import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/functions.dart';
 import '../../../../utils/logger.dart';
 import '../customer_controller.dart';
-import '../customer_fields.dart';
 import 'contact_add_or_edit_view.dart';
 import 'contact_data_source.dart';
 import 'point_add_or_edit_view.dart';
