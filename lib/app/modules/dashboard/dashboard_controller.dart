@@ -17,7 +17,7 @@ class DashboardController extends GetxController {
   final isLoading = true.obs;
   Map<String, dynamic> search = {};
   RxBool hasPermission = true.obs;
-  final apiResult = ApiResult().obs;
+  final apiResult = ChartResult().obs;
   @override
   void onInit() {
     getChartData();
@@ -26,7 +26,7 @@ class DashboardController extends GetxController {
 
   Future<void> getChartData() async {
     isLoading(true);
-    apiResult.value = ApiResult();
+    apiResult.value = ChartResult();
     try {
       final formatter = DateFormat('yyyy-MM-dd');
       search.putIfAbsent("startDate", () => formatter.format(DateTime.now().subtract(Duration(days: 7))));
@@ -47,7 +47,7 @@ class DashboardController extends GetxController {
       final chartModel = chartModelFromJson(dioApiResult.data!);
 
       if (chartModel.status == 200) {
-        apiResult.value = chartModel.apiResult ?? ApiResult();
+        apiResult.value = chartModel.apiResult ?? ChartResult();
       } else {
         CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
       }

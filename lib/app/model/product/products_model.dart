@@ -10,14 +10,14 @@ ProductsModel productsModelFromJson(String str) => ProductsModel.fromJson(json.d
 String productsModelToJson(ProductsModel data) => json.encode(data.toJson());
 
 class ProductsModel {
-  ApiResult? apiResult;
+  ProductsResult? apiResult;
   String? msg;
   int? status;
 
   ProductsModel({this.apiResult, this.msg, this.status});
 
   factory ProductsModel.fromJson(Map<String, dynamic> json) => ProductsModel(
-    apiResult: json["apiResult"] == null ? null : ApiResult.fromJson(json["apiResult"]),
+    apiResult: json["apiResult"] == null ? null : ProductsResult.fromJson(json["apiResult"]),
     msg: json["msg"],
     status: json["status"],
   );
@@ -28,7 +28,7 @@ class ProductsModel {
   String toString() => 'ProductsModel(data: $apiResult, msg: $msg, status: $status)';
 }
 
-class ApiResult {
+class ProductsResult {
   int? total;
   int? perPage;
   int? currentPage;
@@ -36,9 +36,9 @@ class ApiResult {
   List<ProductData>? productData;
   bool? hasMore;
 
-  ApiResult({this.total, this.perPage, this.currentPage, this.lastPage, this.productData, this.hasMore});
+  ProductsResult({this.total, this.perPage, this.currentPage, this.lastPage, this.productData, this.hasMore});
 
-  factory ApiResult.fromJson(Map<String, dynamic> json) => ApiResult(
+  factory ProductsResult.fromJson(Map<String, dynamic> json) => ProductsResult(
     total: json["total"],
     perPage: json["per_page"],
     currentPage: json["current_page"],

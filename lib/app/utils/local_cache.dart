@@ -12,7 +12,7 @@ class LocalCache {
 
     if (!isLogin || loginInfo.isEmpty) return {};
 
-    ApiResult apiResult = ApiResult.fromJson(loginInfo);
+    LoginResult apiResult = LoginResult.fromJson(loginInfo);
     if ((apiResult.company ?? "").isEmpty || apiResult.dsn == null) {
       return {};
     }

@@ -26,11 +26,11 @@ class CustomerEditModel {
   @JsonKey(name: "msg")
   String? msg;
   @JsonKey(name: "apiResult")
-  ApiResult? apiResult;
+  CustomerEditResult? apiResult;
 
   CustomerEditModel({this.status, this.msg, this.apiResult});
 
-  CustomerEditModel copyWith({int? status, String? msg, ApiResult? apiResult}) =>
+  CustomerEditModel copyWith({int? status, String? msg, CustomerEditResult? apiResult}) =>
       CustomerEditModel(status: status ?? this.status, msg: msg ?? this.msg, apiResult: apiResult ?? this.apiResult);
 
   factory CustomerEditModel.fromJson(Map<String, dynamic> json) => _$CustomerEditModelFromJson(json);
@@ -39,7 +39,7 @@ class CustomerEditModel {
 }
 
 @JsonSerializable(explicitToJson: true)
-class ApiResult {
+class CustomerEditResult {
   @JsonKey(name: "customerInfo")
   CustomerData? customerInfo;
   @JsonKey(name: "customerType")
@@ -55,7 +55,7 @@ class ApiResult {
   @JsonKey(name: "customerDiscount")
   List<CustomerDiscount>? customerDiscount;
 
-  ApiResult({
+  CustomerEditResult({
     this.customerInfo,
     this.customerType,
     this.customerContact,
@@ -65,7 +65,7 @@ class ApiResult {
     this.customerDiscount,
   });
 
-  ApiResult copyWith({
+  CustomerEditResult copyWith({
     CustomerData? customerInfo,
     List<String>? customerType,
     dynamic customerContact,
@@ -75,7 +75,7 @@ class ApiResult {
     List<PayMethodData>? payment,
     PointList? pointList,
     List<CustomerDiscount>? customerDiscount,
-  }) => ApiResult(
+  }) => CustomerEditResult(
     customerInfo: customerInfo ?? this.customerInfo,
     customerType: customerType ?? this.customerType,
     customerContact: customerContact ?? this.customerContact,
@@ -85,7 +85,7 @@ class ApiResult {
     customerDiscount: customerDiscount ?? this.customerDiscount,
   );
 
-  factory ApiResult.fromJson(Map<String, dynamic> json) => _$ApiResultFromJson(json);
+  factory CustomerEditResult.fromJson(Map<String, dynamic> json) => _$ApiResultFromJson(json);
 
   Map<String, dynamic> toJson() => _$ApiResultToJson(this);
 }

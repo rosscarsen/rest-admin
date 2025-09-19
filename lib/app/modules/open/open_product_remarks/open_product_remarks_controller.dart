@@ -72,7 +72,7 @@ class OpenProductRemarksController extends GetxController {
       }
       final productRemarksModel = productRemarksModelFromJson(dioApiResult.data!);
       if (productRemarksModel.status == 200) {
-        final ApiResult? apiResult = productRemarksModel.apiResult;
+        final ProductRemarksResult? apiResult = productRemarksModel.apiResult;
         DataList = apiResult?.productRemarksInfo ?? [];
         totalPages.value = apiResult?.lastPage ?? 0;
         totalRecords.value = apiResult?.total ?? 0;

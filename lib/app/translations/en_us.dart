@@ -352,6 +352,9 @@ Map<String, String> get enUS => {
   LocaleKeys.receiptNo: "Receipt No.",
   LocaleKeys.flag: "Flag",
   LocaleKeys.posting: "Posting",
+  LocaleKeys.cancelPosting: "Cancel Posting",
   LocaleKeys.supplierCode: "Supplier Code",
   LocaleKeys.supplierName: "Supplier Name",
+  LocaleKeys.postedDataCannotBeDelete: "Posted data cannot be delete!",
+  LocaleKeys.operationInProgressPleaseWait: "Operation in progress, please wait...",
 };

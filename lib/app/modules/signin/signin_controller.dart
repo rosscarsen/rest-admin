@@ -43,7 +43,7 @@ class SigninController extends GetxController with GetSingleTickerProviderStateM
   //获取本地存储的用户信息
   void getLoginInfo() {
     var loginUserJson = storageManage.read(Config.localStorageLoginInfo);
-    ApiResult? loginUser = loginUserJson != null ? ApiResult.fromJson(loginUserJson) : null;
+    LoginResult? loginUser = loginUserJson != null ? LoginResult.fromJson(loginUserJson) : null;
 
     if (loginUser != null && _formKey.currentState != null) {
       _formKey.currentState!.fields['company']?.didChange(loginUser.company);

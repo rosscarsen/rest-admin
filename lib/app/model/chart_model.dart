@@ -16,20 +16,20 @@ String chartModelToJson(ChartModel data) => json.encode(data.toJson());
 class ChartModel {
   int? status;
   String? msg;
-  ApiResult? apiResult;
+  ChartResult? apiResult;
 
   ChartModel({this.status, this.msg, this.apiResult});
 
   factory ChartModel.fromJson(Map<String, dynamic> json) => ChartModel(
     status: json["status"],
     msg: json["msg"],
-    apiResult: json["apiResult"] == null ? null : ApiResult.fromJson(json["apiResult"]),
+    apiResult: json["apiResult"] == null ? null : ChartResult.fromJson(json["apiResult"]),
   );
 
   Map<String, dynamic> toJson() => {"status": status, "msg": msg, "apiResult": apiResult?.toJson()};
 }
 
-class ApiResult {
+class ChartResult {
   List<SalePlayRatio>? salePlayRatio;
   List<SevenSale>? sevenSale;
   ThreeRatio? threeRatio;
@@ -37,7 +37,7 @@ class ApiResult {
   List<TopSaleQty>? topSaleQty;
   List<TopSaleAmount>? topSaleAmount;
 
-  ApiResult({
+  ChartResult({
     this.salePlayRatio,
     this.sevenSale,
     this.threeRatio,
@@ -46,7 +46,7 @@ class ApiResult {
     this.topSaleAmount,
   });
 
-  factory ApiResult.fromJson(Map<String, dynamic> json) => ApiResult(
+  factory ChartResult.fromJson(Map<String, dynamic> json) => ChartResult(
     salePlayRatio: json["salePlayRatio"] == null
         ? []
         : List<SalePlayRatio>.from(json["salePlayRatio"]!.map((x) => SalePlayRatio.fromJson(x))),

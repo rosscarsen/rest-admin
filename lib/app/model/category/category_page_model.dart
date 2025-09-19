@@ -13,23 +13,23 @@ String CategoryPageModelToJson(CategoryPageModel data) => json.encode(data.toJso
 class CategoryPageModel {
   final int? status;
   final String? msg;
-  final ApiResult? apiResult;
+  final CategoryResult? apiResult;
 
   CategoryPageModel({this.status, this.msg, this.apiResult});
 
-  CategoryPageModel copyWith({int? status, String? msg, ApiResult? apiResult}) =>
+  CategoryPageModel copyWith({int? status, String? msg, CategoryResult? apiResult}) =>
       CategoryPageModel(status: status ?? this.status, msg: msg ?? this.msg, apiResult: apiResult ?? this.apiResult);
 
   factory CategoryPageModel.fromJson(Map<String, dynamic> json) => CategoryPageModel(
     status: json["status"],
     msg: json["msg"],
-    apiResult: json["apiResult"] == null ? null : ApiResult.fromJson(json["apiResult"]),
+    apiResult: json["apiResult"] == null ? null : CategoryResult.fromJson(json["apiResult"]),
   );
 
   Map<String, dynamic> toJson() => {"status": status, "msg": msg, "apiResult": apiResult?.toJson()};
 }
 
-class ApiResult {
+class CategoryResult {
   final int? total;
   final int? perPage;
   final int? currentPage;
@@ -37,16 +37,16 @@ class ApiResult {
   final List<CategoryModel>? data;
   final bool? hasMore;
 
-  ApiResult({this.total, this.perPage, this.currentPage, this.lastPage, this.data, this.hasMore});
+  CategoryResult({this.total, this.perPage, this.currentPage, this.lastPage, this.data, this.hasMore});
 
-  ApiResult copyWith({
+  CategoryResult copyWith({
     int? total,
     int? perPage,
     int? currentPage,
     int? lastPage,
     List<CategoryModel>? data,
     bool? hasMore,
-  }) => ApiResult(
+  }) => CategoryResult(
     total: total ?? this.total,
     perPage: perPage ?? this.perPage,
     currentPage: currentPage ?? this.currentPage,
@@ -55,7 +55,7 @@ class ApiResult {
     hasMore: hasMore ?? this.hasMore,
   );
 
-  factory ApiResult.fromJson(Map<String, dynamic> json) => ApiResult(
+  factory CategoryResult.fromJson(Map<String, dynamic> json) => CategoryResult(
     total: json["total"],
     perPage: json["per_page"],
     currentPage: json["current_page"],

@@ -10,14 +10,14 @@ LoginModel loginModelFromJson(String str) => LoginModel.fromJson(json.decode(str
 String loginModelToJson(LoginModel data) => json.encode(data.toJson());
 
 class LoginModel {
-  ApiResult? apiResult;
+  LoginResult? apiResult;
   String? msg;
   int? status;
 
   LoginModel({this.apiResult, this.msg, this.status});
 
   factory LoginModel.fromJson(Map<String, dynamic> json) => LoginModel(
-    apiResult: json["apiResult"] == null ? null : ApiResult.fromJson(json["apiResult"]),
+    apiResult: json["apiResult"] == null ? null : LoginResult.fromJson(json["apiResult"]),
     msg: json["msg"],
     status: json["status"],
   );
@@ -28,15 +28,15 @@ class LoginModel {
   String toString() => 'LoginModel(data: $apiResult, msg: $msg, status: $status)';
 }
 
-class ApiResult {
+class LoginResult {
   String? company;
   String? pwd;
   String? user;
   Dsn? dsn;
 
-  ApiResult({this.company, this.pwd, this.user, this.dsn});
+  LoginResult({this.company, this.pwd, this.user, this.dsn});
 
-  factory ApiResult.fromJson(Map<String, dynamic> json) => ApiResult(
+  factory LoginResult.fromJson(Map<String, dynamic> json) => LoginResult(
     company: json["company"],
     pwd: json["pwd"],
     user: json["user"],

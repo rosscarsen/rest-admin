@@ -42,7 +42,7 @@ class SupplierInvoiceDataSource extends DataGridSource with WidgetsBindingObserv
   @override
   List<DataGridRow> get rows => _dataGridRows;
 
-  DataGridRow _createDataRow(InvoiceDataModel e) {
+  DataGridRow _createDataRow(InvoiceDataItem e) {
     return DataGridRow(
       cells: [
         DataGridCell<String>(columnName: 'mSupplierInvoiceInNo', value: e.mSupplierInvoiceInNo),
@@ -53,7 +53,7 @@ class SupplierInvoiceDataSource extends DataGridSource with WidgetsBindingObserv
         DataGridCell<String>(columnName: 'mSupplierCode', value: e.mSupplierCode),
         DataGridCell<String>(columnName: 'mSupplierName', value: e.mSupplierName),
         DataGridCell<String>(columnName: 'mFlag', value: e.mFlag),
-        DataGridCell<InvoiceDataModel>(columnName: 'actions', value: e),
+        DataGridCell<InvoiceDataItem>(columnName: 'actions', value: e),
       ],
     );
   }
@@ -64,17 +64,20 @@ class SupplierInvoiceDataSource extends DataGridSource with WidgetsBindingObserv
       cells: dataGridRow.getCells().map<Widget>((e) {
         // 操作列
         if (e.columnName == "actions") {
-          InvoiceDataModel row = e.value as InvoiceDataModel;
+          InvoiceDataItem row = e.value as InvoiceDataItem;
           final GlobalKey globalKey = GlobalKey();
           return Get.context!.isPhoneOrWider
               ? Row(
                   children: [
                     Flexible(
                       child: Tooltip(
-                        message: LocaleKeys.posting.tr,
+                        message: (row.mFlag ?? "0") != "1" ? LocaleKeys.posting.tr : LocaleKeys.cancelPosting.tr,
                         child: IconButton(
-                          icon: const Icon(Icons.post_add, color: AppColors.exportColor),
-                          onPressed: () => controller.posting(id: row.tSupplierInvoiceInId),
+                          icon: Icon(
+                            (row.mFlag ?? "0") != "1" ? Icons.lock : Icons.lock_open,
+                            color: Colors.teal.shade500,
+                          ),
+                          onPressed: () => controller.posting(id: row.tSupplierInvoiceInId, flag: row.mFlag),
                         ),
                       ),
                     ),
@@ -120,7 +123,7 @@ class SupplierInvoiceDataSource extends DataGridSource with WidgetsBindingObserv
                         ),
                         onClickMenu: (MenuItemProvider item) {
                           if (item.menuUserInfo == "posting") {
-                            controller.posting(id: row.tSupplierInvoiceInId);
+                            controller.posting(id: row.tSupplierInvoiceInId, flag: row.mFlag);
                           } else if (item.menuUserInfo == "print") {
                             controller.printInvoice(id: row.tSupplierInvoiceInId);
                           } else if (item.menuUserInfo == "edit") {
@@ -131,8 +134,8 @@ class SupplierInvoiceDataSource extends DataGridSource with WidgetsBindingObserv
                         },
                         items: [
                           MenuItem(
-                            title: LocaleKeys.posting.tr,
-                            image: Icon(Icons.post_add, color: Colors.white),
+                            title: (row.mFlag ?? "0") != "1" ? LocaleKeys.posting.tr : LocaleKeys.cancelPosting.tr,
+                            image: Icon((row.mFlag ?? "0") != "1" ? Icons.lock : Icons.lock_open, color: Colors.white),
                             userInfo: "posting",
                           ),
                           MenuItem(

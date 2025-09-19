@@ -13,8 +13,31 @@ SupplierInvoiceModel supplierInvoiceModelFromJson(String str) => SupplierInvoice
 
 String supplierInvoiceModelToJson(SupplierInvoiceModel data) => json.encode(data.toJson());
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 class SupplierInvoiceModel {
+  @JsonKey(name: "status")
+  int? status;
+  @JsonKey(name: "msg")
+  String? msg;
+  @JsonKey(name: "apiResult")
+  SupplierInvoiceRet? supplierInvoiceRet;
+
+  SupplierInvoiceModel({this.status, this.msg, this.supplierInvoiceRet});
+
+  SupplierInvoiceModel copyWith({int? status, String? msg, SupplierInvoiceRet? supplierInvoiceRet}) =>
+      SupplierInvoiceModel(
+        status: status ?? this.status,
+        msg: msg ?? this.msg,
+        supplierInvoiceRet: supplierInvoiceRet ?? this.supplierInvoiceRet,
+      );
+
+  factory SupplierInvoiceModel.fromJson(Map<String, dynamic> json) => _$SupplierInvoiceModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SupplierInvoiceModelToJson(this);
+}
+
+@JsonSerializable()
+class SupplierInvoiceRet {
   @JsonKey(name: "total")
   int? total;
   @JsonKey(name: "per_page")
@@ -24,20 +47,20 @@ class SupplierInvoiceModel {
   @JsonKey(name: "last_page")
   int? lastPage;
   @JsonKey(name: "data")
-  List<InvoiceDataModel>? data;
+  List<InvoiceDataItem>? data;
   @JsonKey(name: "has_more")
   bool? hasMore;
 
-  SupplierInvoiceModel({this.total, this.perPage, this.currentPage, this.lastPage, this.data, this.hasMore});
+  SupplierInvoiceRet({this.total, this.perPage, this.currentPage, this.lastPage, this.data, this.hasMore});
 
-  SupplierInvoiceModel copyWith({
+  SupplierInvoiceRet copyWith({
     int? total,
     int? perPage,
     int? currentPage,
     int? lastPage,
-    List<InvoiceDataModel>? data,
+    List<InvoiceDataItem>? data,
     bool? hasMore,
-  }) => SupplierInvoiceModel(
+  }) => SupplierInvoiceRet(
     total: total ?? this.total,
     perPage: perPage ?? this.perPage,
     currentPage: currentPage ?? this.currentPage,
@@ -46,13 +69,13 @@ class SupplierInvoiceModel {
     hasMore: hasMore ?? this.hasMore,
   );
 
-  factory SupplierInvoiceModel.fromJson(Map<String, dynamic> json) => _$SupplierInvoiceModelFromJson(json);
+  factory SupplierInvoiceRet.fromJson(Map<String, dynamic> json) => _$SupplierInvoiceRetFromJson(json);
 
-  Map<String, dynamic> toJson() => _$SupplierInvoiceModelToJson(this);
+  Map<String, dynamic> toJson() => _$SupplierInvoiceRetToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)
-class InvoiceDataModel {
+class InvoiceDataItem {
   @JsonKey(name: "mSupplier_Invoice_In_No", fromJson: Functions.asString)
   String? mSupplierInvoiceInNo;
   @JsonKey(name: "mSupplier_Invoice_In_Date", fromJson: _fromJson)
@@ -94,7 +117,7 @@ class InvoiceDataModel {
   @JsonKey(name: "mRef_Supplier_Invoice_No", fromJson: Functions.asString)
   String? mRefSupplierInvoiceNo;
 
-  InvoiceDataModel({
+  InvoiceDataItem({
     this.mSupplierInvoiceInNo,
     this.mSupplierInvoiceInDate,
     this.mMoneyCurrency,
@@ -114,7 +137,7 @@ class InvoiceDataModel {
     this.mRefSupplierInvoiceNo,
   });
 
-  InvoiceDataModel copyWith({
+  InvoiceDataItem copyWith({
     String? mSupplierInvoiceInNo,
     String? mSupplierInvoiceInDate,
     String? mMoneyCurrency,
@@ -132,7 +155,7 @@ class InvoiceDataModel {
     String? mRevised,
     String? mFlag,
     String? mRefSupplierInvoiceNo,
-  }) => InvoiceDataModel(
+  }) => InvoiceDataItem(
     mSupplierInvoiceInNo: mSupplierInvoiceInNo ?? this.mSupplierInvoiceInNo,
     mSupplierInvoiceInDate: mSupplierInvoiceInDate ?? this.mSupplierInvoiceInDate,
     mMoneyCurrency: mMoneyCurrency ?? this.mMoneyCurrency,
@@ -152,11 +175,11 @@ class InvoiceDataModel {
     mRefSupplierInvoiceNo: mRefSupplierInvoiceNo ?? this.mRefSupplierInvoiceNo,
   );
 
-  factory InvoiceDataModel.fromJson(Map<String, dynamic> json) => _$InvoiceDataModelFromJson(json);
+  factory InvoiceDataItem.fromJson(Map<String, dynamic> json) => _$InvoiceDataItemFromJson(json);
 
-  Map<String, dynamic> toJson() => _$InvoiceDataModelToJson(this);
+  Map<String, dynamic> toJson() => _$InvoiceDataItemToJson(this);
 
-  void updateFromSource(InvoiceDataModel model) {
+  void updateFromSource(InvoiceDataItem model) {
     mSupplierInvoiceInNo = model.mSupplierInvoiceInNo;
     mSupplierInvoiceInDate = model.mSupplierInvoiceInDate;
     mMoneyCurrency = model.mMoneyCurrency;

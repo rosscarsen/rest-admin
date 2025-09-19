@@ -14,26 +14,26 @@ String advancedSearchModelToJson(AdvancedSearchModel data) => json.encode(data.t
 class AdvancedSearchModel {
   int? status;
   String? msg;
-  ApiResult? apiResult;
+  AdvancedSearchResult? apiResult;
 
   AdvancedSearchModel({this.status, this.msg, this.apiResult});
 
   factory AdvancedSearchModel.fromJson(Map<String, dynamic> json) => AdvancedSearchModel(
     status: json["status"],
     msg: json["msg"],
-    apiResult: json["apiResult"] == null ? null : ApiResult.fromJson(json["apiResult"]),
+    apiResult: json["apiResult"] == null ? null : AdvancedSearchResult.fromJson(json["apiResult"]),
   );
 
   Map<String, dynamic> toJson() => {"status": status, "msg": msg, "apiResult": apiResult?.toJson()};
 }
 
-class ApiResult {
+class AdvancedSearchResult {
   List<CategoryModel>? category;
   List<DepartmentModel>? department;
 
-  ApiResult({this.category, this.department});
+  AdvancedSearchResult({this.category, this.department});
 
-  factory ApiResult.fromJson(Map<String, dynamic> json) => ApiResult(
+  factory AdvancedSearchResult.fromJson(Map<String, dynamic> json) => AdvancedSearchResult(
     category: json["category"] == null
         ? []
         : List<CategoryModel>.from(json["category"]!.map((x) => CategoryModel.fromJson(x))),

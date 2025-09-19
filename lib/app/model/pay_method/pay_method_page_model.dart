@@ -20,11 +20,11 @@ class PayMethodPageModel {
   @JsonKey(name: "msg")
   final String? msg;
   @JsonKey(name: "apiResult")
-  final ApiResult? apiResult;
+  final PayMethodResult? apiResult;
 
   PayMethodPageModel({this.status, this.msg, this.apiResult});
 
-  PayMethodPageModel copyWith({int? status, String? msg, ApiResult? apiResult}) =>
+  PayMethodPageModel copyWith({int? status, String? msg, PayMethodResult? apiResult}) =>
       PayMethodPageModel(status: status ?? this.status, msg: msg ?? this.msg, apiResult: apiResult ?? this.apiResult);
 
   factory PayMethodPageModel.fromJson(Map<String, dynamic> json) => _$PayMethodPageModelFromJson(json);
@@ -33,7 +33,7 @@ class PayMethodPageModel {
 }
 
 @JsonSerializable()
-class ApiResult {
+class PayMethodResult {
   @JsonKey(name: "total")
   final int? total;
   @JsonKey(name: "per_page")
@@ -47,16 +47,16 @@ class ApiResult {
   @JsonKey(name: "has_more")
   final bool? hasMore;
 
-  ApiResult({this.total, this.perPage, this.currentPage, this.lastPage, this.data, this.hasMore});
+  PayMethodResult({this.total, this.perPage, this.currentPage, this.lastPage, this.data, this.hasMore});
 
-  ApiResult copyWith({
+  PayMethodResult copyWith({
     int? total,
     int? perPage,
     int? currentPage,
     int? lastPage,
     List<PayMethodData>? data,
     bool? hasMore,
-  }) => ApiResult(
+  }) => PayMethodResult(
     total: total ?? this.total,
     perPage: perPage ?? this.perPage,
     currentPage: currentPage ?? this.currentPage,
@@ -65,7 +65,7 @@ class ApiResult {
     hasMore: hasMore ?? this.hasMore,
   );
 
-  factory ApiResult.fromJson(Map<String, dynamic> json) => _$ApiResultFromJson(json);
+  factory PayMethodResult.fromJson(Map<String, dynamic> json) => _$ApiResultFromJson(json);
 
   Map<String, dynamic> toJson() => _$ApiResultToJson(this);
 }

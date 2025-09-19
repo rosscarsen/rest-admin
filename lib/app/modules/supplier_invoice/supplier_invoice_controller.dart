@@ -22,7 +22,7 @@ class SupplierInvoiceController extends GetxController {
   final totalPages = 0.obs;
   final currentPage = 1.obs;
   final totalRecords = 0.obs;
-  List<InvoiceDataModel> dataList = [];
+  List<InvoiceDataItem> dataList = [];
   final ApiClient apiClient = ApiClient();
   late SupplierInvoiceDataSource dataSource;
   RxBool hasPermission = true.obs;
@@ -62,7 +62,7 @@ class SupplierInvoiceController extends GetxController {
     try {
       formKey.currentState?.saveAndValidate();
       final param = {'page': currentPage.value, ...formKey.currentState?.value ?? {}};
-      final DioApiResult dioApiResult = await apiClient.post(Config.supplierInvoice, data: param);
+      final DioApiResult dioApiResult = await apiClient.get(Config.supplierInvoice, data: param);
 
       if (!dioApiResult.success) {
         if (!dioApiResult.hasPermission) {
@@ -81,9 +81,9 @@ class SupplierInvoiceController extends GetxController {
 
       dataList
         ..clear()
-        ..addAll(resultModel.data ?? []);
-      totalPages.value = (resultModel.lastPage ?? 0);
-      totalRecords.value = (resultModel.total ?? 0);
+        ..addAll(resultModel.supplierInvoiceRet?.data ?? []);
+      totalPages.value = (resultModel.supplierInvoiceRet?.lastPage ?? 0);
+      totalRecords.value = (resultModel.supplierInvoiceRet?.total ?? 0);
     } catch (e) {
       CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
     } finally {
@@ -104,7 +104,7 @@ class SupplierInvoiceController extends GetxController {
       onConfirm: () async {
         try {
           CustomDialog.showLoading(LocaleKeys.deleting.tr);
-          final DioApiResult dioApiResult = await apiClient.post(Config.customerDelete, data: {"id": id});
+          final DioApiResult dioApiResult = await apiClient.get(Config.supplierInvoiceDelete, data: {"id": id});
 
           if (!dioApiResult.success) {
             CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
@@ -122,6 +122,9 @@ class SupplierInvoiceController extends GetxController {
               dataSource.updateDataSource();
               break;
             case 201:
+              CustomDialog.errorMessages(LocaleKeys.postedDataCannotBeDelete.tr);
+              break;
+            case 202:
               CustomDialog.errorMessages(LocaleKeys.deleteFailed.tr);
               break;
             default:
@@ -137,7 +140,51 @@ class SupplierInvoiceController extends GetxController {
   }
 
   /// 过账
-  Future<void> posting({String? id}) async {}
+  Future<void> posting({String? id, String? flag}) async {
+    final String type = (flag ?? '0') == "1" ? "0" : "1";
+    CustomAlert.iosAlert(
+      showCancel: true,
+      message: "${type == "1" ? LocaleKeys.posting.tr : LocaleKeys.cancelPosting.tr}?",
+      onConfirm: () async {
+        try {
+          CustomDialog.showLoading(LocaleKeys.operationInProgressPleaseWait.tr);
+          final DioApiResult dioApiResult = await apiClient.get(
+            Config.supplierInvoicePosting,
+            data: {"id": id, "type": type},
+          );
+
+          if (!dioApiResult.success) {
+            CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+            return;
+          }
+          if (dioApiResult.data == null) {
+            CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+            return;
+          }
+          final Map<String, dynamic> data = jsonDecode(dioApiResult.data!) as Map<String, dynamic>;
+          switch (data['status']) {
+            case 200:
+              final index = dataList.indexWhere((element) => element.tSupplierInvoiceInId == id);
+              if (index != -1) {
+                dataList[index].mFlag = dataList[index].mFlag == "1" ? "0" : "1";
+              }
+              dataSource.updateDataSource();
+              break;
+            case 201:
+              CustomDialog.errorMessages(LocaleKeys.postedDataCannotBeDelete.tr);
+              break;
+            default:
+              CustomDialog.errorMessages(LocaleKeys.unknownError.tr);
+          }
+        } catch (e) {
+          CustomDialog.errorMessages(LocaleKeys.deleteFailed.tr);
+        } finally {
+          CustomDialog.dismissDialog();
+        }
+      },
+    );
+  }
+
   //打印发票
   Future<void> printInvoice({String? id}) async {}
 }

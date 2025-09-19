@@ -42,7 +42,7 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
   List<CustomerContact> customerContactList = [];
   List<CurrencyData> currencyList = [];
   List<CustomerDiscount> customerDiscountList = [];
-  ApiResult? customerRet;
+  CustomerEditResult? customerRet;
   final customerCtl = Get.find<CustomerController>();
 
   final totalPages = 0.obs;
@@ -210,8 +210,8 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
 
   /// 保存
   Future<void> save() async {
-    CustomDialog.showLoading(LocaleKeys.saving.tr);
     if (formKey.currentState?.saveAndValidate() ?? false) {
+      CustomDialog.showLoading(LocaleKeys.saving.tr);
       final formData = Map<String, dynamic>.from(formKey.currentState?.value ?? {})
         ..addAll({"T_Customer_ID": id})
         ..addAll({"customerContact": customerContactList})

@@ -11,20 +11,20 @@ String supplierModelModelToJson(SupplierModelModel data) => json.encode(data.toJ
 class SupplierModelModel {
   int? status;
   String? msg;
-  ApiResult? apiResult;
+  SupplierResult? apiResult;
 
   SupplierModelModel({this.status, this.msg, this.apiResult});
 
   factory SupplierModelModel.fromJson(Map<String, dynamic> json) => SupplierModelModel(
     status: json["status"],
     msg: json["msg"],
-    apiResult: json["apiResult"] == null ? null : ApiResult.fromJson(json["apiResult"]),
+    apiResult: json["apiResult"] == null ? null : SupplierResult.fromJson(json["apiResult"]),
   );
 
   Map<String, dynamic> toJson() => {"status": status, "msg": msg, "apiResult": apiResult?.toJson()};
 }
 
-class ApiResult {
+class SupplierResult {
   int? total;
   int? perPage;
   int? currentPage;
@@ -32,9 +32,9 @@ class ApiResult {
   List<SupplierInfo>? supplierInfo;
   bool? hasMore;
 
-  ApiResult({this.total, this.perPage, this.currentPage, this.lastPage, this.supplierInfo, this.hasMore});
+  SupplierResult({this.total, this.perPage, this.currentPage, this.lastPage, this.supplierInfo, this.hasMore});
 
-  factory ApiResult.fromJson(Map<String, dynamic> json) => ApiResult(
+  factory SupplierResult.fromJson(Map<String, dynamic> json) => SupplierResult(
     total: json["total"],
     perPage: json["per_page"],
     currentPage: json["current_page"],

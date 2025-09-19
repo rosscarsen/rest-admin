@@ -72,7 +72,7 @@ class OpenSetMealController extends GetxController {
       }
       final SetMealModel = setMealModelFromJson(dioApiResult.data!);
       if (SetMealModel.status == 200) {
-        final ApiResult? apiResult = SetMealModel.apiResult;
+        final SetMealResult? apiResult = SetMealModel.apiResult;
         DataList
           ..clear()
           ..addAll(apiResult?.data ?? []);

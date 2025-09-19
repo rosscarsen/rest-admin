@@ -25,10 +25,7 @@ class SupplierInvoiceView extends GetView<SupplierInvoiceController> {
       actions: [
         Tooltip(
           message: LocaleKeys.refresh.tr,
-          child: IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: controller.hasPermission.value ? () => controller.reloadData() : null,
-          ),
+          child: IconButton(icon: const Icon(Icons.refresh), onPressed: () => controller.reloadData()),
         ),
       ],
       body: Obx(() {

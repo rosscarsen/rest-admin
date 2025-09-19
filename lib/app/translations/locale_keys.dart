@@ -352,6 +352,9 @@ abstract class LocaleKeys {
   static const String receiptNo = "receiptNo";
   static const String flag = "flag";
   static const String posting = "posting";
+  static const String cancelPosting = "cancelPosting";
   static const String supplierCode = "supplierCode";
   static const String supplierName = "supplierName";
+  static const String postedDataCannotBeDelete = "postedDataCannotBeDelete";
+  static const String operationInProgressPleaseWait = "operationInProgressPleaseWait";
 }

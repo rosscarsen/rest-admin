@@ -352,6 +352,9 @@ Map<String, String> get zhCN => {
   LocaleKeys.receiptNo: "收货单编号",
   LocaleKeys.flag: "标记",
   LocaleKeys.posting: "过账",
-  LocaleKeys.supplierCode: "供应商代码",
+  LocaleKeys.cancelPosting: "取消过账",
+  LocaleKeys.supplierCode: "供应商编号",
   LocaleKeys.supplierName: "供应商名称",
+  LocaleKeys.postedDataCannotBeDelete: "已过账,不能删除!",
+  LocaleKeys.operationInProgressPleaseWait: "正在操作中，请等待...",
 };

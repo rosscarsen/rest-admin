@@ -12,14 +12,14 @@ String setMealModelToJson(SetMealModel data) => json.encode(data.toJson());
 class SetMealModel {
   final int? status;
   final String? msg;
-  final ApiResult? apiResult;
+  final SetMealResult? apiResult;
 
   SetMealModel({this.status, this.msg, this.apiResult});
 
   factory SetMealModel.fromJson(Map<String, dynamic> json) => SetMealModel(
     status: json["status"],
     msg: json["msg"],
-    apiResult: json["apiResult"] == null ? null : ApiResult.fromJson(json["apiResult"]),
+    apiResult: json["apiResult"] == null ? null : SetMealResult.fromJson(json["apiResult"]),
   );
 
   Map<String, dynamic> toJson() => {"status": status, "msg": msg, "apiResult": apiResult?.toJson()};
@@ -28,7 +28,7 @@ class SetMealModel {
   String toString() => 'SetMealModel(status: $status, msg: $msg, apiResult: $apiResult)';
 }
 
-class ApiResult {
+class SetMealResult {
   final int? total;
   final int? perPage;
   final int? currentPage;
@@ -36,9 +36,9 @@ class ApiResult {
   final List<SetMealData>? data;
   final bool? hasMore;
 
-  ApiResult({this.total, this.perPage, this.currentPage, this.lastPage, this.data, this.hasMore});
+  SetMealResult({this.total, this.perPage, this.currentPage, this.lastPage, this.data, this.hasMore});
 
-  factory ApiResult.fromJson(Map<String, dynamic> json) => ApiResult(
+  factory SetMealResult.fromJson(Map<String, dynamic> json) => SetMealResult(
     total: json["total"],
     perPage: json["per_page"],
     currentPage: json["current_page"],

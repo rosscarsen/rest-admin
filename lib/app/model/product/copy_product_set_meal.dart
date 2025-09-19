@@ -13,26 +13,27 @@ class CopyProductSetMealModel {
   /// 复制食品套餐
   final int? status;
   final String? msg;
-  final ApiResult? apiResult;
+  final CopyProductSetMealResult? apiResult;
 
   CopyProductSetMealModel({this.status, this.msg, this.apiResult});
 
-  CopyProductSetMealModel copyWith({int? status, String? msg, ApiResult? apiResult}) => CopyProductSetMealModel(
-    status: status ?? this.status,
-    msg: msg ?? this.msg,
-    apiResult: apiResult ?? this.apiResult,
-  );
+  CopyProductSetMealModel copyWith({int? status, String? msg, CopyProductSetMealResult? apiResult}) =>
+      CopyProductSetMealModel(
+        status: status ?? this.status,
+        msg: msg ?? this.msg,
+        apiResult: apiResult ?? this.apiResult,
+      );
 
   factory CopyProductSetMealModel.fromJson(Map<String, dynamic> json) => CopyProductSetMealModel(
     status: json["status"],
     msg: json["msg"],
-    apiResult: json["apiResult"] == null ? null : ApiResult.fromJson(json["apiResult"]),
+    apiResult: json["apiResult"] == null ? null : CopyProductSetMealResult.fromJson(json["apiResult"]),
   );
 
   Map<String, dynamic> toJson() => {"status": status, "msg": msg, "apiResult": apiResult?.toJson()};
 }
 
-class ApiResult {
+class CopyProductSetMealResult {
   final int? total;
   final int? perPage;
   final int? currentPage;
@@ -40,16 +41,16 @@ class ApiResult {
   final List<ProductSetMealData>? data;
   final bool? hasMore;
 
-  ApiResult({this.total, this.perPage, this.currentPage, this.lastPage, this.data, this.hasMore});
+  CopyProductSetMealResult({this.total, this.perPage, this.currentPage, this.lastPage, this.data, this.hasMore});
 
-  ApiResult copyWith({
+  CopyProductSetMealResult copyWith({
     int? total,
     int? perPage,
     int? currentPage,
     int? lastPage,
     List<ProductSetMealData>? data,
     bool? hasMore,
-  }) => ApiResult(
+  }) => CopyProductSetMealResult(
     total: total ?? this.total,
     perPage: perPage ?? this.perPage,
     currentPage: currentPage ?? this.currentPage,
@@ -58,7 +59,7 @@ class ApiResult {
     hasMore: hasMore ?? this.hasMore,
   );
 
-  factory ApiResult.fromJson(Map<String, dynamic> json) => ApiResult(
+  factory CopyProductSetMealResult.fromJson(Map<String, dynamic> json) => CopyProductSetMealResult(
     total: json["total"],
     perPage: json["per_page"],
     currentPage: json["current_page"],

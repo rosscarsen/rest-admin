@@ -72,7 +72,7 @@ class OpenSupplierController extends GetxController {
       }
       final supplierModel = supplierModelModelFromJson(dioApiResult.data!);
       if (supplierModel.status == 200) {
-        final ApiResult? apiResult = supplierModel.apiResult;
+        final SupplierResult? apiResult = supplierModel.apiResult;
         DataList
           ..clear()
           ..addAll(apiResult?.supplierInfo ?? []);

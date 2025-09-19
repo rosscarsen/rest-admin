@@ -9,32 +9,48 @@ part of 'supplier_invoice_model.dart';
 SupplierInvoiceModel _$SupplierInvoiceModelFromJson(
   Map<String, dynamic> json,
 ) => SupplierInvoiceModel(
-  total: (json['total'] as num?)?.toInt(),
-  perPage: (json['per_page'] as num?)?.toInt(),
-  currentPage: (json['current_page'] as num?)?.toInt(),
-  lastPage: (json['last_page'] as num?)?.toInt(),
-  data: (json['data'] as List<dynamic>?)
-      ?.map((e) => InvoiceDataModel.fromJson(e as Map<String, dynamic>))
-      .toList(),
-  hasMore: json['has_more'] as bool?,
+  status: (json['status'] as num?)?.toInt(),
+  msg: json['msg'] as String?,
+  supplierInvoiceRet: json['apiResult'] == null
+      ? null
+      : SupplierInvoiceRet.fromJson(json['apiResult'] as Map<String, dynamic>),
 );
 
 Map<String, dynamic> _$SupplierInvoiceModelToJson(
   SupplierInvoiceModel instance,
 ) => <String, dynamic>{
-  'total': instance.total,
-  'per_page': instance.perPage,
-  'current_page': instance.currentPage,
-  'last_page': instance.lastPage,
-  'data': instance.data?.map((e) => e.toJson()).toList(),
-  'has_more': instance.hasMore,
+  'status': instance.status,
+  'msg': instance.msg,
+  'apiResult': instance.supplierInvoiceRet,
 };
 
-InvoiceDataModel _$InvoiceDataModelFromJson(
+SupplierInvoiceRet _$SupplierInvoiceRetFromJson(Map<String, dynamic> json) =>
+    SupplierInvoiceRet(
+      total: (json['total'] as num?)?.toInt(),
+      perPage: (json['per_page'] as num?)?.toInt(),
+      currentPage: (json['current_page'] as num?)?.toInt(),
+      lastPage: (json['last_page'] as num?)?.toInt(),
+      data: (json['data'] as List<dynamic>?)
+          ?.map((e) => InvoiceDataItem.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      hasMore: json['has_more'] as bool?,
+    );
+
+Map<String, dynamic> _$SupplierInvoiceRetToJson(SupplierInvoiceRet instance) =>
+    <String, dynamic>{
+      'total': instance.total,
+      'per_page': instance.perPage,
+      'current_page': instance.currentPage,
+      'last_page': instance.lastPage,
+      'data': instance.data,
+      'has_more': instance.hasMore,
+    };
+
+InvoiceDataItem _$InvoiceDataItemFromJson(
   Map<String, dynamic> json,
-) => InvoiceDataModel(
+) => InvoiceDataItem(
   mSupplierInvoiceInNo: Functions.asString(json['mSupplier_Invoice_In_No']),
-  mSupplierInvoiceInDate: InvoiceDataModel._fromJson(
+  mSupplierInvoiceInDate: InvoiceDataItem._fromJson(
     json['mSupplier_Invoice_In_Date'],
   ),
   mMoneyCurrency: Functions.asString(json['mMoneyCurrency']),
@@ -54,7 +70,7 @@ InvoiceDataModel _$InvoiceDataModelFromJson(
   mRefSupplierInvoiceNo: Functions.asString(json['mRef_Supplier_Invoice_No']),
 );
 
-Map<String, dynamic> _$InvoiceDataModelToJson(InvoiceDataModel instance) =>
+Map<String, dynamic> _$InvoiceDataItemToJson(InvoiceDataItem instance) =>
     <String, dynamic>{
       'mSupplier_Invoice_In_No': instance.mSupplierInvoiceInNo,
       'mSupplier_Invoice_In_Date': instance.mSupplierInvoiceInDate,

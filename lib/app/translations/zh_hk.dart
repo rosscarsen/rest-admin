@@ -352,6 +352,9 @@ Map<String, String> zhHK = {
   LocaleKeys.receiptNo: "收貨單編號",
   LocaleKeys.flag: "標記",
   LocaleKeys.posting: "過賬",
-  LocaleKeys.supplierCode: "供應商代碼",
+  LocaleKeys.cancelPosting: "取消過賬",
+  LocaleKeys.supplierCode: "供應商编号",
   LocaleKeys.supplierName: "供應商名稱",
+  LocaleKeys.postedDataCannotBeDelete: "已過帳,不能刪除!",
+  LocaleKeys.operationInProgressPleaseWait: "正在操作中，请等待...",
 };

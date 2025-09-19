@@ -15,20 +15,20 @@ String productAddOrEditModelToJson(ProductAddOrEditModel data) => json.encode(da
 class ProductAddOrEditModel {
   int? status;
   String? msg;
-  ApiResult? apiResult;
+  ProductAddOrEditResult? apiResult;
 
   ProductAddOrEditModel({this.status, this.msg, this.apiResult});
 
   factory ProductAddOrEditModel.fromJson(Map<String, dynamic> json) => ProductAddOrEditModel(
     status: json["status"],
     msg: json["msg"],
-    apiResult: json["apiResult"] == null ? null : ApiResult.fromJson(json["apiResult"]),
+    apiResult: json["apiResult"] == null ? null : ProductAddOrEditResult.fromJson(json["apiResult"]),
   );
 
   Map<String, dynamic> toJson() => {"status": status, "msg": msg, "apiResult": apiResult?.toJson()};
 }
 
-class ApiResult {
+class ProductAddOrEditResult {
   ProductInfo? productInfo;
   List<CategoryModel>? category;
   List<UnitModel>? units;
@@ -37,7 +37,7 @@ class ApiResult {
   List<ProductStock>? productStock;
   List<SetMealLimit>? setMealLimit;
 
-  ApiResult({
+  ProductAddOrEditResult({
     this.productInfo,
     this.category,
     this.units,
@@ -47,7 +47,7 @@ class ApiResult {
     this.setMealLimit,
   });
 
-  factory ApiResult.fromJson(Map<String, dynamic> json) => ApiResult(
+  factory ProductAddOrEditResult.fromJson(Map<String, dynamic> json) => ProductAddOrEditResult(
     productInfo: json["productInfo"] == null ? null : ProductInfo.fromJson(json["productInfo"]),
 
     category: json["category"] == null
