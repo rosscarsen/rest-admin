@@ -248,7 +248,7 @@ class ProductsView extends GetView<ProductsController> {
               'startCode': startCodeController.text,
               'endCode': endCodeController.text,
               'printPrice': printPrice.toString(),
-              'type': 'masterPrintBarcode',
+              'type': 'barcode',
             },
           );
         },
