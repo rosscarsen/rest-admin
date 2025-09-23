@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../config.dart';
+import '../../routes/app_pages.dart';
 import '../../service/dio_api_client.dart';
 import '../../service/dio_api_result.dart';
 import '../../translations/locale_keys.dart';
@@ -186,5 +187,11 @@ class SupplierInvoiceController extends GetxController {
   }
 
   //打印发票
-  Future<void> printInvoice({String? id}) async {}
+  Future<void> printInvoice({String? id}) async {
+    if (id == null) {
+      CustomDialog.errorMessages(LocaleKeys.unknownError.tr);
+      return;
+    }
+    Get.toNamed(Routes.PDF, parameters: {'type': 'supplier_invoice', 'id': id});
+  }
 }

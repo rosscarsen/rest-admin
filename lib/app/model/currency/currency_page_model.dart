@@ -65,7 +65,7 @@ class CurrencyResult {
     hasMore: hasMore ?? this.hasMore,
   );
 
-  factory CurrencyResult.fromJson(Map<String, dynamic> json) => _$ApiResultFromJson(json);
+  factory CurrencyResult.fromJson(Map<String, dynamic> json) => _$CurrencyResultFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ApiResultToJson(this);
+  Map<String, dynamic> toJson() => _$CurrencyResultToJson(this);
 }

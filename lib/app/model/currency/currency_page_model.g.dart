@@ -6,32 +6,40 @@ part of 'currency_page_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-CurrencyPageModel _$CurrencyPageModelFromJson(Map<String, dynamic> json) => CurrencyPageModel(
-  status: (json['status'] as num?)?.toInt(),
-  msg: json['msg'] as String?,
-  apiResult: json['apiResult'] == null ? null : CurrencyResult.fromJson(json['apiResult'] as Map<String, dynamic>),
-);
+CurrencyPageModel _$CurrencyPageModelFromJson(Map<String, dynamic> json) =>
+    CurrencyPageModel(
+      status: (json['status'] as num?)?.toInt(),
+      msg: json['msg'] as String?,
+      apiResult: json['apiResult'] == null
+          ? null
+          : CurrencyResult.fromJson(json['apiResult'] as Map<String, dynamic>),
+    );
 
-Map<String, dynamic> _$CurrencyPageModelToJson(CurrencyPageModel instance) => <String, dynamic>{
-  'status': instance.status,
-  'msg': instance.msg,
-  'apiResult': instance.apiResult,
-};
+Map<String, dynamic> _$CurrencyPageModelToJson(CurrencyPageModel instance) =>
+    <String, dynamic>{
+      'status': instance.status,
+      'msg': instance.msg,
+      'apiResult': instance.apiResult,
+    };
 
-CurrencyResult _$ApiResultFromJson(Map<String, dynamic> json) => CurrencyResult(
-  total: (json['total'] as num?)?.toInt(),
-  perPage: (json['per_page'] as num?)?.toInt(),
-  currentPage: (json['current_page'] as num?)?.toInt(),
-  lastPage: (json['last_page'] as num?)?.toInt(),
-  data: (json['data'] as List<dynamic>?)?.map((e) => CurrencyData.fromJson(e as Map<String, dynamic>)).toList(),
-  hasMore: json['has_more'] as bool?,
-);
+CurrencyResult _$CurrencyResultFromJson(Map<String, dynamic> json) =>
+    CurrencyResult(
+      total: (json['total'] as num?)?.toInt(),
+      perPage: (json['per_page'] as num?)?.toInt(),
+      currentPage: (json['current_page'] as num?)?.toInt(),
+      lastPage: (json['last_page'] as num?)?.toInt(),
+      data: (json['data'] as List<dynamic>?)
+          ?.map((e) => CurrencyData.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      hasMore: json['has_more'] as bool?,
+    );
 
-Map<String, dynamic> _$ApiResultToJson(CurrencyResult instance) => <String, dynamic>{
-  'total': instance.total,
-  'per_page': instance.perPage,
-  'current_page': instance.currentPage,
-  'last_page': instance.lastPage,
-  'data': instance.data,
-  'has_more': instance.hasMore,
-};
+Map<String, dynamic> _$CurrencyResultToJson(CurrencyResult instance) =>
+    <String, dynamic>{
+      'total': instance.total,
+      'per_page': instance.perPage,
+      'current_page': instance.currentPage,
+      'last_page': instance.lastPage,
+      'data': instance.data,
+      'has_more': instance.hasMore,
+    };

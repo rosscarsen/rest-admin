@@ -85,9 +85,9 @@ class CustomerEditResult {
     customerDiscount: customerDiscount ?? this.customerDiscount,
   );
 
-  factory CustomerEditResult.fromJson(Map<String, dynamic> json) => _$ApiResultFromJson(json);
+  factory CustomerEditResult.fromJson(Map<String, dynamic> json) => _$CustomerEditResultFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ApiResultToJson(this);
+  Map<String, dynamic> toJson() => _$CustomerEditResultToJson(this);
 }
 
 @JsonSerializable(explicitToJson: true)

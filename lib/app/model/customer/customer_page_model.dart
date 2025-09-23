@@ -66,7 +66,7 @@ class CustomerResult {
     hasMore: hasMore ?? this.hasMore,
   );
 
-  factory CustomerResult.fromJson(Map<String, dynamic> json) => _$ApiResultFromJson(json);
+  factory CustomerResult.fromJson(Map<String, dynamic> json) => _$CustomerResultFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ApiResultToJson(this);
+  Map<String, dynamic> toJson() => _$CustomerResultToJson(this);
 }

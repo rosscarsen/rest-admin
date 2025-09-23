@@ -65,7 +65,7 @@ class PayMethodResult {
     hasMore: hasMore ?? this.hasMore,
   );
 
-  factory PayMethodResult.fromJson(Map<String, dynamic> json) => _$ApiResultFromJson(json);
+  factory PayMethodResult.fromJson(Map<String, dynamic> json) => _$PayMethodResultFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ApiResultToJson(this);
+  Map<String, dynamic> toJson() => _$PayMethodResultToJson(this);
 }

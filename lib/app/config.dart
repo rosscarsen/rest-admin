@@ -171,6 +171,8 @@ class Config {
   static String supplierInvoiceDelete = "/SupplierInvoice/invoiceDelete";
   // 过账
   static String supplierInvoicePosting = "/SupplierInvoice/invoicePosting";
+  // 打印PDf
+  static String getSupplierInvoicePdf = "/SupplierInvoice/invoicePrintPdf";
 
   // ==========================================================================
   // 打开选择

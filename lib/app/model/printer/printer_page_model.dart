@@ -65,7 +65,7 @@ class PrinterResult {
     hasMore: hasMore ?? this.hasMore,
   );
 
-  factory PrinterResult.fromJson(Map<String, dynamic> json) => _$ApiResultFromJson(json);
+  factory PrinterResult.fromJson(Map<String, dynamic> json) => _$PrinterResultFromJson(json);
 
-  Map<String, dynamic> toJson() => _$ApiResultToJson(this);
+  Map<String, dynamic> toJson() => _$PrinterResultToJson(this);
 }
