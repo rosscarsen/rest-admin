@@ -1,61 +1,71 @@
 // To parse this JSON data, do
 //
-//     final supplierInvoiceDataModel = supplierInvoiceDataModelFromJson(jsonString);
+//     final supplierInvoiceApiModel = supplierInvoiceApiModelFromJson(jsonString);
 
 import 'package:json_annotation/json_annotation.dart';
 import 'dart:convert';
 
-part 'supplier_invoice_data_model.g.dart';
+import '../../../model/company/company_model.dart';
+import '../../../model/supplier/supplier_data.dart';
 
-SupplierInvoiceDataModel supplierInvoiceDataModelFromJson(String str) =>
-    SupplierInvoiceDataModel.fromJson(json.decode(str));
+part 'supplier_invoice_api_model.g.dart';
 
-String supplierInvoiceDataModelToJson(SupplierInvoiceDataModel data) => json.encode(data.toJson());
+SupplierInvoiceApiModel supplierInvoiceApiModelFromJson(String str) =>
+    SupplierInvoiceApiModel.fromJson(json.decode(str));
+
+String supplierInvoiceApiModelToJson(SupplierInvoiceApiModel data) => json.encode(data.toJson());
 
 @JsonSerializable()
-class SupplierInvoiceDataModel {
+class SupplierInvoiceApiModel {
   @JsonKey(name: "status")
   int? status;
   @JsonKey(name: "msg")
   String? msg;
   @JsonKey(name: "apiResult")
-  SupplierInvoiceDataResult? apiResult;
+  SupplierInvoiceApiResult? apiResult;
 
-  SupplierInvoiceDataModel({this.status, this.msg, this.apiResult});
+  SupplierInvoiceApiModel({this.status, this.msg, this.apiResult});
 
-  SupplierInvoiceDataModel copyWith({int? status, String? msg, SupplierInvoiceDataResult? apiResult}) =>
-      SupplierInvoiceDataModel(
+  SupplierInvoiceApiModel copyWith({int? status, String? msg, SupplierInvoiceApiResult? apiResult}) =>
+      SupplierInvoiceApiModel(
         status: status ?? this.status,
         msg: msg ?? this.msg,
         apiResult: apiResult ?? this.apiResult,
       );
 
-  factory SupplierInvoiceDataModel.fromJson(Map<String, dynamic> json) => _$SupplierInvoiceDataModelFromJson(json);
+  factory SupplierInvoiceApiModel.fromJson(Map<String, dynamic> json) => _$SupplierInvoiceApiModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$SupplierInvoiceDataModelToJson(this);
+  Map<String, dynamic> toJson() => _$SupplierInvoiceApiModelToJson(this);
 }
 
 @JsonSerializable()
-class SupplierInvoiceDataResult {
+class SupplierInvoiceApiResult {
   @JsonKey(name: "invoice")
   Invoice? invoice;
   @JsonKey(name: "invoiceDetail")
   List<InvoiceDetail>? invoiceDetail;
   @JsonKey(name: "supplier")
-  Supplier? supplier;
+  SupplierData? supplier;
+  @JsonKey(name: "company")
+  Company? company;
 
-  SupplierInvoiceDataResult({this.invoice, this.invoiceDetail, this.supplier});
+  SupplierInvoiceApiResult({this.invoice, this.invoiceDetail, this.supplier, this.company});
 
-  SupplierInvoiceDataResult copyWith({Invoice? invoice, List<InvoiceDetail>? invoiceDetail, Supplier? supplier}) =>
-      SupplierInvoiceDataResult(
-        invoice: invoice ?? this.invoice,
-        invoiceDetail: invoiceDetail ?? this.invoiceDetail,
-        supplier: supplier ?? this.supplier,
-      );
+  SupplierInvoiceApiResult copyWith({
+    Invoice? invoice,
+    List<InvoiceDetail>? invoiceDetail,
+    SupplierData? supplier,
+    Company? company,
+  }) => SupplierInvoiceApiResult(
+    invoice: invoice ?? this.invoice,
+    invoiceDetail: invoiceDetail ?? this.invoiceDetail,
+    supplier: supplier ?? this.supplier,
+    company: company ?? this.company,
+  );
 
-  factory SupplierInvoiceDataResult.fromJson(Map<String, dynamic> json) => _$SupplierInvoiceDataResultFromJson(json);
+  factory SupplierInvoiceApiResult.fromJson(Map<String, dynamic> json) => _$SupplierInvoiceApiResultFromJson(json);
 
-  Map<String, dynamic> toJson() => _$SupplierInvoiceDataResultToJson(this);
+  Map<String, dynamic> toJson() => _$SupplierInvoiceApiResultToJson(this);
 }
 
 @JsonSerializable()
@@ -251,109 +261,4 @@ class InvoiceDetail {
   factory InvoiceDetail.fromJson(Map<String, dynamic> json) => _$InvoiceDetailFromJson(json);
 
   Map<String, dynamic> toJson() => _$InvoiceDetailToJson(this);
-}
-
-@JsonSerializable()
-class Supplier {
-  @JsonKey(name: "mAddress")
-  String? mAddress;
-  @JsonKey(name: "mAns_Back")
-  String? mAnsBack;
-  @JsonKey(name: "mCode")
-  String? mCode;
-  @JsonKey(name: "mContact")
-  String? mContact;
-  @JsonKey(name: "mFax_No")
-  String? mFaxNo;
-  @JsonKey(name: "mFullName")
-  String? mFullName;
-  @JsonKey(name: "mPhone_No")
-  String? mPhoneNo;
-  @JsonKey(name: "mSimpleName")
-  String? mSimpleName;
-  @JsonKey(name: "mST_Currency")
-  String? mStCurrency;
-  @JsonKey(name: "mST_Payment_Days")
-  int? mStPaymentDays;
-  @JsonKey(name: "mST_Discount")
-  String? mStDiscount;
-  @JsonKey(name: "mST_Payment_Method")
-  int? mStPaymentMethod;
-  @JsonKey(name: "mST_Payment_Term")
-  String? mStPaymentTerm;
-  @JsonKey(name: "mTelex")
-  String? mTelex;
-  @JsonKey(name: "T_Supplier_ID")
-  int? tSupplierId;
-  @JsonKey(name: "mEmail")
-  String? mEmail;
-  @JsonKey(name: "mRemarks")
-  String? mRemarks;
-  @JsonKey(name: "mNon_Active")
-  int? mNonActive;
-
-  Supplier({
-    this.mAddress,
-    this.mAnsBack,
-    this.mCode,
-    this.mContact,
-    this.mFaxNo,
-    this.mFullName,
-    this.mPhoneNo,
-    this.mSimpleName,
-    this.mStCurrency,
-    this.mStPaymentDays,
-    this.mStDiscount,
-    this.mStPaymentMethod,
-    this.mStPaymentTerm,
-    this.mTelex,
-    this.tSupplierId,
-    this.mEmail,
-    this.mRemarks,
-    this.mNonActive,
-  });
-
-  Supplier copyWith({
-    String? mAddress,
-    String? mAnsBack,
-    String? mCode,
-    String? mContact,
-    String? mFaxNo,
-    String? mFullName,
-    String? mPhoneNo,
-    String? mSimpleName,
-    String? mStCurrency,
-    int? mStPaymentDays,
-    String? mStDiscount,
-    int? mStPaymentMethod,
-    String? mStPaymentTerm,
-    String? mTelex,
-    int? tSupplierId,
-    String? mEmail,
-    String? mRemarks,
-    int? mNonActive,
-  }) => Supplier(
-    mAddress: mAddress ?? this.mAddress,
-    mAnsBack: mAnsBack ?? this.mAnsBack,
-    mCode: mCode ?? this.mCode,
-    mContact: mContact ?? this.mContact,
-    mFaxNo: mFaxNo ?? this.mFaxNo,
-    mFullName: mFullName ?? this.mFullName,
-    mPhoneNo: mPhoneNo ?? this.mPhoneNo,
-    mSimpleName: mSimpleName ?? this.mSimpleName,
-    mStCurrency: mStCurrency ?? this.mStCurrency,
-    mStPaymentDays: mStPaymentDays ?? this.mStPaymentDays,
-    mStDiscount: mStDiscount ?? this.mStDiscount,
-    mStPaymentMethod: mStPaymentMethod ?? this.mStPaymentMethod,
-    mStPaymentTerm: mStPaymentTerm ?? this.mStPaymentTerm,
-    mTelex: mTelex ?? this.mTelex,
-    tSupplierId: tSupplierId ?? this.tSupplierId,
-    mEmail: mEmail ?? this.mEmail,
-    mRemarks: mRemarks ?? this.mRemarks,
-    mNonActive: mNonActive ?? this.mNonActive,
-  );
-
-  factory Supplier.fromJson(Map<String, dynamic> json) => _$SupplierFromJson(json);
-
-  Map<String, dynamic> toJson() => _$SupplierToJson(this);
 }

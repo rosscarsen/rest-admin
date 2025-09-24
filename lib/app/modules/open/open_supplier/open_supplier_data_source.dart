@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../../model/supplier_model.dart';
+import '../../../model/supplier/supplier_data.dart';
 import 'open_supplier_controller.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../widgets/custom_cell.dart';
@@ -24,10 +24,10 @@ class OpenSupplierDataSource extends DataGridSource {
   @override
   List<DataGridRow> get rows => _dataGridRows;
 
-  DataGridRow _createDataRow(SupplierInfo e) {
+  DataGridRow _createDataRow(SupplierData e) {
     return DataGridRow(
       cells: [
-        DataGridCell<int>(columnName: 'T_Supplier_ID', value: e.tSupplierId),
+        DataGridCell<String>(columnName: 'T_Supplier_ID', value: e.tSupplierId),
         DataGridCell<String>(columnName: 'select', value: e.mCode.toString()),
         DataGridCell<String>(columnName: 'code', value: e.mCode),
         DataGridCell<String>(columnName: 'simpleName', value: e.mSimpleName),

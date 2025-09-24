@@ -1,34 +1,34 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'supplier_invoice_data_model.dart';
+part of 'supplier_invoice_api_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-SupplierInvoiceDataModel _$SupplierInvoiceDataModelFromJson(
+SupplierInvoiceApiModel _$SupplierInvoiceApiModelFromJson(
   Map<String, dynamic> json,
-) => SupplierInvoiceDataModel(
+) => SupplierInvoiceApiModel(
   status: (json['status'] as num?)?.toInt(),
   msg: json['msg'] as String?,
   apiResult: json['apiResult'] == null
       ? null
-      : SupplierInvoiceDataResult.fromJson(
+      : SupplierInvoiceApiResult.fromJson(
           json['apiResult'] as Map<String, dynamic>,
         ),
 );
 
-Map<String, dynamic> _$SupplierInvoiceDataModelToJson(
-  SupplierInvoiceDataModel instance,
+Map<String, dynamic> _$SupplierInvoiceApiModelToJson(
+  SupplierInvoiceApiModel instance,
 ) => <String, dynamic>{
   'status': instance.status,
   'msg': instance.msg,
   'apiResult': instance.apiResult,
 };
 
-SupplierInvoiceDataResult _$SupplierInvoiceDataResultFromJson(
+SupplierInvoiceApiResult _$SupplierInvoiceApiResultFromJson(
   Map<String, dynamic> json,
-) => SupplierInvoiceDataResult(
+) => SupplierInvoiceApiResult(
   invoice: json['invoice'] == null
       ? null
       : Invoice.fromJson(json['invoice'] as Map<String, dynamic>),
@@ -37,15 +37,19 @@ SupplierInvoiceDataResult _$SupplierInvoiceDataResultFromJson(
       .toList(),
   supplier: json['supplier'] == null
       ? null
-      : Supplier.fromJson(json['supplier'] as Map<String, dynamic>),
+      : SupplierData.fromJson(json['supplier'] as Map<String, dynamic>),
+  company: json['company'] == null
+      ? null
+      : Company.fromJson(json['company'] as Map<String, dynamic>),
 );
 
-Map<String, dynamic> _$SupplierInvoiceDataResultToJson(
-  SupplierInvoiceDataResult instance,
+Map<String, dynamic> _$SupplierInvoiceApiResultToJson(
+  SupplierInvoiceApiResult instance,
 ) => <String, dynamic>{
   'invoice': instance.invoice,
   'invoiceDetail': instance.invoiceDetail,
   'supplier': instance.supplier,
+  'company': instance.company,
 };
 
 Invoice _$InvoiceFromJson(Map<String, dynamic> json) => Invoice(
@@ -135,45 +139,3 @@ Map<String, dynamic> _$InvoiceDetailToJson(InvoiceDetail instance) =>
       'mRevised': instance.mRevised,
       'mProduct_Content': instance.mProductContent,
     };
-
-Supplier _$SupplierFromJson(Map<String, dynamic> json) => Supplier(
-  mAddress: json['mAddress'] as String?,
-  mAnsBack: json['mAns_Back'] as String?,
-  mCode: json['mCode'] as String?,
-  mContact: json['mContact'] as String?,
-  mFaxNo: json['mFax_No'] as String?,
-  mFullName: json['mFullName'] as String?,
-  mPhoneNo: json['mPhone_No'] as String?,
-  mSimpleName: json['mSimpleName'] as String?,
-  mStCurrency: json['mST_Currency'] as String?,
-  mStPaymentDays: (json['mST_Payment_Days'] as num?)?.toInt(),
-  mStDiscount: json['mST_Discount'] as String?,
-  mStPaymentMethod: (json['mST_Payment_Method'] as num?)?.toInt(),
-  mStPaymentTerm: json['mST_Payment_Term'] as String?,
-  mTelex: json['mTelex'] as String?,
-  tSupplierId: (json['T_Supplier_ID'] as num?)?.toInt(),
-  mEmail: json['mEmail'] as String?,
-  mRemarks: json['mRemarks'] as String?,
-  mNonActive: (json['mNon_Active'] as num?)?.toInt(),
-);
-
-Map<String, dynamic> _$SupplierToJson(Supplier instance) => <String, dynamic>{
-  'mAddress': instance.mAddress,
-  'mAns_Back': instance.mAnsBack,
-  'mCode': instance.mCode,
-  'mContact': instance.mContact,
-  'mFax_No': instance.mFaxNo,
-  'mFullName': instance.mFullName,
-  'mPhone_No': instance.mPhoneNo,
-  'mSimpleName': instance.mSimpleName,
-  'mST_Currency': instance.mStCurrency,
-  'mST_Payment_Days': instance.mStPaymentDays,
-  'mST_Discount': instance.mStDiscount,
-  'mST_Payment_Method': instance.mStPaymentMethod,
-  'mST_Payment_Term': instance.mStPaymentTerm,
-  'mTelex': instance.mTelex,
-  'T_Supplier_ID': instance.tSupplierId,
-  'mEmail': instance.mEmail,
-  'mRemarks': instance.mRemarks,
-  'mNon_Active': instance.mNonActive,
-};

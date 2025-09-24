@@ -3,7 +3,8 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
-import '../../../model/supplier_model.dart';
+import '../../../model/supplier/supplier_data.dart';
+import '../../../model/supplier/supplier_page_model.dart';
 import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
@@ -18,7 +19,7 @@ class OpenSupplierController extends GetxController {
   final totalPages = 0.obs;
   final currentPage = 1.obs;
   final totalRecords = 0.obs;
-  List<SupplierInfo> DataList = [];
+  List<SupplierData> DataList = [];
   final ApiClient apiClient = ApiClient();
   late OpenSupplierDataSource dataSource;
   @override
@@ -70,12 +71,12 @@ class OpenSupplierController extends GetxController {
         CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
-      final supplierModel = supplierModelModelFromJson(dioApiResult.data!);
-      if (supplierModel.status == 200) {
-        final SupplierResult? apiResult = supplierModel.apiResult;
+      final supplierPageModel = supplierPageModelFromJson(dioApiResult.data!);
+      if (supplierPageModel.status == 200) {
+        final SupplierApiResult? apiResult = supplierPageModel.apiResult;
         DataList
           ..clear()
-          ..addAll(apiResult?.supplierInfo ?? []);
+          ..addAll(apiResult?.data ?? []);
         totalPages.value = apiResult?.lastPage ?? 0;
         totalRecords.value = apiResult?.total ?? 0;
       }

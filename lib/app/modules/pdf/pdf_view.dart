@@ -26,7 +26,7 @@ class PdfView extends GetView<PdfController> {
                         final pdfBytes = await controller.generatePdf();
                         await Printing.layoutPdf(
                           onLayout: (PdfPageFormat format) async => pdfBytes,
-                          name: controller.pdfName.value,
+                          name: controller.pdfName,
                         );
                       },
                       icon: const Icon(Icons.print),
@@ -38,7 +38,7 @@ class PdfView extends GetView<PdfController> {
                     child: IconButton(
                       onPressed: () async {
                         final pdfBytes = await controller.generatePdf();
-                        await Printing.sharePdf(bytes: pdfBytes, filename: controller.pdfName.value);
+                        await Printing.sharePdf(bytes: pdfBytes, filename: controller.pdfName);
                       },
                       icon: const Icon(Icons.share),
                     ),
@@ -51,7 +51,7 @@ class PdfView extends GetView<PdfController> {
                         final pdfBytes = await controller.generatePdf();
                         await FileStorage.saveFileToDownloads(
                           bytes: pdfBytes,
-                          fileName: controller.pdfName.value,
+                          fileName: controller.pdfName,
                           fileType: DownloadFileType.Pdf,
                         );
                       },
@@ -62,13 +62,34 @@ class PdfView extends GetView<PdfController> {
               : null,
         ),
         body: controller.isLoading.value
-            ? Center(child: CircularProgressIndicator())
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  spacing: 10.0,
+                  children: [
+                    CircularProgressIndicator(),
+                    Text(LocaleKeys.gettingData.tr, style: const TextStyle(fontSize: 20)),
+                  ],
+                ),
+              )
             : controller.hasData.value
             ? PdfPreview(
-                initialPageFormat: PdfPageFormat(48 * PdfPageFormat.mm, 19 * PdfPageFormat.mm),
-                build: (format) => controller.generateBarcodePdf(),
-                maxPageWidth: controller.PageWidth,
-                useActions: false,
+                initialPageFormat: controller.pdfPageFormat,
+                build: (format) => controller.generatePdf(),
+                useActions: true,
+                maxPageWidth: controller.maxPageWidth,
+                allowPrinting: false,
+                allowSharing: false,
+                enableScrollToPage: true,
+                canChangePageFormat: false,
+                canChangeOrientation: false,
+                canDebug: false,
+                loadingWidget: Center(child: CircularProgressIndicator()),
+                onError: (context, error) {
+                  return Center(child: Text(error.toString()));
+                },
+                pdfFileName: controller.pdfName,
               )
             : Center(child: Text(LocaleKeys.noRecordFound.tr, style: const TextStyle(fontSize: 20))),
       );

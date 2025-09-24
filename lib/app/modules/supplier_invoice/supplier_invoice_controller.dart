@@ -192,6 +192,6 @@ class SupplierInvoiceController extends GetxController {
       CustomDialog.errorMessages(LocaleKeys.unknownError.tr);
       return;
     }
-    Get.toNamed(Routes.PDF, parameters: {'type': 'supplier_invoice', 'id': id});
+    Get.toNamed(Routes.PDF, parameters: {'type': 'supplierInvoice', 'id': id});
   }
 }

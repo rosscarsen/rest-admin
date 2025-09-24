@@ -11,14 +11,16 @@ import '../../service/dio_api_client.dart';
 import '../../service/dio_api_result.dart';
 import '../../translations/locale_keys.dart';
 import '../../utils/custom_dialog.dart';
+import 'model/supplier_invoice_api_model.dart';
 
 class PdfController extends GetxController {
   final isLoading = true.obs;
   final ApiClient apiClient = ApiClient();
+  // pdf页面大小
+  PdfPageFormat pdfPageFormat = PdfPageFormat.a4;
 
-  // 页面宽度
-  double PageWidth = PdfPageFormat.a4.width;
-
+  /// 最大宽度
+  double maxPageWidth = 700.00;
   // 页面标题
   final _title = ''.obs;
   String get title => _title.value;
@@ -28,29 +30,40 @@ class PdfController extends GetxController {
   final hasData = false.obs;
 
   // pdf名称
-  final pdfName = 'pdf.pdf'.obs;
+  String pdfName = 'pdf.pdf';
 
-  // 条码数据
-  List<PrintBarcodeApiResult> barcodeData = [];
-
+  late pw.ThemeData theme;
   // 通用 PDF 生成函数（UI层统一调用）
   late Future<Uint8List> Function() generatePdf;
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-
+    await initTheme();
     final Map<String, String?> parameters = Get.parameters;
-
-    switch (parameters['type']) {
-      case "masterPrintBarcode":
+    final String? type = parameters['type'];
+    pdfName = '${type ?? 'pdf'}_${DateTime.now().millisecondsSinceEpoch}.pdf';
+    switch (type) {
+      case "barcode": //食品主档打印条码
         title = LocaleKeys.printBarcode.tr;
-        PageWidth = 230;
-        pdfName.value = 'barcode_${DateTime.now().millisecondsSinceEpoch}.pdf';
-        getProductBarcodeData(parameters);
-        generatePdf = () => generateBarcodePdf();
+        pdfPageFormat = PdfPageFormat(48 * PdfPageFormat.mm, 19 * PdfPageFormat.mm);
+        maxPageWidth = 230;
+        getProductBarcodeData(parameters).then((value) {
+          if (value != null) {
+            hasData.value = value.isNotEmpty;
+            generatePdf = () => generateBarcodePdf(barcodeData: value);
+          }
+        });
         break;
-
+      case "supplierInvoice":
+        title = LocaleKeys.supplierInvoice.tr;
+        getSupplierInvoiceData(parameters).then((value) {
+          if (value != null) {
+            hasData.value = true;
+            generatePdf = () => generateSupplierInvoicePdf(data: value);
+          }
+        });
+        break;
       default:
         title = LocaleKeys.unknown.tr;
         generatePdf = () async => Uint8List(0); // 防止UI中调用时报错
@@ -58,32 +71,40 @@ class PdfController extends GetxController {
     }
   }
 
+  /// 初始pdf theme
+  Future<void> initTheme() async {
+    final baseFont = await PdfGoogleFonts.notoSansSCRegular();
+    // 加入一个英文字体作为 fallback，或者再加 emoji 字体
+    final fallbackFont = await PdfGoogleFonts.notoSansSymbols2Regular();
+
+    theme = pw.ThemeData.withFont(base: baseFont, bold: baseFont, italic: baseFont, icons: baseFont).copyWith(
+      defaultTextStyle: pw.TextStyle(font: baseFont, fontFallback: [fallbackFont]),
+    );
+  }
+
   /// 获取barcode数据
-  Future<void> getProductBarcodeData(Map<String, String?> parameters) async {
-    parameters.remove("type");
+  Future<List<PrintBarcodeApiResult>?> getProductBarcodeData(Map<String, String?> parameters) async {
     try {
       isLoading.value = true;
-      CustomDialog.showLoading(LocaleKeys.gettingData.tr);
-
       final DioApiResult dioApiResult = await apiClient.post(Config.printBarcode, queryParameters: parameters);
       if (!dioApiResult.success) {
         CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
-        return;
+        return null;
       }
       if (!dioApiResult.hasPermission) {
         CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.noPermission.tr);
-        return;
+        return null;
       }
       if (dioApiResult.data == null) {
         CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
-        return;
+        return null;
       }
       final PrintBarcodeModel printBarcodeModel = printBarcodeModelFromJson(dioApiResult.data!);
       if (printBarcodeModel.status == 200) {
-        barcodeData = printBarcodeModel.apiResult ?? [];
-        hasData.value = barcodeData.isNotEmpty;
+        return printBarcodeModel.apiResult;
       } else {
         CustomDialog.errorMessages(printBarcodeModel.msg ?? LocaleKeys.getDataException.tr);
+        return null;
       }
     } finally {
       CustomDialog.dismissDialog();
@@ -93,14 +114,12 @@ class PdfController extends GetxController {
 
   /// 生成条码 PDF
   Future<Uint8List> generateBarcodePdf({
-    double pdfHeight = 19, // mm
-    double pdfWidth = 48, // mm
+    required List<PrintBarcodeApiResult> barcodeData,
     double margin = 1,
     double barcodeWidth = 35,
     double barcodeHeight = 6,
   }) async {
     final pdf = pw.Document();
-    final font = await PdfGoogleFonts.notoSansSCRegular();
     final Map<String, String?> parameters = Get.parameters;
     final showPrice = parameters["printPrice"] == "1";
 
@@ -108,9 +127,9 @@ class PdfController extends GetxController {
       pdf.addPage(
         pw.Page(
           pageTheme: pw.PageTheme(
-            pageFormat: PdfPageFormat(pdfWidth * PdfPageFormat.mm, pdfHeight * PdfPageFormat.mm),
+            pageFormat: pdfPageFormat,
             margin: pw.EdgeInsets.all(margin * PdfPageFormat.mm),
-            theme: pw.ThemeData.withFont(base: font, bold: font, italic: font),
+            theme: theme,
           ),
           build: (context) => pw.Column(
             crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -134,6 +153,51 @@ class PdfController extends GetxController {
         ),
       );
     }
+
+    return pdf.save();
+  }
+
+  /// 获取供应商发票数据
+  Future<SupplierInvoiceApiResult?> getSupplierInvoiceData(Map<String, String?> parameters) async {
+    try {
+      isLoading.value = true;
+      CustomDialog.showLoading(LocaleKeys.gettingData.tr);
+      final DioApiResult dioApiResult = await apiClient.get(Config.getSupplierInvoicePdf, queryParameters: parameters);
+      if (!dioApiResult.success) {
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        return null;
+      }
+      if (!dioApiResult.hasPermission) {
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.noPermission.tr);
+        return null;
+      }
+      if (dioApiResult.data == null) {
+        CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        return null;
+      }
+      final retModel = supplierInvoiceApiModelFromJson(dioApiResult.data!);
+      if (retModel.status == 200) {
+        return retModel.apiResult;
+      } else if (retModel.status == 201) {
+        CustomDialog.errorMessages(retModel.msg ?? LocaleKeys.getDataException.tr);
+        return null;
+      } else {
+        CustomDialog.errorMessages(retModel.msg ?? LocaleKeys.getDataException.tr);
+        return null;
+      }
+    } finally {
+      CustomDialog.dismissDialog();
+      isLoading.value = false;
+    }
+  }
+
+  /// 生成供应商发票 PDF
+  Future<Uint8List> generateSupplierInvoicePdf({required SupplierInvoiceApiResult data}) async {
+    final pdf = pw.Document();
+    final font = await PdfGoogleFonts.notoSansSCRegular();
+    final company = data.company;
+    final invoice = data.invoice;
+    final supplier = data.supplier; //重写供应商model
 
     return pdf.save();
   }
