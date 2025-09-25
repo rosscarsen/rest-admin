@@ -12,7 +12,6 @@ import '../../service/dio_api_result.dart';
 import '../../service/pdf_theme_manager.dart';
 import '../../translations/locale_keys.dart';
 import '../../utils/custom_dialog.dart';
-import '../../utils/logger.dart';
 import 'common.dart';
 import 'model/supplier_invoice_api_model.dart';
 part 'barcode_pdf.dart';
@@ -140,60 +139,6 @@ class PdfController extends GetxController {
       CustomDialog.dismissDialog();
       isLoading.value = false;
     }
-  }
-
-  /// PDF 头
-  pw.Widget _buildHeader(pw.Context context, Company? company, pw.ImageProvider imageProvider, String title) {
-    return pw.Column(
-      children: [
-        pw.Row(
-          crossAxisAlignment: pw.CrossAxisAlignment.center,
-          children: [
-            pw.Container(
-              alignment: pw.Alignment.center,
-              width: 80,
-              height: 80,
-              decoration: pw.BoxDecoration(
-                image: pw.DecorationImage(image: imageProvider, fit: pw.BoxFit.contain),
-              ),
-            ),
-            pw.Expanded(
-              child: pw.Padding(
-                padding: pw.EdgeInsets.only(left: 8),
-                child: pw.Column(
-                  mainAxisSize: pw.MainAxisSize.min,
-                  mainAxisAlignment: pw.MainAxisAlignment.start,
-                  crossAxisAlignment: pw.CrossAxisAlignment.start,
-                  children: [
-                    pw.Text(company?.mNameChinese ?? "", style: pw.TextStyle(fontSize: 16)),
-                    pw.Text(company?.mNameEnglish ?? "", style: pw.TextStyle(fontSize: 16)),
-                    pw.Divider(color: PdfColors.grey700),
-                    pw.Text(company?.mAddress ?? ""),
-                    pw.Row(
-                      children: [
-                        pw.Expanded(child: pw.Text("${LocaleKeys.tel.tr}: ${company?.mTel ?? ""}")),
-                        pw.Expanded(child: pw.Text("${LocaleKeys.fax.tr}: ${company?.mFax ?? ""}")),
-                      ],
-                    ),
-                    pw.Row(
-                      children: [
-                        pw.Expanded(child: pw.Text("${LocaleKeys.email.tr}: ${company?.mEMail ?? ""}")),
-                        pw.Expanded(
-                          child: pw.FittedBox(child: pw.Text("${LocaleKeys.website.tr}: ${company?.mWebSite ?? ""}")),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-        pw.Text(title, style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
-        if (context.pageNumber > 1) pw.SizedBox(height: 10),
-        if (context.pageNumber > 1) pw.SizedBox(height: 10),
-      ],
-    );
   }
 
   @override
