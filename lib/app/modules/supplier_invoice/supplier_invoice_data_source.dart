@@ -3,10 +3,10 @@ import 'package:get/get.dart';
 import 'package:popup_menu/popup_menu.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../model/supplierInvoice/supplier_invoice_api_model.dart';
 import '../../translations/locale_keys.dart';
 import '../../utils/constants.dart';
 import '../../widgets/custom_cell.dart';
-import 'model/supplier_invoice_model.dart';
 import 'supplier_invoice_controller.dart';
 
 class SupplierInvoiceDataSource extends DataGridSource with WidgetsBindingObserver {
@@ -42,7 +42,7 @@ class SupplierInvoiceDataSource extends DataGridSource with WidgetsBindingObserv
   @override
   List<DataGridRow> get rows => _dataGridRows;
 
-  DataGridRow _createDataRow(InvoiceDataItem e) {
+  DataGridRow _createDataRow(Invoice e) {
     return DataGridRow(
       cells: [
         DataGridCell<String>(columnName: 'mSupplierInvoiceInNo', value: e.mSupplierInvoiceInNo),
@@ -53,7 +53,7 @@ class SupplierInvoiceDataSource extends DataGridSource with WidgetsBindingObserv
         DataGridCell<String>(columnName: 'mSupplierCode', value: e.mSupplierCode),
         DataGridCell<String>(columnName: 'mSupplierName', value: e.mSupplierName),
         DataGridCell<String>(columnName: 'mFlag', value: e.mFlag),
-        DataGridCell<InvoiceDataItem>(columnName: 'actions', value: e),
+        DataGridCell<Invoice>(columnName: 'actions', value: e),
       ],
     );
   }
@@ -64,7 +64,7 @@ class SupplierInvoiceDataSource extends DataGridSource with WidgetsBindingObserv
       cells: dataGridRow.getCells().map<Widget>((e) {
         // 操作列
         if (e.columnName == "actions") {
-          InvoiceDataItem row = e.value as InvoiceDataItem;
+          Invoice row = e.value as Invoice;
           final GlobalKey globalKey = GlobalKey();
           return Get.context!.isPhoneOrWider
               ? Row(

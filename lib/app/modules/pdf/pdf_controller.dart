@@ -13,7 +13,7 @@ import '../../service/pdf_theme_manager.dart';
 import '../../translations/locale_keys.dart';
 import '../../utils/custom_dialog.dart';
 import 'common.dart';
-import 'model/supplier_invoice_api_model.dart';
+import '../../model/supplierInvoice/supplier_invoice_api_model.dart';
 part 'barcode_pdf.dart';
 part 'supplier_invoice_pdf.dart';
 

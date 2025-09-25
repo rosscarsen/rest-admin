@@ -5,9 +5,9 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'dart:convert';
 
-import '../../../model/company/company_model.dart';
-import '../../../model/supplier/supplier_data.dart';
-import '../../../utils/functions.dart';
+import '../company/company_model.dart';
+import '../supplier/supplier_data.dart';
+import '../../utils/functions.dart';
 
 part 'supplier_invoice_api_model.g.dart';
 
@@ -69,23 +69,23 @@ class SupplierInvoiceApiResult {
   Map<String, dynamic> toJson() => _$SupplierInvoiceApiResultToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Invoice {
-  @JsonKey(name: "mSupplier_Invoice_In_No")
+  @JsonKey(name: "mSupplier_Invoice_In_No", fromJson: Functions.asString)
   String? mSupplierInvoiceInNo;
   @JsonKey(name: "mSupplier_Invoice_In_Date", fromJson: Functions.asString)
   String? mSupplierInvoiceInDate;
-  @JsonKey(name: "mMoneyCurrency")
+  @JsonKey(name: "mMoneyCurrency", fromJson: Functions.asString)
   String? mMoneyCurrency;
-  @JsonKey(name: "mDiscount")
+  @JsonKey(name: "mDiscount", fromJson: Functions.asString)
   String? mDiscount;
-  @JsonKey(name: "mAmount")
+  @JsonKey(name: "mAmount", fromJson: Functions.asString)
   String? mAmount;
-  @JsonKey(name: "mRemarks")
+  @JsonKey(name: "mRemarks", fromJson: Functions.asString)
   String? mRemarks;
-  @JsonKey(name: "mSupplier_Code")
+  @JsonKey(name: "mSupplier_Code", fromJson: Functions.asString)
   String? mSupplierCode;
-  @JsonKey(name: "mSupplier_Name")
+  @JsonKey(name: "mSupplier_Name", fromJson: Functions.asString)
   String? mSupplierName;
   @JsonKey(name: "T_Supplier_Invoice_In_ID", fromJson: Functions.asString)
   String? tSupplierInvoiceInId;
@@ -93,13 +93,13 @@ class Invoice {
   String? mCreatedDate;
   @JsonKey(name: "mLast_Modified_Date", fromJson: Functions.asString)
   String? mLastModifiedDate;
-  @JsonKey(name: "mCreated_By")
+  @JsonKey(name: "mCreated_By", fromJson: Functions.asString)
   String? mCreatedBy;
-  @JsonKey(name: "mLast_Modified_By")
+  @JsonKey(name: "mLast_Modified_By", fromJson: Functions.asString)
   String? mLastModifiedBy;
-  @JsonKey(name: "mEx_Ratio")
+  @JsonKey(name: "mEx_Ratio", fromJson: Functions.asString)
   String? mExRatio;
-  @JsonKey(name: "mRevised")
+  @JsonKey(name: "mRevised", fromJson: Functions.asString)
   String? mRevised;
   @JsonKey(name: "mFlag", fromJson: Functions.asString)
   String? mFlag;
@@ -169,39 +169,39 @@ class Invoice {
   Map<String, dynamic> toJson() => _$InvoiceToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class InvoiceDetail {
-  @JsonKey(name: "mItem")
-  int? mItem;
-  @JsonKey(name: "mProduct_Code")
+  @JsonKey(name: "mItem", fromJson: Functions.asString)
+  String? mItem;
+  @JsonKey(name: "mProduct_Code", fromJson: Functions.asString)
   String? mProductCode;
-  @JsonKey(name: "mProduct_Name")
+  @JsonKey(name: "mProduct_Name", fromJson: Functions.asString)
   String? mProductName;
-  @JsonKey(name: "mPrice")
+  @JsonKey(name: "mPrice", fromJson: Functions.asString)
   String? mPrice;
-  @JsonKey(name: "mQty")
+  @JsonKey(name: "mQty", fromJson: Functions.asString)
   String? mQty;
-  @JsonKey(name: "mAmount")
+  @JsonKey(name: "mAmount", fromJson: Functions.asString)
   String? mAmount;
-  @JsonKey(name: "mDiscount")
+  @JsonKey(name: "mDiscount", fromJson: Functions.asString)
   String? mDiscount;
-  @JsonKey(name: "mRemarks")
+  @JsonKey(name: "mRemarks", fromJson: Functions.asString)
   String? mRemarks;
-  @JsonKey(name: "T_Supplier_Invoice_In_ID")
-  int? tSupplierInvoiceInId;
-  @JsonKey(name: "mPo_Detail_ID")
-  dynamic mPoDetailId;
-  @JsonKey(name: "mStock_Code")
+  @JsonKey(name: "T_Supplier_Invoice_In_ID", fromJson: Functions.asString)
+  String? tSupplierInvoiceInId;
+  @JsonKey(name: "mPo_Detail_ID", fromJson: Functions.asString)
+  String? mPoDetailId;
+  @JsonKey(name: "mStock_Code", fromJson: Functions.asString)
   String? mStockCode;
-  @JsonKey(name: "mUnit")
+  @JsonKey(name: "mUnit", fromJson: Functions.asString)
   String? mUnit;
-  @JsonKey(name: "mSupplier_Invoice_In_Detail_ID")
-  int? mSupplierInvoiceInDetailId;
-  @JsonKey(name: "mPO_No")
-  dynamic mPoNo;
-  @JsonKey(name: "mRevised")
-  dynamic mRevised;
-  @JsonKey(name: "mProduct_Content")
+  @JsonKey(name: "mSupplier_Invoice_In_Detail_ID", fromJson: Functions.asString)
+  String? mSupplierInvoiceInDetailId;
+  @JsonKey(name: "mPO_No", fromJson: Functions.asString)
+  String? mPoNo;
+  @JsonKey(name: "mRevised", fromJson: Functions.asString)
+  String? mRevised;
+  @JsonKey(name: "mProduct_Content", fromJson: Functions.asString)
   String? mProductContent;
 
   InvoiceDetail({
@@ -224,7 +224,7 @@ class InvoiceDetail {
   });
 
   InvoiceDetail copyWith({
-    int? mItem,
+    String? mItem,
     String? mProductCode,
     String? mProductName,
     String? mPrice,
@@ -232,13 +232,13 @@ class InvoiceDetail {
     String? mAmount,
     String? mDiscount,
     String? mRemarks,
-    int? tSupplierInvoiceInId,
-    dynamic mPoDetailId,
+    String? tSupplierInvoiceInId,
+    String? mPoDetailId,
     String? mStockCode,
     String? mUnit,
-    int? mSupplierInvoiceInDetailId,
-    dynamic mPoNo,
-    dynamic mRevised,
+    String? mSupplierInvoiceInDetailId,
+    String? mPoNo,
+    String? mRevised,
     String? mProductContent,
   }) => InvoiceDetail(
     mItem: mItem ?? this.mItem,

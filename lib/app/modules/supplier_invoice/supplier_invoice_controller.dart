@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../config.dart';
+import '../../model/supplierInvoice/supplier_invoice_api_model.dart';
 import '../../routes/app_pages.dart';
 import '../../service/dio_api_client.dart';
 import '../../service/dio_api_result.dart';
@@ -23,7 +24,7 @@ class SupplierInvoiceController extends GetxController {
   final totalPages = 0.obs;
   final currentPage = 1.obs;
   final totalRecords = 0.obs;
-  List<InvoiceDataItem> dataList = [];
+  List<Invoice> dataList = [];
   final ApiClient apiClient = ApiClient();
   late SupplierInvoiceDataSource dataSource;
   RxBool hasPermission = true.obs;
