@@ -57,7 +57,6 @@ class SupplierInvoiceController extends GetxController {
   }
 
   /// 获取列表
-  /// 获取列表
   Future<void> getList() async {
     isLoading(true);
     dataList.clear();
@@ -95,7 +94,7 @@ class SupplierInvoiceController extends GetxController {
 
   /// 编辑
   void edit({String? id}) async {
-    // Get.toNamed(Routes.CUSTOMER_EDIT, parameters: id == null ? null : {'id': id.toString()});
+    Get.toNamed(Routes.SUPPLIER_INVOICE_EDIT, parameters: id == null ? null : {'id': id.toString()});
   }
 
   /// 删除单行数据

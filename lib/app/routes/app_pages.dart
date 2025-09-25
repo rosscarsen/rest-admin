@@ -50,6 +50,8 @@ import '../modules/pdf/pdf_view.dart';
 import '../modules/signin/signin_binding.dart';
 import '../modules/signin/signin_view.dart';
 import '../modules/supplier_invoice/supplier_invoice_binding.dart';
+import '../modules/supplier_invoice/supplier_invoice_edit/supplier_invoice_edit_binding.dart';
+import '../modules/supplier_invoice/supplier_invoice_edit/supplier_invoice_edit_view.dart';
 import '../modules/supplier_invoice/supplier_invoice_view.dart';
 
 part 'app_routes.dart';
@@ -58,7 +60,10 @@ class AppPages {
   AppPages._();
 
   static final routes = [
-    GetPage(name: _Paths.SIGNIN, page: () => const SigninView(), binding: SigninBinding()),
+    GetPage(
+        name: _Paths.SIGNIN,
+        page: () => const SigninView(),
+        binding: SigninBinding()),
     GetPage(
       name: _Paths.DASHBOARD,
       page: () => const DashboardView(),
@@ -114,7 +119,11 @@ class AppPages {
         ),
       ],
     ),
-    GetPage(name: _Paths.PDF, page: () => const PdfView(), binding: PdfBinding(), middlewares: [AuthMiddleware()]),
+    GetPage(
+        name: _Paths.PDF,
+        page: () => const PdfView(),
+        binding: PdfBinding(),
+        middlewares: [AuthMiddleware()]),
     GetPage(
       name: _Paths.MASTER,
       page: () => const MasterView(),
@@ -211,6 +220,13 @@ class AppPages {
       page: () => const SupplierInvoiceView(),
       binding: SupplierInvoiceBinding(),
       middlewares: [AuthMiddleware()],
+      children: [
+        GetPage(
+          name: _Paths.SUPPLIER_INVOICE_EDIT,
+          page: () => const SupplierInvoiceEditView(),
+          binding: SupplierInvoiceEditBinding(),
+        ),
+      ],
     ),
   ];
 }

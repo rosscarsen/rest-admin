@@ -42,6 +42,8 @@ abstract class Routes {
   static const CUSTOMER_EDIT =
       _Paths.MASTER + _Paths.CUSTOMER + _Paths.CUSTOMER_EDIT;
   static const OPEN_CUSTOMER = _Paths.OPEN + _Paths.OPEN_CUSTOMER;
+  static const SUPPLIER_INVOICE_EDIT =
+      _Paths.SUPPLIER_INVOICE + _Paths.SUPPLIER_INVOICE_EDIT;
 }
 
 abstract class _Paths {
@@ -72,4 +74,5 @@ abstract class _Paths {
   static const CUSTOMER = '/customer';
   static const CUSTOMER_EDIT = '/customer-edit';
   static const OPEN_CUSTOMER = '/open-customer';
+  static const SUPPLIER_INVOICE_EDIT = '/supplier-invoice-edit';
 }

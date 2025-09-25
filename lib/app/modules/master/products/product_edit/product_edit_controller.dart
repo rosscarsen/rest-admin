@@ -392,6 +392,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
                   }
                   CustomDialog.showLoading(LocaleKeys.saving.tr);
                   try {
+                    FocusManager.instance.primaryFocus?.unfocus();
                     final DioApiResult dioApiResult = await apiClient.post(
                       Config.productSetMealSave,
                       data: row.toJson(),

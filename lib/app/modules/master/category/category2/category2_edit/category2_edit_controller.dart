@@ -139,6 +139,7 @@ class Category2EditController extends GetxController {
 
   /// 保存
   Future<void> save() async {
+    FocusManager.instance.primaryFocus?.unfocus();
     if (formKey.currentState?.saveAndValidate() ?? false) {
       final categoryCtl = Get.find<Category2Controller>();
       //CustomDialog.showLoading(id == null ? LocaleKeys.adding.tr : LocaleKeys.updating.tr);
@@ -156,7 +157,7 @@ class Category2EditController extends GetxController {
         }
       }
       try {
-        final DioApiResult dioApiResult = await apiClient.post(Config.categorySave, data: formData);
+        final DioApiResult dioApiResult = await apiClient.post(Config.category2Save, data: formData);
         if (!dioApiResult.success) {
           CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
           return;

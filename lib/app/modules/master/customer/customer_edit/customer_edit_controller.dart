@@ -210,6 +210,7 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
 
   /// 保存
   Future<void> save() async {
+    FocusManager.instance.primaryFocus?.unfocus();
     if (formKey.currentState?.saveAndValidate() ?? false) {
       CustomDialog.showLoading(LocaleKeys.saving.tr);
       final formData = Map<String, dynamic>.from(formKey.currentState?.value ?? {})
@@ -282,7 +283,7 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
   /// 保存客户积分
   Future<void> saveCustomerPoint({required PointData row, required bool isAdd}) async {
     CustomDialog.showLoading(isAdd ? LocaleKeys.adding.tr : LocaleKeys.updating.tr);
-
+    FocusManager.instance.primaryFocus?.unfocus();
     try {
       final DioApiResult dioApiResult = await apiClient.post(Config.customerPointSave, data: row.toJson());
       logger.f(dioApiResult);

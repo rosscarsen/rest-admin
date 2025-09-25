@@ -121,6 +121,7 @@ class ProductRemarksEditController extends GetxController with GetSingleTickerPr
 
   /// 检测页面数据是否发生变化
   Object checkPageDataChange() {
+    FocusManager.instance.primaryFocus?.unfocus();
     if (formKey.currentState?.saveAndValidate() ?? false) {
       final Map<String, dynamic> formData = {
         ProductRemarksFields.mId: id,

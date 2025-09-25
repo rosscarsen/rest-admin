@@ -1,21 +1,16 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+import 'package:rest_admin/app/service/dio_api_client.dart';
 
-import '../../../../config.dart';
-import '../../../../model/category/category_model.dart';
-import '../../../../service/dio_api_client.dart';
-import '../../../../service/dio_api_result.dart';
-import '../../../../translations/locale_keys.dart';
-import '../../../../utils/custom_dialog.dart';
-import '../../../../utils/functions.dart';
-import '../../../../utils/logger.dart';
-import '../category_controller.dart';
-import 'category_fields.dart';
+import '../../../config.dart';
+import '../../../service/dio_api_result.dart';
+import '../../../translations/locale_keys.dart';
+import '../../../utils/custom_dialog.dart';
+import '../../../utils/logger.dart';
+import '../model/supplier_invoice_edit_model.dart';
 
-class CategoryEditController extends GetxController {
+class SupplierInvoiceEditController extends GetxController {
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
   // Dio客户端
   final ApiClient apiClient = ApiClient();
@@ -57,7 +52,7 @@ class CategoryEditController extends GetxController {
   Future<void> addOrEdit() async {
     isLoading(true);
     try {
-      final DioApiResult dioApiResult = await apiClient.post(Config.categoryAddOrEdit, data: {'id': id});
+      final DioApiResult dioApiResult = await apiClient.post(Config.supplierInvoiceAddOrEdit, data: {'id': id});
       if (!dioApiResult.success) {
         if (!dioApiResult.hasPermission) {
           hasPermission.value = false;
@@ -72,12 +67,11 @@ class CategoryEditController extends GetxController {
       }
 
       hasPermission.value = true;
-      final data = json.decode(dioApiResult.data!) as Map<String, dynamic>;
-      final apiResult = data["apiResult"];
-      if (apiResult == null) {
+      final resultModel = supplierInvoiceEditModelFromJson(dioApiResult.data);
+      final SupplierInvoiceEditResult? apiData = resultModel.apiResult;
+      if (apiData == null) {
         return;
       }
-      final CategoryModel resultModel = CategoryModel.fromJson(apiResult);
 
       formKey.currentState?.patchValue(
         Map.fromEntries(
@@ -96,23 +90,15 @@ class CategoryEditController extends GetxController {
   /// 保存
   Future<void> save() async {
     FocusManager.instance.primaryFocus?.unfocus();
-    if (formKey.currentState?.saveAndValidate() ?? false) {
-      final parentCtl = Get.find<CategoryController>();
-      CustomDialog.showLoading(id == null ? LocaleKeys.adding.tr : LocaleKeys.updating.tr);
-      final Map<String, dynamic> formData = {CategoryFields.T_Category_ID: id, ...formKey.currentState?.value ?? {}};
-      if (id != null) {
-        final oldRow = parentCtl.dataList.firstWhereOrNull((e) => e.tCategoryId.toString() == id);
-        if (oldRow != null) {
-          final isSame = Functions.compareMap(oldRow.toJson(), formData);
-          if (isSame) {
-            CustomDialog.dismissDialog();
-            Get.back();
-            return;
-          }
-        }
-      }
+    /* if (formKey.currentState?.saveAndValidate() ?? false) {
+      CustomDialog.showLoading(LocaleKeys.saving.tr);
+      final formData = Map<String, dynamic>.from(formKey.currentState?.value ?? {})
+        ..addAll({"T_Customer_ID": id})
+        ..addAll({"customerContact": customerContactList})
+        ..addAll({"customerDiscount": customerDiscountList});
+      logger.f(formData);
       try {
-        final DioApiResult dioApiResult = await apiClient.post(Config.categorySave, data: formData);
+        final DioApiResult dioApiResult = await apiClient.post(Config.customerSave, data: formData);
         if (!dioApiResult.success) {
           CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
           return;
@@ -123,29 +109,28 @@ class CategoryEditController extends GetxController {
             CustomDialog.successMessages(id == null ? LocaleKeys.addSuccess.tr : LocaleKeys.updateSuccess.tr);
             final apiResult = data["apiResult"];
             if (apiResult == null) {
-              parentCtl.reloadData();
+              CustomerController.to.reloadData();
               Get.back();
               return;
             }
-            final resultModel = CategoryModel.fromJson(apiResult);
+            final resultModel = CustomerData.fromJson(apiResult);
+            final customerCtl = Get.find<CustomerController>();
             if (id == null) {
-              parentCtl.dataList.insert(0, resultModel);
+              customerCtl.dataList.insert(0, resultModel);
             } else {
-              final index = parentCtl.dataList.indexWhere((element) => element.tCategoryId.toString() == id);
+              final index = customerCtl.dataList.indexWhere((element) => element.tCustomerId.toString() == id);
               if (index != -1) {
-                parentCtl.dataList[index] = resultModel;
+                customerCtl.dataList[index] = resultModel;
               }
             }
-            parentCtl.dataSource.updateDataSource();
+            customerCtl.dataSource.updateDataSource();
             Get.back();
             break;
           case 201:
-            CustomDialog.errorMessages(
-              LocaleKeys.codeExists.trArgs([formKey.currentState?.fields[CategoryFields.mCategory]?.value]),
-            );
+            CustomDialog.errorMessages(LocaleKeys.codeExists.trArgs([LocaleKeys.code.tr]));
             break;
           case 202:
-            CustomDialog.errorMessages(id == null ? LocaleKeys.addFailed.tr : LocaleKeys.updateFailed.tr);
+            CustomDialog.errorMessages(LocaleKeys.codeExists.trArgs([LocaleKeys.mobile.tr]));
             break;
           default:
             CustomDialog.errorMessages(LocaleKeys.unknownError.tr);
@@ -155,6 +140,6 @@ class CategoryEditController extends GetxController {
       } finally {
         CustomDialog.dismissDialog();
       }
-    }
+    } */
   }
 }
