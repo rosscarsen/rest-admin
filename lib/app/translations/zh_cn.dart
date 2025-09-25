@@ -357,4 +357,10 @@ Map<String, String> get zhCN => {
   LocaleKeys.supplierName: "供应商名称",
   LocaleKeys.postedDataCannotBeDelete: "已过账,不能删除!",
   LocaleKeys.operationInProgressPleaseWait: "正在操作中，请等待...",
+  LocaleKeys.website: "网站",
+  LocaleKeys.toMessrs: "致",
+  LocaleKeys.item: "项目",
+  LocaleKeys.paramCode: "%s编号",
+  LocaleKeys.total: "总计",
+  LocaleKeys.subTotal: "小计",
 };

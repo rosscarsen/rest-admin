@@ -7,6 +7,7 @@ import 'dart:convert';
 
 import '../../../model/company/company_model.dart';
 import '../../../model/supplier/supplier_data.dart';
+import '../../../utils/functions.dart';
 
 part 'supplier_invoice_api_model.g.dart';
 
@@ -72,8 +73,8 @@ class SupplierInvoiceApiResult {
 class Invoice {
   @JsonKey(name: "mSupplier_Invoice_In_No")
   String? mSupplierInvoiceInNo;
-  @JsonKey(name: "mSupplier_Invoice_In_Date")
-  DateTime? mSupplierInvoiceInDate;
+  @JsonKey(name: "mSupplier_Invoice_In_Date", fromJson: Functions.asString)
+  String? mSupplierInvoiceInDate;
   @JsonKey(name: "mMoneyCurrency")
   String? mMoneyCurrency;
   @JsonKey(name: "mDiscount")
@@ -86,12 +87,12 @@ class Invoice {
   String? mSupplierCode;
   @JsonKey(name: "mSupplier_Name")
   String? mSupplierName;
-  @JsonKey(name: "T_Supplier_Invoice_In_ID")
-  int? tSupplierInvoiceInId;
-  @JsonKey(name: "mCreated_Date")
-  DateTime? mCreatedDate;
-  @JsonKey(name: "mLast_Modified_Date")
-  DateTime? mLastModifiedDate;
+  @JsonKey(name: "T_Supplier_Invoice_In_ID", fromJson: Functions.asString)
+  String? tSupplierInvoiceInId;
+  @JsonKey(name: "mCreated_Date", fromJson: Functions.asString)
+  String? mCreatedDate;
+  @JsonKey(name: "mLast_Modified_Date", fromJson: Functions.asString)
+  String? mLastModifiedDate;
   @JsonKey(name: "mCreated_By")
   String? mCreatedBy;
   @JsonKey(name: "mLast_Modified_By")
@@ -100,10 +101,10 @@ class Invoice {
   String? mExRatio;
   @JsonKey(name: "mRevised")
   String? mRevised;
-  @JsonKey(name: "mFlag")
-  int? mFlag;
-  @JsonKey(name: "mRef_Supplier_Invoice_No")
-  dynamic mRefSupplierInvoiceNo;
+  @JsonKey(name: "mFlag", fromJson: Functions.asString)
+  String? mFlag;
+  @JsonKey(name: "mRef_Supplier_Invoice_No", fromJson: Functions.asString)
+  String? mRefSupplierInvoiceNo;
 
   Invoice({
     this.mSupplierInvoiceInNo,
@@ -127,22 +128,22 @@ class Invoice {
 
   Invoice copyWith({
     String? mSupplierInvoiceInNo,
-    DateTime? mSupplierInvoiceInDate,
+    String? mSupplierInvoiceInDate,
     String? mMoneyCurrency,
     String? mDiscount,
     String? mAmount,
     String? mRemarks,
     String? mSupplierCode,
     String? mSupplierName,
-    int? tSupplierInvoiceInId,
-    DateTime? mCreatedDate,
-    DateTime? mLastModifiedDate,
+    String? tSupplierInvoiceInId,
+    String? mCreatedDate,
+    String? mLastModifiedDate,
     String? mCreatedBy,
     String? mLastModifiedBy,
     String? mExRatio,
     String? mRevised,
-    int? mFlag,
-    dynamic mRefSupplierInvoiceNo,
+    String? mFlag,
+    String? mRefSupplierInvoiceNo,
   }) => Invoice(
     mSupplierInvoiceInNo: mSupplierInvoiceInNo ?? this.mSupplierInvoiceInNo,
     mSupplierInvoiceInDate: mSupplierInvoiceInDate ?? this.mSupplierInvoiceInDate,

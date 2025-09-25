@@ -1,17 +1,22 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
-
 import '../../config.dart';
+import '../../model/company/company_model.dart';
 import '../../model/product/print_barcode_model.dart';
+import '../../model/supplier/supplier_data.dart';
 import '../../service/dio_api_client.dart';
 import '../../service/dio_api_result.dart';
+import '../../service/pdf_theme_manager.dart';
 import '../../translations/locale_keys.dart';
 import '../../utils/custom_dialog.dart';
+import '../../utils/logger.dart';
+import 'common.dart';
 import 'model/supplier_invoice_api_model.dart';
+part 'barcode_pdf.dart';
+part 'supplier_invoice_pdf.dart';
 
 class PdfController extends GetxController {
   final isLoading = true.obs;
@@ -20,18 +25,15 @@ class PdfController extends GetxController {
   PdfPageFormat pdfPageFormat = PdfPageFormat.a4;
 
   /// 最大宽度
-  double maxPageWidth = 700.00;
+  double maxPageWidth = 800.00;
   // 页面标题
   final _title = ''.obs;
   String get title => _title.value;
   set title(String value) => _title.value = value;
-
   // 是否有数据
   final hasData = false.obs;
-
   // pdf名称
   String pdfName = 'pdf.pdf';
-
   late pw.ThemeData theme;
   // 通用 PDF 生成函数（UI层统一调用）
   late Future<Uint8List> Function() generatePdf;
@@ -51,7 +53,7 @@ class PdfController extends GetxController {
         getProductBarcodeData(parameters).then((value) {
           if (value != null) {
             hasData.value = value.isNotEmpty;
-            generatePdf = () => generateBarcodePdf(barcodeData: value);
+            generatePdf = () => generateBarcodePdf(barcodeData: value, theme: theme, pdfPageFormat: pdfPageFormat);
           }
         });
         break;
@@ -60,7 +62,7 @@ class PdfController extends GetxController {
         getSupplierInvoiceData(parameters).then((value) {
           if (value != null) {
             hasData.value = true;
-            generatePdf = () => generateSupplierInvoicePdf(data: value);
+            generatePdf = () => generateSupplierInvoicePdf(data: value, theme: theme, pdfPageFormat: pdfPageFormat);
           }
         });
         break;
@@ -73,13 +75,7 @@ class PdfController extends GetxController {
 
   /// 初始pdf theme
   Future<void> initTheme() async {
-    final baseFont = await PdfGoogleFonts.notoSansSCRegular();
-    // 加入一个英文字体作为 fallback，或者再加 emoji 字体
-    final fallbackFont = await PdfGoogleFonts.notoSansSymbols2Regular();
-
-    theme = pw.ThemeData.withFont(base: baseFont, bold: baseFont, italic: baseFont, icons: baseFont).copyWith(
-      defaultTextStyle: pw.TextStyle(font: baseFont, fontFallback: [fallbackFont]),
-    );
+    theme = await PdfThemeManager.instance.getTheme();
   }
 
   /// 获取barcode数据
@@ -110,51 +106,6 @@ class PdfController extends GetxController {
       CustomDialog.dismissDialog();
       isLoading.value = false;
     }
-  }
-
-  /// 生成条码 PDF
-  Future<Uint8List> generateBarcodePdf({
-    required List<PrintBarcodeApiResult> barcodeData,
-    double margin = 1,
-    double barcodeWidth = 35,
-    double barcodeHeight = 6,
-  }) async {
-    final pdf = pw.Document();
-    final Map<String, String?> parameters = Get.parameters;
-    final showPrice = parameters["printPrice"] == "1";
-
-    for (var item in barcodeData) {
-      pdf.addPage(
-        pw.Page(
-          pageTheme: pw.PageTheme(
-            pageFormat: pdfPageFormat,
-            margin: pw.EdgeInsets.all(margin * PdfPageFormat.mm),
-            theme: theme,
-          ),
-          build: (context) => pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
-            children: [
-              pw.Text(item.mName ?? "", style: pw.TextStyle(fontSize: 8), maxLines: 1, overflow: pw.TextOverflow.clip),
-              pw.SizedBox(height: 2),
-              pw.BarcodeWidget(
-                barcode: pw.Barcode.code128(),
-                data: item.mCode ?? "",
-                drawText: false,
-                width: barcodeWidth * PdfPageFormat.mm,
-                height: barcodeHeight * PdfPageFormat.mm,
-              ),
-              pw.SizedBox(height: 2),
-              pw.Text(
-                '${item.mCode ?? ""}${showPrice ? '   \$${item.mPrice ?? ""}' : ''}',
-                style: pw.TextStyle(fontSize: 8),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
-    return pdf.save();
   }
 
   /// 获取供应商发票数据
@@ -191,15 +142,58 @@ class PdfController extends GetxController {
     }
   }
 
-  /// 生成供应商发票 PDF
-  Future<Uint8List> generateSupplierInvoicePdf({required SupplierInvoiceApiResult data}) async {
-    final pdf = pw.Document();
-    final font = await PdfGoogleFonts.notoSansSCRegular();
-    final company = data.company;
-    final invoice = data.invoice;
-    final supplier = data.supplier; //重写供应商model
-
-    return pdf.save();
+  /// PDF 头
+  pw.Widget _buildHeader(pw.Context context, Company? company, pw.ImageProvider imageProvider, String title) {
+    return pw.Column(
+      children: [
+        pw.Row(
+          crossAxisAlignment: pw.CrossAxisAlignment.center,
+          children: [
+            pw.Container(
+              alignment: pw.Alignment.center,
+              width: 80,
+              height: 80,
+              decoration: pw.BoxDecoration(
+                image: pw.DecorationImage(image: imageProvider, fit: pw.BoxFit.contain),
+              ),
+            ),
+            pw.Expanded(
+              child: pw.Padding(
+                padding: pw.EdgeInsets.only(left: 8),
+                child: pw.Column(
+                  mainAxisSize: pw.MainAxisSize.min,
+                  mainAxisAlignment: pw.MainAxisAlignment.start,
+                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                  children: [
+                    pw.Text(company?.mNameChinese ?? "", style: pw.TextStyle(fontSize: 16)),
+                    pw.Text(company?.mNameEnglish ?? "", style: pw.TextStyle(fontSize: 16)),
+                    pw.Divider(color: PdfColors.grey700),
+                    pw.Text(company?.mAddress ?? ""),
+                    pw.Row(
+                      children: [
+                        pw.Expanded(child: pw.Text("${LocaleKeys.tel.tr}: ${company?.mTel ?? ""}")),
+                        pw.Expanded(child: pw.Text("${LocaleKeys.fax.tr}: ${company?.mFax ?? ""}")),
+                      ],
+                    ),
+                    pw.Row(
+                      children: [
+                        pw.Expanded(child: pw.Text("${LocaleKeys.email.tr}: ${company?.mEMail ?? ""}")),
+                        pw.Expanded(
+                          child: pw.FittedBox(child: pw.Text("${LocaleKeys.website.tr}: ${company?.mWebSite ?? ""}")),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+        pw.Text(title, style: pw.TextStyle(fontSize: 18, fontWeight: pw.FontWeight.bold)),
+        if (context.pageNumber > 1) pw.SizedBox(height: 10),
+        if (context.pageNumber > 1) pw.SizedBox(height: 10),
+      ],
+    );
   }
 
   @override

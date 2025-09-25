@@ -54,34 +54,27 @@ Map<String, dynamic> _$SupplierInvoiceApiResultToJson(
 
 Invoice _$InvoiceFromJson(Map<String, dynamic> json) => Invoice(
   mSupplierInvoiceInNo: json['mSupplier_Invoice_In_No'] as String?,
-  mSupplierInvoiceInDate: json['mSupplier_Invoice_In_Date'] == null
-      ? null
-      : DateTime.parse(json['mSupplier_Invoice_In_Date'] as String),
+  mSupplierInvoiceInDate: Functions.asString(json['mSupplier_Invoice_In_Date']),
   mMoneyCurrency: json['mMoneyCurrency'] as String?,
   mDiscount: json['mDiscount'] as String?,
   mAmount: json['mAmount'] as String?,
   mRemarks: json['mRemarks'] as String?,
   mSupplierCode: json['mSupplier_Code'] as String?,
   mSupplierName: json['mSupplier_Name'] as String?,
-  tSupplierInvoiceInId: (json['T_Supplier_Invoice_In_ID'] as num?)?.toInt(),
-  mCreatedDate: json['mCreated_Date'] == null
-      ? null
-      : DateTime.parse(json['mCreated_Date'] as String),
-  mLastModifiedDate: json['mLast_Modified_Date'] == null
-      ? null
-      : DateTime.parse(json['mLast_Modified_Date'] as String),
+  tSupplierInvoiceInId: Functions.asString(json['T_Supplier_Invoice_In_ID']),
+  mCreatedDate: Functions.asString(json['mCreated_Date']),
+  mLastModifiedDate: Functions.asString(json['mLast_Modified_Date']),
   mCreatedBy: json['mCreated_By'] as String?,
   mLastModifiedBy: json['mLast_Modified_By'] as String?,
   mExRatio: json['mEx_Ratio'] as String?,
   mRevised: json['mRevised'] as String?,
-  mFlag: (json['mFlag'] as num?)?.toInt(),
-  mRefSupplierInvoiceNo: json['mRef_Supplier_Invoice_No'],
+  mFlag: Functions.asString(json['mFlag']),
+  mRefSupplierInvoiceNo: Functions.asString(json['mRef_Supplier_Invoice_No']),
 );
 
 Map<String, dynamic> _$InvoiceToJson(Invoice instance) => <String, dynamic>{
   'mSupplier_Invoice_In_No': instance.mSupplierInvoiceInNo,
-  'mSupplier_Invoice_In_Date': instance.mSupplierInvoiceInDate
-      ?.toIso8601String(),
+  'mSupplier_Invoice_In_Date': instance.mSupplierInvoiceInDate,
   'mMoneyCurrency': instance.mMoneyCurrency,
   'mDiscount': instance.mDiscount,
   'mAmount': instance.mAmount,
@@ -89,8 +82,8 @@ Map<String, dynamic> _$InvoiceToJson(Invoice instance) => <String, dynamic>{
   'mSupplier_Code': instance.mSupplierCode,
   'mSupplier_Name': instance.mSupplierName,
   'T_Supplier_Invoice_In_ID': instance.tSupplierInvoiceInId,
-  'mCreated_Date': instance.mCreatedDate?.toIso8601String(),
-  'mLast_Modified_Date': instance.mLastModifiedDate?.toIso8601String(),
+  'mCreated_Date': instance.mCreatedDate,
+  'mLast_Modified_Date': instance.mLastModifiedDate,
   'mCreated_By': instance.mCreatedBy,
   'mLast_Modified_By': instance.mLastModifiedBy,
   'mEx_Ratio': instance.mExRatio,

@@ -357,4 +357,10 @@ Map<String, String> get enUS => {
   LocaleKeys.supplierName: "Supplier Name",
   LocaleKeys.postedDataCannotBeDelete: "Posted data cannot be delete!",
   LocaleKeys.operationInProgressPleaseWait: "Operation in progress, please wait...",
+  LocaleKeys.website: "Website",
+  LocaleKeys.toMessrs: "To",
+  LocaleKeys.item: "Item",
+  LocaleKeys.paramCode: "%s Code",
+  LocaleKeys.total: "Total",
+  LocaleKeys.subTotal: "Sub Total",
 };

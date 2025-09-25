@@ -357,4 +357,10 @@ abstract class LocaleKeys {
   static const String supplierName = "supplierName";
   static const String postedDataCannotBeDelete = "postedDataCannotBeDelete";
   static const String operationInProgressPleaseWait = "operationInProgressPleaseWait";
+  static const String website = "website";
+  static const String toMessrs = "toMessrs";
+  static const String item = "item";
+  static const String paramCode = "paramCode";
+  static const String total = "total";
+  static const String subTotal = "subTotal";
 }

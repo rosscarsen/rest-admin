@@ -357,4 +357,10 @@ Map<String, String> zhHK = {
   LocaleKeys.supplierName: "供應商名稱",
   LocaleKeys.postedDataCannotBeDelete: "已過帳,不能刪除!",
   LocaleKeys.operationInProgressPleaseWait: "正在操作中，请等待...",
+  LocaleKeys.website: "網站",
+  LocaleKeys.toMessrs: "致",
+  LocaleKeys.item: "項目",
+  LocaleKeys.paramCode: "%s編號",
+  LocaleKeys.total: "總計",
+  LocaleKeys.subTotal: "小计",
 };

@@ -61,6 +61,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/fonts/
 
 get_cli:
   sub_folder: false
