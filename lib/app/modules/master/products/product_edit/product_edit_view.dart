@@ -7,6 +7,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
+import '../../../../model/supplier/supplier_data.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/constants.dart';
@@ -389,9 +390,11 @@ class ProductEditView extends GetView<ProductEditController> {
                     labelText: LocaleKeys.supplier.tr,
                     onPressed: () async {
                       var result = await Get.toNamed(Routes.OPEN_SUPPLIER);
-                      controller.productEditFormKey.currentState?.fields[ProductEditFields.mSupplier_Code]?.didChange(
-                        result,
-                      );
+                      if (result != null && result is SupplierData) {
+                        controller.productEditFormKey.currentState?.fields[ProductEditFields.mSupplier_Code]?.didChange(
+                          result.mCode ?? "",
+                        );
+                      }
                     },
                   ),
                 ),

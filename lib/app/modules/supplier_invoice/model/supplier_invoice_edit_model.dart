@@ -2,9 +2,12 @@
 //
 //     final supplierInvoiceEditModel = supplierInvoiceEditModelFromJson(jsonString);
 
-import 'package:json_annotation/json_annotation.dart';
 import 'dart:convert';
 
+import 'package:json_annotation/json_annotation.dart';
+
+import '../../../model/currency/currency_data.dart';
+import '../../../model/stock/stock_data.dart';
 import '../../../model/supplierInvoice/supplier_invoice_api_model.dart';
 
 part 'supplier_invoice_edit_model.g.dart';
@@ -37,17 +40,30 @@ class SupplierInvoiceEditModel {
   Map<String, dynamic> toJson() => _$SupplierInvoiceEditModelToJson(this);
 }
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class SupplierInvoiceEditResult {
   @JsonKey(name: "invoice")
   Invoice? invoice;
   @JsonKey(name: "invoiceDetail")
   List<InvoiceDetail>? invoiceDetail;
+  @JsonKey(name: "currency")
+  List<CurrencyData>? currency;
+  @JsonKey(name: "stock")
+  List<StockData>? stock;
 
-  SupplierInvoiceEditResult({this.invoice, this.invoiceDetail});
+  SupplierInvoiceEditResult({this.invoice, this.invoiceDetail, this.currency, this.stock});
 
-  SupplierInvoiceEditResult copyWith({Invoice? invoice, List<InvoiceDetail>? invoiceDetail}) =>
-      SupplierInvoiceEditResult(invoice: invoice ?? this.invoice, invoiceDetail: invoiceDetail ?? this.invoiceDetail);
+  SupplierInvoiceEditResult copyWith({
+    Invoice? invoice,
+    List<InvoiceDetail>? invoiceDetail,
+    List<CurrencyData>? currency,
+    List<StockData>? stock,
+  }) => SupplierInvoiceEditResult(
+    invoice: invoice ?? this.invoice,
+    invoiceDetail: invoiceDetail ?? this.invoiceDetail,
+    currency: currency ?? this.currency,
+    stock: stock ?? this.stock,
+  );
 
   factory SupplierInvoiceEditResult.fromJson(Map<String, dynamic> json) => _$SupplierInvoiceEditResultFromJson(json);
 

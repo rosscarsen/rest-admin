@@ -1,25 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:rest_admin/app/service/dio_api_client.dart';
 
 import '../../../config.dart';
+import '../../../model/currency/currency_data.dart';
+import '../../../model/login_model.dart';
+import '../../../model/stock/stock_data.dart';
+import '../../../model/supplierInvoice/supplier_invoice_api_model.dart';
+import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/custom_dialog.dart';
 import '../../../utils/logger.dart';
+import '../../../utils/storage_manage.dart';
 import '../model/supplier_invoice_edit_model.dart';
+import '../supplier_invoice_fields.dart';
+import 'supplier_invoice_detail_data_source.dart';
 
 class SupplierInvoiceEditController extends GetxController {
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
-  // Dio客户端
+  final StorageManage storageManage = StorageManage();
+
+  /// Dio客户端
   final ApiClient apiClient = ApiClient();
-  final title = LocaleKeys.categoryAdd.tr.obs;
-  // 权限
+
+  /// 标题
+  final title = LocaleKeys.addParam.trArgs([LocaleKeys.supplierInvoice.tr]).obs;
+
+  /// 权限
   final hasPermission = true.obs;
   String? id;
+
+  /// 表格是否可用
+  bool formEnabled = true;
   // 加载标识
   final isLoading = true.obs;
+  late SupplierInvoiceDetailDataSource dataSource;
+
+  /// 表格高度
+  final tableHeight = 100.00.obs;
+
+  /// 数据
+  Invoice? invoice;
+  List<InvoiceDetail> invoiceDetail = [];
+  List<CurrencyData> currency = [];
+  List<StockData> stock = [];
+
+  /// 选中仓库
+  String? selectStock;
+
+  /// 总折扣
+  String totalDiscount = "0.00";
+
   @override
   void onInit() {
     super.onInit();
@@ -27,25 +59,40 @@ class SupplierInvoiceEditController extends GetxController {
     if (params.isNotEmpty) {
       id = params['id'];
       if (id != null) {
-        title.value = LocaleKeys.categoryEdit.tr;
+        title.value = LocaleKeys.editParam.trArgs([LocaleKeys.supplierInvoice.tr]);
       }
     }
-    addOrEdit();
+    updateDataGridSource();
+  }
+
+  /// 更新数据源
+  void updateDataGridSource() {
+    addOrEdit().then((_) {
+      tableHeight.value = invoiceDetail.isNotEmpty ? 100 + invoiceDetail.length * 48 : 100;
+      dataSource = SupplierInvoiceDetailDataSource(this);
+    });
+  }
+
+  /// 获取缓存用户
+  Future<void> getCacheUser() async {
+    final localStorageLoginInfo = storageManage.read(Config.localStorageLoginInfo);
+    final LoginResult? loginUser = localStorageLoginInfo != null ? LoginResult.fromJson(localStorageLoginInfo) : null;
+    if (id == null) {
+      formKey.currentState?.patchValue({SupplierInvoiceFields.createdBy: loginUser?.user ?? ""});
+    } else {
+      formKey.currentState?.patchValue({SupplierInvoiceFields.lastModifiedBy: loginUser?.user ?? ""});
+    }
   }
 
   @override
   void onReady() {
+    getCacheUser();
     super.onReady();
   }
 
   @override
   void onClose() {
     super.onClose();
-  }
-
-  /// 刷新数据
-  Future<void> refreshData() async {
-    await addOrEdit();
   }
 
   /// 添加或编辑
@@ -68,16 +115,34 @@ class SupplierInvoiceEditController extends GetxController {
 
       hasPermission.value = true;
       final resultModel = supplierInvoiceEditModelFromJson(dioApiResult.data);
-      final SupplierInvoiceEditResult? apiData = resultModel.apiResult;
+      final apiData = resultModel.apiResult;
       if (apiData == null) {
         return;
       }
-
-      formKey.currentState?.patchValue(
-        Map.fromEntries(
-          resultModel.toJson().entries.where((e) => e.value != null).map((e) => MapEntry(e.key, e.value.toString())),
-        ),
-      );
+      invoice = apiData.invoice;
+      invoiceDetail
+        ..clear()
+        ..addAll(apiData.invoiceDetail ?? []);
+      currency
+        ..clear()
+        ..addAll(apiData.currency ?? []);
+      stock
+        ..clear()
+        ..addAll(apiData.stock ?? []);
+      formEnabled = apiData.invoice?.mFlag != "1";
+      totalDiscount = invoice?.mDiscount ?? "0.00";
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        formKey.currentState?.patchValue(
+          Map.fromEntries(
+            apiData.invoice
+                    ?.toJson()
+                    .entries
+                    .where((e) => e.value != null)
+                    .map((e) => MapEntry(e.key, e.value.toString())) ??
+                [],
+          ),
+        );
+      });
       FocusManager.instance.primaryFocus?.unfocus();
     } catch (e) {
       logger.i(e.toString());
@@ -90,6 +155,7 @@ class SupplierInvoiceEditController extends GetxController {
   /// 保存
   Future<void> save() async {
     FocusManager.instance.primaryFocus?.unfocus();
+    logger.f(invoiceDetail.map((e) => e.toJson()).toList());
     /* if (formKey.currentState?.saveAndValidate() ?? false) {
       CustomDialog.showLoading(LocaleKeys.saving.tr);
       final formData = Map<String, dynamic>.from(formKey.currentState?.value ?? {})
@@ -141,5 +207,26 @@ class SupplierInvoiceEditController extends GetxController {
         CustomDialog.dismissDialog();
       }
     } */
+  }
+
+  /// 修改行金额
+  void updateRowAmount({required InvoiceDetail row}) {
+    final index = invoiceDetail.indexOf(row);
+    if (index == -1) {
+      return;
+    }
+    final qty = double.tryParse(row.mQty ?? "0") ?? 0;
+    final price = double.tryParse(row.mPrice ?? "0") ?? 0;
+    final discount = double.tryParse(row.mDiscount ?? "0") ?? 0;
+    row.mAmount = ((qty * price * (100 - discount)) / 100).toStringAsFixed(2);
+    dataSource.updateDataSource();
+    updateTotalAmount();
+  }
+
+  /// 修改总金额
+  void updateTotalAmount() {
+    final totalAmount = invoiceDetail.fold(0.0, (sum, e) => sum + (double.tryParse(e.mAmount ?? "0") ?? 0));
+    final lastAmount = totalAmount * (100 - (double.tryParse(totalDiscount) ?? 0)) / 100;
+    formKey.currentState?.fields[SupplierInvoiceFields.amount]?.didChange(lastAmount.toStringAsFixed(2));
   }
 }

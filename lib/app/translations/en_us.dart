@@ -363,4 +363,11 @@ Map<String, String> get enUS => {
   LocaleKeys.paramCode: "%s Code",
   LocaleKeys.total: "Total",
   LocaleKeys.subTotal: "Sub Total",
+  LocaleKeys.rate: "Rate",
+  LocaleKeys.defaultStock: "Default Stock",
+  LocaleKeys.applyToAllItem: "Apply To All Item",
+  LocaleKeys.createBy: "Create By",
+  LocaleKeys.modifyBy: "Modify By",
+  LocaleKeys.searching: "Searching...",
+  LocaleKeys.paramName: "%s Name",
 };

@@ -83,7 +83,7 @@ class FormHelper {
     String? initialValue,
     void Function(String?)? onChanged,
     void Function(String?)? onSubmitted,
-    bool enabled = true,
+    bool? enabled,
     bool readOnly = false,
     TextEditingController? controller,
     int? maxDecimalDigits = 2,
@@ -92,86 +92,92 @@ class FormHelper {
   }) {
     assert(maxLines >= 1, 'maxLines不能小于1');
     assert(!(controller != null && initialValue != null), 'controller 和 initialValue 不能同时设置');
-    return FormBuilderTextField(
-      controller: controller,
-      onSubmitted: onSubmitted,
-      style: displayTextStyle,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      enabled: enabled,
-      initialValue: initialValue,
-      readOnly: readOnly,
-      name: name,
-      maxLines: maxLines,
-      validator: validator,
-      onChanged: onChanged,
-      valueTransformer: (value) {
-        final raw = (value ?? "").trim();
-        return raw.replaceAll(RegExp(r'[,\s]'), '');
-      },
-      decoration: InputDecoration(
-        labelText: labelText,
-        hintText: hintText,
-        prefixIcon: prefixIcon,
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        focusedBorder: !enabled || readOnly
-            ? OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey.shade400, width: 1.0),
-                borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-              )
-            : null,
-        suffixIcon: suffixIcon,
-        fillColor: Colors.grey.shade200,
-        filled: !enabled || readOnly,
-        errorText: errorText,
-      ),
-      keyboardType: keyboardType ?? (maxLines > 1 ? TextInputType.multiline : TextInputType.text),
-      inputFormatters: keyboardType == TextInputType.number
-          ? inputFormatters ??
-                [
-                  TextInputFormatter.withFunction((oldValue, newValue) {
-                    final text = newValue.text;
+    return Builder(
+      builder: (context) {
+        final formEnabled = FormBuilder.of(context)?.enabled ?? true;
+        final effectiveEnabled = enabled ?? formEnabled;
+        return FormBuilderTextField(
+          controller: controller,
+          onSubmitted: onSubmitted,
+          style: displayTextStyle,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          enabled: effectiveEnabled,
+          initialValue: initialValue,
+          readOnly: readOnly,
+          name: name,
+          maxLines: maxLines,
+          validator: validator,
+          onChanged: onChanged,
+          valueTransformer: (value) {
+            final raw = (value ?? "").trim();
+            return raw.replaceAll(RegExp(r'[,\s]'), '');
+          },
+          decoration: InputDecoration(
+            labelText: labelText,
+            hintText: hintText,
+            prefixIcon: prefixIcon,
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            focusedBorder: !effectiveEnabled || readOnly
+                ? OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey.shade400, width: 1.0),
+                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                  )
+                : null,
+            suffixIcon: suffixIcon,
+            fillColor: Colors.grey.shade200,
+            filled: !effectiveEnabled || readOnly,
+            errorText: errorText,
+          ),
+          keyboardType: keyboardType ?? (maxLines > 1 ? TextInputType.multiline : TextInputType.text),
+          inputFormatters: keyboardType == TextInputType.number
+              ? inputFormatters ??
+                    [
+                      TextInputFormatter.withFunction((oldValue, newValue) {
+                        final text = newValue.text;
 
-                    // 允许删除
-                    if (text.isEmpty) return newValue;
+                        // 允许删除
+                        if (text.isEmpty) return newValue;
 
-                    // 当不允许小数时
-                    if (maxDecimalDigits == 0) {
-                      // 允许单独负号
-                      if (text == '-') return newValue;
+                        // 当不允许小数时
+                        if (maxDecimalDigits == 0) {
+                          // 允许单独负号
+                          if (text == '-') return newValue;
 
-                      // 不允许小数点
-                      final regex = RegExp(r'^-?\d+$'); // 只允许整数(含负数)
-                      if (regex.hasMatch(text)) {
-                        return newValue;
-                      }
-                      return oldValue;
-                    }
+                          // 不允许小数点
+                          final regex = RegExp(r'^-?\d+$'); // 只允许整数(含负数)
+                          if (regex.hasMatch(text)) {
+                            return newValue;
+                          }
+                          return oldValue;
+                        }
 
-                    // 当允许小数时
-                    // 允许单独输入负号
-                    if (text == '-') return newValue;
+                        // 当允许小数时
+                        // 允许单独输入负号
+                        if (text == '-') return newValue;
 
-                    // 允许 "-." 输入后再补数字
-                    if (text == '-.') return newValue;
+                        // 允许 "-." 输入后再补数字
+                        if (text == '-.') return newValue;
 
-                    // 允许单独小数点（仅限正数输入）
-                    if (text == '.') return newValue;
+                        // 允许单独小数点（仅限正数输入）
+                        if (text == '.') return newValue;
 
-                    // 允许负数带小数
-                    final regex = RegExp(r'^-?\d+(\.\d{0,' + maxDecimalDigits.toString() + r'})?$');
-                    if (regex.hasMatch(text)) {
-                      return newValue;
-                    }
+                        // 允许负数带小数
+                        final regex = RegExp(r'^-?\d+(\.\d{0,' + maxDecimalDigits.toString() + r'})?$');
+                        if (regex.hasMatch(text)) {
+                          return newValue;
+                        }
 
-                    return oldValue;
-                  }),
-                ]
-          : null,
-      //textInputAction: maxLines > 1 ? TextInputAction.newline : TextInputAction.done,
-      enableSuggestions: true,
-      enableInteractiveSelection: true,
-      contextMenuBuilder: (context, editableTextState) {
-        return AdaptiveTextSelectionToolbar.editableText(editableTextState: editableTextState);
+                        return oldValue;
+                      }),
+                    ]
+              : null,
+          //textInputAction: maxLines > 1 ? TextInputAction.newline : TextInputAction.done,
+          enableSuggestions: true,
+          enableInteractiveSelection: true,
+          contextMenuBuilder: (context, editableTextState) {
+            return AdaptiveTextSelectionToolbar.editableText(editableTextState: editableTextState);
+          },
+        );
       },
     );
   }
@@ -182,59 +188,72 @@ class FormHelper {
     required String labelText,
     required void Function()? onPressed,
     TextEditingController? controller,
+    bool? enabled, // 可空
     bool readOnly = true,
   }) {
-    return FormBuilderField<String>(
-      name: name,
-      builder: (FormFieldState<String?> field) {
-        // 如果外部没传 controller，就内部创建并初始化
-        final effectiveController = controller ?? TextEditingController(text: field.value ?? "");
+    return Builder(
+      builder: (context) {
+        final formEnabled = FormBuilder.of(context)?.enabled ?? true;
+        final effectiveEnabled = enabled ?? formEnabled;
 
-        // 保证 controller.text 与 field.value 同步
-        if (effectiveController.text != field.value) {
-          effectiveController.text = field.value ?? "";
-        }
+        return FormBuilderField<String>(
+          name: name,
+          enabled: effectiveEnabled,
+          builder: (FormFieldState<String?> field) {
+            final effectiveController = controller ?? TextEditingController(text: field.value ?? "");
 
-        return Shortcuts(
-          shortcuts: <LogicalKeySet, Intent>{
-            LogicalKeySet(LogicalKeyboardKey.altLeft): DoNothingIntent(),
-            LogicalKeySet(LogicalKeyboardKey.altRight): DoNothingIntent(),
+            if (effectiveController.text != (field.value ?? "")) {
+              effectiveController.text = field.value ?? "";
+            }
+
+            return Shortcuts(
+              shortcuts: <LogicalKeySet, Intent>{
+                LogicalKeySet(LogicalKeyboardKey.altLeft): DoNothingIntent(),
+                LogicalKeySet(LogicalKeyboardKey.altRight): DoNothingIntent(),
+              },
+              child: ValueListenableBuilder<TextEditingValue>(
+                valueListenable: effectiveController,
+                builder: (context, value, child) {
+                  return TextField(
+                    controller: effectiveController,
+                    readOnly: readOnly || !effectiveEnabled,
+                    enableInteractiveSelection: !(readOnly || !effectiveEnabled),
+                    style: displayTextStyle,
+                    onTap: effectiveEnabled ? onPressed : null,
+                    decoration: InputDecoration(
+                      labelText: labelText,
+                      floatingLabelBehavior: FloatingLabelBehavior.always,
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey.shade400, width: 1.0),
+                        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+                      ),
+                      suffixIcon: value.text.isNotEmpty
+                          ? IconButton(
+                              tooltip: LocaleKeys.clearContent.tr,
+                              onPressed: effectiveEnabled
+                                  ? () {
+                                      effectiveController.clear();
+                                      field.didChange("");
+                                    }
+                                  : null,
+                              icon: const Icon(Icons.clear),
+                            )
+                          : IconButton(
+                              tooltip: LocaleKeys.openChoice.tr,
+                              onPressed: effectiveEnabled ? onPressed : null,
+                              icon: Icon(Icons.file_open, color: AppColors.openColor),
+                            ),
+                      fillColor: !effectiveEnabled ? Colors.grey.shade200 : null,
+                      filled: !effectiveEnabled,
+                    ),
+                    onChanged: (v) {
+                      if (effectiveEnabled) field.didChange(v);
+                    },
+                  );
+                },
+              ),
+            );
           },
-          child: ValueListenableBuilder<TextEditingValue>(
-            valueListenable: effectiveController,
-            builder: (context, value, child) {
-              return TextField(
-                controller: effectiveController,
-                readOnly: readOnly,
-                enableInteractiveSelection: !readOnly,
-                style: displayTextStyle,
-                onTap: onPressed,
-                decoration: InputDecoration(
-                  labelText: labelText,
-                  floatingLabelBehavior: FloatingLabelBehavior.always,
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey.shade400, width: 1.0),
-                    borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                  ),
-                  suffixIcon: value.text.isNotEmpty
-                      ? IconButton(
-                          tooltip: LocaleKeys.clearContent.tr,
-                          onPressed: () {
-                            effectiveController.clear();
-                            field.didChange(""); // 同步表单
-                          },
-                          icon: const Icon(Icons.clear),
-                        )
-                      : IconButton(
-                          tooltip: LocaleKeys.openChoice.tr,
-                          onPressed: onPressed,
-                          icon: Icon(Icons.file_open, color: AppColors.openColor),
-                        ),
-                ),
-                onChanged: field.didChange, // 保证输入同步表单
-              );
-            },
-          ),
         );
       },
     );
@@ -310,77 +329,85 @@ class FormHelper {
   }
 
   /// 下拉选择框
-  static FormBuilderField selectInput<T>({
+  static Builder selectInput<T>({
     required String name,
     required String labelText,
     required List<DropdownMenuItem<T>>? items,
-    bool enabled = true,
+    bool? enabled,
     Widget? prefixIcon,
+    Widget? prefix,
     FormFieldValidator<T?>? validator,
     T? initialValue,
     void Function(T?)? onChanged,
     Widget? suffixIcon,
     bool allowUnmatchedValue = true, // ✅ 新增参数
   }) {
-    return FormBuilderField<T>(
-      name: name,
-      enabled: enabled,
-      initialValue: initialValue,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: validator,
-      onChanged: onChanged,
-      valueTransformer: (value) => (value?.toString() ?? "").trim(),
-      builder: (field) {
-        T? currentValue = field.value;
-        List<DropdownMenuItem<T>> safeItems = items ?? [];
+    return Builder(
+      builder: (context) {
+        final formEnabled = FormBuilder.of(context)?.enabled ?? true;
+        final effectiveEnabled = enabled ?? formEnabled;
+        return FormBuilderField<T>(
+          name: name,
+          enabled: effectiveEnabled,
+          initialValue: initialValue,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: validator,
+          onChanged: onChanged,
+          valueTransformer: (value) => (value?.toString() ?? "").trim(),
+          builder: (field) {
+            T? currentValue = field.value;
+            List<DropdownMenuItem<T>> safeItems = items ?? [];
 
-        // ✅ 如果允许非法值，且当前值不在选项中，加入一个“隐藏项”
-        bool valueNotInList = currentValue != null && safeItems.where((item) => item.value == currentValue).isEmpty;
+            // ✅ 如果允许非法值，且当前值不在选项中，加入一个“隐藏项”
+            bool valueNotInList = currentValue != null && safeItems.where((item) => item.value == currentValue).isEmpty;
 
-        if (allowUnmatchedValue && valueNotInList) {
-          safeItems = [
-            DropdownMenuItem<T>(
-              value: currentValue,
-              child: Text("${LocaleKeys.invalidItem.tr} $currentValue"), // 不显示该项
-            ),
-            ...safeItems,
-          ];
-        }
-        return DropdownButtonFormField<T>(
-          style: displayTextStyle,
-          initialValue: currentValue,
-          items: safeItems,
-          isExpanded: true,
-          borderRadius: BorderRadius.circular(8),
-          onChanged: enabled
-              ? (value) {
-                  field.didChange(value);
-                }
-              : null,
-          decoration: InputDecoration(
-            labelText: labelText,
-            suffixIcon: suffixIcon,
-            prefixIcon: prefixIcon,
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            focusedBorder: !enabled
-                ? OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey.shade400),
-                    borderRadius: BorderRadius.circular(8),
-                  )
-                : null,
-            fillColor: Colors.grey.shade200,
-            filled: !enabled,
-          ),
+            if (allowUnmatchedValue && valueNotInList) {
+              safeItems = [
+                DropdownMenuItem<T>(
+                  value: currentValue,
+                  child: Text("${LocaleKeys.invalidItem.tr} $currentValue"), // 不显示该项
+                ),
+                ...safeItems,
+              ];
+            }
+            return DropdownButtonFormField<T>(
+              style: displayTextStyle,
+              initialValue: currentValue,
+              items: safeItems,
+              isExpanded: true,
+              borderRadius: BorderRadius.circular(8),
+              onChanged: effectiveEnabled
+                  ? (value) {
+                      field.didChange(value);
+                    }
+                  : null,
+              decoration: InputDecoration(
+                labelText: labelText,
+                suffixIcon: suffixIcon,
+                prefixIcon: prefixIcon,
+                prefix: prefix,
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+                focusedBorder: !effectiveEnabled
+                    ? OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey.shade400),
+                        borderRadius: BorderRadius.circular(8),
+                      )
+                    : null,
+                fillColor: Colors.grey.shade200,
+                filled: !effectiveEnabled,
+              ),
+            );
+          },
         );
       },
     );
   }
 
   /// 日期选择框
-  static FormBuilderField dateInput({
+  static Builder dateInput({
     required String name,
     required String labelText,
-    bool enabled = true,
+    bool? enabled,
     bool canClear = true,
     FormFieldValidator<String?>? validator,
     dynamic initialValue, // ✅ 支持 DateTime 或 String
@@ -413,59 +440,65 @@ class FormHelper {
       return null;
     }
 
-    return FormBuilderField<String>(
-      name: name,
-      enabled: enabled,
-      validator: validator,
-      onChanged: onChanged,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      valueTransformer: (value) => (value?.toString() ?? "").trim(),
-      initialValue: normalizeInitialValue(initialValue),
-      builder: (field) {
-        DateTime? getDateTimeFromValue(String? value) {
-          if (value == null || value.isEmpty) return null;
-          try {
-            final iso = DateTime.tryParse(value);
-            if (iso != null) return iso;
+    return Builder(
+      builder: (context) {
+        final formEnabled = FormBuilder.of(context)?.enabled ?? true;
+        final effectiveEnabled = enabled ?? formEnabled;
+        return FormBuilderField<String>(
+          name: name,
+          enabled: effectiveEnabled,
+          validator: validator,
+          onChanged: onChanged,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          valueTransformer: (value) => (value?.toString() ?? "").trim(),
+          initialValue: normalizeInitialValue(initialValue),
+          builder: (field) {
+            DateTime? getDateTimeFromValue(String? value) {
+              if (value == null || value.isEmpty) return null;
+              try {
+                final iso = DateTime.tryParse(value);
+                if (iso != null) return iso;
 
-            String normalized = value;
+                String normalized = value;
 
-            if (inputType == DateInputType.time && RegExp(r'^\d{2}:\d{2}:\d{2}$').hasMatch(normalized)) {
-              normalized = normalized.substring(0, 5);
+                if (inputType == DateInputType.time && RegExp(r'^\d{2}:\d{2}:\d{2}$').hasMatch(normalized)) {
+                  normalized = normalized.substring(0, 5);
+                }
+                if (inputType == DateInputType.dateAndTime &&
+                    RegExp(r'^\d{4}[-/]\d{2}[-/]\d{2} \d{2}:\d{2}:\d{2}$').hasMatch(normalized)) {
+                  normalized = normalized.substring(0, 16);
+                }
+                if (inputType == DateInputType.date && RegExp(r'^\d{4}/\d{2}/\d{2}$').hasMatch(normalized)) {
+                  normalized = normalized.replaceAll('/', '-');
+                }
+
+                return effectiveDateFormat.parseStrict(normalized);
+              } catch (e) {
+                return null;
+              }
             }
-            if (inputType == DateInputType.dateAndTime &&
-                RegExp(r'^\d{4}[-/]\d{2}[-/]\d{2} \d{2}:\d{2}:\d{2}$').hasMatch(normalized)) {
-              normalized = normalized.substring(0, 16);
-            }
-            if (inputType == DateInputType.date && RegExp(r'^\d{4}/\d{2}/\d{2}$').hasMatch(normalized)) {
-              normalized = normalized.replaceAll('/', '-');
-            }
 
-            return effectiveDateFormat.parseStrict(normalized);
-          } catch (e) {
-            return null;
-          }
-        }
-
-        return DateTimeFormField(
-          initialValue: getDateTimeFromValue(field.value),
-          enabled: enabled,
-          canClear: canClear,
-          clearIconData: Icons.clear,
-          style: displayTextStyle,
-          decoration: InputDecoration(
-            labelText: labelText,
-            prefixIcon: prefixIcon,
-            fillColor: enabled ? Colors.transparent : Colors.grey.shade200,
-            filled: !enabled,
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-          ),
-          mode: mode,
-          dateFormat: effectiveDateFormat,
-          firstDate: firstDate,
-          lastDate: lastDate,
-          pickerPlatform: DateTimeFieldPickerPlatform.adaptive,
-          onChanged: (val) => field.didChange(val != null ? effectiveDateFormat.format(val) : null),
+            return DateTimeFormField(
+              initialValue: getDateTimeFromValue(field.value),
+              enabled: effectiveEnabled,
+              canClear: canClear,
+              clearIconData: Icons.clear,
+              style: displayTextStyle,
+              decoration: InputDecoration(
+                labelText: labelText,
+                prefixIcon: prefixIcon,
+                fillColor: effectiveEnabled ? Colors.transparent : Colors.grey.shade200,
+                filled: !effectiveEnabled,
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+              ),
+              mode: mode,
+              dateFormat: effectiveDateFormat,
+              firstDate: firstDate,
+              lastDate: lastDate,
+              pickerPlatform: DateTimeFieldPickerPlatform.adaptive,
+              onChanged: (val) => field.didChange(val != null ? effectiveDateFormat.format(val) : null),
+            );
+          },
         );
       },
     );

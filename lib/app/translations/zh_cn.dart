@@ -363,4 +363,11 @@ Map<String, String> get zhCN => {
   LocaleKeys.paramCode: "%s编号",
   LocaleKeys.total: "总计",
   LocaleKeys.subTotal: "小计",
+  LocaleKeys.rate: "兑换率",
+  LocaleKeys.defaultStock: "默认库存",
+  LocaleKeys.applyToAllItem: "应用于所有项目",
+  LocaleKeys.createBy: "创建人",
+  LocaleKeys.modifyBy: "修改人",
+  LocaleKeys.searching: "搜索中...",
+  LocaleKeys.paramName: "%s名称",
 };

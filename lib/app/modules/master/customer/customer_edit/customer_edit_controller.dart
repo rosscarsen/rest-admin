@@ -206,8 +206,6 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
     }
   }
 
-  /// 检测页面数据是否发生变化
-
   /// 保存
   Future<void> save() async {
     FocusManager.instance.primaryFocus?.unfocus();

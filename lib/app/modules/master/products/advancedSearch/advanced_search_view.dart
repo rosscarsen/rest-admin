@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../config.dart';
+import '../../../../model/supplier/supplier_data.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/form_help.dart';
@@ -181,7 +182,11 @@ class AdvancedSearchView extends GetView<AdvancedSearchController> {
               labelText: LocaleKeys.supplier.tr,
               onPressed: () async {
                 var result = await Get.toNamed(Routes.OPEN_SUPPLIER);
-                controller.formKey.currentState?.fields[AdvancedSearchFields.mSupplierCode]?.didChange(result);
+                if (result != null && result is SupplierData) {
+                  controller.formKey.currentState?.fields[AdvancedSearchFields.mSupplierCode]?.didChange(
+                    result.mCode ?? "",
+                  );
+                }
               },
             ),
           ),

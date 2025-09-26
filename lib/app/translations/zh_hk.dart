@@ -363,4 +363,11 @@ Map<String, String> zhHK = {
   LocaleKeys.paramCode: "%s編號",
   LocaleKeys.total: "總計",
   LocaleKeys.subTotal: "小计",
+  LocaleKeys.rate: "兌換率",
+  LocaleKeys.defaultStock: "默認庫存",
+  LocaleKeys.applyToAllItem: "應用於所有項目",
+  LocaleKeys.createBy: "創建人",
+  LocaleKeys.modifyBy: "修改人",
+  LocaleKeys.searching: "搜索中...",
+  LocaleKeys.paramName: "%s名稱",
 };

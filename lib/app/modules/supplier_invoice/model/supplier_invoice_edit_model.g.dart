@@ -35,11 +35,19 @@ SupplierInvoiceEditResult _$SupplierInvoiceEditResultFromJson(
   invoiceDetail: (json['invoiceDetail'] as List<dynamic>?)
       ?.map((e) => InvoiceDetail.fromJson(e as Map<String, dynamic>))
       .toList(),
+  currency: (json['currency'] as List<dynamic>?)
+      ?.map((e) => CurrencyData.fromJson(e as Map<String, dynamic>))
+      .toList(),
+  stock: (json['stock'] as List<dynamic>?)
+      ?.map((e) => StockData.fromJson(e as Map<String, dynamic>))
+      .toList(),
 );
 
 Map<String, dynamic> _$SupplierInvoiceEditResultToJson(
   SupplierInvoiceEditResult instance,
 ) => <String, dynamic>{
-  'invoice': instance.invoice,
-  'invoiceDetail': instance.invoiceDetail,
+  'invoice': instance.invoice?.toJson(),
+  'invoiceDetail': instance.invoiceDetail?.map((e) => e.toJson()).toList(),
+  'currency': instance.currency?.map((e) => e.toJson()).toList(),
+  'stock': instance.stock?.map((e) => e.toJson()).toList(),
 };

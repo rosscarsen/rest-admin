@@ -28,7 +28,7 @@ class OpenSupplierDataSource extends DataGridSource {
     return DataGridRow(
       cells: [
         DataGridCell<String>(columnName: 'T_Supplier_ID', value: e.tSupplierId),
-        DataGridCell<String>(columnName: 'select', value: e.mCode.toString()),
+        DataGridCell<SupplierData>(columnName: 'select', value: e),
         DataGridCell<String>(columnName: 'code', value: e.mCode),
         DataGridCell<String>(columnName: 'simpleName', value: e.mSimpleName),
         DataGridCell<String>(columnName: 'fullName', value: e.mFullName),
@@ -48,7 +48,7 @@ class OpenSupplierDataSource extends DataGridSource {
             child: FittedBox(
               child: FilledButton(
                 onPressed: () {
-                  Get.back(result: e.value.toString());
+                  Get.back(result: e.value);
                 },
                 child: Text(LocaleKeys.select.tr),
               ),

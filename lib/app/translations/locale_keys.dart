@@ -363,4 +363,11 @@ abstract class LocaleKeys {
   static const String paramCode = "paramCode";
   static const String total = "total";
   static const String subTotal = "subTotal";
+  static const String rate = "Rate";
+  static const String defaultStock = "defaultStock";
+  static const String applyToAllItem = "applyToAllItem";
+  static const String createBy = "createBy";
+  static const String modifyBy = "modifyBy";
+  static const String searching = "searching";
+  static const String paramName = "paramName";
 }
