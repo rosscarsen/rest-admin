@@ -103,7 +103,7 @@ class DashboardView extends GetView<DashboardController> {
   Widget _buildContent() {
     return Expanded(
       child: ProgressHUD(
-        child: controller.isLoading.value
+        child: controller.isLoading
             ? null
             : SingleChildScrollView(
                 child: Column(

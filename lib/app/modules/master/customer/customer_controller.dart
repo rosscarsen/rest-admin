@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
+import '../../../mixin/loading_state_mixin.dart';
 import '../../../model/customer/customer_data.dart';
 import '../../../model/customer/customer_page_model.dart';
 import '../../../routes/app_pages.dart';
@@ -20,24 +21,20 @@ import '../../../utils/file_storage.dart';
 import '../../../utils/logger.dart';
 import 'customer_data_source.dart';
 
-class CustomerController extends GetxController {
+class CustomerController extends GetxController with LoadingStateMixin {
   final DataGridController dataGridController = DataGridController();
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
   static CustomerController get to => Get.find();
-  final isLoading = true.obs;
-  final totalPages = 0.obs;
-  final currentPage = 1.obs;
-  final totalRecords = 0.obs;
+
   List<CustomerData> dataList = [];
   final ApiClient apiClient = ApiClient();
   late CustomerDataSource dataSource;
-  RxBool hasPermission = true.obs;
   // 客户类型
   final customerTypes = <String>[].obs;
   @override
   void onInit() {
-    updateDataGridSource();
     super.onInit();
+    updateDataGridSource();
   }
 
   @override
@@ -49,8 +46,8 @@ class CustomerController extends GetxController {
   /// 重载数据
   void reloadData() {
     FocusManager.instance.primaryFocus?.unfocus();
-    totalPages.value = 0;
-    currentPage.value = 1;
+    totalPages = 0;
+    currentPage = 1;
     updateDataGridSource();
   }
 
@@ -64,11 +61,11 @@ class CustomerController extends GetxController {
 
   /// 获取列表
   Future<void> getList() async {
-    isLoading(true);
+    isLoading = true;
     dataList.clear();
     try {
       formKey.currentState?.saveAndValidate();
-      final param = {'page': currentPage.value, ...formKey.currentState?.value ?? {}};
+      final param = {'page': currentPage, ...formKey.currentState?.value ?? {}};
       final futures = [apiClient.get(Config.customerType), apiClient.get(Config.customer, data: param)];
       final results = await Future.wait(futures);
       // 客户类型
@@ -84,7 +81,7 @@ class CustomerController extends GetxController {
       final DioApiResult customerResult = results[1];
       if (!customerResult.success) {
         if (!customerResult.hasPermission) {
-          hasPermission.value = false;
+          hasPermission = false;
         }
         CustomDialog.errorMessages(customerResult.error ?? LocaleKeys.unknownError.tr);
         return;
@@ -93,20 +90,20 @@ class CustomerController extends GetxController {
         CustomDialog.errorMessages(customerResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
-      hasPermission.value = true;
+      hasPermission = true;
 
       final resultModel = customerPageModelFromJson(customerResult.data.toString());
       if (resultModel.status == 200) {
         dataList
           ..clear()
           ..addAll(resultModel.apiResult?.data ?? []);
-        totalPages.value = (resultModel.apiResult?.lastPage ?? 0);
-        totalRecords.value = (resultModel.apiResult?.total ?? 0);
+        totalPages = (resultModel.apiResult?.lastPage ?? 0);
+        totalRecords = (resultModel.apiResult?.total ?? 0);
       } else {
         CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
       }
     } finally {
-      isLoading(false);
+      isLoading = false;
     }
   }
 

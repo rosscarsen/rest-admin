@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../config.dart';
+import '../../mixin/loading_state_mixin.dart';
 import '../../model/supplierInvoice/supplier_invoice_api_model.dart';
 import '../../routes/app_pages.dart';
 import '../../service/dio_api_client.dart';
@@ -13,25 +14,21 @@ import '../../service/dio_api_result.dart';
 import '../../translations/locale_keys.dart';
 import '../../utils/custom_alert.dart';
 import '../../utils/custom_dialog.dart';
+import '../../utils/logger.dart';
 import 'model/supplier_invoice_model.dart';
 import 'supplier_invoice_data_source.dart';
 
-class SupplierInvoiceController extends GetxController {
+class SupplierInvoiceController extends GetxController with LoadingStateMixin {
   final DataGridController dataGridController = DataGridController();
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
   static SupplierInvoiceController get to => Get.find();
-  final isLoading = true.obs;
-  final totalPages = 0.obs;
-  final currentPage = 1.obs;
-  final totalRecords = 0.obs;
   List<Invoice> dataList = [];
   final ApiClient apiClient = ApiClient();
   late SupplierInvoiceDataSource dataSource;
-  RxBool hasPermission = true.obs;
   @override
   void onInit() {
-    updateDataGridSource();
     super.onInit();
+    updateDataGridSource();
   }
 
   @override
@@ -43,8 +40,8 @@ class SupplierInvoiceController extends GetxController {
   /// 重载数据
   void reloadData() {
     FocusManager.instance.primaryFocus?.unfocus();
-    totalPages.value = 0;
-    currentPage.value = 1;
+    totalPages = 0;
+    currentPage = 1;
     updateDataGridSource();
   }
 
@@ -58,16 +55,16 @@ class SupplierInvoiceController extends GetxController {
 
   /// 获取列表
   Future<void> getList() async {
-    isLoading(true);
+    isLoading = true;
     dataList.clear();
     try {
       formKey.currentState?.saveAndValidate();
-      final param = {'page': currentPage.value, ...formKey.currentState?.value ?? {}};
+      final param = {'page': currentPage, ...formKey.currentState?.value ?? {}};
       final DioApiResult dioApiResult = await apiClient.get(Config.supplierInvoice, data: param);
 
       if (!dioApiResult.success) {
         if (!dioApiResult.hasPermission) {
-          hasPermission.value = false;
+          hasPermission = false;
         }
         CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
@@ -76,19 +73,19 @@ class SupplierInvoiceController extends GetxController {
         CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
-      hasPermission.value = true;
+      hasPermission = true;
       //logger.f(dioApiResult.data);
       final resultModel = supplierInvoiceModelFromJson(dioApiResult.data.toString());
-
+      logger.f(resultModel.supplierInvoiceRet?.toJson());
       dataList
         ..clear()
         ..addAll(resultModel.supplierInvoiceRet?.data ?? []);
-      totalPages.value = (resultModel.supplierInvoiceRet?.lastPage ?? 0);
-      totalRecords.value = (resultModel.supplierInvoiceRet?.total ?? 0);
+      totalPages = (resultModel.supplierInvoiceRet?.lastPage ?? 0);
+      totalRecords = (resultModel.supplierInvoiceRet?.total ?? 0);
     } catch (e) {
       CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
     } finally {
-      isLoading(false);
+      isLoading = false;
     }
   }
 

@@ -5,6 +5,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 
 import '../../../../config.dart';
+import '../../../../mixin/loading_state_mixin.dart';
 import '../../../../model/category/category_model.dart';
 import '../../../../service/dio_api_client.dart';
 import '../../../../service/dio_api_result.dart';
@@ -15,24 +16,22 @@ import '../../../../utils/logger.dart';
 import '../category_controller.dart';
 import 'category_fields.dart';
 
-class CategoryEditController extends GetxController {
+class CategoryEditController extends GetxController with LoadingStateMixin {
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
   // Dio客户端
   final ApiClient apiClient = ApiClient();
-  final title = LocaleKeys.categoryAdd.tr.obs;
-  // 权限
-  final hasPermission = true.obs;
+
   String? id;
-  // 加载标识
-  final isLoading = true.obs;
+
   @override
   void onInit() {
     super.onInit();
+    title = LocaleKeys.categoryAdd.tr;
     final params = Get.parameters;
     if (params.isNotEmpty) {
       id = params['id'];
       if (id != null) {
-        title.value = LocaleKeys.categoryEdit.tr;
+        title = LocaleKeys.categoryEdit.tr;
       }
     }
     addOrEdit();
@@ -55,12 +54,12 @@ class CategoryEditController extends GetxController {
 
   /// 添加或编辑
   Future<void> addOrEdit() async {
-    isLoading(true);
+    isLoading = true;
     try {
       final DioApiResult dioApiResult = await apiClient.post(Config.categoryAddOrEdit, data: {'id': id});
       if (!dioApiResult.success) {
         if (!dioApiResult.hasPermission) {
-          hasPermission.value = false;
+          hasPermission = false;
         }
         CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
@@ -71,7 +70,7 @@ class CategoryEditController extends GetxController {
         return;
       }
 
-      hasPermission.value = true;
+      hasPermission = true;
       final data = json.decode(dioApiResult.data!) as Map<String, dynamic>;
       final apiResult = data["apiResult"];
       if (apiResult == null) {
@@ -89,7 +88,7 @@ class CategoryEditController extends GetxController {
       logger.i(e.toString());
       CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
     } finally {
-      isLoading(false);
+      isLoading = false;
     }
   }
 

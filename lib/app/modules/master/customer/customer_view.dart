@@ -30,7 +30,7 @@ class CustomerView extends GetView<CustomerController> {
           message: LocaleKeys.refresh.tr,
           child: IconButton(
             icon: const Icon(Icons.refresh),
-            onPressed: controller.hasPermission.value ? () => controller.reloadData() : null,
+            onPressed: controller.hasPermission ? () => controller.reloadData() : null,
           ),
         ),
       ],
@@ -39,13 +39,13 @@ class CustomerView extends GetView<CustomerController> {
           spacing: Config.defaultGap,
           children: <Widget>[
             _buildToolBar(context),
-            Expanded(child: ProgressHUD(child: controller.isLoading.value ? null : _buildDataGrid(context))),
+            Expanded(child: ProgressHUD(child: controller.isLoading ? null : _buildDataGrid(context))),
             DataPager(
               totalPages: controller.totalPages,
               totalRecords: controller.totalRecords,
               currentPage: controller.currentPage,
               onPageChanged: (int pageNumber) {
-                controller.currentPage.value = pageNumber;
+                controller.currentPage = pageNumber;
                 controller.updateDataGridSource();
               },
             ),
@@ -64,7 +64,7 @@ class CustomerView extends GetView<CustomerController> {
           //关键字
           FormHelper.buildGridCol(
             child: FormHelper.textInput(
-              enabled: controller.hasPermission.value,
+              enabled: controller.hasPermission,
               name: "keyword",
               labelText: LocaleKeys.keyWord.tr,
               onSubmitted: (value) => controller.reloadData(),
@@ -75,7 +75,7 @@ class CustomerView extends GetView<CustomerController> {
             child: FormHelper.selectInput(
               name: "mCustomer_Type",
               labelText: LocaleKeys.type.tr,
-              enabled: controller.hasPermission.value,
+              enabled: controller.hasPermission,
               initialValue: "",
               items: [
                 DropdownMenuItem(value: "", child: Text("")),
@@ -95,7 +95,7 @@ class CustomerView extends GetView<CustomerController> {
                 DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
                 DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
               ],
-              enabled: controller.hasPermission.value,
+              enabled: controller.hasPermission,
               onChanged: (value) => controller.reloadData(),
             ),
           ),
@@ -113,22 +113,22 @@ class CustomerView extends GetView<CustomerController> {
               children: [
                 //搜索
                 ElevatedButton(
-                  onPressed: controller.hasPermission.value ? () => controller.reloadData() : null,
+                  onPressed: controller.hasPermission ? () => controller.reloadData() : null,
                   child: Text(LocaleKeys.search.tr),
                 ),
                 //导入
                 ElevatedButton(
-                  onPressed: controller.hasPermission.value ? () => _buildImport() : null,
+                  onPressed: controller.hasPermission ? () => _buildImport() : null,
                   child: Text(LocaleKeys.import.tr),
                 ),
                 //导出
                 ElevatedButton(
-                  onPressed: controller.hasPermission.value ? () => _buildExport() : null,
+                  onPressed: controller.hasPermission ? () => _buildExport() : null,
                   child: Text(LocaleKeys.export.tr),
                 ),
                 //新增
                 ElevatedButton(
-                  onPressed: controller.hasPermission.value ? () => controller.edit() : null,
+                  onPressed: controller.hasPermission ? () => controller.edit() : null,
                   child: Text(LocaleKeys.add.tr),
                 ),
               ],
@@ -309,7 +309,7 @@ class CustomerView extends GetView<CustomerController> {
           ),
         ],
         placeholder: NoRecordPermission(
-          msg: controller.hasPermission.value ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
+          msg: controller.hasPermission ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
         ),
       ),
     );

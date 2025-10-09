@@ -76,9 +76,9 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
   RxList productCategory3 = [].obs;
   @override
   void onInit() {
+    super.onInit();
     initParams();
     updateDataGridSource();
-    super.onInit();
   }
 
   /// 重置状态

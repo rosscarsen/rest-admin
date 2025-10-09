@@ -5,6 +5,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 
 import '../../../../config.dart';
+import '../../../../mixin/loading_state_mixin.dart';
 import '../../../../model/currency/currency_data.dart';
 import '../../../../model/customer/customer_contact.dart';
 import '../../../../model/customer/customer_data.dart';
@@ -22,18 +23,15 @@ import 'contact_data_source.dart';
 import 'point_add_or_edit_view.dart';
 import 'point_data_source.dart';
 
-class CustomerEditController extends GetxController with GetSingleTickerProviderStateMixin {
+class CustomerEditController extends GetxController with GetSingleTickerProviderStateMixin, LoadingStateMixin {
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
   final ScrollController scrollController = ScrollController();
   static CustomerEditController get to => Get.find();
   // Dio客户端
   final ApiClient apiClient = ApiClient();
-  final title = LocaleKeys.addCustomer.tr.obs;
-  // 权限
-  final hasPermission = true.obs;
+
   String? id;
-  // 加载标识
-  final isLoading = true.obs;
+
   late TabController tabController;
   final tabIndex = 0.obs;
   late PointDetailDataSource pointDataSource;
@@ -45,9 +43,6 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
   CustomerEditResult? customerRet;
   final customerCtl = Get.find<CustomerController>();
 
-  final totalPages = 0.obs;
-  final currentPage = 1.obs;
-  final totalRecords = 0.obs;
   final customerTypeList = <String>[];
 
   String? invoiceAmount;
@@ -70,11 +65,12 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
   @override
   void onInit() {
     super.onInit();
+    title = LocaleKeys.addCustomer.tr;
     final params = Get.parameters;
 
     id = params['id'];
     if (id != null) {
-      title.value = LocaleKeys.editCustomer.tr;
+      title = LocaleKeys.editCustomer.tr;
       tabController = TabController(vsync: this, length: 3);
     } else {
       tabController = TabController(vsync: this, length: 2);
@@ -107,8 +103,8 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
 
   /// 更新积分数据源
   void updateDepositDataSource() {
-    totalPages.value = 0;
-    currentPage.value = 1;
+    totalPages = 0;
+    currentPage = 1;
     getDepositList().then((_) {
       pointDataSource = PointDetailDataSource(this);
     });
@@ -116,13 +112,10 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
 
   /// 获取积分列表
   Future<void> getDepositList() async {
-    isLoading(true);
+    isLoading = true;
     pointList.clear();
     try {
-      final DioApiResult pointResult = await apiClient.get(
-        Config.customerPoint,
-        data: {'page': currentPage.value, 'id': id},
-      );
+      final DioApiResult pointResult = await apiClient.get(Config.customerPoint, data: {'page': currentPage, 'id': id});
       if (pointResult.success) {
         final pointData = pointResult.data;
         if (pointData != null) {
@@ -133,13 +126,13 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
         }
       }
     } finally {
-      isLoading(false);
+      isLoading = false;
     }
   }
 
   /// 添加或编辑
   Future<void> addOrEdit() async {
-    isLoading(true);
+    isLoading = true;
     customerContactList.clear();
     customerTypeList.clear();
     currencyList.clear();
@@ -148,7 +141,7 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
     pointList.clear();
 
     final futures = [
-      apiClient.get(Config.customerPoint, data: {'page': currentPage.value, 'id': id}),
+      apiClient.get(Config.customerPoint, data: {'page': currentPage, 'id': id}),
       apiClient.get(Config.customerAddOrEdit, data: {'id': id}),
     ];
     try {
@@ -161,8 +154,8 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
           final pointListModel = pointListFromJson(pointData);
           if (pointListModel.status == 200) {
             pointList.addAll(pointListModel.pointResult?.pointData ?? []);
-            totalPages.value = pointListModel.pointResult?.lastPage ?? 0;
-            totalRecords.value = pointListModel.pointResult?.total ?? 0;
+            totalPages = pointListModel.pointResult?.lastPage ?? 0;
+            totalRecords = pointListModel.pointResult?.total ?? 0;
           }
         }
       }
@@ -170,7 +163,7 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
       final DioApiResult customerResult = results[1];
       if (!customerResult.success) {
         if (!customerResult.hasPermission) {
-          hasPermission.value = false;
+          hasPermission = false;
         }
         CustomDialog.errorMessages(customerResult.error ?? LocaleKeys.unknownError.tr);
         return;
@@ -181,7 +174,7 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
         return;
       }
 
-      hasPermission.value = true;
+      hasPermission = true;
 
       final resultModel = customerEditModelFromJson(customerResult.data);
       customerRet = resultModel.apiResult;
@@ -202,7 +195,7 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
       logger.i(e.toString());
       CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
     } finally {
-      isLoading(false);
+      isLoading = false;
     }
   }
 

@@ -15,7 +15,9 @@ import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/form_help.dart';
 import '../../../../utils/progress_hub.dart';
 import '../../../../widgets/custom_cell.dart';
+import '../../../../widgets/data_grid_theme.dart';
 import '../../../../widgets/no_record.dart';
+import '../../../../widgets/table_input_theme.dart';
 import '../../../open/open_set_meal/open_set_meal_view.dart';
 import 'copy_product_set_meal/copy_product_set_meal_view.dart';
 import 'product_edit_controller.dart';
@@ -723,15 +725,9 @@ class ProductEditView extends GetView<ProductEditController> {
     return ProgressHUD(
       child: controller.isLoading.value
           ? null
-          : SelectionArea(
-              child: SfDataGridTheme(
-                data: SfDataGridThemeData(
-                  gridLineColor: Colors.grey.shade300,
-                  currentCellStyle: DataGridCurrentCellStyle(
-                    borderColor: Colors.transparent, // 避免选中单元格边框影响
-                    borderWidth: 0,
-                  ),
-                ),
+          : DataGridTheme(
+              child: Theme(
+                data: ThemeData(inputDecorationTheme: tableInputTheme),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: SfDataGrid(

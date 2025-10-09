@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../../config.dart';
+import '../../../../../mixin/loading_state_mixin.dart';
 import '../../../../../model/category/category_all_model.dart';
 import '../../../../../model/category/category_model.dart';
 import '../../../../../model/product/copy_product_set_meal.dart';
@@ -14,14 +15,10 @@ import '../../../../../utils/custom_dialog.dart';
 import '../../../../../utils/logger.dart';
 import 'copy_product_set_meal_source.dart';
 
-class CopyProductSetMealController extends GetxController {
+class CopyProductSetMealController extends GetxController with LoadingStateMixin {
   final DataGridController dataGridController = DataGridController();
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
   final TextEditingController keyWordController = TextEditingController();
-  final isLoading = true.obs;
-  final totalPages = 0.obs;
-  final currentPage = 1.obs;
-  final totalRecords = 0.obs;
   List<ProductSetMealData> DataList = [];
   final ApiClient apiClient = ApiClient();
   late CopyProductSetMealDataSource dataSource;
@@ -30,10 +27,10 @@ class CopyProductSetMealController extends GetxController {
   final category2 = <CategoryModel>[].obs;
   @override
   void onInit() {
+    super.onInit();
     fetchMultipleData().then((_) {
       dataSource = CopyProductSetMealDataSource(this);
     });
-    super.onInit();
   }
 
   @override
@@ -47,8 +44,8 @@ class CopyProductSetMealController extends GetxController {
     dataGridController.selectedRows = [];
     formKey.currentState?.saveAndValidate();
     FocusManager.instance.primaryFocus?.unfocus();
-    totalPages.value = 0;
-    currentPage.value = 1;
+    totalPages = 0;
+    currentPage = 1;
     updateDataGridSource();
   }
 
@@ -72,11 +69,11 @@ class CopyProductSetMealController extends GetxController {
 
   ///获取产品列表
   Future<void> getProductSetMeal() async {
-    isLoading(true);
+    isLoading = true;
     DataList.clear();
     try {
-      Map<String, dynamic> search = {'page': currentPage.value};
-      if (formKey.currentState?.value != null) {
+      Map<String, dynamic> search = {'page': currentPage};
+      if (formKey.currentState?.validate() ?? false) {
         search.addAll(formKey.currentState?.value ?? {});
       }
       logger.f(search);
@@ -97,20 +94,20 @@ class CopyProductSetMealController extends GetxController {
       final productsSetMealModel = copyProductSetMealModelFromJson(dioApiResult.data!);
       if (productsSetMealModel.status == 200) {
         DataList = productsSetMealModel.apiResult?.data ?? [];
-        totalPages.value = (productsSetMealModel.apiResult?.lastPage ?? 0);
-        totalRecords.value = (productsSetMealModel.apiResult?.total ?? 0);
+        totalPages = (productsSetMealModel.apiResult?.lastPage ?? 0);
+        totalRecords = (productsSetMealModel.apiResult?.total ?? 0);
       } else {
         CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
       }
     } finally {
-      isLoading(false);
+      isLoading = false;
     }
   }
 
   /// 获取产品列表和类目列表
   Future<void> fetchMultipleData() async {
-    isLoading(true);
-    Map<String, Object> search = {'page': currentPage.value};
+    isLoading = true;
+    Map<String, Object> search = {'page': currentPage};
     final futures = [apiClient.post(Config.openProductSetMeal, data: search), apiClient.post(Config.openCategory)];
 
     try {
@@ -136,8 +133,8 @@ class CopyProductSetMealController extends GetxController {
 
           if (productsSetMealModel.status == 200) {
             DataList = productsSetMealModel.apiResult?.data ?? [];
-            totalPages.value = (productsSetMealModel.apiResult?.lastPage ?? 0);
-            totalRecords.value = (productsSetMealModel.apiResult?.total ?? 0);
+            totalPages = (productsSetMealModel.apiResult?.lastPage ?? 0);
+            totalRecords = (productsSetMealModel.apiResult?.total ?? 0);
           } else {
             CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
           }
@@ -166,7 +163,7 @@ class CopyProductSetMealController extends GetxController {
     } catch (e) {
       CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
     } finally {
-      isLoading(false);
+      isLoading = false;
     }
   }
 }

@@ -17,9 +17,9 @@ class CategoryEditView extends GetView<CategoryEditController> {
     return Obx(
       () => Scaffold(
         appBar: AppBar(
-          title: Text(controller.title.value),
+          title: Text(controller.title),
           centerTitle: true,
-          actions: controller.isLoading.value
+          actions: controller.isLoading
               ? null
               : [
                   Tooltip(
@@ -29,10 +29,10 @@ class CategoryEditView extends GetView<CategoryEditController> {
                 ],
         ),
 
-        body: controller.hasPermission.value ? _buildMain() : NoRecordPermission(msg: LocaleKeys.noPermission.tr),
+        body: controller.hasPermission ? _buildMain() : NoRecordPermission(msg: LocaleKeys.noPermission.tr),
         persistentFooterButtons: [
           FormHelper.saveButton(
-            onPressed: controller.isLoading.value || !controller.hasPermission.value ? null : () => controller.save(),
+            onPressed: controller.isLoading || !controller.hasPermission ? null : () => controller.save(),
           ),
         ],
       ),
@@ -42,7 +42,7 @@ class CategoryEditView extends GetView<CategoryEditController> {
   /// 构建表单
   Widget _buildMain() {
     return Skeletonizer(
-      enabled: controller.isLoading.value,
+      enabled: controller.isLoading,
       child: FormBuilder(
         key: controller.formKey,
         child: SingleChildScrollView(

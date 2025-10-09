@@ -33,13 +33,13 @@ class SupplierInvoiceView extends GetView<SupplierInvoiceController> {
           spacing: Config.defaultGap,
           children: <Widget>[
             _buildToolBar(context),
-            Expanded(child: ProgressHUD(child: controller.isLoading.value ? null : _buildDataGrid(context))),
+            Expanded(child: ProgressHUD(child: controller.isLoading ? null : _buildDataGrid(context))),
             DataPager(
               totalPages: controller.totalPages,
               totalRecords: controller.totalRecords,
               currentPage: controller.currentPage,
               onPageChanged: (int pageNumber) {
-                controller.currentPage.value = pageNumber;
+                controller.currentPage = pageNumber;
                 controller.updateDataGridSource();
               },
             ),
@@ -58,7 +58,7 @@ class SupplierInvoiceView extends GetView<SupplierInvoiceController> {
           //关键字
           FormHelper.buildGridCol(
             child: FormHelper.textInput(
-              enabled: controller.hasPermission.value,
+              enabled: controller.hasPermission,
               name: "mCode",
               labelText: LocaleKeys.code.tr,
               onSubmitted: (value) => controller.reloadData(),
@@ -69,7 +69,7 @@ class SupplierInvoiceView extends GetView<SupplierInvoiceController> {
             child: FormHelper.dateInput(
               name: "startDate",
               labelText: LocaleKeys.startDate.tr,
-              enabled: controller.hasPermission.value,
+              enabled: controller.hasPermission,
               onChanged: (value) => controller.reloadData(),
             ),
           ),
@@ -78,14 +78,14 @@ class SupplierInvoiceView extends GetView<SupplierInvoiceController> {
             child: FormHelper.dateInput(
               name: "endDate",
               labelText: LocaleKeys.endDate.tr,
-              enabled: controller.hasPermission.value,
+              enabled: controller.hasPermission,
               onChanged: (value) => controller.reloadData(),
             ),
           ),
           //其它
           FormHelper.buildGridCol(
             child: FormHelper.textInput(
-              enabled: controller.hasPermission.value,
+              enabled: controller.hasPermission,
               name: "other",
               labelText: LocaleKeys.other.tr,
               onSubmitted: (value) => controller.reloadData(),
@@ -106,12 +106,12 @@ class SupplierInvoiceView extends GetView<SupplierInvoiceController> {
               children: [
                 //搜索
                 ElevatedButton(
-                  onPressed: controller.hasPermission.value ? () => controller.reloadData() : null,
+                  onPressed: controller.hasPermission ? () => controller.reloadData() : null,
                   child: Text(LocaleKeys.search.tr),
                 ),
                 //新增
                 ElevatedButton(
-                  onPressed: controller.hasPermission.value ? () => controller.edit() : null,
+                  onPressed: controller.hasPermission ? () => controller.edit() : null,
                   child: Text(LocaleKeys.add.tr),
                 ),
               ],
@@ -181,7 +181,7 @@ class SupplierInvoiceView extends GetView<SupplierInvoiceController> {
             ),
           ],
           placeholder: NoRecordPermission(
-            msg: controller.hasPermission.value ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
+            msg: controller.hasPermission ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
           ),
         ),
       ),

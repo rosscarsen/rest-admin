@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
+import '../../../mixin/loading_state_mixin.dart';
 import '../../../model/product_remarks_model.dart';
 import '../../../routes/app_pages.dart';
 import '../../../service/dio_api_client.dart';
@@ -21,23 +22,19 @@ import '../../../utils/form_help.dart';
 import '../../../utils/logger.dart';
 import 'product_remarks_data_source.dart';
 
-class ProductRemarksController extends GetxController {
+class ProductRemarksController extends GetxController with LoadingStateMixin {
   final DataGridController dataGridController = DataGridController();
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
   final GlobalKey<FormBuilderState> copyKey = GlobalKey<FormBuilderState>();
   static ProductRemarksController get to => Get.find();
-  final isLoading = true.obs;
-  final totalPages = 0.obs;
-  final currentPage = 1.obs;
-  final totalRecords = 0.obs;
+
   List<ProductRemarksInfo> dataList = [];
   final ApiClient apiClient = ApiClient();
   late ProductRemarksDataSource dataSource;
-  RxBool hasPermission = true.obs;
   @override
   void onInit() {
-    updateDataGridSource();
     super.onInit();
+    updateDataGridSource();
   }
 
   @override
@@ -49,8 +46,8 @@ class ProductRemarksController extends GetxController {
   /// 重载数据
   void reloadData() {
     FocusManager.instance.primaryFocus?.unfocus();
-    totalPages.value = 0;
-    currentPage.value = 1;
+    totalPages = 0;
+    currentPage = 1;
     updateDataGridSource();
   }
 
@@ -64,16 +61,16 @@ class ProductRemarksController extends GetxController {
 
   /// 获取列表
   Future<void> getList() async {
-    isLoading(true);
+    isLoading = true;
     dataList.clear();
     try {
       formKey.currentState?.saveAndValidate();
-      final param = {'page': currentPage.value, ...formKey.currentState?.value ?? {}};
+      final param = {'page': currentPage, ...formKey.currentState?.value ?? {}};
       final DioApiResult dioApiResult = await apiClient.post(Config.productRemark, data: param);
 
       if (!dioApiResult.success) {
         if (!dioApiResult.hasPermission) {
-          hasPermission.value = false;
+          hasPermission = false;
         }
         CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
@@ -82,20 +79,20 @@ class ProductRemarksController extends GetxController {
         CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
-      hasPermission.value = true;
+      hasPermission = true;
       //logger.f(dioApiResult.data);
       final resultModel = productRemarksModelFromJson(dioApiResult.data.toString());
       if (resultModel.status == 200) {
         dataList
           ..clear()
           ..addAll(resultModel.apiResult?.productRemarksInfo ?? []);
-        totalPages.value = (resultModel.apiResult?.lastPage ?? 0);
-        totalRecords.value = (resultModel.apiResult?.total ?? 0);
+        totalPages = (resultModel.apiResult?.lastPage ?? 0);
+        totalRecords = (resultModel.apiResult?.total ?? 0);
       } else {
         CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
       }
     } finally {
-      isLoading(false);
+      isLoading = false;
     }
   }
 

@@ -45,7 +45,7 @@ class CopyProductSetMealView extends GetView<CopyProductSetMealController> {
                 totalRecords: controller.totalRecords,
                 currentPage: controller.currentPage,
                 onPageChanged: (int pageNumber) {
-                  controller.currentPage.value = pageNumber;
+                  controller.currentPage = pageNumber;
                   controller.updateDataGridSource();
                 },
               ),
@@ -59,7 +59,7 @@ class CopyProductSetMealView extends GetView<CopyProductSetMealController> {
   //数据表格
   Widget _buildDataGrid(BuildContext context, CopyProductSetMealController controller) {
     return ProgressHUD(
-      child: controller.isLoading.value
+      child: controller.isLoading
           ? null
           : SelectionArea(
               child: SfDataGridTheme(
@@ -142,7 +142,7 @@ class CopyProductSetMealView extends GetView<CopyProductSetMealController> {
   //搜索框
   Widget _buildSearch(BuildContext context, CopyProductSetMealController controller) {
     return Skeletonizer(
-      enabled: controller.isLoading.value,
+      enabled: controller.isLoading,
       child: FormBuilder(
         key: controller.formKey,
         child: FormHelper.buildGridRow(

@@ -25,15 +25,17 @@ class OpenCustomerView extends GetView<OpenCustomerController> {
           spacing: Config.defaultGap,
           children: <Widget>[
             _buildToolBar(context),
-            Expanded(child: ProgressHUD(child: controller.isLoading.value ? null : _buildDataGrid(context))),
-            DataPager(
-              totalPages: controller.totalPages,
-              totalRecords: controller.totalRecords,
-              currentPage: controller.currentPage,
-              onPageChanged: (int pageNumber) {
-                controller.currentPage.value = pageNumber;
-                controller.updateDataGridSource();
-              },
+            Expanded(child: ProgressHUD(child: controller.isLoading ? null : _buildDataGrid(context))),
+            Obx(
+              () => DataPager(
+                totalPages: controller.totalPages,
+                totalRecords: controller.totalRecords,
+                currentPage: controller.currentPage,
+                onPageChanged: (int pageNumber) {
+                  controller.currentPage = pageNumber;
+                  controller.updateDataGridSource();
+                },
+              ),
             ),
           ],
         ).paddingAll(Config.defaultPadding);

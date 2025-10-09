@@ -6,8 +6,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'dart:convert';
 
 import '../../../model/supplierInvoice/supplier_invoice_api_model.dart';
-import '../../../utils/functions.dart';
-
 part 'supplier_invoice_model.g.dart';
 
 SupplierInvoiceModel supplierInvoiceModelFromJson(String str) => SupplierInvoiceModel.fromJson(json.decode(str));

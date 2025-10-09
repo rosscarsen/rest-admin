@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
+import '../../../mixin/loading_state_mixin.dart';
 import '../../../model/product/products_model.dart';
 import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
@@ -10,21 +11,17 @@ import '../../../translations/locale_keys.dart';
 import '../../../utils/custom_dialog.dart';
 import 'open_products_data_source.dart';
 
-class OpenProductController extends GetxController {
+class OpenProductController extends GetxController with LoadingStateMixin {
   final DataGridController dataGridController = DataGridController();
   final TextEditingController searchController = TextEditingController();
   static OpenProductController get to => Get.find();
-  final isLoading = true.obs;
-  final totalPages = 0.obs;
-  final currentPage = 1.obs;
-  final totalRecords = 0.obs;
   List<ProductData> DataList = [];
   final ApiClient apiClient = ApiClient();
   late OpenProductsDataSource dataSource;
   @override
   void onInit() {
-    updateDataGridSource();
     super.onInit();
+    updateDataGridSource();
   }
 
   @override
@@ -37,8 +34,8 @@ class OpenProductController extends GetxController {
   //重载数据
   void reloadData() {
     FocusManager.instance.primaryFocus?.unfocus();
-    totalPages.value = 0;
-    currentPage.value = 1;
+    totalPages = 0;
+    currentPage = 1;
     updateDataGridSource();
   }
 
@@ -51,10 +48,10 @@ class OpenProductController extends GetxController {
 
   ///获取产品列表
   Future<void> getProduct() async {
-    isLoading(true);
+    isLoading = true;
     DataList.clear();
     try {
-      Map<String, Object> search = {'page': currentPage.value, "byCode": "asc"};
+      Map<String, Object> search = {'page': currentPage, "byCode": "asc"};
       if (searchController.text.isNotEmpty) search['search'] = searchController.text;
       final DioApiResult dioApiResult = await apiClient.post(Config.openProduct, data: search);
 
@@ -73,13 +70,13 @@ class OpenProductController extends GetxController {
       final productsModel = productsModelFromJson(dioApiResult.data!);
       if (productsModel.status == 200) {
         DataList = productsModel.apiResult?.productData ?? [];
-        totalPages.value = (productsModel.apiResult?.lastPage ?? 0);
-        totalRecords.value = (productsModel.apiResult?.total ?? 0);
+        totalPages = (productsModel.apiResult?.lastPage ?? 0);
+        totalRecords = (productsModel.apiResult?.total ?? 0);
       } else {
         CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
       }
     } finally {
-      isLoading(false);
+      isLoading = false;
     }
   }
 }

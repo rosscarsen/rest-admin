@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -16,6 +14,7 @@ import '../../../utils/progress_hub.dart';
 import '../../../widgets/custom_cell.dart';
 import '../../../widgets/data_grid_theme.dart';
 import '../../../widgets/no_record.dart';
+import '../../../widgets/table_input_theme.dart';
 import '../supplier_invoice_fields.dart';
 import 'supplier_invoice_edit_controller.dart';
 
@@ -26,9 +25,9 @@ class SupplierInvoiceEditView extends GetView<SupplierInvoiceEditController> {
     return Obx(
       () => Scaffold(
         appBar: AppBar(
-          title: Text(controller.title.value),
+          title: Text(controller.title),
           centerTitle: true,
-          actions: controller.isLoading.value
+          actions: controller.isLoading
               ? null
               : [
                   Tooltip(
@@ -41,10 +40,10 @@ class SupplierInvoiceEditView extends GetView<SupplierInvoiceEditController> {
                 ],
         ),
 
-        body: controller.hasPermission.value ? _buildMain() : NoRecordPermission(msg: LocaleKeys.noPermission.tr),
+        body: controller.hasPermission ? _buildMain() : NoRecordPermission(msg: LocaleKeys.noPermission.tr),
         persistentFooterButtons: [
           FormHelper.saveButton(
-            onPressed: controller.isLoading.value || !controller.hasPermission.value ? null : () => controller.save(),
+            onPressed: controller.isLoading || !controller.hasPermission ? null : () => controller.save(),
           ),
         ],
       ),
@@ -54,7 +53,7 @@ class SupplierInvoiceEditView extends GetView<SupplierInvoiceEditController> {
   /// 构建表单
   Widget _buildMain() {
     return Skeletonizer(
-      enabled: controller.isLoading.value,
+      enabled: controller.isLoading,
       child: FormBuilder(
         enabled: controller.formEnabled,
         key: controller.formKey,
@@ -283,24 +282,10 @@ class SupplierInvoiceEditView extends GetView<SupplierInvoiceEditController> {
   //数据表格
   Widget _buildDataGrid() {
     return ProgressHUD(
-      child: controller.isLoading.value
+      child: controller.isLoading
           ? null
           : Theme(
-              data: ThemeData(
-                inputDecorationTheme: InputDecorationTheme(
-                  isDense: true,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 3, vertical: 6),
-                  border: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey.shade400, width: 1.0)),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey.shade400, width: 1.0),
-                    borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey.shade400, width: 1.0),
-                    borderRadius: BorderRadius.all(Radius.circular(4.0)),
-                  ),
-                ),
-              ),
+              data: ThemeData(inputDecorationTheme: tableInputTheme),
               child: DataGridTheme(
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),

@@ -31,18 +31,20 @@ class OpenSupplierView extends GetView<OpenSupplierController> {
             child: GetX<OpenSupplierController>(
               init: OpenSupplierController(),
               builder: (_) {
-                return ProgressHUD(child: controller.isLoading.value ? null : _buildDataGrid(context));
+                return ProgressHUD(child: controller.isLoading ? null : _buildDataGrid(context));
               },
             ),
           ),
-          DataPager(
-            totalPages: controller.totalPages,
-            totalRecords: controller.totalRecords,
-            currentPage: controller.currentPage,
-            onPageChanged: (int pageNumber) {
-              controller.currentPage.value = pageNumber;
-              controller.updateDataGridSource();
-            },
+          Obx(
+            () => DataPager(
+              totalPages: controller.totalPages,
+              totalRecords: controller.totalRecords,
+              currentPage: controller.currentPage,
+              onPageChanged: (int pageNumber) {
+                controller.currentPage = pageNumber;
+                controller.updateDataGridSource();
+              },
+            ),
           ),
         ],
       ).paddingAll(Config.defaultPadding),

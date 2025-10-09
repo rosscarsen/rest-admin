@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
+import '../../../mixin/loading_state_mixin.dart';
 import '../../../model/product/products_model.dart';
 import '../../../routes/app_pages.dart';
 import '../../../service/dio_api_client.dart';
@@ -20,25 +21,21 @@ import '../../../utils/functions.dart';
 import '../../../utils/logger.dart';
 import 'products_data_source.dart';
 
-class ProductsController extends GetxController {
+class ProductsController extends GetxController with LoadingStateMixin {
   final DataGridController dataGridController = DataGridController();
   final TextEditingController searchController = TextEditingController();
   final copyNewCodeCtl = TextEditingController();
   static ProductsController get to => Get.find();
-  final isLoading = true.obs;
-  final totalPages = 0.obs;
-  final currentPage = 1.obs;
-  final totalRecords = 0.obs;
+
   List<ProductData> dataList = [];
   final ApiClient apiClient = ApiClient();
   late ProductsDataSource dataSource;
   Map<String, dynamic> advancedSearch = {};
   Map<String, dynamic> sort = {"byCode": "asc"};
-  RxBool hasPermission = true.obs;
   @override
   void onInit() {
-    updateDataGridSource();
     super.onInit();
+    updateDataGridSource();
   }
 
   @override
@@ -71,8 +68,8 @@ class ProductsController extends GetxController {
   //重载数据
   void reloadData() {
     FocusManager.instance.primaryFocus?.unfocus();
-    totalPages.value = 0;
-    currentPage.value = 1;
+    totalPages = 0;
+    currentPage = 1;
     updateDataGridSource();
   }
 
@@ -86,11 +83,11 @@ class ProductsController extends GetxController {
 
   // 获取产品列表
   Future<void> getProduct() async {
-    isLoading(true);
+    isLoading = true;
     dataList.clear();
     try {
       Map<String, dynamic> search = {
-        'page': currentPage.value,
+        'page': currentPage,
         'hasImage': true,
         ...sort,
         if (advancedSearch.isNotEmpty) ...advancedSearch,
@@ -101,7 +98,7 @@ class ProductsController extends GetxController {
 
       if (!dioApiResult.success) {
         if (!dioApiResult.hasPermission) {
-          hasPermission.value = false;
+          hasPermission = false;
         }
         CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
@@ -111,18 +108,18 @@ class ProductsController extends GetxController {
         return;
       }
 
-      hasPermission.value = true;
+      hasPermission = true;
       //logger.f(dioApiResult.data);
       final productsModel = productsModelFromJson(dioApiResult.data.toString());
       if (productsModel.status == 200) {
         dataList = productsModel.apiResult?.productData ?? [];
-        totalPages.value = (productsModel.apiResult?.lastPage ?? 0);
-        totalRecords.value = (productsModel.apiResult?.total ?? 0);
+        totalPages = (productsModel.apiResult?.lastPage ?? 0);
+        totalRecords = (productsModel.apiResult?.total ?? 0);
       } else {
         CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
       }
     } finally {
-      isLoading(false);
+      isLoading = false;
     }
   }
 

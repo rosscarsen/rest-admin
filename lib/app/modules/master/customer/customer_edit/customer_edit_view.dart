@@ -25,9 +25,9 @@ class CustomerEditView extends GetView<CustomerEditController> {
     return Obx(
       () => Scaffold(
         appBar: AppBar(
-          title: Text(controller.title.value),
+          title: Text(controller.title),
           centerTitle: true,
-          actions: controller.isLoading.value
+          actions: controller.isLoading
               ? null
               : [
                   Tooltip(
@@ -38,7 +38,7 @@ class CustomerEditView extends GetView<CustomerEditController> {
                     ),
                   ),
                 ],
-          bottom: controller.hasPermission.value
+          bottom: controller.hasPermission
               ? PreferredSize(
                   preferredSize: Size.fromHeight(48.0),
                   child: Container(
@@ -64,10 +64,10 @@ class CustomerEditView extends GetView<CustomerEditController> {
               : null,
         ),
 
-        body: controller.hasPermission.value ? buildMain(context) : NoRecordPermission(msg: LocaleKeys.noPermission.tr),
+        body: controller.hasPermission ? buildMain(context) : NoRecordPermission(msg: LocaleKeys.noPermission.tr),
         persistentFooterButtons: [
           FormHelper.saveButton(
-            onPressed: controller.isLoading.value || !controller.hasPermission.value ? null : () => controller.save(),
+            onPressed: controller.isLoading || !controller.hasPermission ? null : () => controller.save(),
           ),
         ],
       ),
@@ -85,7 +85,7 @@ class CustomerEditView extends GetView<CustomerEditController> {
   Widget _buildBasicInfo(BuildContext context) {
     bool visibility = controller.id != null;
     return Skeletonizer(
-      enabled: controller.isLoading.value,
+      enabled: controller.isLoading,
       child: FormBuilder(
         key: controller.formKey,
         child: SingleChildScrollView(
@@ -560,7 +560,7 @@ class CustomerEditView extends GetView<CustomerEditController> {
           ),
           Expanded(
             child: ProgressHUD(
-              child: controller.isLoading.value
+              child: controller.isLoading
                   ? null
                   : DataGridTheme(
                       child: SfDataGrid(
@@ -607,9 +607,7 @@ class CustomerEditView extends GetView<CustomerEditController> {
                           ),
                         ],
                         placeholder: NoRecordPermission(
-                          msg: controller.hasPermission.value
-                              ? LocaleKeys.noRecordFound.tr
-                              : LocaleKeys.noPermission.tr,
+                          msg: controller.hasPermission ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
                         ),
                       ),
                     ),
@@ -657,7 +655,7 @@ class CustomerEditView extends GetView<CustomerEditController> {
           ),
           Expanded(
             child: ProgressHUD(
-              child: controller.isLoading.value
+              child: controller.isLoading
                   ? null
                   : DataGridTheme(
                       child: SfDataGrid(
@@ -697,9 +695,7 @@ class CustomerEditView extends GetView<CustomerEditController> {
                           ),
                         ],
                         placeholder: NoRecordPermission(
-                          msg: controller.hasPermission.value
-                              ? LocaleKeys.noRecordFound.tr
-                              : LocaleKeys.noPermission.tr,
+                          msg: controller.hasPermission ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
                         ),
                       ),
                     ),
@@ -710,7 +706,7 @@ class CustomerEditView extends GetView<CustomerEditController> {
             totalRecords: controller.totalRecords,
             currentPage: controller.currentPage,
             onPageChanged: (int pageNumber) {
-              controller.currentPage.value = pageNumber;
+              controller.currentPage = pageNumber;
               controller.updateDepositDataSource();
             },
           ),

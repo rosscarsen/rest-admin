@@ -30,7 +30,7 @@ class ProductRemarksView extends GetView<ProductRemarksController> {
           message: LocaleKeys.refresh.tr,
           child: IconButton(
             icon: const Icon(Icons.refresh),
-            onPressed: controller.hasPermission.value ? () => controller.reloadData() : null,
+            onPressed: controller.hasPermission ? () => controller.reloadData() : null,
           ),
         ),
       ],
@@ -39,13 +39,13 @@ class ProductRemarksView extends GetView<ProductRemarksController> {
           spacing: Config.defaultGap,
           children: <Widget>[
             _buildToolBar(context),
-            Expanded(child: ProgressHUD(child: controller.isLoading.value ? null : _buildDataGrid(context))),
+            Expanded(child: ProgressHUD(child: controller.isLoading ? null : _buildDataGrid(context))),
             DataPager(
               totalPages: controller.totalPages,
               totalRecords: controller.totalRecords,
               currentPage: controller.currentPage,
               onPageChanged: (int pageNumber) {
-                controller.currentPage.value = pageNumber;
+                controller.currentPage = pageNumber;
                 controller.updateDataGridSource();
               },
             ),
@@ -64,7 +64,7 @@ class ProductRemarksView extends GetView<ProductRemarksController> {
           //关键字
           FormHelper.buildGridCol(
             child: FormHelper.textInput(
-              enabled: controller.hasPermission.value,
+              enabled: controller.hasPermission,
               name: "search",
               labelText: LocaleKeys.keyWord.tr,
               onSubmitted: (value) => controller.reloadData(),
@@ -74,7 +74,7 @@ class ProductRemarksView extends GetView<ProductRemarksController> {
           //类型
           FormHelper.buildGridCol(
             child: FormHelper.selectInput(
-              enabled: controller.hasPermission.value,
+              enabled: controller.hasPermission,
               name: "sort",
               labelText: "",
               initialValue: "0",
@@ -83,7 +83,7 @@ class ProductRemarksView extends GetView<ProductRemarksController> {
                 DropdownMenuItem(value: "1", child: Text(LocaleKeys.address.tr)),
                 DropdownMenuItem(value: "2", child: Text(LocaleKeys.cancel.tr)),
               ],
-              onChanged: (value) => controller.hasPermission.value ? controller.reloadData() : null,
+              onChanged: (value) => controller.hasPermission ? controller.reloadData() : null,
             ),
           ),
           //按钮
@@ -99,17 +99,17 @@ class ProductRemarksView extends GetView<ProductRemarksController> {
                 children: [
                   //导入
                   ElevatedButton(
-                    onPressed: controller.hasPermission.value ? () => _buildImport() : null,
+                    onPressed: controller.hasPermission ? () => _buildImport() : null,
                     child: Text(LocaleKeys.import.tr),
                   ),
                   //导出
                   ElevatedButton(
-                    onPressed: controller.hasPermission.value ? () => controller.exportProductRemark() : null,
+                    onPressed: controller.hasPermission ? () => controller.exportProductRemark() : null,
                     child: Text(LocaleKeys.export.tr),
                   ),
                   //新增
                   ElevatedButton(
-                    onPressed: controller.hasPermission.value ? () => controller.edit() : null,
+                    onPressed: controller.hasPermission ? () => controller.edit() : null,
                     child: Text(LocaleKeys.add.tr),
                   ),
                 ],
@@ -225,7 +225,7 @@ class ProductRemarksView extends GetView<ProductRemarksController> {
           ),
         ],
         placeholder: NoRecordPermission(
-          msg: controller.hasPermission.value ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
+          msg: controller.hasPermission ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
         ),
       ),
     );

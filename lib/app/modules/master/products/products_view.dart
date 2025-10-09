@@ -29,7 +29,7 @@ class ProductsView extends GetView<ProductsController> {
           message: LocaleKeys.refresh.tr,
           child: IconButton(
             icon: const Icon(Icons.refresh),
-            onPressed: controller.hasPermission.value ? () => controller.reloadData() : null,
+            onPressed: controller.hasPermission ? () => controller.reloadData() : null,
           ),
         ),
       ],
@@ -38,13 +38,13 @@ class ProductsView extends GetView<ProductsController> {
           spacing: Config.defaultGap,
           children: <Widget>[
             _buildToolBar(context),
-            Expanded(child: ProgressHUD(child: controller.isLoading.value ? null : _buildDataGrid(context))),
+            Expanded(child: ProgressHUD(child: controller.isLoading ? null : _buildDataGrid(context))),
             DataPager(
               totalPages: controller.totalPages,
               totalRecords: controller.totalRecords,
               currentPage: controller.currentPage,
               onPageChanged: (int pageNumber) {
-                controller.currentPage.value = pageNumber;
+                controller.currentPage = pageNumber;
                 controller.updateDataGridSource();
               },
             ),
@@ -67,12 +67,12 @@ class ProductsView extends GetView<ProductsController> {
           lg: 3,
           xl: 2,
           child: TextField(
-            enabled: controller.hasPermission.value,
+            enabled: controller.hasPermission,
             controller: controller.searchController,
             textInputAction: TextInputAction.search,
             onSubmitted: (value) => controller.reloadData(),
             decoration: InputDecoration(
-              enabled: controller.hasPermission.value,
+              enabled: controller.hasPermission,
               hintText: LocaleKeys.keyWord.tr,
               suffixIcon: TextButton(onPressed: () => controller.reloadData(), child: Text(LocaleKeys.search.tr)),
             ),
@@ -98,7 +98,7 @@ class ProductsView extends GetView<ProductsController> {
                 children: [
                   //进阶搜索
                   ElevatedButton(
-                    onPressed: controller.hasPermission.value
+                    onPressed: controller.hasPermission
                         ? () async {
                             FocusManager.instance.primaryFocus?.unfocus();
                             Map<String, dynamic>? advancedSearch = await Get.toNamed(
@@ -116,42 +116,42 @@ class ProductsView extends GetView<ProductsController> {
                   ),
                   //依编号
                   ElevatedButton(
-                    onPressed: controller.hasPermission.value ? () => controller.sortButton(isByCode: true) : null,
+                    onPressed: controller.hasPermission ? () => controller.sortButton(isByCode: true) : null,
                     child: Text(LocaleKeys.byCode.tr),
                   ),
                   //依排序
                   ElevatedButton(
-                    onPressed: controller.hasPermission.value ? () => controller.sortButton(isByCode: false) : null,
+                    onPressed: controller.hasPermission ? () => controller.sortButton(isByCode: false) : null,
                     child: Text(LocaleKeys.bySort.tr),
                   ),
                   //批量删除食品
                   ElevatedButton(
-                    onPressed: controller.hasPermission.value ? () => controller.deleteSelectedRows() : null,
+                    onPressed: controller.hasPermission ? () => controller.deleteSelectedRows() : null,
                     child: Text(LocaleKeys.batchDeleteProduct.tr),
                   ),
                   //批量删除套餐
                   ElevatedButton(
-                    onPressed: controller.hasPermission.value ? () => controller.deleteSelectedSetMeal() : null,
+                    onPressed: controller.hasPermission ? () => controller.deleteSelectedSetMeal() : null,
                     child: Text(LocaleKeys.batchDeleteSetMeal.tr),
                   ),
                   //打印条码
                   ElevatedButton(
-                    onPressed: controller.hasPermission.value ? () => _printBarcode() : null,
+                    onPressed: controller.hasPermission ? () => _printBarcode() : null,
                     child: Text(LocaleKeys.printBarcode.tr),
                   ),
                   //导入
                   ElevatedButton(
-                    onPressed: controller.hasPermission.value ? () => _importProduct() : null,
+                    onPressed: controller.hasPermission ? () => _importProduct() : null,
                     child: Text(LocaleKeys.import.tr),
                   ),
                   //导出
                   ElevatedButton(
-                    onPressed: controller.hasPermission.value ? () => controller.exportProduct() : null,
+                    onPressed: controller.hasPermission ? () => controller.exportProduct() : null,
                     child: Text(LocaleKeys.export.tr),
                   ),
                   //新增
                   ElevatedButton(
-                    onPressed: controller.hasPermission.value ? () => controller.edit() : null,
+                    onPressed: controller.hasPermission ? () => controller.edit() : null,
                     child: Text(LocaleKeys.add.tr),
                   ),
                 ],
@@ -411,7 +411,7 @@ class ProductsView extends GetView<ProductsController> {
           ),
         ],
         placeholder: NoRecordPermission(
-          msg: controller.hasPermission.value ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
+          msg: controller.hasPermission ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
         ),
       ),
     );

@@ -32,14 +32,16 @@ class OpenSetMealView extends GetView<OpenSetMealController> {
             children: <Widget>[
               _buildSearch(context, controller),
               Expanded(child: _buildDataGrid(context, controller)),
-              DataPager(
-                totalPages: controller.totalPages,
-                currentPage: controller.currentPage,
-                totalRecords: controller.totalRecords,
-                onPageChanged: (int pageNumber) {
-                  controller.currentPage.value = pageNumber;
-                  controller.updateDataGridSource();
-                },
+              Obx(
+                () => DataPager(
+                  totalPages: controller.totalPages,
+                  currentPage: controller.currentPage,
+                  totalRecords: controller.totalRecords,
+                  onPageChanged: (int pageNumber) {
+                    controller.currentPage = pageNumber;
+                    controller.updateDataGridSource();
+                  },
+                ),
               ),
             ],
           ).paddingAll(Config.defaultPadding);
@@ -51,7 +53,7 @@ class OpenSetMealView extends GetView<OpenSetMealController> {
   //数据表格
   Widget _buildDataGrid(BuildContext context, OpenSetMealController controller) {
     return ProgressHUD(
-      child: controller.isLoading.value
+      child: controller.isLoading
           ? null
           : SelectionArea(
               child: SfDataGridTheme(
@@ -104,7 +106,7 @@ class OpenSetMealView extends GetView<OpenSetMealController> {
   //搜索框
   Widget _buildSearch(BuildContext context, OpenSetMealController controller) {
     return Skeletonizer(
-      enabled: controller.isLoading.value,
+      enabled: controller.isLoading,
       child: FormHelper.buildGridRow(
         children: [
           FormHelper.buildGridCol(

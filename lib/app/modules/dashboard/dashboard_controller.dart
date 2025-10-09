@@ -4,28 +4,27 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../config.dart';
+import '../../mixin/loading_state_mixin.dart';
 import '../../model/chart_model.dart';
 import '../../service/dio_api_client.dart';
 import '../../service/dio_api_result.dart';
 import '../../translations/locale_keys.dart';
 import '../../utils/custom_dialog.dart';
 
-class DashboardController extends GetxController {
+class DashboardController extends GetxController with LoadingStateMixin {
   static DashboardController get to => Get.find();
   final ApiClient apiClient = ApiClient();
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
-  final isLoading = true.obs;
   Map<String, dynamic> search = {};
-  RxBool hasPermission = true.obs;
   final apiResult = ChartResult().obs;
   @override
   void onInit() {
-    getChartData();
     super.onInit();
+    getChartData();
   }
 
   Future<void> getChartData() async {
-    isLoading(true);
+    isLoading = true;
     apiResult.value = ChartResult();
     try {
       final formatter = DateFormat('yyyy-MM-dd');
@@ -39,7 +38,7 @@ class DashboardController extends GetxController {
         return;
       }
       if (dioApiResult.hasPermission == false) {
-        hasPermission.value = false;
+        hasPermission = false;
         CustomDialog.showToast(dioApiResult.error ?? LocaleKeys.noPermission.tr);
         return;
       }
@@ -52,7 +51,7 @@ class DashboardController extends GetxController {
         CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
       }
     } finally {
-      isLoading(false);
+      isLoading = false;
     }
   }
 }

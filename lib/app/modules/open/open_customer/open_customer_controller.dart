@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
+import '../../../mixin/loading_state_mixin.dart';
 import '../../../model/customer/customer_data.dart';
 import '../../../model/customer/customer_page_model.dart';
 import '../../../service/dio_api_client.dart';
@@ -12,14 +13,10 @@ import '../../../translations/locale_keys.dart';
 import '../../../utils/custom_dialog.dart';
 import 'open_customer_data_source.dart';
 
-class OpenCustomerController extends GetxController {
+class OpenCustomerController extends GetxController with LoadingStateMixin {
   final DataGridController dataGridController = DataGridController();
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
   static DataGridController get to => Get.find();
-  final isLoading = true.obs;
-  final totalPages = 0.obs;
-  final currentPage = 1.obs;
-  final totalRecords = 0.obs;
   List<CustomerData> dataList = [];
   final ApiClient apiClient = ApiClient();
   late OpenCustomerDataSource dataSource;
@@ -27,8 +24,8 @@ class OpenCustomerController extends GetxController {
   final customerTypes = <String>[].obs;
   @override
   void onInit() {
-    updateDataGridSource();
     super.onInit();
+    updateDataGridSource();
   }
 
   @override
@@ -40,8 +37,8 @@ class OpenCustomerController extends GetxController {
   /// 重载数据
   void reloadData() {
     FocusManager.instance.primaryFocus?.unfocus();
-    totalPages.value = 0;
-    currentPage.value = 1;
+    totalPages = 0;
+    currentPage = 1;
     updateDataGridSource();
   }
 
@@ -55,11 +52,11 @@ class OpenCustomerController extends GetxController {
 
   /// 获取列表
   Future<void> getList() async {
-    isLoading(true);
+    isLoading = true;
     dataList.clear();
     try {
       formKey.currentState?.saveAndValidate();
-      final param = {'page': currentPage.value, "checkPermission": false, ...formKey.currentState?.value ?? {}};
+      final param = {'page': currentPage, "checkPermission": false, ...formKey.currentState?.value ?? {}};
 
       final DioApiResult dioApiResult = await apiClient.post(Config.openCustomer, data: param);
 
@@ -77,13 +74,13 @@ class OpenCustomerController extends GetxController {
         dataList
           ..clear()
           ..addAll(resultModel.apiResult?.data ?? []);
-        totalPages.value = (resultModel.apiResult?.lastPage ?? 0);
-        totalRecords.value = (resultModel.apiResult?.total ?? 0);
+        totalPages = (resultModel.apiResult?.lastPage ?? 0);
+        totalRecords = (resultModel.apiResult?.total ?? 0);
       } else {
         CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
       }
     } finally {
-      isLoading(false);
+      isLoading = false;
     }
   }
 }

@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
+import '../../../mixin/loading_state_mixin.dart';
 import '../../../model/category/category_all_model.dart';
 import '../../../model/category/category_model.dart';
 import '../../../model/product/product_add_or_edit_model.dart';
@@ -19,14 +20,10 @@ import '../../../utils/logger.dart';
 import '../../master/products/product_edit/product_edit_controller.dart';
 import 'open_multiple_products_data_source.dart';
 
-class OpenMultipleProductController extends GetxController {
+class OpenMultipleProductController extends GetxController with LoadingStateMixin {
   final DataGridController dataGridController = DataGridController();
   static OpenMultipleProductController get to => Get.find();
   final GlobalKey<FormBuilderState> openMultipleProductFormKey = GlobalKey<FormBuilderState>();
-  final isLoading = true.obs;
-  final totalPages = 0.obs;
-  final currentPage = 1.obs;
-  final totalRecords = 0.obs;
   List<ProductData> DataList = [];
   final ApiClient apiClient = ApiClient();
   late OpenMultipleProductsDataSource dataSource;
@@ -36,10 +33,10 @@ class OpenMultipleProductController extends GetxController {
   final category2 = <CategoryModel>[].obs;
   @override
   void onInit() {
+    super.onInit();
     fetchMultipleData().then((_) {
       dataSource = OpenMultipleProductsDataSource(this);
     });
-    super.onInit();
   }
 
   @override
@@ -53,8 +50,8 @@ class OpenMultipleProductController extends GetxController {
     dataGridController.selectedRows = [];
     openMultipleProductFormKey.currentState?.saveAndValidate();
     FocusManager.instance.primaryFocus?.unfocus();
-    totalPages.value = 0;
-    currentPage.value = 1;
+    totalPages = 0;
+    currentPage = 1;
     updateDataGridSource();
   }
 
@@ -78,10 +75,10 @@ class OpenMultipleProductController extends GetxController {
 
   ///获取产品列表
   Future<void> getProduct() async {
-    isLoading(true);
+    isLoading = true;
     DataList.clear();
     try {
-      Map<String, dynamic> search = {'page': currentPage.value, "byCode": "asc"};
+      Map<String, dynamic> search = {'page': currentPage, "byCode": "asc"};
       if (openMultipleProductFormKey.currentState?.value != null) {
         search.addAll(openMultipleProductFormKey.currentState?.value ?? {});
       }
@@ -103,21 +100,21 @@ class OpenMultipleProductController extends GetxController {
       final productsModel = productsModelFromJson(dioApiResult.data!);
       if (productsModel.status == 200) {
         DataList = productsModel.apiResult?.productData ?? [];
-        totalPages.value = (productsModel.apiResult?.lastPage ?? 0);
-        totalRecords.value = (productsModel.apiResult?.total ?? 0);
+        totalPages = (productsModel.apiResult?.lastPage ?? 0);
+        totalRecords = (productsModel.apiResult?.total ?? 0);
       } else {
         CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
       }
     } finally {
-      isLoading(false);
+      isLoading = false;
     }
   }
 
   /// 获取产品列表和类目列表
   Future<void> fetchMultipleData() async {
-    isLoading(true);
-    Map<String, Object> search = {'page': currentPage.value, "byCode": "asc"};
-    final futures = [apiClient.post(Config.openProduct, data: search), apiClient.post(Config.categories)];
+    isLoading = true;
+    Map<String, Object> search = {'page': currentPage, "byCode": "asc"};
+    final futures = [apiClient.post(Config.openProduct, data: search), apiClient.post(Config.openCategory)];
 
     try {
       final results = await Future.wait(futures);
@@ -142,8 +139,8 @@ class OpenMultipleProductController extends GetxController {
 
           if (productsModel.status == 200) {
             DataList = productsModel.apiResult?.productData ?? [];
-            totalPages.value = (productsModel.apiResult?.lastPage ?? 0);
-            totalRecords.value = (productsModel.apiResult?.total ?? 0);
+            totalPages = (productsModel.apiResult?.lastPage ?? 0);
+            totalRecords = (productsModel.apiResult?.total ?? 0);
           } else {
             CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
           }
@@ -151,6 +148,7 @@ class OpenMultipleProductController extends GetxController {
         // 类目
         if (i == 1) {
           final DioApiResult categoryDioApiResult = results[i];
+
           if (!categoryDioApiResult.success) {
             continue;
           }
@@ -160,7 +158,9 @@ class OpenMultipleProductController extends GetxController {
           if (categoryDioApiResult.data == null) {
             continue;
           }
+
           final categoriesModel = categoryAllModelFromJson(categoryDioApiResult.data!);
+          logger.f(categoriesModel);
           if (categoriesModel.status == 200) {
             category1.assignAll(categoriesModel.apiResult ?? []);
           } else {
@@ -172,7 +172,7 @@ class OpenMultipleProductController extends GetxController {
     } catch (e) {
       CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
     } finally {
-      isLoading(false);
+      isLoading = false;
     }
   }
 

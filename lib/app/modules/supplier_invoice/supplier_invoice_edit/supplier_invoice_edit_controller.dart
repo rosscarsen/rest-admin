@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+import 'package:rest_admin/app/utils/custom_alert.dart';
 
 import '../../../config.dart';
+import '../../../mixin/loading_state_mixin.dart';
 import '../../../model/currency/currency_data.dart';
 import '../../../model/login_model.dart';
 import '../../../model/stock/stock_data.dart';
@@ -17,24 +19,18 @@ import '../model/supplier_invoice_edit_model.dart';
 import '../supplier_invoice_fields.dart';
 import 'supplier_invoice_detail_data_source.dart';
 
-class SupplierInvoiceEditController extends GetxController {
+class SupplierInvoiceEditController extends GetxController with LoadingStateMixin {
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
   final StorageManage storageManage = StorageManage();
 
   /// Dio客户端
   final ApiClient apiClient = ApiClient();
 
-  /// 标题
-  final title = LocaleKeys.addParam.trArgs([LocaleKeys.supplierInvoice.tr]).obs;
-
-  /// 权限
-  final hasPermission = true.obs;
   String? id;
 
   /// 表格是否可用
   bool formEnabled = true;
-  // 加载标识
-  final isLoading = true.obs;
+
   late SupplierInvoiceDetailDataSource dataSource;
 
   /// 表格高度
@@ -55,11 +51,12 @@ class SupplierInvoiceEditController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    title = LocaleKeys.addParam.trArgs([LocaleKeys.supplierInvoice.tr]);
     final params = Get.parameters;
     if (params.isNotEmpty) {
       id = params['id'];
       if (id != null) {
-        title.value = LocaleKeys.editParam.trArgs([LocaleKeys.supplierInvoice.tr]);
+        title = LocaleKeys.editParam.trArgs([LocaleKeys.supplierInvoice.tr]);
       }
     }
     updateDataGridSource();
@@ -97,23 +94,22 @@ class SupplierInvoiceEditController extends GetxController {
 
   /// 添加或编辑
   Future<void> addOrEdit() async {
-    isLoading(true);
+    isLoading = true;
     try {
       final DioApiResult dioApiResult = await apiClient.post(Config.supplierInvoiceAddOrEdit, data: {'id': id});
       if (!dioApiResult.success) {
         if (!dioApiResult.hasPermission) {
-          hasPermission.value = false;
+          hasPermission = false;
         }
         CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
-
       if (dioApiResult.data == null) {
         CustomDialog.errorMessages(LocaleKeys.dataException.tr);
         return;
       }
 
-      hasPermission.value = true;
+      hasPermission = true;
       final resultModel = supplierInvoiceEditModelFromJson(dioApiResult.data);
       final apiData = resultModel.apiResult;
       if (apiData == null) {
@@ -148,12 +144,14 @@ class SupplierInvoiceEditController extends GetxController {
       logger.i(e.toString());
       CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
     } finally {
-      isLoading(false);
+      isLoading = false;
     }
   }
 
   /// 保存
   Future<void> save() async {
+    CustomAlert.iosAlert(message: "此功能未完成");
+    return;
     FocusManager.instance.primaryFocus?.unfocus();
     logger.f(invoiceDetail.map((e) => e.toJson()).toList());
     /* if (formKey.currentState?.saveAndValidate() ?? false) {

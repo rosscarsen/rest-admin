@@ -24,7 +24,7 @@ class Category2View extends GetView<Category2Controller> {
             message: LocaleKeys.refresh.tr,
             child: IconButton(
               icon: const Icon(Icons.refresh),
-              onPressed: controller.hasPermission.value ? () => controller.reloadData() : null,
+              onPressed: controller.hasPermission ? () => controller.reloadData() : null,
             ),
           ),
         ],
@@ -37,13 +37,13 @@ class Category2View extends GetView<Category2Controller> {
               alignment: Alignment.centerRight,
               child: ElevatedButton(onPressed: () => controller.edit(), child: Text(LocaleKeys.add.tr)),
             ),
-            Expanded(child: ProgressHUD(child: controller.isLoading.value ? null : _buildDataGrid(context))),
+            Expanded(child: ProgressHUD(child: controller.isLoading ? null : _buildDataGrid(context))),
             DataPager(
               totalPages: controller.totalPages,
               totalRecords: controller.totalRecords,
               currentPage: controller.currentPage,
               onPageChanged: (int pageNumber) {
-                controller.currentPage.value = pageNumber;
+                controller.currentPage = pageNumber;
                 controller.updateDataGridSource();
               },
             ),
@@ -123,7 +123,7 @@ class Category2View extends GetView<Category2Controller> {
           ),
         ],
         placeholder: NoRecordPermission(
-          msg: controller.hasPermission.value ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
+          msg: controller.hasPermission ? LocaleKeys.noRecordFound.tr : LocaleKeys.noPermission.tr,
         ),
       ),
     );

@@ -31,18 +31,20 @@ class OpenProductRemarksView extends GetView<OpenProductRemarksController> {
             child: GetX<OpenProductRemarksController>(
               init: OpenProductRemarksController(),
               builder: (_) {
-                return ProgressHUD(child: controller.isLoading.value ? null : _buildDataGrid(context));
+                return ProgressHUD(child: controller.isLoading ? null : _buildDataGrid(context));
               },
             ),
           ),
-          DataPager(
-            totalPages: controller.totalPages,
-            currentPage: controller.currentPage,
-            totalRecords: controller.totalRecords,
-            onPageChanged: (int pageNumber) {
-              controller.currentPage.value = pageNumber;
-              controller.updateDataGridSource();
-            },
+          Obx(
+            () => DataPager(
+              totalPages: controller.totalPages,
+              currentPage: controller.currentPage,
+              totalRecords: controller.totalRecords,
+              onPageChanged: (int pageNumber) {
+                controller.currentPage = pageNumber;
+                controller.updateDataGridSource();
+              },
+            ),
           ),
         ],
       ).paddingAll(Config.defaultPadding),

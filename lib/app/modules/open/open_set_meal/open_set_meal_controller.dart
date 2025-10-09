@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
+import '../../../mixin/loading_state_mixin.dart';
 import '../../../model/set_meal_model.dart';
 import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
@@ -10,21 +11,18 @@ import '../../../translations/locale_keys.dart';
 import '../../../utils/custom_dialog.dart';
 import 'open_set_meal_source.dart';
 
-class OpenSetMealController extends GetxController {
+class OpenSetMealController extends GetxController with LoadingStateMixin {
   final DataGridController dataGridController = DataGridController();
   final TextEditingController searchController = TextEditingController();
   static OpenSetMealController get to => Get.find();
-  final isLoading = true.obs;
-  final totalPages = 0.obs;
-  final currentPage = 1.obs;
-  final totalRecords = 0.obs;
+
   List<SetMealData> DataList = [];
   final ApiClient apiClient = ApiClient();
   late OpenSetMealSource dataSource;
   @override
   void onInit() {
-    updateDataGridSource();
     super.onInit();
+    updateDataGridSource();
   }
 
   @override
@@ -37,8 +35,8 @@ class OpenSetMealController extends GetxController {
   //重载数据
   void reloadData() {
     FocusManager.instance.primaryFocus?.unfocus();
-    totalPages.value = 0;
-    currentPage.value = 1;
+    totalPages = 0;
+    currentPage = 1;
     updateDataGridSource();
   }
 
@@ -51,10 +49,10 @@ class OpenSetMealController extends GetxController {
 
   ///获取列表
   Future<void> getData() async {
-    isLoading(true);
+    isLoading = true;
     DataList.clear();
     try {
-      Map<String, Object> search = {'page': currentPage.value};
+      Map<String, Object> search = {'page': currentPage};
       if (searchController.text.isNotEmpty) search['search'] = searchController.text;
       final DioApiResult dioApiResult = await apiClient.post(Config.openSetMeal, data: search);
 
@@ -76,11 +74,11 @@ class OpenSetMealController extends GetxController {
         DataList
           ..clear()
           ..addAll(apiResult?.data ?? []);
-        totalPages.value = apiResult?.lastPage ?? 0;
-        totalRecords.value = apiResult?.total ?? 0;
+        totalPages = apiResult?.lastPage ?? 0;
+        totalRecords = apiResult?.total ?? 0;
       }
     } finally {
-      isLoading(false);
+      isLoading = false;
     }
   }
 }
