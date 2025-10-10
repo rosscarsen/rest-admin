@@ -227,22 +227,22 @@ class FormHelper {
                         borderSide: const BorderSide(color: Color(0xFFBDBDBD), width: 1.0),
                         borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                       ),
-                      suffixIcon: value.text.isNotEmpty
-                          ? IconButton(
-                              tooltip: LocaleKeys.clearContent.tr,
-                              onPressed: effectiveEnabled
-                                  ? () {
+                      suffixIcon: !effectiveEnabled
+                          ? null // ❌ 禁用时完全不显示任何图标
+                          : (value.text.isNotEmpty
+                                ? IconButton(
+                                    tooltip: LocaleKeys.clearContent.tr,
+                                    onPressed: () {
                                       effectiveController.clear();
                                       field.didChange("");
-                                    }
-                                  : null,
-                              icon: const Icon(Icons.clear),
-                            )
-                          : IconButton(
-                              tooltip: LocaleKeys.openChoice.tr,
-                              onPressed: effectiveEnabled ? onPressed : null,
-                              icon: Icon(Icons.file_open, color: AppColors.openColor),
-                            ),
+                                    },
+                                    icon: const Icon(Icons.clear),
+                                  )
+                                : IconButton(
+                                    tooltip: LocaleKeys.openChoice.tr,
+                                    onPressed: onPressed,
+                                    icon: Icon(Icons.file_open, color: AppColors.openColor),
+                                  )),
                       fillColor: !effectiveEnabled ? const Color(0xFFEEEEEE) : null,
                       filled: !effectiveEnabled,
                     ),
@@ -408,7 +408,7 @@ class FormHelper {
     required String name,
     required String labelText,
     bool? enabled,
-    bool canClear = true,
+    bool? canClear,
     FormFieldValidator<String?>? validator,
     dynamic initialValue, // ✅ 支持 DateTime 或 String
     void Function(String?)? onChanged,
@@ -481,7 +481,7 @@ class FormHelper {
             return DateTimeFormField(
               initialValue: getDateTimeFromValue(field.value),
               enabled: effectiveEnabled,
-              canClear: canClear,
+              canClear: canClear ?? effectiveEnabled,
               clearIconData: Icons.clear,
               style: displayTextStyle,
               decoration: InputDecoration(
