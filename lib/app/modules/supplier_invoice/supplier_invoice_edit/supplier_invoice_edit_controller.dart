@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:rest_admin/app/utils/custom_alert.dart';
 
 import '../../../config.dart';
 import '../../../mixin/loading_state_mixin.dart';
@@ -12,6 +11,7 @@ import '../../../model/supplierInvoice/supplier_invoice_api_model.dart';
 import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
+import '../../../utils/custom_alert.dart';
 import '../../../utils/custom_dialog.dart';
 import '../../../utils/logger.dart';
 import '../../../utils/storage_manage.dart';
@@ -96,7 +96,7 @@ class SupplierInvoiceEditController extends GetxController with LoadingStateMixi
   Future<void> addOrEdit() async {
     isLoading = true;
     try {
-      final DioApiResult dioApiResult = await apiClient.post(Config.supplierInvoiceAddOrEdit, data: {'id': id});
+      final DioApiResult dioApiResult = await apiClient.get(Config.supplierInvoiceAddOrEdit, data: {'id': id});
       if (!dioApiResult.success) {
         if (!dioApiResult.hasPermission) {
           hasPermission = false;

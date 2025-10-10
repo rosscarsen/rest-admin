@@ -14,7 +14,6 @@ import '../../service/dio_api_result.dart';
 import '../../translations/locale_keys.dart';
 import '../../utils/custom_alert.dart';
 import '../../utils/custom_dialog.dart';
-import '../../utils/logger.dart';
 import 'model/supplier_invoice_model.dart';
 import 'supplier_invoice_data_source.dart';
 
@@ -76,7 +75,6 @@ class SupplierInvoiceController extends GetxController with LoadingStateMixin {
       hasPermission = true;
       //logger.f(dioApiResult.data);
       final resultModel = supplierInvoiceModelFromJson(dioApiResult.data.toString());
-      logger.f(resultModel.supplierInvoiceRet?.toJson());
       dataList
         ..clear()
         ..addAll(resultModel.supplierInvoiceRet?.data ?? []);
@@ -146,7 +144,7 @@ class SupplierInvoiceController extends GetxController with LoadingStateMixin {
       onConfirm: () async {
         try {
           CustomDialog.showLoading(LocaleKeys.operationInProgressPleaseWait.tr);
-          final DioApiResult dioApiResult = await apiClient.get(
+          final DioApiResult dioApiResult = await apiClient.post(
             Config.supplierInvoicePosting,
             data: {"id": id, "type": type},
           );
@@ -162,6 +160,7 @@ class SupplierInvoiceController extends GetxController with LoadingStateMixin {
           final Map<String, dynamic> data = jsonDecode(dioApiResult.data!) as Map<String, dynamic>;
           switch (data['status']) {
             case 200:
+              CustomDialog.successMessages(LocaleKeys.operationSuccess.tr);
               final index = dataList.indexWhere((element) => element.tSupplierInvoiceInId == id);
               if (index != -1) {
                 dataList[index].mFlag = dataList[index].mFlag == "1" ? "0" : "1";

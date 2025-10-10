@@ -10,7 +10,7 @@ import '../../../../utils/custom_alert.dart';
 import '../../../../utils/form_help.dart';
 import '../../../../utils/progress_hub.dart';
 import '../../../../widgets/custom_cell.dart';
-import '../../../../widgets/data_grid_theme.dart';
+import '../../../../theme/data_grid_theme.dart';
 import '../../../../widgets/no_record.dart';
 import 'product_remarks_edit_controller.dart';
 import 'product_remarks_fields.dart';

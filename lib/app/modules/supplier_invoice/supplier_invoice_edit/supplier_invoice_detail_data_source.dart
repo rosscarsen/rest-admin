@@ -83,6 +83,7 @@ class SupplierInvoiceDetailDataSource extends DataGridSource with WidgetsBinding
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: TextFormField(
+              key: ValueKey('${rowIndex}_${e.value}'),
               initialValue: e.value?.toString() ?? "",
               inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d*'))],
               onChanged: (value) {
@@ -99,6 +100,7 @@ class SupplierInvoiceDetailDataSource extends DataGridSource with WidgetsBinding
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: TextFormField(
+              key: ValueKey('${rowIndex}_${e.value}'),
               initialValue: e.value?.toString() ?? "",
               onChanged: (value) {
                 controller.invoiceDetail[rowIndex].mPrice = value;
@@ -114,6 +116,7 @@ class SupplierInvoiceDetailDataSource extends DataGridSource with WidgetsBinding
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: TextFormField(
+              key: ValueKey('${rowIndex}_${e.value}'),
               initialValue: e.value?.toString() ?? "",
               onChanged: (value) {
                 controller.invoiceDetail[rowIndex].mDiscount = value;
@@ -129,6 +132,13 @@ class SupplierInvoiceDetailDataSource extends DataGridSource with WidgetsBinding
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: TextFormField(
+              readOnly: true,
+              decoration: InputDecoration(
+                fillColor: const Color(0xFFEEEEEE),
+                filled: controller.formEnabled,
+                focusedBorder: OutlineInputBorder(borderSide: const BorderSide(color: Color(0xFFBDBDBD))),
+              ),
+              key: ValueKey('${rowIndex}_${e.value}'),
               initialValue: e.value?.toString() ?? "",
               onChanged: (value) {
                 controller.invoiceDetail[rowIndex].mRemarks = value;

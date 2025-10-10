@@ -119,12 +119,12 @@ class FormHelper {
             floatingLabelBehavior: FloatingLabelBehavior.always,
             focusedBorder: !effectiveEnabled || readOnly
                 ? OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey.shade400, width: 1.0),
+                    borderSide: const BorderSide(color: Color(0xFFBDBDBD), width: 1.0),
                     borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                   )
                 : null,
             suffixIcon: suffixIcon,
-            fillColor: Colors.grey.shade200,
+            fillColor: const Color(0xFFEEEEEE),
             filled: !effectiveEnabled || readOnly,
             errorText: errorText,
           ),
@@ -224,7 +224,7 @@ class FormHelper {
                       labelText: labelText,
                       floatingLabelBehavior: FloatingLabelBehavior.always,
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey.shade400, width: 1.0),
+                        borderSide: const BorderSide(color: Color(0xFFBDBDBD), width: 1.0),
                         borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                       ),
                       suffixIcon: value.text.isNotEmpty
@@ -243,7 +243,7 @@ class FormHelper {
                               onPressed: effectiveEnabled ? onPressed : null,
                               icon: Icon(Icons.file_open, color: AppColors.openColor),
                             ),
-                      fillColor: !effectiveEnabled ? Colors.grey.shade200 : null,
+                      fillColor: !effectiveEnabled ? const Color(0xFFEEEEEE) : null,
                       filled: !effectiveEnabled,
                     ),
                     onChanged: (v) {
@@ -389,11 +389,11 @@ class FormHelper {
                 floatingLabelBehavior: FloatingLabelBehavior.always,
                 focusedBorder: !effectiveEnabled
                     ? OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey.shade400),
-                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Color(0xFFBDBDBD)),
+                        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                       )
                     : null,
-                fillColor: Colors.grey.shade200,
+                fillColor: const Color(0xFFEEEEEE),
                 filled: !effectiveEnabled,
               ),
             );
@@ -487,7 +487,7 @@ class FormHelper {
               decoration: InputDecoration(
                 labelText: labelText,
                 prefixIcon: prefixIcon,
-                fillColor: effectiveEnabled ? Colors.transparent : Colors.grey.shade200,
+                fillColor: effectiveEnabled ? Colors.transparent : const Color(0xFFEEEEEE),
                 filled: !effectiveEnabled,
                 floatingLabelBehavior: FloatingLabelBehavior.always,
               ),
