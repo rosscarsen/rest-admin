@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart' show FormBuilderState, FormBuilder;
 import 'package:form_builder_validators/form_builder_validators.dart' show FormBuilderValidators;
 import 'package:get/get.dart';
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
 import '../../../mixin/loading_state_mixin.dart';

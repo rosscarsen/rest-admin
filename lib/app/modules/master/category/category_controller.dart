@@ -5,7 +5,6 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
 import '../../../mixin/loading_state_mixin.dart';
