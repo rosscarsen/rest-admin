@@ -18,7 +18,6 @@ import 'model/supplier_invoice_model.dart';
 import 'supplier_invoice_data_source.dart';
 
 class SupplierInvoiceController extends GetxController with LoadingStateMixin {
-  final DataGridController dataGridController = DataGridController();
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
   static SupplierInvoiceController get to => Get.find();
   List<Invoice> dataList = [];
@@ -32,7 +31,6 @@ class SupplierInvoiceController extends GetxController with LoadingStateMixin {
 
   @override
   void onClose() {
-    dataGridController.dispose();
     super.onClose();
   }
 
@@ -46,7 +44,6 @@ class SupplierInvoiceController extends GetxController with LoadingStateMixin {
 
   /// 更新数据源
   void updateDataGridSource() {
-    dataGridController.selectedRows = [];
     getList().then((_) {
       dataSource = SupplierInvoiceDataSource(this);
     });

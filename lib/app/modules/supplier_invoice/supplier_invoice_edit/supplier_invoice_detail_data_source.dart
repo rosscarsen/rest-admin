@@ -45,7 +45,8 @@ class SupplierInvoiceDetailDataSource extends DataGridSource with WidgetsBinding
   @override
   DataGridRowAdapter buildRow(DataGridRow dataGridRow) {
     final int rowIndex = _dataGridRows.indexOf(dataGridRow);
-    final row = dataGridRow.getCells().firstWhere((element) => element.columnName == "actions").value as InvoiceDetail;
+    final row =
+        dataGridRow.getCells().firstWhereOrNull((element) => element.columnName == "actions")?.value as InvoiceDetail?;
     return DataGridRowAdapter(
       cells: dataGridRow.getCells().map<Widget>((e) {
         // 操作列
@@ -53,15 +54,17 @@ class SupplierInvoiceDetailDataSource extends DataGridSource with WidgetsBinding
           return Tooltip(
             message: LocaleKeys.delete.tr,
             child: IconButton(
-              icon: const Icon(Icons.delete, color: AppColors.deleteColor),
-              onPressed: () {
-                _dataGridRows.remove(dataGridRow);
-                controller.invoiceDetail.remove(row);
-                controller.tableHeight.value = controller.invoiceDetail.isNotEmpty
-                    ? 100 + controller.invoiceDetail.length * 48
-                    : 100;
-                notifyListeners();
-              },
+              icon: Icon(Icons.delete, color: controller.formEnabled ? AppColors.deleteColor : Colors.grey),
+              onPressed: controller.formEnabled
+                  ? () {
+                      _dataGridRows.remove(dataGridRow);
+                      controller.invoiceDetail.remove(row);
+                      controller.tableHeight.value = controller.invoiceDetail.isNotEmpty
+                          ? 100 + controller.invoiceDetail.length * 48
+                          : 100;
+                      notifyListeners();
+                    }
+                  : null,
             ),
           );
         }
@@ -70,6 +73,7 @@ class SupplierInvoiceDetailDataSource extends DataGridSource with WidgetsBinding
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: TextFormField(
+              readOnly: !controller.formEnabled,
               key: ValueKey('${rowIndex}_${e.value}'),
               initialValue: e.value?.toString() ?? "",
               onChanged: (value) {
@@ -83,6 +87,7 @@ class SupplierInvoiceDetailDataSource extends DataGridSource with WidgetsBinding
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: TextFormField(
+              readOnly: !controller.formEnabled,
               key: ValueKey('${rowIndex}_${e.value}'),
               initialValue: e.value?.toString() ?? "",
               inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d*'))],
@@ -100,11 +105,12 @@ class SupplierInvoiceDetailDataSource extends DataGridSource with WidgetsBinding
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: TextFormField(
+              readOnly: !controller.formEnabled,
               key: ValueKey('${rowIndex}_${e.value}'),
               initialValue: e.value?.toString() ?? "",
               onChanged: (value) {
                 controller.invoiceDetail[rowIndex].mPrice = value;
-                controller.updateRowAmount(row: row);
+                controller.updateRowAmount(row: row ?? InvoiceDetail());
               },
               inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d*'))],
               keyboardType: TextInputType.number,
@@ -116,6 +122,7 @@ class SupplierInvoiceDetailDataSource extends DataGridSource with WidgetsBinding
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: TextFormField(
+              readOnly: !controller.formEnabled,
               key: ValueKey('${rowIndex}_${e.value}'),
               initialValue: e.value?.toString() ?? "",
               onChanged: (value) {
@@ -132,12 +139,7 @@ class SupplierInvoiceDetailDataSource extends DataGridSource with WidgetsBinding
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 4),
             child: TextFormField(
-              readOnly: true,
-              decoration: InputDecoration(
-                fillColor: const Color(0xFFEEEEEE),
-                filled: controller.formEnabled,
-                focusedBorder: OutlineInputBorder(borderSide: const BorderSide(color: Color(0xFFBDBDBD))),
-              ),
+              readOnly: !controller.formEnabled,
               key: ValueKey('${rowIndex}_${e.value}'),
               initialValue: e.value?.toString() ?? "",
               onChanged: (value) {

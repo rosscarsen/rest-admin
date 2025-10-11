@@ -897,7 +897,7 @@ class ProductEditView extends GetView<ProductEditController> {
                           onPressed: () async {
                             await Get.toNamed(
                               Routes.OPEN_MULTIPLE_PRODUCT,
-                              parameters: {"productId": controller.productID.toString(), "isShowOption": "Y"},
+                              parameters: {"productId": controller.productID.toString(), "target": "addSetMeal"},
                             );
                           },
                           child: Text(LocaleKeys.setMealAdd.tr),

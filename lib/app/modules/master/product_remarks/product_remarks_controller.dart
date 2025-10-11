@@ -23,7 +23,6 @@ import '../../../utils/logger.dart';
 import 'product_remarks_data_source.dart';
 
 class ProductRemarksController extends GetxController with LoadingStateMixin {
-  final DataGridController dataGridController = DataGridController();
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
   final GlobalKey<FormBuilderState> copyKey = GlobalKey<FormBuilderState>();
   static ProductRemarksController get to => Get.find();
@@ -39,7 +38,6 @@ class ProductRemarksController extends GetxController with LoadingStateMixin {
 
   @override
   void onClose() {
-    dataGridController.dispose();
     super.onClose();
   }
 
@@ -53,7 +51,6 @@ class ProductRemarksController extends GetxController with LoadingStateMixin {
 
   /// 更新数据源
   void updateDataGridSource() {
-    dataGridController.selectedRows = [];
     getList().then((_) {
       dataSource = ProductRemarksDataSource(this);
     });

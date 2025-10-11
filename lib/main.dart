@@ -41,7 +41,7 @@ Future<void> main() async {
   final String initialRoute = hasLogin ? Routes.DASHBOARD : Routes.SIGNIN;
   storageManage.write(Config.localStorageLanguage, localeString);
 
-  if (!kIsWeb && Platform.isAndroid) {
+  if (!kIsWeb) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent));
   }

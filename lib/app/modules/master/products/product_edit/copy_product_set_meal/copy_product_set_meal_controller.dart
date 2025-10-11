@@ -16,7 +16,6 @@ import '../../../../../utils/logger.dart';
 import 'copy_product_set_meal_source.dart';
 
 class CopyProductSetMealController extends GetxController with LoadingStateMixin {
-  final DataGridController dataGridController = DataGridController();
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
   final TextEditingController keyWordController = TextEditingController();
   List<ProductSetMealData> DataList = [];
@@ -35,13 +34,11 @@ class CopyProductSetMealController extends GetxController with LoadingStateMixin
 
   @override
   void onClose() {
-    dataGridController.dispose();
     super.onClose();
   }
 
   //重载数据
   void reloadData() {
-    dataGridController.selectedRows = [];
     formKey.currentState?.saveAndValidate();
     FocusManager.instance.primaryFocus?.unfocus();
     totalPages = 0;

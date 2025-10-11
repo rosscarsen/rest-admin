@@ -17,7 +17,6 @@ import 'category2_data_source.dart';
 import 'category2_edit/category2_edit_view.dart';
 
 class Category2Controller extends GetxController with LoadingStateMixin {
-  final DataGridController dataGridController = DataGridController();
   static Category2Controller get to => Get.find();
   List<CategoryModel> dataList = [];
   final ApiClient apiClient = ApiClient();
@@ -35,7 +34,6 @@ class Category2Controller extends GetxController with LoadingStateMixin {
 
   @override
   void onClose() {
-    dataGridController.dispose();
     super.onClose();
   }
 
@@ -49,7 +47,6 @@ class Category2Controller extends GetxController with LoadingStateMixin {
 
   /// 更新数据源
   void updateDataGridSource() {
-    dataGridController.selectedRows = [];
     getCategory().then((_) {
       dataSource = Category2DataSource(this);
     });

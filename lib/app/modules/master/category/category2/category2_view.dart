@@ -58,7 +58,6 @@ class Category2View extends GetView<Category2Controller> {
     return DataGridTheme(
       child: SfDataGrid(
         isScrollbarAlwaysShown: true,
-        controller: controller.dataGridController,
         footerFrozenColumnsCount: 1,
         frozenColumnsCount: 0,
         gridLinesVisibility: GridLinesVisibility.both,

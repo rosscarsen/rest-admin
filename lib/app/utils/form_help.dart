@@ -199,6 +199,7 @@ class FormHelper {
         return FormBuilderField<String>(
           name: name,
           enabled: effectiveEnabled,
+          valueTransformer: (value) => (value?.toString() ?? "").trim(),
           builder: (FormFieldState<String?> field) {
             final effectiveController = controller ?? TextEditingController(text: field.value ?? "");
 

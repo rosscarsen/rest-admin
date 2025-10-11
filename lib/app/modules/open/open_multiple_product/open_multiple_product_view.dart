@@ -28,7 +28,7 @@ class OpenMultipleProductView extends GetView<OpenMultipleProductController> {
         spacing: Config.defaultGap,
         children: <Widget>[
           _buildSearch(context),
-          if (Get.parameters["isShowOption"] != null)
+          if (controller.target == "addSetMeal")
             FormHelper.buildGridRow(
               children: [
                 FormHelper.buildGridCol(
@@ -98,7 +98,7 @@ class OpenMultipleProductView extends GetView<OpenMultipleProductController> {
                     children: [
                       ElevatedButton(
                         child: Text(LocaleKeys.join.tr),
-                        onPressed: () async => await controller.joinSetMeal(),
+                        onPressed: () async => await controller.joinSelected(),
                       ),
                       ElevatedButton(
                         child: Text(LocaleKeys.leave.tr),
@@ -156,6 +156,7 @@ class OpenMultipleProductView extends GetView<OpenMultipleProductController> {
           key: controller.openMultipleProductFormKey,
           child: FormHelper.buildGridRow(
             children: [
+              // 关键字
               FormHelper.buildGridCol(
                 child: FormHelper.textInput(name: "search", labelText: LocaleKeys.keyWord.tr),
               ),
@@ -208,9 +209,23 @@ class OpenMultipleProductView extends GetView<OpenMultipleProductController> {
                   ],
                 ),
               ),
+              // 非启用
+              FormHelper.buildGridCol(
+                child: FormHelper.selectInput(
+                  name: "mNonActived",
+                  labelText: LocaleKeys.nonEnable.tr,
+                  initialValue: "",
+                  items: [
+                    DropdownMenuItem(value: "", child: Text(LocaleKeys.all.tr)),
+                    DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
+                    DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
+                  ],
+                ),
+              ),
               // 搜索
               FormHelper.buildGridCol(
-                child: Align(
+                child: Container(
+                  height: 40,
                   alignment: Alignment.centerLeft,
                   child: ElevatedButton.icon(
                     onPressed: () {

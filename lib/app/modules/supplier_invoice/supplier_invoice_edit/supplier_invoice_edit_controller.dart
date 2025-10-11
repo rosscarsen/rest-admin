@@ -150,12 +150,13 @@ class SupplierInvoiceEditController extends GetxController with LoadingStateMixi
 
   /// 保存
   Future<void> save() async {
-    CustomAlert.iosAlert(message: "此功能未完成");
+    /* CustomAlert.iosAlert(message: "此功能未完成");
     return;
     FocusManager.instance.primaryFocus?.unfocus();
-    logger.f(invoiceDetail.map((e) => e.toJson()).toList());
-    /* if (formKey.currentState?.saveAndValidate() ?? false) {
-      CustomDialog.showLoading(LocaleKeys.saving.tr);
+    logger.f(invoiceDetail.map((e) => e.toJson()).toList()); */
+    if (formKey.currentState?.saveAndValidate() ?? false) {
+      logger.f(formKey.currentState?.value);
+      /* CustomDialog.showLoading(LocaleKeys.saving.tr);
       final formData = Map<String, dynamic>.from(formKey.currentState?.value ?? {})
         ..addAll({"T_Customer_ID": id})
         ..addAll({"customerContact": customerContactList})
@@ -203,12 +204,15 @@ class SupplierInvoiceEditController extends GetxController with LoadingStateMixi
         CustomDialog.errorMessages(e.toString());
       } finally {
         CustomDialog.dismissDialog();
-      }
-    } */
+      } */
+    }
   }
 
   /// 修改行金额
-  void updateRowAmount({required InvoiceDetail row}) {
+  void updateRowAmount({required InvoiceDetail? row}) {
+    if (row == null) {
+      return;
+    }
     final index = invoiceDetail.indexOf(row);
     if (index == -1) {
       return;

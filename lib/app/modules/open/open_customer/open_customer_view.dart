@@ -68,7 +68,6 @@ class OpenCustomerView extends GetView<OpenCustomerController> {
     return DataGridTheme(
       child: SfDataGrid(
         isScrollbarAlwaysShown: true,
-        controller: controller.dataGridController,
         footerFrozenColumnsCount: 0,
         frozenColumnsCount: 0,
         gridLinesVisibility: GridLinesVisibility.both,

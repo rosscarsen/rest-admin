@@ -72,7 +72,6 @@ class CopyProductSetMealView extends GetView<CopyProductSetMealController> {
                 ),
                 child: SfDataGrid(
                   isScrollbarAlwaysShown: true,
-                  controller: controller.dataGridController,
                   footerFrozenColumnsCount: 0,
                   frozenColumnsCount: 1,
                   gridLinesVisibility: GridLinesVisibility.both,

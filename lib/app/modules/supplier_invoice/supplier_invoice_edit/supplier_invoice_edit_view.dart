@@ -40,10 +40,12 @@ class SupplierInvoiceEditView extends GetView<SupplierInvoiceEditController> {
                 ],
         ),
 
-        body: controller.hasPermission ? _buildMain() : NoRecordPermission(msg: LocaleKeys.noPermission.tr),
+        body: controller.hasPermission ? _buildMain(context) : NoRecordPermission(msg: LocaleKeys.noPermission.tr),
         persistentFooterButtons: [
           FormHelper.saveButton(
-            onPressed: controller.isLoading || !controller.hasPermission ? null : () => controller.save(),
+            onPressed: controller.formEnabled && !controller.isLoading && controller.hasPermission
+                ? () => controller.save()
+                : null,
           ),
         ],
       ),
@@ -51,7 +53,7 @@ class SupplierInvoiceEditView extends GetView<SupplierInvoiceEditController> {
   }
 
   /// 构建表单
-  Widget _buildMain() {
+  Widget _buildMain(BuildContext context) {
     return Skeletonizer(
       enabled: controller.isLoading,
       child: FormBuilder(
@@ -224,8 +226,13 @@ class SupplierInvoiceEditView extends GetView<SupplierInvoiceEditController> {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: ElevatedButton(
+                    onPressed: controller.formEnabled
+                        ? () async => await Get.toNamed(
+                            Routes.OPEN_MULTIPLE_PRODUCT,
+                            parameters: {"target": "supplierInvoiceAddItem"},
+                          )
+                        : null,
                     child: Text(LocaleKeys.addParam.trArgs([LocaleKeys.item.tr])),
-                    onPressed: () {},
                   ),
                 ),
               ),
@@ -235,7 +242,7 @@ class SupplierInvoiceEditView extends GetView<SupplierInvoiceEditController> {
                 md: 12,
                 lg: 12,
                 xl: 12,
-                child: SizedBox(height: controller.tableHeight.value, child: _buildDataGrid()),
+                child: SizedBox(height: controller.tableHeight.value, child: _buildDataGrid(context)),
               ),
               //备注
               FormHelper.buildGridCol(
@@ -280,12 +287,20 @@ class SupplierInvoiceEditView extends GetView<SupplierInvoiceEditController> {
   }
 
   //数据表格
-  Widget _buildDataGrid() {
+  Widget _buildDataGrid(BuildContext context) {
     return ProgressHUD(
       child: controller.isLoading
           ? null
           : Theme(
-              data: ThemeData(inputDecorationTheme: tableInputTheme),
+              data: ThemeData(
+                inputDecorationTheme: tableInputTheme.copyWith(
+                  fillColor: const Color(0xFFEEEEEE),
+                  filled: !controller.formEnabled,
+                  focusedBorder: !controller.formEnabled
+                      ? OutlineInputBorder(borderSide: BorderSide(color: Color(0xFFBDBDBD)))
+                      : null,
+                ),
+              ),
               child: DataGridTheme(
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),

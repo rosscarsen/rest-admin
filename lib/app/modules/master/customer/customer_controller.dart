@@ -22,7 +22,6 @@ import '../../../utils/logger.dart';
 import 'customer_data_source.dart';
 
 class CustomerController extends GetxController with LoadingStateMixin {
-  final DataGridController dataGridController = DataGridController();
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
   static CustomerController get to => Get.find();
 
@@ -39,7 +38,6 @@ class CustomerController extends GetxController with LoadingStateMixin {
 
   @override
   void onClose() {
-    dataGridController.dispose();
     super.onClose();
   }
 
@@ -53,7 +51,6 @@ class CustomerController extends GetxController with LoadingStateMixin {
 
   /// 更新数据源
   void updateDataGridSource() {
-    dataGridController.selectedRows = [];
     getList().then((_) {
       dataSource = CustomerDataSource(this);
     });

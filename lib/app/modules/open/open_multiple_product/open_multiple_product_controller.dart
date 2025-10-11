@@ -18,6 +18,7 @@ import '../../../utils/custom_alert.dart';
 import '../../../utils/custom_dialog.dart';
 import '../../../utils/logger.dart';
 import '../../master/products/product_edit/product_edit_controller.dart';
+import '../../supplier_invoice/supplier_invoice_edit/supplier_invoice_edit_controller.dart';
 import 'open_multiple_products_data_source.dart';
 
 class OpenMultipleProductController extends GetxController with LoadingStateMixin {
@@ -31,9 +32,12 @@ class OpenMultipleProductController extends GetxController with LoadingStateMixi
   // 类目
   final category1 = <CategoryModel>[].obs;
   final category2 = <CategoryModel>[].obs;
+  // 从哪个页面调用
+  late final String target;
   @override
   void onInit() {
     super.onInit();
+    target = Get.parameters["target"] ?? "";
     fetchMultipleData().then((_) {
       dataSource = OpenMultipleProductsDataSource(this);
     });
@@ -47,7 +51,6 @@ class OpenMultipleProductController extends GetxController with LoadingStateMixi
 
   //重载数据
   void reloadData() {
-    dataGridController.selectedRows = [];
     openMultipleProductFormKey.currentState?.saveAndValidate();
     FocusManager.instance.primaryFocus?.unfocus();
     totalPages = 0;
@@ -57,6 +60,7 @@ class OpenMultipleProductController extends GetxController with LoadingStateMixi
 
   //更新数据源
   void updateDataGridSource() {
+    dataGridController.selectedRows = [];
     getProduct().then((_) {
       dataSource = OpenMultipleProductsDataSource(this);
     });
@@ -82,7 +86,7 @@ class OpenMultipleProductController extends GetxController with LoadingStateMixi
       if (openMultipleProductFormKey.currentState?.value != null) {
         search.addAll(openMultipleProductFormKey.currentState?.value ?? {});
       }
-      logger.f(search);
+      //logger.f(search);
       final DioApiResult dioApiResult = await apiClient.post(Config.openProduct, data: search);
 
       if (!dioApiResult.success) {
@@ -160,7 +164,6 @@ class OpenMultipleProductController extends GetxController with LoadingStateMixi
           }
 
           final categoriesModel = categoryAllModelFromJson(categoryDioApiResult.data!);
-          logger.f(categoriesModel);
           if (categoriesModel.status == 200) {
             category1.assignAll(categoriesModel.apiResult ?? []);
           } else {
@@ -176,21 +179,45 @@ class OpenMultipleProductController extends GetxController with LoadingStateMixi
     }
   }
 
-  /// 加入套餐
-  Future<void> joinSetMeal() async {
-    final productCtl = Get.find<ProductEditController>();
-    final oldSetMealCodes = productCtl.productSetMeal.map((e) => e.mBarcode).toSet().toList();
-
-    if (dataGridController.selectedRows.isEmpty) {
-      CustomDialog.errorMessages(LocaleKeys.pleaseSelectOneDataOrMore.tr);
-      return;
-    }
-
+  /// 加入选中的产品
+  Future<void> joinSelected() async {
     final selectedRows = dataGridController.selectedRows;
     if (selectedRows.isEmpty) {
       CustomDialog.errorMessages(LocaleKeys.pleaseSelectOneDataOrMore.tr);
       return;
     }
+
+    switch (target) {
+      case "addSetMeal": //加入套餐
+        await joinSetMeal(selectedRows);
+        break;
+      case "supplierInvoiceAddItem": //加入发票项目
+        await joinSupplierInvoiceAddItem(selectedRows);
+        break;
+      default:
+        break;
+    }
+  }
+
+  /// 加入供应商发票项目
+  Future<void> joinSupplierInvoiceAddItem(List<DataGridRow> selectedRows) async {
+    /* final preCtl = Get.find<SupplierInvoiceEditController>();
+    final oldCodes = preCtl.invoiceDetail.map((e) => e.mProductCode).toSet().toList(); */
+    final selectCodes = selectedRows
+        .map((row) => row.getCells().firstWhereOrNull((cell) => cell.columnName == "code")?.value)
+        .whereType<String>()
+        .where((element) => element.trim().isNotEmpty)
+        .toSet()
+        .toList();
+    final selectedItems = DataList.where((e) => selectCodes.contains(e.mCode)).toList();
+    logger.f(selectCodes);
+  }
+
+  /// 加入套餐
+  Future<void> joinSetMeal(List<DataGridRow> selectedRows) async {
+    final productCtl = Get.find<ProductEditController>();
+    final oldSetMealCodes = productCtl.productSetMeal.map((e) => e.mBarcode).toSet().toList();
+
     final selectProductCodes = selectedRows
         .map((row) => row.getCells().firstWhereOrNull((cell) => cell.columnName == "code")?.value)
         .whereType<String>()
@@ -244,7 +271,7 @@ class OpenMultipleProductController extends GetxController with LoadingStateMixi
           if (apiProductList != null) {
             productCtl.productSetMeal
               ..clear()
-              ..addAll(apiProductList.map((e) => ProductSetMeal.fromJson(e)).toList());
+              ..assignAll(apiProductList.map((e) => ProductSetMeal.fromJson(e)).toList());
             productCtl.productSetMealSource.updateDataSource();
             CustomDialog.successMessages(LocaleKeys.joinSuccess.tr);
             Get.back();

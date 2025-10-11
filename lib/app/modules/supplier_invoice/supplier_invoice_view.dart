@@ -129,7 +129,6 @@ class SupplierInvoiceView extends GetView<SupplierInvoiceController> {
         padding: const EdgeInsets.all(4.0),
         child: SfDataGrid(
           isScrollbarAlwaysShown: true,
-          controller: controller.dataGridController,
           footerFrozenColumnsCount: 1,
           frozenColumnsCount: 0,
           gridLinesVisibility: GridLinesVisibility.both,
