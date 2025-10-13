@@ -370,4 +370,5 @@ abstract class LocaleKeys {
   static const String modifyBy = "modifyBy";
   static const String searching = "searching";
   static const String paramName = "paramName";
+  static const String invalidFormatParam = "invalidFormatParam";
 }

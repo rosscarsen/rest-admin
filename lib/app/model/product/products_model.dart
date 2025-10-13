@@ -82,6 +82,7 @@ class ProductData {
   String? mPCode;
   int? mSoldOut;
   String? imagesPath;
+  String? mLatCost;
 
   ProductData({
     this.sort,
@@ -103,6 +104,7 @@ class ProductData {
     this.mPCode,
     this.mSoldOut,
     this.imagesPath,
+    this.mLatCost,
   });
 
   factory ProductData.fromJson(Map<String, dynamic> json) => ProductData(
@@ -125,6 +127,7 @@ class ProductData {
     mPCode: json["mPCode"]?.toString() ?? "",
     mSoldOut: json["mSoldOut"],
     imagesPath: json["imagesPath"],
+    mLatCost: json["mLat_Cost"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -147,11 +150,12 @@ class ProductData {
     "mPCode": mPCode,
     "mSoldOut": mSoldOut,
     "imagesPath": imagesPath,
+    "mLat_Cost": mLatCost,
   };
 
   @override
   String toString() {
-    return 'ProductData(sort: $sort, tProductId: $tProductId, mCode: $mCode, mDesc1: $mDesc1, mCategory1: $mCategory1, mCategory2: $mCategory2, mDesc2: $mDesc2, mRemarks: $mRemarks, mUnit: $mUnit, mMeasurement: $mMeasurement, mModel: $mModel, mColor: $mColor, mSize: $mSize, mPrice: $mPrice, mDiscount: $mDiscount, mQty: $mQty, mPCode: $mPCode, mSoldOut: $mSoldOut, imagesPath: $imagesPath)';
+    return 'ProductData(sort: $sort, tProductId: $tProductId, mCode: $mCode, mDesc1: $mDesc1, mCategory1: $mCategory1, mCategory2: $mCategory2, mDesc2: $mDesc2, mRemarks: $mRemarks, mUnit: $mUnit, mMeasurement: $mMeasurement, mModel: $mModel, mColor: $mColor, mSize: $mSize, mPrice: $mPrice, mDiscount: $mDiscount, mQty: $mQty, mPCode: $mPCode, mSoldOut: $mSoldOut, imagesPath: $imagesPath, mLatCost: $mLatCost)';
   }
 
   void copyForm(ProductData source) {

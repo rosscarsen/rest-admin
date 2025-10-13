@@ -7,6 +7,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../config.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/form_help.dart';
+import '../../../utils/logger.dart';
 import '../../../utils/progress_hub.dart';
 import '../../../widgets/custom_cell.dart';
 import '../../../theme/data_grid_theme.dart';
@@ -86,6 +87,14 @@ class OpenMultipleProductView extends GetView<OpenMultipleProductController> {
         showCheckboxColumn: true,
         selectionMode: SelectionMode.multiple,
         source: controller.dataSource,
+        onSelectionChanged: (addedRows, removedRows) {
+          if (addedRows.isNotEmpty) {
+            controller.addSelectedItems(addedRows, true);
+          }
+          if (removedRows.isNotEmpty) {
+            controller.addSelectedItems(removedRows, false);
+          }
+        },
         stackedHeaderRows: [
           StackedHeaderRow(
             cells: [
@@ -158,7 +167,11 @@ class OpenMultipleProductView extends GetView<OpenMultipleProductController> {
             children: [
               // 关键字
               FormHelper.buildGridCol(
-                child: FormHelper.textInput(name: "search", labelText: LocaleKeys.keyWord.tr),
+                child: FormHelper.textInput(
+                  name: "search",
+                  labelText: LocaleKeys.keyWord.tr,
+                  onSubmitted: (value) => controller.reloadData(),
+                ),
               ),
               //类目1
               FormHelper.buildGridCol(
@@ -183,6 +196,7 @@ class OpenMultipleProductView extends GetView<OpenMultipleProductController> {
                   ],
                   onChanged: (String? category1) {
                     controller.generateCategory2(category1);
+                    controller.reloadData();
                   },
                 ),
               ),
@@ -207,6 +221,7 @@ class OpenMultipleProductView extends GetView<OpenMultipleProductController> {
                         ),
                       ),
                   ],
+                  onChanged: (String? category2) => controller.reloadData(),
                 ),
               ),
               // 非启用
@@ -220,6 +235,7 @@ class OpenMultipleProductView extends GetView<OpenMultipleProductController> {
                     DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
                     DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
                   ],
+                  onChanged: (String? nonActived) => controller.reloadData(),
                 ),
               ),
               // 搜索

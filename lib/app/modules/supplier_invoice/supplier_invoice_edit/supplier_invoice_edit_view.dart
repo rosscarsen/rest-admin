@@ -90,9 +90,14 @@ class SupplierInvoiceEditView extends GetView<SupplierInvoiceEditController> {
               //日期
               FormHelper.buildGridCol(
                 child: FormHelper.dateInput(
+                  initialValue: DateTime.now(),
                   name: SupplierInvoiceFields.supplierInvoiceInDate,
                   labelText: LocaleKeys.date.tr,
                   inputType: DateInputType.date,
+                  validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.required(errorText: LocaleKeys.thisFieldIsRequired.tr),
+                    FormBuilderValidators.date(errorText: LocaleKeys.invalidFormatParam.trArgs([LocaleKeys.date.tr])),
+                  ]),
                 ),
               ),
               //過賬
@@ -163,19 +168,17 @@ class SupplierInvoiceEditView extends GetView<SupplierInvoiceEditController> {
                 child: FormHelper.selectInput(
                   name: "defaultStock",
                   labelText: LocaleKeys.defaultStock.tr,
-                  onChanged: (value) {
-                    controller.selectStock = value;
-                  },
+
                   items: controller.stock
                       .map((e) => DropdownMenuItem(value: e.mCode, child: Text('${e.mCode ?? ""} ${e.mName ?? ""}')))
                       .toList(),
                   prefixIcon: TextButton(
                     onPressed: () {
-                      if (controller.selectStock != null) {
+                      final selectStock = controller.formKey.currentState?.fields["defaultStock"]?.value;
+                      if (selectStock != null) {
                         for (var element in controller.invoiceDetail) {
-                          element.mStockCode = controller.selectStock;
+                          element.mStockCode = selectStock;
                         }
-                        logger.f(controller.invoiceDetail.map((e) => e.toJson()).toList());
                         controller.dataSource.updateDataSource();
                       }
                     },
@@ -227,10 +230,15 @@ class SupplierInvoiceEditView extends GetView<SupplierInvoiceEditController> {
                   alignment: Alignment.centerLeft,
                   child: ElevatedButton(
                     onPressed: controller.formEnabled
-                        ? () async => await Get.toNamed(
-                            Routes.OPEN_MULTIPLE_PRODUCT,
-                            parameters: {"target": "supplierInvoiceAddItem"},
-                          )
+                        ? () async {
+                            await Get.toNamed(
+                              Routes.OPEN_MULTIPLE_PRODUCT,
+                              parameters: {
+                                "target": "supplierInvoiceAddItem",
+                                "defaultStock": controller.formKey.currentState?.fields["defaultStock"]?.value,
+                              },
+                            );
+                          }
                         : null,
                     child: Text(LocaleKeys.addParam.trArgs([LocaleKeys.item.tr])),
                   ),
@@ -262,9 +270,8 @@ class SupplierInvoiceEditView extends GetView<SupplierInvoiceEditController> {
                   name: SupplierInvoiceFields.discount,
                   labelText: "${LocaleKeys.discount.tr}(0-100)",
                   keyboardType: TextInputType.number,
-                  maxDecimalDigits: 2,
+                  maxDecimalDigits: 4,
                   onChanged: (value) {
-                    controller.totalDiscount = value ?? "0.00";
                     controller.updateTotalAmount();
                   },
                 ),
@@ -305,6 +312,7 @@ class SupplierInvoiceEditView extends GetView<SupplierInvoiceEditController> {
                 child: Padding(
                   padding: const EdgeInsets.all(4.0),
                   child: SfDataGrid(
+                    allowFiltering: true,
                     headerRowHeight: 56,
                     rowHeight: 48,
                     isScrollbarAlwaysShown: true,
@@ -325,6 +333,7 @@ class SupplierInvoiceEditView extends GetView<SupplierInvoiceEditController> {
                       GridColumn(
                         columnName: 'mProductCode',
                         label: CustomCell(data: LocaleKeys.paramCode.trArgs([LocaleKeys.product.tr])),
+                        allowFiltering: true,
                       ),
                       GridColumn(
                         columnName: 'mProductName',
@@ -336,29 +345,35 @@ class SupplierInvoiceEditView extends GetView<SupplierInvoiceEditController> {
                         columnName: 'mQty',
                         label: CustomCell(data: LocaleKeys.qty.tr),
                         width: 80,
+                        allowFiltering: false,
                       ),
                       GridColumn(
                         columnName: 'mPrice',
                         label: CustomCell(data: LocaleKeys.price.tr),
                         width: 80,
+                        allowFiltering: false,
                       ),
                       GridColumn(
                         columnName: 'mDiscount',
                         label: CustomCell(data: LocaleKeys.discount.tr),
                         width: 80,
+                        allowFiltering: false,
                       ),
                       GridColumn(
                         columnName: 'mAmount',
                         label: CustomCell(data: LocaleKeys.amount.tr),
+                        allowFiltering: false,
                       ),
                       GridColumn(
                         columnName: 'mRemarks',
                         label: CustomCell(data: LocaleKeys.remarks.tr),
+                        allowFiltering: false,
                       ),
                       GridColumn(
                         allowSorting: false,
                         columnName: 'actions',
                         width: 60,
+                        allowFiltering: false,
                         label: CustomCell(data: LocaleKeys.operation.tr),
                       ),
                     ],

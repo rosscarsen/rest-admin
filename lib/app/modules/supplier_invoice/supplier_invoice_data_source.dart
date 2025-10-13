@@ -162,7 +162,10 @@ class SupplierInvoiceDataSource extends DataGridSource with WidgetsBindingObserv
                   ),
                 );
         }
-
+        //日期
+        if (e.columnName == "mSupplierInvoiceInDate") {
+          return CustomCell(data: e.value?.toString().substring(0, 10) ?? "");
+        }
         //套餐
         if (e.columnName == "mFlag") {
           return CustomCell(data: e.value == "0" ? LocaleKeys.no.tr : LocaleKeys.yes.tr);

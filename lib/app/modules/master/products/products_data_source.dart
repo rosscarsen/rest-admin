@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart' show CachedNetworkImage;
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -217,7 +218,26 @@ class ProductsDataSource extends DataGridSource with WidgetsBindingObserver {
                     decoration: BoxDecoration(borderRadius: BorderRadius.circular(3)),
                     child: e.value.toString().isEmpty
                         ? Image.asset("assets/notfound.png")
-                        : Image.network(
+                        : CachedNetworkImage(
+                            imageUrl: e.value ?? "",
+                            fit: BoxFit.cover,
+                            fadeInDuration: const Duration(milliseconds: 200),
+                            placeholder: (context, url) {
+                              return const Center(child: CircularProgressIndicator());
+                            },
+                            imageBuilder: (context, imageProvider) {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                isImageLoaded.value = true;
+                              });
+                              return Image(image: imageProvider, fit: BoxFit.cover);
+                            },
+                            errorWidget: (context, url, error) {
+                              return Image.asset("assets/notfound.png", fit: BoxFit.cover);
+                            },
+                            memCacheHeight: 300,
+                            memCacheWidth: 300,
+                          ),
+                    /*  Image.network(
                             e.value ?? "",
                             webHtmlElementStrategy: WebHtmlElementStrategy.fallback,
                             fit: BoxFit.cover,
@@ -239,6 +259,7 @@ class ProductsDataSource extends DataGridSource with WidgetsBindingObserver {
                               return Image.asset("assets/notfound.png");
                             },
                           ),
+                  */
                   ),
                 ),
               );

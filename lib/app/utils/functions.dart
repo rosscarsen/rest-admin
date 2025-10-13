@@ -150,8 +150,8 @@ class Functions {
 
   /// 转换为字符串
   static String? asString(Object? value) {
-    if (value == null) return null;
-    if (value is String && value.trim().isEmpty) return null;
+    if (value == null) return "";
+    if (value is String && value.trim().isEmpty) return "";
     return value.toString();
   }
 

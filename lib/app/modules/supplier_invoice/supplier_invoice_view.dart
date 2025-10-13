@@ -135,6 +135,7 @@ class SupplierInvoiceView extends GetView<SupplierInvoiceController> {
           headerGridLinesVisibility: GridLinesVisibility.both,
           columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
           showCheckboxColumn: false,
+          columnWidthMode: ColumnWidthMode.auto,
           selectionMode: SelectionMode.none,
           source: controller.dataSource,
           columns: <GridColumn>[

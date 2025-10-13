@@ -5,7 +5,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl_standalone.dart' if (dart.library.html) 'package:intl/intl_browser.dart';
-
+import 'package:syncfusion_localizations/syncfusion_localizations.dart';
 import 'app/config.dart';
 import 'app/routes/app_pages.dart';
 import 'app/translations/app_translations.dart';
@@ -81,7 +81,7 @@ class MyApp extends StatelessWidget {
       //defaultTransition: Transition.noTransition,
       supportedLocales: const [Locale('zh', 'CN'), Locale('zh', 'HK'), Locale('en', 'US')],
 
-      localizationsDelegates: GlobalMaterialLocalizations.delegates,
+      localizationsDelegates: [...GlobalMaterialLocalizations.delegates, SfGlobalLocalizations.delegate],
       localeResolutionCallback: (locale, supportedLocales) =>
           supportedLocales.contains(locale) ? locale : initialLocale,
 

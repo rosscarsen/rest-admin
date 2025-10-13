@@ -491,6 +491,11 @@ class FormHelper {
                 fillColor: effectiveEnabled ? Colors.transparent : const Color(0xFFEEEEEE),
                 filled: !effectiveEnabled,
                 floatingLabelBehavior: FloatingLabelBehavior.always,
+                errorText: field.errorText,
+                errorBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.red, width: 0.7),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
               ),
               mode: mode,
               dateFormat: effectiveDateFormat,

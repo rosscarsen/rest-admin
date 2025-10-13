@@ -80,7 +80,11 @@ class CategoryEditController extends GetxController with LoadingStateMixin {
 
       formKey.currentState?.patchValue(
         Map.fromEntries(
-          resultModel.toJson().entries.where((e) => e.value != null).map((e) => MapEntry(e.key, e.value.toString())),
+          resultModel
+              .toJson()
+              .entries
+              .where((e) => (e.value?.toString() ?? "").trim().isNotEmpty)
+              .map((e) => MapEntry(e.key, e.value.toString())),
         ),
       );
       FocusManager.instance.primaryFocus?.unfocus();

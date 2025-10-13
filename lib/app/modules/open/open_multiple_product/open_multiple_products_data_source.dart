@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
@@ -41,6 +42,12 @@ class OpenMultipleProductsDataSource extends DataGridSource {
       cells: row.getCells().map<Widget>((e) {
         return CustomCell(data: e.value?.toString() ?? "");
       }).toList(),
+    );
+  }
+
+  DataGridRow? findRowByCode(String code) {
+    return _dataGridRows.firstWhereOrNull(
+      (row) => row.getCells().any((cell) => cell.columnName == 'code' && cell.value == code),
     );
   }
 }

@@ -370,4 +370,5 @@ Map<String, String> zhHK = {
   LocaleKeys.modifyBy: "修改人",
   LocaleKeys.searching: "搜索中...",
   LocaleKeys.paramName: "%s名稱",
+  LocaleKeys.invalidFormatParam: "%s格式錯誤",
 };

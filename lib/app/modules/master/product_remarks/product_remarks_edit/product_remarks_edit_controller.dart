@@ -98,7 +98,7 @@ class ProductRemarksEditController extends GetxController with GetSingleTickerPr
       WidgetsBinding.instance.addPostFrameCallback((_) {
         formKey.currentState?.patchValue(
           Map.fromEntries(
-            resultModel.toJson().entries.where((e) => e.value != null).map((e) {
+            resultModel.toJson().entries.where((e) => (e.value?.toString() ?? "").trim().isNotEmpty).map((e) {
               final key = e.key;
               var value = e.value;
               if (['mVisible'].contains(key)) {

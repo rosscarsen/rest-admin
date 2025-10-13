@@ -178,7 +178,13 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
           if (productInfo != null) {
             productCategory3.value = productInfo.mCategory3?.split(",") ?? [];
             productEditFormKey.currentState?.patchValue(
-              Map.fromEntries(productInfo.toJson().entries.where((e) => e.value != null)),
+              Map.fromEntries(
+                productInfo
+                    .toJson()
+                    .entries
+                    .where((e) => (e.value?.toString() ?? "").trim().isNotEmpty)
+                    .map((e) => MapEntry(e.key, e.value.toString())),
+              ),
             );
             FocusManager.instance.primaryFocus?.unfocus();
           }

@@ -11,6 +11,7 @@ import '../../../model/category/category_all_model.dart';
 import '../../../model/category/category_model.dart';
 import '../../../model/product/product_add_or_edit_model.dart';
 import '../../../model/product/products_model.dart';
+import '../../../model/supplierInvoice/supplier_invoice_api_model.dart';
 import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
@@ -25,7 +26,7 @@ class OpenMultipleProductController extends GetxController with LoadingStateMixi
   final DataGridController dataGridController = DataGridController();
   static OpenMultipleProductController get to => Get.find();
   final GlobalKey<FormBuilderState> openMultipleProductFormKey = GlobalKey<FormBuilderState>();
-  List<ProductData> DataList = [];
+
   final ApiClient apiClient = ApiClient();
   late OpenMultipleProductsDataSource dataSource;
   String mStep = "1";
@@ -34,6 +35,11 @@ class OpenMultipleProductController extends GetxController with LoadingStateMixi
   final category2 = <CategoryModel>[].obs;
   // 从哪个页面调用
   late final String target;
+
+  List<ProductData> DataList = [];
+
+  /// 选中的产品
+  List<ProductData> selectedItems = [];
   @override
   void onInit() {
     super.onInit();
@@ -46,6 +52,7 @@ class OpenMultipleProductController extends GetxController with LoadingStateMixi
   @override
   void onClose() {
     dataGridController.dispose();
+    selectedItems.clear();
     super.onClose();
   }
 
@@ -63,6 +70,7 @@ class OpenMultipleProductController extends GetxController with LoadingStateMixi
     dataGridController.selectedRows = [];
     getProduct().then((_) {
       dataSource = OpenMultipleProductsDataSource(this);
+      setInitialSelectedRows();
     });
   }
 
@@ -86,8 +94,8 @@ class OpenMultipleProductController extends GetxController with LoadingStateMixi
       if (openMultipleProductFormKey.currentState?.value != null) {
         search.addAll(openMultipleProductFormKey.currentState?.value ?? {});
       }
-      //logger.f(search);
-      final DioApiResult dioApiResult = await apiClient.post(Config.openProduct, data: search);
+      logger.f(search);
+      final DioApiResult dioApiResult = await apiClient.get(Config.openProduct, data: search);
 
       if (!dioApiResult.success) {
         CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
@@ -179,53 +187,115 @@ class OpenMultipleProductController extends GetxController with LoadingStateMixi
     }
   }
 
+  /// 初始化选中的行
+  void setInitialSelectedRows() {
+    final selectedCodes = selectedItems.map((e) => e.mCode).whereType<String>().toList();
+    final rowsToSelect = selectedCodes.map((code) => dataSource.findRowByCode(code)).whereType<DataGridRow>().toList();
+    dataGridController.selectedRows = rowsToSelect;
+  }
+
   /// 加入选中的产品
   Future<void> joinSelected() async {
-    final selectedRows = dataGridController.selectedRows;
-    if (selectedRows.isEmpty) {
+    final selectedCodes = selectedItems.map((e) => e.mCode).toList();
+    if (selectedCodes.isEmpty) {
       CustomDialog.errorMessages(LocaleKeys.pleaseSelectOneDataOrMore.tr);
       return;
     }
-
     switch (target) {
       case "addSetMeal": //加入套餐
-        await joinSetMeal(selectedRows);
+        await joinSetMeal();
         break;
       case "supplierInvoiceAddItem": //加入发票项目
-        await joinSupplierInvoiceAddItem(selectedRows);
+        await joinSupplierInvoiceAddItem();
         break;
       default:
         break;
     }
   }
 
-  /// 加入供应商发票项目
-  Future<void> joinSupplierInvoiceAddItem(List<DataGridRow> selectedRows) async {
-    /* final preCtl = Get.find<SupplierInvoiceEditController>();
-    final oldCodes = preCtl.invoiceDetail.map((e) => e.mProductCode).toSet().toList(); */
-    final selectCodes = selectedRows
+  /// 加入或移除选中的产品
+  void addSelectedItems(List<DataGridRow> rows, bool isAdd) {
+    final selectCodes = rows
         .map((row) => row.getCells().firstWhereOrNull((cell) => cell.columnName == "code")?.value)
         .whereType<String>()
         .where((element) => element.trim().isNotEmpty)
         .toSet()
         .toList();
-    final selectedItems = DataList.where((e) => selectCodes.contains(e.mCode)).toList();
-    logger.f(selectCodes);
+    if (isAdd) {
+      for (final e in DataList) {
+        if (selectCodes.contains(e.mCode) && !selectedItems.any((item) => item.mCode == e.mCode)) {
+          selectedItems.add(e);
+        }
+      }
+    } else {
+      selectedItems.removeWhere((e) => selectCodes.contains(e.mCode));
+    }
+  }
+
+  /// 加入供应商发票项目
+  Future<void> joinSupplierInvoiceAddItem() async {
+    final preCtl = Get.find<SupplierInvoiceEditController>();
+    final oldCodes = preCtl.invoiceDetail.map((e) => e.mProductCode).toSet();
+    final selectCodes = selectedItems.map((e) => e.mCode).toSet();
+    final commonCodes = selectCodes.intersection(oldCodes).toList();
+    final defaultStock = Get.parameters["defaultStock"] ?? "";
+    if (commonCodes.isNotEmpty) {
+      await CustomAlert.iosAlert(
+        message: "${LocaleKeys.theSelectedContentAlreadyExists.tr}:${commonCodes.join(",")}",
+        showCancel: true,
+        cancelText: LocaleKeys.ignore.tr,
+        confirmText: LocaleKeys.skip.tr,
+        onConfirm: () {
+          selectedItems.removeWhere((e) => commonCodes.contains(e.mCode));
+          logger.f(selectedItems);
+        },
+      );
+    }
+    if (selectedItems.isEmpty) {
+      Get.back();
+      return;
+    }
+    // 保存初始长度
+    final initialLength = preCtl.invoiceDetail.length;
+    final firstInvoiceId = preCtl.id ?? "";
+
+    // 使用asMap()获取索引，避免indexOf的性能开销
+    preCtl.invoiceDetail.addAll(
+      selectedItems.asMap().entries.map((entry) {
+        final index = entry.key;
+        final ProductData product = entry.value;
+        return InvoiceDetail(
+          mItem: (initialLength + index + 1).toString(), // 自增的行号
+          mProductCode: product.mCode,
+          mProductName: product.mDesc1,
+          mPrice: product.mLatCost ?? "0.00",
+          mQty: "1.00",
+          mAmount: product.mLatCost ?? "0.00",
+          mDiscount: "0.00",
+          mRemarks: "",
+          tSupplierInvoiceInId: firstInvoiceId,
+          mPoDetailId: "",
+          mStockCode: defaultStock,
+          mUnit: product.mUnit,
+          mSupplierInvoiceInDetailId: "",
+          mPoNo: "",
+          mRevised: "",
+          mProductContent: "",
+        );
+      }).toList(),
+    );
+    preCtl.updateTableHeight();
+    preCtl.dataSource.updateDataSource();
+    preCtl.updateTotalAmount();
+    Get.back();
   }
 
   /// 加入套餐
-  Future<void> joinSetMeal(List<DataGridRow> selectedRows) async {
+  Future<void> joinSetMeal() async {
     final productCtl = Get.find<ProductEditController>();
     final oldSetMealCodes = productCtl.productSetMeal.map((e) => e.mBarcode).toSet().toList();
-
-    final selectProductCodes = selectedRows
-        .map((row) => row.getCells().firstWhereOrNull((cell) => cell.columnName == "code")?.value)
-        .whereType<String>()
-        .where((element) => element.trim().isNotEmpty)
-        .toSet()
-        .toList();
-    final commonCodes = selectProductCodes.toSet().intersection(oldSetMealCodes.toSet()).toList();
-    final lastSelectProductCodes = List.from(selectProductCodes);
+    final commonCodes = selectedItems.map((e) => e.mCode).toSet().intersection(oldSetMealCodes.toSet()).toList();
+    final lastSelectProductCodes = List.from(selectedItems.map((e) => e.mCode));
     if (commonCodes.isNotEmpty) {
       await CustomAlert.iosAlert(
         message: "${LocaleKeys.theSelectedContentAlreadyExists.tr}:${commonCodes.join(",")}",
@@ -234,11 +304,12 @@ class OpenMultipleProductController extends GetxController with LoadingStateMixi
         confirmText: LocaleKeys.skip.tr,
         onConfirm: () {
           lastSelectProductCodes.clear();
-          lastSelectProductCodes.addAll(selectProductCodes.toSet().difference(oldSetMealCodes.toSet()).toList());
+          lastSelectProductCodes.addAll(
+            selectedItems.map((e) => e.mCode).toSet().difference(oldSetMealCodes.toSet()).toList(),
+          );
         },
       );
     }
-    selectProductCodes.clear();
     if (lastSelectProductCodes.isEmpty) {
       Get.back();
       return;

@@ -1,6 +1,9 @@
+import 'dart:convert' show json;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
 import '../../../mixin/loading_state_mixin.dart';
@@ -15,6 +18,7 @@ import '../../../utils/custom_dialog.dart';
 import '../../../utils/logger.dart';
 import '../../../utils/storage_manage.dart';
 import '../model/supplier_invoice_edit_model.dart';
+import '../supplier_invoice_controller.dart';
 import '../supplier_invoice_fields.dart';
 import 'supplier_invoice_detail_data_source.dart';
 
@@ -41,12 +45,6 @@ class SupplierInvoiceEditController extends GetxController with LoadingStateMixi
   List<CurrencyData> currency = [];
   List<StockData> stock = [];
 
-  /// 选中仓库
-  String? selectStock;
-
-  /// 总折扣
-  String totalDiscount = "0.00";
-
   @override
   void onInit() {
     super.onInit();
@@ -64,9 +62,18 @@ class SupplierInvoiceEditController extends GetxController with LoadingStateMixi
   /// 更新数据源
   void updateDataGridSource() {
     addOrEdit().then((_) {
-      tableHeight.value = invoiceDetail.isNotEmpty ? 100 + invoiceDetail.length * 48 : 100;
+      updateTableHeight();
       dataSource = SupplierInvoiceDetailDataSource(this);
     });
+  }
+
+  /// 更新表格高度
+  void updateTableHeight() {
+    tableHeight.value = invoiceDetail.isNotEmpty
+        ? (100 + invoiceDetail.length * 48) > 300
+              ? 300
+              : (100 + invoiceDetail.length * 48)
+        : 100;
   }
 
   /// 获取缓存用户
@@ -74,9 +81,12 @@ class SupplierInvoiceEditController extends GetxController with LoadingStateMixi
     final localStorageLoginInfo = storageManage.read(Config.localStorageLoginInfo);
     final LoginResult? loginUser = localStorageLoginInfo != null ? LoginResult.fromJson(localStorageLoginInfo) : null;
     if (id == null) {
-      formKey.currentState?.patchValue({SupplierInvoiceFields.createdBy: loginUser?.user ?? ""});
+      formKey.currentState?.patchValue({
+        SupplierInvoiceFields.createdBy: loginUser?.user ?? "",
+        SupplierInvoiceFields.lastModifiedBy: loginUser?.user ?? "",
+      });
     } else {
-      formKey.currentState?.patchValue({SupplierInvoiceFields.lastModifiedBy: loginUser?.user ?? ""});
+      formKey.currentState?.fields[SupplierInvoiceFields.lastModifiedBy]?.didChange(loginUser?.user ?? "");
     }
   }
 
@@ -124,21 +134,21 @@ class SupplierInvoiceEditController extends GetxController with LoadingStateMixi
       stock
         ..clear()
         ..addAll(apiData.stock ?? []);
+
       formEnabled = apiData.invoice?.mFlag != "1";
-      totalDiscount = invoice?.mDiscount ?? "0.00";
       WidgetsBinding.instance.addPostFrameCallback((_) {
+        formKey.currentState?.fields["defaultStock"]?.didChange(stock.first.mCode);
         formKey.currentState?.patchValue(
           Map.fromEntries(
             apiData.invoice
                     ?.toJson()
                     .entries
-                    .where((e) => e.value != null)
+                    .where((e) => (e.value?.toString() ?? "").trim().isNotEmpty)
                     .map((e) => MapEntry(e.key, e.value.toString())) ??
                 [],
           ),
         );
       });
-      FocusManager.instance.primaryFocus?.unfocus();
     } catch (e) {
       logger.i(e.toString());
       CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
@@ -149,45 +159,42 @@ class SupplierInvoiceEditController extends GetxController with LoadingStateMixi
 
   /// 保存
   Future<void> save() async {
-    /* CustomAlert.iosAlert(message: "此功能未完成");
-    return;
     FocusManager.instance.primaryFocus?.unfocus();
-    logger.f(invoiceDetail.map((e) => e.toJson()).toList()); */
     if (formKey.currentState?.saveAndValidate() ?? false) {
-      logger.f(formKey.currentState?.value);
-      /* CustomDialog.showLoading(LocaleKeys.saving.tr);
+      CustomDialog.showLoading(LocaleKeys.saving.tr);
       final formData = Map<String, dynamic>.from(formKey.currentState?.value ?? {})
-        ..addAll({"T_Customer_ID": id})
-        ..addAll({"customerContact": customerContactList})
-        ..addAll({"customerDiscount": customerDiscountList});
+        ..addAll({"id": id})
+        ..addAll({"detail": invoiceDetail.map((e) => e.toJson()).toList()});
       logger.f(formData);
       try {
-        final DioApiResult dioApiResult = await apiClient.post(Config.customerSave, data: formData);
+        final DioApiResult dioApiResult = await apiClient.post(Config.supplierInvoiceSave, data: formData);
+        logger.f(dioApiResult);
         if (!dioApiResult.success) {
           CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
           return;
         }
         final data = json.decode(dioApiResult.data!) as Map<String, dynamic>;
+        final preCtl = Get.find<SupplierInvoiceController>();
         switch (data["status"]) {
           case 200:
             CustomDialog.successMessages(id == null ? LocaleKeys.addSuccess.tr : LocaleKeys.updateSuccess.tr);
             final apiResult = data["apiResult"];
             if (apiResult == null) {
-              CustomerController.to.reloadData();
+              preCtl.reloadData();
               Get.back();
               return;
             }
-            final resultModel = CustomerData.fromJson(apiResult);
-            final customerCtl = Get.find<CustomerController>();
+            final resultModel = Invoice.fromJson(apiResult);
+
             if (id == null) {
-              customerCtl.dataList.insert(0, resultModel);
+              preCtl.dataList.insert(0, resultModel);
             } else {
-              final index = customerCtl.dataList.indexWhere((element) => element.tCustomerId.toString() == id);
+              final index = preCtl.dataList.indexWhere((element) => element.tSupplierInvoiceInId.toString() == id);
               if (index != -1) {
-                customerCtl.dataList[index] = resultModel;
+                preCtl.dataList[index] = resultModel;
               }
             }
-            customerCtl.dataSource.updateDataSource();
+            preCtl.dataSource.updateDataSource();
             Get.back();
             break;
           case 201:
@@ -203,7 +210,7 @@ class SupplierInvoiceEditController extends GetxController with LoadingStateMixi
         CustomDialog.errorMessages(e.toString());
       } finally {
         CustomDialog.dismissDialog();
-      } */
+      }
     }
   }
 
@@ -219,14 +226,19 @@ class SupplierInvoiceEditController extends GetxController with LoadingStateMixi
     final qty = double.tryParse(row.mQty ?? "0") ?? 0;
     final price = double.tryParse(row.mPrice ?? "0") ?? 0;
     final discount = double.tryParse(row.mDiscount ?? "0") ?? 0;
-    row.mAmount = ((qty * price * (100 - discount)) / 100).toStringAsFixed(2);
-    dataSource.updateDataSource();
+    final newAmount = ((qty * price * (100 - discount)) / 100).toStringAsFixed(2);
+    row.mAmount = newAmount;
+    dataSource.updateAmountCell(index, newAmount);
     updateTotalAmount();
   }
 
   /// 修改总金额
   void updateTotalAmount() {
+    // 总折扣
+    final totalDiscount = formKey.currentState?.fields[SupplierInvoiceFields.discount]?.value ?? "0.00";
+    // 总金额
     final totalAmount = invoiceDetail.fold(0.0, (sum, e) => sum + (double.tryParse(e.mAmount ?? "0") ?? 0));
+    // 最后金额
     final lastAmount = totalAmount * (100 - (double.tryParse(totalDiscount) ?? 0)) / 100;
     formKey.currentState?.fields[SupplierInvoiceFields.amount]?.didChange(lastAmount.toStringAsFixed(2));
   }

@@ -63,6 +63,7 @@ class SupplierInvoiceDetailDataSource extends DataGridSource with WidgetsBinding
                           ? 100 + controller.invoiceDetail.length * 48
                           : 100;
                       notifyListeners();
+                      controller.updateTotalAmount();
                     }
                   : null,
             ),
@@ -153,5 +154,18 @@ class SupplierInvoiceDetailDataSource extends DataGridSource with WidgetsBinding
         return CustomCell(data: e.value?.toString() ?? "");
       }).toList(),
     );
+  }
+
+  /// 更新金额单元格
+  void updateAmountCell(int rowIndex, String newAmount) {
+    final amountColumnIndex = _dataGridRows[rowIndex].getCells().indexWhere((c) => c.columnName == 'mAmount');
+
+    if (amountColumnIndex != -1) {
+      _dataGridRows[rowIndex].getCells()[amountColumnIndex] = DataGridCell<String>(
+        columnName: 'mAmount',
+        value: newAmount,
+      );
+      notifyDataSourceListeners(rowColumnIndex: RowColumnIndex(rowIndex, amountColumnIndex));
+    }
   }
 }

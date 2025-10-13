@@ -370,4 +370,5 @@ Map<String, String> get enUS => {
   LocaleKeys.modifyBy: "Modify By",
   LocaleKeys.searching: "Searching...",
   LocaleKeys.paramName: "%s Name",
+  LocaleKeys.invalidFormatParam: "%s format is invalid",
 };

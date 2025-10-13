@@ -370,4 +370,5 @@ Map<String, String> get zhCN => {
   LocaleKeys.modifyBy: "修改人",
   LocaleKeys.searching: "搜索中...",
   LocaleKeys.paramName: "%s名称",
+  LocaleKeys.invalidFormatParam: "%s格式错误",
 };
