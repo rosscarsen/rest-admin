@@ -159,7 +159,23 @@ class Config {
   static String customerPointDelete = "/Master/customerPointDelete";
 
   // ==========================================================================
-  // 供应商品发票
+  // 供应商管理模块
+  // ==========================================================================
+  // 供应商列表
+  static String supplier = "/Master/supplier";
+  // 供应商添加或编辑
+  static String supplierAddOrEdit = "/Master/supplierAddOrEdit";
+  // 供应商保存
+  static String supplierSave = "/Master/supplierSave";
+  // 供应商删除
+  static String supplierDelete = "/Master/supplierDelete";
+  // 导出供应商
+  static String exportSupplierExcel = "/Excel/supplierExport";
+  // 导入供应商
+  static String importSupplierExcel = "/Excel/supplierImport";
+
+  // ==========================================================================
+  // 供应商商品发票
   // ==========================================================================
   // 发票列表
   static String supplierInvoice = "/SupplierInvoice/invoice";
