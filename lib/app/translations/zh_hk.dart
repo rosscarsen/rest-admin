@@ -371,4 +371,10 @@ Map<String, String> zhHK = {
   LocaleKeys.searching: "搜索中...",
   LocaleKeys.paramName: "%s名稱",
   LocaleKeys.invalidFormatParam: "%s格式錯誤",
+  LocaleKeys.networkPayMethod: "網上支付方式",
+  LocaleKeys.mesa: "臺面",
+  LocaleKeys.calendar: "日曆",
+  LocaleKeys.timeSales: "時段銷售",
+  LocaleKeys.decca: "臺卡",
+  LocaleKeys.screenModeCategory: "螢幕模式 类目",
 };

@@ -371,4 +371,10 @@ abstract class LocaleKeys {
   static const String searching = "searching";
   static const String paramName = "paramName";
   static const String invalidFormatParam = "invalidFormatParam";
+  static const String networkPayMethod = "networkPayMethod";
+  static const String mesa = "mesa";
+  static const String calendar = "calendar";
+  static const String timeSales = "timeSales";
+  static const String decca = "decca";
+  static const String screenModeCategory = "screenModeCategory";
 }

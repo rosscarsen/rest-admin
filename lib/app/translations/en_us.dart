@@ -371,4 +371,10 @@ Map<String, String> get enUS => {
   LocaleKeys.searching: "Searching...",
   LocaleKeys.paramName: "%s Name",
   LocaleKeys.invalidFormatParam: "%s format is invalid",
+  LocaleKeys.networkPayMethod: "Network Pay Method",
+  LocaleKeys.mesa: "Mesa",
+  LocaleKeys.calendar: "Calendar",
+  LocaleKeys.timeSales: "Time Sales",
+  LocaleKeys.decca: "Decca",
+  LocaleKeys.screenModeCategory: "Screen Mode Category",
 };

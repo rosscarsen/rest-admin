@@ -371,4 +371,10 @@ Map<String, String> get zhCN => {
   LocaleKeys.searching: "搜索中...",
   LocaleKeys.paramName: "%s名称",
   LocaleKeys.invalidFormatParam: "%s格式错误",
+  LocaleKeys.networkPayMethod: "网上支付方式",
+  LocaleKeys.mesa: "台面",
+  LocaleKeys.calendar: "日历",
+  LocaleKeys.timeSales: "时段销售",
+  LocaleKeys.decca: "台卡",
+  LocaleKeys.screenModeCategory: "画面模式 类目",
 };

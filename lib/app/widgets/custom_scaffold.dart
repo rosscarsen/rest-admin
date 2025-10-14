@@ -45,7 +45,7 @@ class CustomScaffold extends StatelessWidget {
           borderColor: const Color(0xFFE7E7E7),
           iconColor: Color.fromARGB(234, 68, 68, 68),
           activeIconColor: Theme.of(context).primaryColor,
-          textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Color.fromARGB(234, 68, 68, 68)),
+          textStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.grey.shade700),
           activeTextStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(color: Theme.of(context).primaryColor),
           items: [
             // 仪表盘
@@ -67,6 +67,40 @@ class CustomScaffold extends StatelessWidget {
                 ),
                 //客户
                 AdminMenuItem(title: LocaleKeys.customer.tr, route: Routes.CUSTOMER, icon: FontAwesomeIcons.user),
+                //供应商
+                AdminMenuItem(title: LocaleKeys.supplier.tr, route: Routes.SUPPLIER, icon: Icons.support),
+                //店铺
+                AdminMenuItem(title: LocaleKeys.shop.tr, route: Routes.STOCK, icon: FontAwesomeIcons.store),
+                //货币
+                AdminMenuItem(title: LocaleKeys.currency.tr, route: Routes.CURRENCY, icon: Icons.monetization_on),
+                //单位
+                AdminMenuItem(title: LocaleKeys.unit.tr, route: Routes.UNIT, icon: Icons.format_list_numbered),
+                //套餐
+                AdminMenuItem(title: LocaleKeys.setMeal.tr, route: Routes.SET_MENU, icon: FontAwesomeIcons.medal),
+                //部门
+                AdminMenuItem(title: LocaleKeys.department.tr, route: Routes.DEPARTMENT, icon: Icons.group),
+                //支付方式
+                AdminMenuItem(title: LocaleKeys.paymentMethod.tr, route: Routes.PAY_METHOD, icon: Icons.payment),
+                //网上支付方式
+                AdminMenuItem(
+                  title: LocaleKeys.networkPayMethod.tr,
+                  route: Routes.NETWORK_PAY_METHOD,
+                  icon: FontAwesomeIcons.networkWired,
+                ),
+                //台面
+                AdminMenuItem(title: LocaleKeys.mesa.tr, route: Routes.MESA, icon: FontAwesomeIcons.table),
+                //日历
+                AdminMenuItem(title: LocaleKeys.calendar.tr, route: Routes.CALENDAR, icon: FontAwesomeIcons.calendar),
+                //時段銷售
+                AdminMenuItem(title: LocaleKeys.timeSales.tr, route: Routes.TIME_SALES, icon: FontAwesomeIcons.clock),
+                //台卡
+                AdminMenuItem(title: LocaleKeys.decca.tr, route: Routes.DECCA, icon: FontAwesomeIcons.creditCard),
+                //画面模式 类目
+                AdminMenuItem(
+                  title: LocaleKeys.screenModeCategory.tr,
+                  route: Routes.SCREEN_MODE_CATEGORY,
+                  icon: FontAwesomeIcons.layerGroup,
+                ),
               ],
             ),
             // 供应商发票

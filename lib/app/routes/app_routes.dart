@@ -44,6 +44,21 @@ abstract class Routes {
   static const OPEN_CUSTOMER = _Paths.OPEN + _Paths.OPEN_CUSTOMER;
   static const SUPPLIER_INVOICE_EDIT =
       _Paths.SUPPLIER_INVOICE + _Paths.SUPPLIER_INVOICE_EDIT;
+  static const SUPPLIER = _Paths.MASTER + _Paths.SUPPLIER;
+  static const STOCK = _Paths.MASTER + _Paths.STOCK;
+  static const CURRENCY = _Paths.MASTER + _Paths.CURRENCY;
+  static const UNIT = _Paths.MASTER + _Paths.UNIT;
+  static const SET_MENU = _Paths.MASTER + _Paths.SET_MENU;
+  static const DEPARTMENT = _Paths.MASTER + _Paths.DEPARTMENT;
+  static const PAY_METHOD = _Paths.MASTER + _Paths.PAY_METHOD;
+  static const NETWORK_PAY_METHOD = _Paths.MASTER + _Paths.NETWORK_PAY_METHOD;
+  static const MESA = _Paths.MASTER + _Paths.MESA;
+  static const CALENDAR = _Paths.MASTER + _Paths.CALENDAR;
+  static const PRINTER = _Paths.MASTER + _Paths.PRINTER;
+  static const TIME_SALES = _Paths.MASTER + _Paths.TIME_SALES;
+  static const DECCA = _Paths.MASTER + _Paths.DECCA;
+  static const SCREEN_MODE_CATEGORY =
+      _Paths.MASTER + _Paths.SCREEN_MODE_CATEGORY;
 }
 
 abstract class _Paths {
@@ -75,4 +90,18 @@ abstract class _Paths {
   static const CUSTOMER_EDIT = '/customer-edit';
   static const OPEN_CUSTOMER = '/open-customer';
   static const SUPPLIER_INVOICE_EDIT = '/supplier-invoice-edit';
+  static const SUPPLIER = '/supplier';
+  static const STOCK = '/stock';
+  static const CURRENCY = '/currency';
+  static const UNIT = '/unit';
+  static const SET_MENU = '/set-menu';
+  static const DEPARTMENT = '/department';
+  static const PAY_METHOD = '/pay-method';
+  static const NETWORK_PAY_METHOD = '/network-pay-method';
+  static const MESA = '/mesa';
+  static const CALENDAR = '/calendar';
+  static const PRINTER = '/printer';
+  static const TIME_SALES = '/time-sales';
+  static const DECCA = '/decca';
+  static const SCREEN_MODE_CATEGORY = '/screen-mode-category';
 }
