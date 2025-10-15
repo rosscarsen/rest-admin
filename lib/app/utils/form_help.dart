@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:date_field/date_field.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -16,7 +14,6 @@ import 'package:responsive_grid/responsive_grid.dart';
 
 import '../translations/locale_keys.dart';
 import 'constants.dart';
-import 'custom_dialog.dart';
 import 'functions.dart';
 
 enum DateInputType { time, date, dateAndTime }
@@ -109,8 +106,8 @@ class FormHelper {
           validator: validator,
           onChanged: onChanged,
           valueTransformer: (value) {
-            final raw = (value ?? "").trim();
-            return raw.replaceAll(RegExp(r'[,\s]'), '');
+            return (value ?? "").trim();
+            //return raw.replaceAll(RegExp(r'[,\s]'), '');
           },
           decoration: InputDecoration(
             labelText: labelText,
@@ -255,75 +252,6 @@ class FormHelper {
               ),
             );
           },
-        );
-      },
-    );
-  }
-
-  /// 打开选择文件
-  static Widget openFileInput({
-    required String name,
-    required String labelText,
-    TextEditingController? controller,
-    required void Function(File? file)? onFileSelected,
-    List<String> allowedExtensions = const ['xlsx', 'xls'],
-    IconData prefixIcon = FontAwesomeIcons.fileExcel,
-    bool readOnly = true,
-  }) {
-    final effectiveController = controller ?? TextEditingController();
-    return StatefulBuilder(
-      builder: (BuildContext context, setState) {
-        File? selectedFile;
-        Future<void> pickFile() async {
-          FilePickerResult? result = await FilePicker.platform.pickFiles(
-            allowMultiple: false,
-            type: FileType.custom,
-            allowedExtensions: allowedExtensions,
-            dialogTitle: LocaleKeys.selectFile.trArgs(["excel"]),
-            lockParentWindow: true,
-          );
-          if (result != null) {
-            setState(() {
-              PlatformFile platformFile = result.files.single;
-              selectedFile = File(platformFile.path!);
-              effectiveController.text = platformFile.name;
-            });
-            onFileSelected?.call(selectedFile);
-          } else {
-            CustomDialog.showToast(LocaleKeys.userCanceledPicker.tr);
-          }
-        }
-
-        return GestureDetector(
-          onTap: pickFile,
-          child: AbsorbPointer(
-            absorbing: effectiveController.text.isEmpty,
-            child: TextField(
-              readOnly: readOnly,
-              controller: controller,
-              decoration: InputDecoration(
-                labelText: labelText,
-                floatingLabelBehavior: FloatingLabelBehavior.never,
-                prefixIcon: Icon(prefixIcon, color: AppColors.openColor),
-                suffixIcon: effectiveController.text.isNotEmpty
-                    ? IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () {
-                          setState(() {
-                            selectedFile = null;
-                            effectiveController.clear();
-                          });
-                          onFileSelected?.call(null);
-                        },
-                      )
-                    : IconButton(
-                        tooltip: LocaleKeys.openChoice.tr,
-                        onPressed: pickFile,
-                        icon: Icon(Icons.file_open, color: AppColors.openColor),
-                      ),
-              ),
-            ),
-          ),
         );
       },
     );

@@ -377,4 +377,8 @@ Map<String, String> get zhCN => {
   LocaleKeys.timeSales: "时段销售",
   LocaleKeys.decca: "台卡",
   LocaleKeys.screenModeCategory: "画面模式 类目",
+  LocaleKeys.noFileSelected: "未选择文件",
+  LocaleKeys.invalidFilePath: "无效文件路径",
+  LocaleKeys.pickerFailed: "文件选择失败",
+  LocaleKeys.pickerTimeout: "文件选择超时",
 };

@@ -6,14 +6,15 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
 import '../../../routes/app_pages.dart';
+import '../../../theme/data_grid_theme.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/constants.dart';
 import '../../../utils/custom_dialog.dart';
 import '../../../utils/form_help.dart';
+import '../../../utils/open_file_input.dart';
 import '../../../utils/progress_hub.dart';
 import '../../../widgets/custom_cell.dart';
 import '../../../widgets/custom_scaffold.dart';
-import '../../../theme/data_grid_theme.dart';
 import '../../../widgets/data_pager.dart';
 import '../../../widgets/no_record.dart';
 import 'products_controller.dart';
@@ -258,65 +259,63 @@ class ProductsView extends GetView<ProductsController> {
   }
 
   // 产品导入
-  void _importProduct() {
-    final TextEditingController fileController = TextEditingController();
-    final TextEditingController overWriteController = TextEditingController();
+  void _importProduct() async {
+    final fileController = TextEditingController();
     File? excelFile;
     int overWrite = 0;
-
-    Get.defaultDialog(
-      barrierDismissible: false,
-      title: LocaleKeys.importProduct.tr,
-      content: Column(
-        spacing: 8.0,
-        children: <Widget>[
-          FormHelper.openFileInput(
-            name: "file",
-            labelText: LocaleKeys.selectFile.trArgs(["excel"]),
-            controller: fileController,
-            onFileSelected: (file) {
-              excelFile = file;
-            },
-          ),
-          FormHelper.selectInput(
-            name: "overWrite",
-            labelText: LocaleKeys.overWrite.tr,
-            initialValue: 0,
-            items: [
-              DropdownMenuItem(value: 0, child: Text(LocaleKeys.no.tr)),
-              DropdownMenuItem(value: 1, child: Text(LocaleKeys.yes.tr)),
-            ],
-            onChanged: (value) {
-              overWrite = value!;
-            },
-          ),
-        ],
-      ),
-
-      cancel: ElevatedButton(
-        onPressed: () {
-          overWriteController.dispose();
-          fileController.dispose();
-          excelFile = null;
-          Get.closeDialog();
-        },
-        child: Text(LocaleKeys.cancel.tr),
-      ),
-      confirm: ElevatedButton(
-        onPressed: () async {
-          if (excelFile == null) {
-            CustomDialog.showToast(LocaleKeys.pleaseSelectFile.tr);
-            return;
-          }
-          fileController.dispose();
-          overWriteController.dispose();
-          Get.closeDialog();
-          controller.importProduct(file: excelFile!, query: {'overWrite': overWrite});
-          excelFile = null;
-        },
-        child: Text(LocaleKeys.confirm.tr),
-      ),
-    );
+    try {
+      await Get.defaultDialog(
+        barrierDismissible: false,
+        title: LocaleKeys.importParam.trArgs([LocaleKeys.productRemarks.tr]),
+        content: Column(
+          spacing: 8.0,
+          children: <Widget>[
+            OpenFileInput(
+              name: "file",
+              labelText: LocaleKeys.selectFile.trArgs(["excel"]),
+              controller: fileController,
+              onFileSelected: (file) {
+                excelFile = file;
+              },
+            ),
+            FormHelper.selectInput(
+              name: "overWrite",
+              labelText: LocaleKeys.overWrite.tr,
+              initialValue: 0,
+              items: [
+                DropdownMenuItem(value: 0, child: Text(LocaleKeys.no.tr)),
+                DropdownMenuItem(value: 1, child: Text(LocaleKeys.yes.tr)),
+              ],
+              onChanged: (value) {
+                overWrite = value!;
+              },
+            ),
+          ],
+        ),
+        cancel: ElevatedButton(
+          onPressed: () {
+            Get.closeDialog();
+          },
+          child: Text(LocaleKeys.cancel.tr),
+        ),
+        confirm: ElevatedButton(
+          onPressed: () async {
+            if (excelFile == null) {
+              CustomDialog.showToast(LocaleKeys.pleaseSelectFile.tr);
+              return;
+            }
+            Get.closeDialog();
+            await controller.importProduct(file: excelFile!, query: {'overWrite': overWrite});
+            excelFile = null;
+          },
+          child: Text(LocaleKeys.confirm.tr),
+        ),
+      );
+    } catch (e, stack) {
+      debugPrint('Dialog error: $e\n$stack');
+    } finally {
+      fileController.dispose();
+    }
   }
 
   //数据表格

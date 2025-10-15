@@ -377,4 +377,8 @@ abstract class LocaleKeys {
   static const String timeSales = "timeSales";
   static const String decca = "decca";
   static const String screenModeCategory = "screenModeCategory";
+  static const String noFileSelected = "noFileSelected";
+  static const String invalidFilePath = "invalidFilePath";
+  static const String pickerFailed = "pickerFailed";
+  static const String pickerTimeout = "pickerTimeout";
 }

@@ -52,6 +52,8 @@ import '../modules/master/set_menu/set_menu_view.dart';
 import '../modules/master/stock/stock_binding.dart';
 import '../modules/master/stock/stock_view.dart';
 import '../modules/master/supplier/supplier_binding.dart';
+import '../modules/master/supplier/supplier_edit/supplier_edit_binding.dart';
+import '../modules/master/supplier/supplier_edit/supplier_edit_view.dart';
 import '../modules/master/supplier/supplier_view.dart';
 import '../modules/master/time_sales/time_sales_binding.dart';
 import '../modules/master/time_sales/time_sales_view.dart';
@@ -239,6 +241,14 @@ class AppPages {
           page: () => const SupplierView(),
           binding: SupplierBinding(),
           middlewares: [AuthMiddleware()],
+          children: [
+            GetPage(
+              name: _Paths.SUPPLIER_EDIT,
+              page: () => const SupplierEditView(),
+              binding: SupplierEditBinding(),
+              middlewares: [AuthMiddleware()],
+            ),
+          ],
         ),
         GetPage(
           name: _Paths.STOCK,

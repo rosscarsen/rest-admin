@@ -7,13 +7,14 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
 import '../../../routes/app_pages.dart';
+import '../../../theme/data_grid_theme.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/custom_dialog.dart';
 import '../../../utils/form_help.dart';
+import '../../../utils/open_file_input.dart';
 import '../../../utils/progress_hub.dart';
 import '../../../widgets/custom_cell.dart';
 import '../../../widgets/custom_scaffold.dart';
-import '../../../theme/data_grid_theme.dart';
 import '../../../widgets/data_pager.dart';
 import '../../../widgets/no_record.dart';
 import 'category_controller.dart';
@@ -124,43 +125,46 @@ class CategoryView extends GetView<CategoryController> {
     );
   }
 
-  // 产品导入
+  // 导入
   void _buildImport() async {
-    final TextEditingController fileController = TextEditingController();
+    final fileController = TextEditingController();
     File? excelFile;
-    await Get.defaultDialog(
-      barrierDismissible: false,
-      title: LocaleKeys.importProduct.tr,
-      content: FormHelper.openFileInput(
-        name: "file",
-        labelText: LocaleKeys.selectFile.trArgs(["excel"]),
-        controller: fileController,
-        onFileSelected: (file) {
-          excelFile = file;
-        },
-      ),
-      cancel: ElevatedButton(
-        onPressed: () {
-          fileController.dispose();
-          excelFile = null;
-          Get.closeDialog();
-        },
-        child: Text(LocaleKeys.cancel.tr),
-      ),
-      confirm: ElevatedButton(
-        onPressed: () async {
-          if (excelFile == null) {
-            CustomDialog.showToast(LocaleKeys.pleaseSelectFile.tr);
-            return;
-          }
-          fileController.dispose();
-          Get.closeDialog();
-          controller.importCategory(file: excelFile!);
-          excelFile = null;
-        },
-        child: Text(LocaleKeys.confirm.tr),
-      ),
-    );
+    try {
+      await Get.defaultDialog(
+        barrierDismissible: false,
+        title: LocaleKeys.importParam.trArgs([LocaleKeys.category.tr]),
+        content: OpenFileInput(
+          name: "file",
+          labelText: LocaleKeys.selectFile.trArgs(["excel"]),
+          controller: fileController,
+          onFileSelected: (file) {
+            excelFile = file;
+          },
+        ),
+        cancel: ElevatedButton(
+          onPressed: () {
+            Get.closeDialog();
+          },
+          child: Text(LocaleKeys.cancel.tr),
+        ),
+        confirm: ElevatedButton(
+          onPressed: () async {
+            if (excelFile == null) {
+              CustomDialog.showToast(LocaleKeys.pleaseSelectFile.tr);
+              return;
+            }
+            Get.closeDialog();
+            await controller.importCategory(file: excelFile!);
+            excelFile = null;
+          },
+          child: Text(LocaleKeys.confirm.tr),
+        ),
+      );
+    } catch (e, stack) {
+      debugPrint('Dialog error: $e\n$stack');
+    } finally {
+      fileController.dispose();
+    }
   }
 
   //数据表格

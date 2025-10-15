@@ -59,6 +59,8 @@ abstract class Routes {
   static const DECCA = _Paths.MASTER + _Paths.DECCA;
   static const SCREEN_MODE_CATEGORY =
       _Paths.MASTER + _Paths.SCREEN_MODE_CATEGORY;
+  static const SUPPLIER_EDIT =
+      _Paths.MASTER + _Paths.SUPPLIER + _Paths.SUPPLIER_EDIT;
 }
 
 abstract class _Paths {
@@ -104,4 +106,5 @@ abstract class _Paths {
   static const TIME_SALES = '/time-sales';
   static const DECCA = '/decca';
   static const SCREEN_MODE_CATEGORY = '/screen-mode-category';
+  static const SUPPLIER_EDIT = '/supplier-edit';
 }

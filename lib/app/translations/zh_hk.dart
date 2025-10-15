@@ -377,4 +377,8 @@ Map<String, String> zhHK = {
   LocaleKeys.timeSales: "時段銷售",
   LocaleKeys.decca: "臺卡",
   LocaleKeys.screenModeCategory: "螢幕模式 类目",
+  LocaleKeys.noFileSelected: "未選擇文件",
+  LocaleKeys.invalidFilePath: "無效文件路徑",
+  LocaleKeys.pickerFailed: "文件選擇失敗",
+  LocaleKeys.pickerTimeout: "文件選擇超時",
 };

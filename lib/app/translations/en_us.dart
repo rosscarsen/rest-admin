@@ -377,4 +377,8 @@ Map<String, String> get enUS => {
   LocaleKeys.timeSales: "Time Sales",
   LocaleKeys.decca: "Decca",
   LocaleKeys.screenModeCategory: "Screen Mode Category",
+  LocaleKeys.noFileSelected: "No file selected",
+  LocaleKeys.invalidFilePath: "Invalid file path",
+  LocaleKeys.pickerFailed: "File picker failed",
+  LocaleKeys.pickerTimeout: "File picker timeout",
 };
