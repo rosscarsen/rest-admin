@@ -25,7 +25,7 @@ mixin LoadingStateMixin<T> on GetxController {
     super.onInit();
   }
 
-  // ===== Getter & Setter =====
+  //  ===== Getter & Setter =====
   String get title => _title.value;
   set title(String value) => _title.value = value;
 
