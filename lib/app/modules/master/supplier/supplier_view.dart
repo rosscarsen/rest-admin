@@ -122,7 +122,7 @@ class SupplierView extends GetView<SupplierController> {
     try {
       await Get.defaultDialog(
         barrierDismissible: false,
-        title: LocaleKeys.importProduct.tr,
+        title: LocaleKeys.importParam.trArgs([LocaleKeys.supplier.tr]),
         content: Column(
           spacing: 8.0,
           children: <Widget>[

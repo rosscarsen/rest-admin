@@ -67,6 +67,11 @@ class FormHelper {
     );
   }
 
+  /// 分割线
+  static ResponsiveGridCol line() {
+    return buildGridCol(sm: 12, md: 12, lg: 12, xl: 12, child: Divider(thickness: 0.8));
+  }
+
   /// 文本输入框
   static Widget textInput({
     required String name,
@@ -732,7 +737,16 @@ class FormHelper {
     return FormBuilderField<PhoneNumber>(
       name: name,
       enabled: enabled,
-      initialValue: initialValue != null ? PhoneNumber.parse(initialValue) : PhoneNumber.parse("+852"),
+      initialValue: () {
+        if (initialValue == null || initialValue.trim().isEmpty) {
+          return PhoneNumber.parse("+852");
+        }
+        try {
+          return PhoneNumber.parse(initialValue);
+        } catch (e) {
+          return PhoneNumber.parse("+852");
+        }
+      }(),
       autovalidateMode: AutovalidateMode.onUserInteraction, // 自动验证
       validator: (PhoneNumber? value) {
         if (isRequired && (value == null || value.nsn.isEmpty)) {

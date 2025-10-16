@@ -12,7 +12,7 @@ SupplierEditModel _$SupplierEditModelFromJson(Map<String, dynamic> json) =>
       msg: json['msg'] as String?,
       apiResult: json['apiResult'] == null
           ? null
-          : SupplierEditResult.fromJson(
+          : SupplierEditData.fromJson(
               json['apiResult'] as Map<String, dynamic>,
             ),
     );
@@ -21,11 +21,11 @@ Map<String, dynamic> _$SupplierEditModelToJson(SupplierEditModel instance) =>
     <String, dynamic>{
       'status': instance.status,
       'msg': instance.msg,
-      'apiResult': instance.apiResult,
+      'apiResult': instance.apiResult?.toJson(),
     };
 
-SupplierEditResult _$SupplierEditResultFromJson(Map<String, dynamic> json) =>
-    SupplierEditResult(
+SupplierEditData _$SupplierEditDataFromJson(Map<String, dynamic> json) =>
+    SupplierEditData(
       mAddress: Functions.asString(json['mAddress']),
       mAnsBack: Functions.asString(json['mAns_Back']),
       mCode: Functions.asString(json['mCode']),
@@ -49,7 +49,7 @@ SupplierEditResult _$SupplierEditResultFromJson(Map<String, dynamic> json) =>
           .toList(),
     );
 
-Map<String, dynamic> _$SupplierEditResultToJson(SupplierEditResult instance) =>
+Map<String, dynamic> _$SupplierEditDataToJson(SupplierEditData instance) =>
     <String, dynamic>{
       'mAddress': instance.mAddress,
       'mAns_Back': instance.mAnsBack,
@@ -57,7 +57,7 @@ Map<String, dynamic> _$SupplierEditResultToJson(SupplierEditResult instance) =>
       'mContact': instance.mContact,
       'mFax_No': instance.mFaxNo,
       'mFullName': instance.mFullName,
-      'mPhone_No': instance.mPhoneNo,
+      'mPhone_No': Functions.stringToPhoneNumber(instance.mPhoneNo),
       'mSimpleName': instance.mSimpleName,
       'mST_Currency': instance.mStCurrency,
       'mST_Payment_Days': instance.mStPaymentDays,

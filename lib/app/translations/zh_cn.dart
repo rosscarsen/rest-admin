@@ -381,4 +381,5 @@ Map<String, String> get zhCN => {
   LocaleKeys.invalidFilePath: "无效文件路径",
   LocaleKeys.pickerFailed: "文件选择失败",
   LocaleKeys.pickerTimeout: "文件选择超时",
+  LocaleKeys.paymentDay: "支付日数",
 };

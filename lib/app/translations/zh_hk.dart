@@ -381,4 +381,5 @@ Map<String, String> zhHK = {
   LocaleKeys.invalidFilePath: "無效文件路徑",
   LocaleKeys.pickerFailed: "文件選擇失敗",
   LocaleKeys.pickerTimeout: "文件選擇超時",
+  LocaleKeys.paymentDay: "支付日數",
 };

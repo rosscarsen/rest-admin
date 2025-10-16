@@ -381,4 +381,5 @@ abstract class LocaleKeys {
   static const String invalidFilePath = "invalidFilePath";
   static const String pickerFailed = "pickerFailed";
   static const String pickerTimeout = "pickerTimeout";
+  static const String paymentDay = "paymentDay";
 }

@@ -35,7 +35,7 @@ Map<String, dynamic> _$SupplierDataToJson(SupplierData instance) =>
       'mContact': instance.mContact,
       'mFax_No': instance.mFaxNo,
       'mFullName': instance.mFullName,
-      'mPhone_No': instance.mPhoneNo,
+      'mPhone_No': Functions.stringToPhoneNumber(instance.mPhoneNo),
       'mSimpleName': instance.mSimpleName,
       'mST_Currency': instance.mStCurrency,
       'mST_Payment_Days': instance.mStPaymentDays,

@@ -17,7 +17,7 @@ class SupplierData {
   String? mFaxNo;
   @JsonKey(name: "mFullName", fromJson: Functions.asString)
   String? mFullName;
-  @JsonKey(name: "mPhone_No", fromJson: Functions.asString)
+  @JsonKey(name: "mPhone_No", fromJson: Functions.asString, toJson: Functions.stringToPhoneNumber)
   String? mPhoneNo;
   @JsonKey(name: "mSimpleName", fromJson: Functions.asString)
   String? mSimpleName;

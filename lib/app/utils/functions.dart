@@ -173,8 +173,16 @@ class Functions {
   }
 
   /// 字符串转PhoneNumber
-  static PhoneNumber? stringToPhoneNumber(String? value) {
-    return PhoneNumber.parse(value == null ? "+852" : value.toString());
+  static PhoneNumber stringToPhoneNumber(String? value, {String defaultIsoCode = "HK"}) {
+    if (value == null || value.trim().isEmpty) {
+      return PhoneNumber.parse("+852");
+    }
+    try {
+      return PhoneNumber.parse(value);
+    } catch (e) {
+      // 解析失败时返回默认值
+      return PhoneNumber.parse("+852");
+    }
   }
 
   /// 格式化金额

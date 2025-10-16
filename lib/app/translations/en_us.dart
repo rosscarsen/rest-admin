@@ -381,4 +381,5 @@ Map<String, String> get enUS => {
   LocaleKeys.invalidFilePath: "Invalid file path",
   LocaleKeys.pickerFailed: "File picker failed",
   LocaleKeys.pickerTimeout: "File picker timeout",
+  LocaleKeys.paymentDay: "Payment Day",
 };

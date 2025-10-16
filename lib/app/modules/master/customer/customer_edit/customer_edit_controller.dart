@@ -186,7 +186,7 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
       setCustomerPoint = customerRet?.customerPoint ?? "";
       final customerInfo = customerRet?.customerInfo;
 
-      //logger.f(customerInfo?.toJson());
+      logger.f(customerInfo?.toJson());
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         formKey.currentState?.patchValue(customerInfo?.toJson() ?? {});

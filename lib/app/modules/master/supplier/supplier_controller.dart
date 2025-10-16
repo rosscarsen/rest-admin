@@ -10,6 +10,7 @@ import '../../../config.dart';
 import '../../../mixin/loading_state_mixin.dart';
 import '../../../model/supplier/supplier_data.dart';
 import '../../../model/supplier/supplier_page_model.dart';
+import '../../../routes/app_pages.dart';
 import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
@@ -90,7 +91,7 @@ class SupplierController extends GetxController with LoadingStateMixin {
 
   /// 编辑
   void edit({String? id}) async {
-    //Get.toNamed(Routes.SUPPLIER_EDIT, parameters: id == null ? null : {'id': id.toString()});
+    Get.toNamed(Routes.SUPPLIER_EDIT, parameters: id == null ? null : {'id': id.toString()});
   }
 
   /// 删除单行数据
