@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../model/stock/stock_data.dart';
-import '../../../model/supplier/supplier_data.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/constants.dart';
 import '../../../widgets/custom_cell.dart';
