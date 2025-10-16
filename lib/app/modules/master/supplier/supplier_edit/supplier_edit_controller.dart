@@ -12,9 +12,11 @@ import '../../../../service/dio_api_client.dart';
 import '../../../../service/dio_api_result.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/custom_dialog.dart';
+import '../../../../utils/functions.dart';
 import '../../../../utils/logger.dart';
 import '../../../../utils/storage_manage.dart';
 import '../supplier_controller.dart';
+import '../supplier_table_fields.dart';
 import 'model/supplier_edit_model.dart';
 
 class SupplierEditController extends GetxController with LoadingStateMixin<SupplierEditData> {
@@ -25,6 +27,8 @@ class SupplierEditController extends GetxController with LoadingStateMixin<Suppl
   final ApiClient apiClient = ApiClient();
 
   String? id;
+  //编辑前的数据
+  SupplierData? oldRow;
 
   @override
   void onInit() {
@@ -47,6 +51,7 @@ class SupplierEditController extends GetxController with LoadingStateMixin<Suppl
 
   @override
   void onClose() {
+    oldRow = null;
     super.onClose();
   }
 
@@ -59,6 +64,7 @@ class SupplierEditController extends GetxController with LoadingStateMixin<Suppl
   Future<void> addOrEdit() async {
     isLoading = true;
     data = null;
+    oldRow = null;
     try {
       final DioApiResult dioApiResult = await apiClient.get(Config.supplierAddOrEdit, data: {'id': id});
       if (!dioApiResult.success) {
@@ -77,11 +83,11 @@ class SupplierEditController extends GetxController with LoadingStateMixin<Suppl
       final resultModel = supplierEditModelFromJson(dioApiResult.data);
 
       if (resultModel.status == 200 && resultModel.apiResult != null) {
-        data = resultModel.apiResult;
+        oldRow = data = resultModel.apiResult;
         WidgetsBinding.instance.addPostFrameCallback((_) {
+          formKey.currentState?.fields[SupplierTableFields.mST_Currency]?.didChange(data?.currency?.first.mCode ?? "");
           final jsonMap = Map<String, dynamic>.from(data?.toJson() ?? {});
           jsonMap.remove("currency");
-
           final filteredMap = Map.fromEntries(
             jsonMap.entries
                 .where((e) => (e.value?.toString() ?? "").trim().isNotEmpty)
@@ -102,18 +108,37 @@ class SupplierEditController extends GetxController with LoadingStateMixin<Suppl
   Future<void> save() async {
     FocusManager.instance.primaryFocus?.unfocus();
     if (formKey.currentState?.saveAndValidate() ?? false) {
+      final preCtl = Get.find<SupplierController>();
+      final formData = formKey.currentState?.value ?? {};
+      //如果是编辑检测一下数据是否有变化
+      if (id != null) {
+        final oldJson = (oldRow?.toJson() ?? {}).map(
+          (key, value) => MapEntry(
+            key,
+            value is PhoneNumber
+                ? value.nsn.isNotEmpty
+                      ? '+${value.countryCode}${value.nsn}'
+                      : ""
+                : value,
+          ),
+        );
+        final isSame = Functions.compareMap(oldJson, formData);
+        if (isSame) {
+          Get.back();
+          return;
+        }
+      }
+      //发送网络保存请求
       CustomDialog.showLoading(LocaleKeys.saving.tr);
-      final formData = Map<String, dynamic>.from(formKey.currentState?.value ?? {})..addAll({"id": id});
-      logger.f(formData);
+      final requestData = {...formData, "id": id};
       try {
-        final DioApiResult dioApiResult = await apiClient.post(Config.supplierInvoiceSave, data: formData);
+        final DioApiResult dioApiResult = await apiClient.post(Config.supplierSave, data: requestData);
         logger.f(dioApiResult);
         if (!dioApiResult.success) {
           CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
           return;
         }
         final data = json.decode(dioApiResult.data!) as Map<String, dynamic>;
-        final preCtl = Get.find<SupplierController>();
         switch (data["status"]) {
           case 200:
             CustomDialog.successMessages(id == null ? LocaleKeys.addSuccess.tr : LocaleKeys.updateSuccess.tr);
@@ -124,7 +149,6 @@ class SupplierEditController extends GetxController with LoadingStateMixin<Suppl
               return;
             }
             final resultModel = SupplierData.fromJson(apiResult);
-
             if (id == null) {
               preCtl.dataList.insert(0, resultModel);
             } else {
@@ -140,7 +164,7 @@ class SupplierEditController extends GetxController with LoadingStateMixin<Suppl
             CustomDialog.errorMessages(LocaleKeys.codeExists.trArgs([LocaleKeys.code.tr]));
             break;
           case 202:
-            CustomDialog.errorMessages(LocaleKeys.codeExists.trArgs([LocaleKeys.mobile.tr]));
+            CustomDialog.errorMessages(LocaleKeys.saveFailed.tr);
             break;
           default:
             CustomDialog.errorMessages(LocaleKeys.unknownError.tr);

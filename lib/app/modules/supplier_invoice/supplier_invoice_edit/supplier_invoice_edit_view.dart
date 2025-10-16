@@ -117,7 +117,6 @@ class SupplierInvoiceEditView extends GetView<SupplierInvoiceEditController> {
                 child: FormHelper.selectInput(
                   name: SupplierInvoiceFields.moneyCurrency,
                   labelText: LocaleKeys.currency.tr,
-                  initialValue: "HKD",
                   items: controller.currency
                       .map((e) => DropdownMenuItem(value: e.mCode, child: Text(e.mCode ?? "")))
                       .toList(),

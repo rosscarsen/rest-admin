@@ -108,7 +108,6 @@ class SupplierEditView extends GetView<SupplierEditController> {
               FormHelper.buildGridCol(
                 child: FormHelper.textInput(name: SupplierTableFields.mContact, labelText: LocaleKeys.contact.tr),
               ),
-              FormHelper.line(),
               //电邮
               FormHelper.buildGridCol(
                 child: FormHelper.textInput(
@@ -117,12 +116,12 @@ class SupplierEditView extends GetView<SupplierEditController> {
                   keyboardType: TextInputType.emailAddress,
                 ),
               ),
+              FormHelper.line(),
               //货币
               FormHelper.buildGridCol(
                 child: FormHelper.selectInput(
                   name: SupplierTableFields.mST_Currency,
                   labelText: LocaleKeys.currency.tr,
-                  initialValue: "1",
                   items: (controller.data?.currency ?? [])
                       .map((e) => DropdownMenuItem(value: e.mCode, child: Text(e.mDescription ?? "")))
                       .toList(),
@@ -143,7 +142,6 @@ class SupplierEditView extends GetView<SupplierEditController> {
                 child: FormHelper.textInput(
                   name: SupplierTableFields.mST_Payment_Term,
                   labelText: LocaleKeys.paymentTerm.tr,
-                  initialValue: "0",
                 ),
               ),
               //支付日数

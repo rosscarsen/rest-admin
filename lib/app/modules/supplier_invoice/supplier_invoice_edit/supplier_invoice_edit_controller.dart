@@ -136,7 +136,8 @@ class SupplierInvoiceEditController extends GetxController with LoadingStateMixi
 
       formEnabled = apiData.invoice?.mFlag != "1";
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        formKey.currentState?.fields["defaultStock"]?.didChange(stock.first.mCode);
+        formKey.currentState?.fields["defaultStock"]?.didChange(stock.firstOrNull?.mCode ?? "");
+        formKey.currentState?.fields[SupplierInvoiceFields.moneyCurrency]?.didChange(currency.firstOrNull?.mCode ?? "");
         formKey.currentState?.patchValue(
           Map.fromEntries(
             apiData.invoice
