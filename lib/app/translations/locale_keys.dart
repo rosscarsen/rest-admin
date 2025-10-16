@@ -382,4 +382,9 @@ abstract class LocaleKeys {
   static const String pickerFailed = "pickerFailed";
   static const String pickerTimeout = "pickerTimeout";
   static const String paymentDay = "paymentDay";
+  static const String attn = "attn";
+  static const String postCode = "postCode";
+  static const String kitchenLabel = "kitchenLabel";
+  static const String salesMemoFooter = "salesMemoFooter";
+  static const String salesMemoRemarks = "salesMemoRemarks";
 }

@@ -1,4 +1,4 @@
-# rest_admin
+# rest_admin（主档以供应商为模板）
 
 **服务器所有返回数据必须是map类型，key为字段名，value为字段值**
 

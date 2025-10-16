@@ -11,8 +11,8 @@ StockData _$StockDataFromJson(Map<String, dynamic> json) => StockData(
   mName: Functions.asString(json['mName']),
   mAddress: Functions.asString(json['mAddress']),
   mAttn: Functions.asString(json['mAttn']),
-  mFax: json['mFax'] as String?,
-  mZip: json['mZip,fromJson: Functions.asString'] as String?,
+  mFax: Functions.asString(json['mFax']),
+  mZip: Functions.asString(json['mZip']),
   mEmail: Functions.asString(json['mEmail']),
   mRemarks: Functions.asString(json['mRemarks']),
   mCode: Functions.asString(json['mCode']),
@@ -26,12 +26,12 @@ StockData _$StockDataFromJson(Map<String, dynamic> json) => StockData(
 );
 
 Map<String, dynamic> _$StockDataToJson(StockData instance) => <String, dynamic>{
-  'mPhone': instance.mPhone,
+  'mPhone': Functions.stringToPhoneNumber(instance.mPhone),
   'mName': instance.mName,
   'mAddress': instance.mAddress,
   'mAttn': instance.mAttn,
   'mFax': instance.mFax,
-  'mZip,fromJson: Functions.asString': instance.mZip,
+  'mZip': instance.mZip,
   'mEmail': instance.mEmail,
   'mRemarks': instance.mRemarks,
   'mCode': instance.mCode,

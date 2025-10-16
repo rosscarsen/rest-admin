@@ -1,17 +1,33 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 
-class StockController extends GetxController {
-  //TODO: Implement StockController
+import '../../../config.dart';
+import '../../../mixin/loading_state_mixin.dart';
+import '../../../model/stock/stock_data.dart';
+import '../../../model/stock/stock_page_model.dart';
+import '../../../routes/app_pages.dart';
+import '../../../service/dio_api_client.dart';
+import '../../../service/dio_api_result.dart';
+import '../../../translations/locale_keys.dart';
+import '../../../utils/custom_alert.dart';
+import '../../../utils/custom_dialog.dart';
 
-  final count = 0.obs;
+import 'stock_data_source.dart';
+
+class StockController extends GetxController with LoadingStateMixin {
+  final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
+  List<StockData> dataList = [];
+  final ApiClient apiClient = ApiClient();
+  late StockDataSource dataSource;
   @override
   void onInit() {
     super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
+    updateDataGridSource();
   }
 
   @override
@@ -19,5 +35,100 @@ class StockController extends GetxController {
     super.onClose();
   }
 
-  void increment() => count.value++;
+  /// 重载数据
+  void reloadData() {
+    FocusManager.instance.primaryFocus?.unfocus();
+    totalPages = 0;
+    currentPage = 1;
+    updateDataGridSource();
+  }
+
+  /// 更新数据源
+  void updateDataGridSource() {
+    getList().then((_) {
+      dataSource = StockDataSource(this);
+    });
+  }
+
+  /// 获取列表
+  Future<void> getList() async {
+    isLoading = true;
+    dataList.clear();
+    try {
+      formKey.currentState?.saveAndValidate();
+      final param = {'page': currentPage, ...formKey.currentState?.value ?? {}};
+      final DioApiResult dioApiResult = await apiClient.get(Config.stock, data: param);
+
+      if (!dioApiResult.success) {
+        if (!dioApiResult.hasPermission) {
+          hasPermission = false;
+        }
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        return;
+      }
+      if (dioApiResult.data == null) {
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        return;
+      }
+      hasPermission = true;
+      //logger.f(dioApiResult.data);
+      final resultModel = stockPageModelFromJson(dioApiResult.data.toString());
+      if (resultModel.status == 200) {
+        dataList
+          ..clear()
+          ..addAll(resultModel.apiResult?.data ?? []);
+        totalPages = (resultModel.apiResult?.lastPage ?? 0);
+        totalRecords = (resultModel.apiResult?.total ?? 0);
+      } else {
+        CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
+      }
+    } finally {
+      isLoading = false;
+    }
+  }
+
+  /// 编辑
+  void edit({String? id}) async {
+    Get.toNamed(Routes.STOCK_EDIT, parameters: id == null ? null : {'id': id.toString()});
+  }
+
+  /// 删除单行数据
+  void deleteRow(String? id) async {
+    CustomAlert.iosAlert(
+      showCancel: true,
+      message: LocaleKeys.deleteConfirmMsg.tr,
+      onConfirm: () async {
+        try {
+          CustomDialog.showLoading(LocaleKeys.deleting.tr);
+          final DioApiResult dioApiResult = await apiClient.get(Config.stockDelete, data: {"id": id});
+
+          if (!dioApiResult.success) {
+            CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+            return;
+          }
+          if (dioApiResult.data == null) {
+            CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+            return;
+          }
+          final Map<String, dynamic> data = jsonDecode(dioApiResult.data!) as Map<String, dynamic>;
+          switch (data['status']) {
+            case 200:
+              CustomDialog.successMessages(LocaleKeys.deleteSuccess.tr);
+              dataList.removeWhere((element) => element.tStockId == id);
+              dataSource.updateDataSource();
+              break;
+            case 201:
+              CustomDialog.errorMessages(LocaleKeys.deleteFailed.tr);
+              break;
+            default:
+              CustomDialog.errorMessages(LocaleKeys.unknownError.tr);
+          }
+        } catch (e) {
+          CustomDialog.errorMessages(LocaleKeys.deleteFailed.tr);
+        } finally {
+          CustomDialog.dismissDialog();
+        }
+      },
+    );
+  }
 }

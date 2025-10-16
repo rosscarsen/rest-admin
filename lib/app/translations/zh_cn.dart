@@ -382,4 +382,9 @@ Map<String, String> get zhCN => {
   LocaleKeys.pickerFailed: "文件选择失败",
   LocaleKeys.pickerTimeout: "文件选择超时",
   LocaleKeys.paymentDay: "支付日数",
+  LocaleKeys.attn: "称谓",
+  LocaleKeys.postCode: "邮编",
+  LocaleKeys.kitchenLabel: "厨房标签",
+  LocaleKeys.salesMemoFooter: "销售备忘",
+  LocaleKeys.salesMemoRemarks: "销售备注",
 };

@@ -50,6 +50,8 @@ import '../modules/master/screen_mode_category/screen_mode_category_view.dart';
 import '../modules/master/set_menu/set_menu_binding.dart';
 import '../modules/master/set_menu/set_menu_view.dart';
 import '../modules/master/stock/stock_binding.dart';
+import '../modules/master/stock/stock_edit/stock_edit_binding.dart';
+import '../modules/master/stock/stock_edit/stock_edit_view.dart';
 import '../modules/master/stock/stock_view.dart';
 import '../modules/master/supplier/supplier_binding.dart';
 import '../modules/master/supplier/supplier_edit/supplier_edit_binding.dart';
@@ -255,6 +257,14 @@ class AppPages {
           page: () => const StockView(),
           binding: StockBinding(),
           middlewares: [AuthMiddleware()],
+          children: [
+            GetPage(
+              name: _Paths.STOCK_EDIT,
+              page: () => const StockEditView(),
+              binding: StockEditBinding(),
+              middlewares: [AuthMiddleware()],
+            ),
+          ],
         ),
         GetPage(
           name: _Paths.CURRENCY,

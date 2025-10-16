@@ -175,6 +175,18 @@ class Config {
   static String importSupplierExcel = "/Excel/supplierImport";
 
   // ==========================================================================
+  // 店铺管理模块
+  // ==========================================================================
+  // 店铺列表
+  static String stock = "/Master/stock";
+  // 店铺添加或编辑
+  static String stockAddOrEdit = "/Master/stockAddOrEdit";
+  // 店铺保存
+  static String stockSave = "/Master/stockSave";
+  // 店铺删除
+  static String stockDelete = "/Master/stockDelete";
+
+  // ==========================================================================
   // 供应商商品发票
   // ==========================================================================
   // 发票列表

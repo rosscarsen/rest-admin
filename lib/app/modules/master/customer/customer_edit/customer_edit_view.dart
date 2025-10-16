@@ -209,7 +209,18 @@ class CustomerEditView extends GetView<CustomerEditController> {
                   ),
                   //电邮
                   FormHelper.buildGridCol(
-                    child: FormHelper.textInput(name: CustomerFields.mEmail, labelText: LocaleKeys.email.tr),
+                    child: FormHelper.textInput(
+                      name: CustomerFields.mEmail,
+                      labelText: LocaleKeys.email.tr,
+                      validator: FormBuilderValidators.compose([
+                        (val) {
+                          if (val == null || val.isEmpty) return null;
+                          return FormBuilderValidators.email(errorText: LocaleKeys.pleaseEnterAValidEmailAddress.tr)(
+                            val,
+                          );
+                        },
+                      ]),
+                    ),
                   ),
                 ],
               ),

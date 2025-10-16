@@ -382,4 +382,9 @@ Map<String, String> get enUS => {
   LocaleKeys.pickerFailed: "File picker failed",
   LocaleKeys.pickerTimeout: "File picker timeout",
   LocaleKeys.paymentDay: "Payment Day",
+  LocaleKeys.attn: "Attn",
+  LocaleKeys.postCode: "Post Code",
+  LocaleKeys.kitchenLabel: "Kitchen Label",
+  LocaleKeys.salesMemoFooter: "Sales Memo Footer",
+  LocaleKeys.salesMemoRemarks: "Sales Memo Remarks",
 };

@@ -114,6 +114,12 @@ class SupplierEditView extends GetView<SupplierEditController> {
                   name: SupplierTableFields.mEmail,
                   labelText: LocaleKeys.email.tr,
                   keyboardType: TextInputType.emailAddress,
+                  validator: FormBuilderValidators.compose([
+                    (val) {
+                      if (val == null || val.isEmpty) return null;
+                      return FormBuilderValidators.email(errorText: LocaleKeys.pleaseEnterAValidEmailAddress.tr)(val);
+                    },
+                  ]),
                 ),
               ),
               FormHelper.line(),

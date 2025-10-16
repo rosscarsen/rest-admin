@@ -5,7 +5,7 @@ part 'stock_data.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class StockData {
-  @JsonKey(name: "mPhone", fromJson: Functions.asString)
+  @JsonKey(name: "mPhone", fromJson: Functions.asString, toJson: Functions.stringToPhoneNumber)
   String? mPhone;
   @JsonKey(name: "mName", fromJson: Functions.asString)
   String? mName;
@@ -13,9 +13,9 @@ class StockData {
   String? mAddress;
   @JsonKey(name: "mAttn", fromJson: Functions.asString)
   String? mAttn;
-  @JsonKey(name: "mFax")
+  @JsonKey(name: "mFax", fromJson: Functions.asString)
   String? mFax;
-  @JsonKey(name: "mZip,fromJson: Functions.asString")
+  @JsonKey(name: "mZip", fromJson: Functions.asString)
   String? mZip;
   @JsonKey(name: "mEmail", fromJson: Functions.asString)
   String? mEmail;

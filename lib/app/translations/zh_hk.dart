@@ -382,4 +382,9 @@ Map<String, String> zhHK = {
   LocaleKeys.pickerFailed: "文件選擇失敗",
   LocaleKeys.pickerTimeout: "文件選擇超時",
   LocaleKeys.paymentDay: "支付日數",
+  LocaleKeys.attn: "稱謂",
+  LocaleKeys.postCode: "郵編",
+  LocaleKeys.kitchenLabel: "廚房標籤",
+  LocaleKeys.salesMemoFooter: "銷售備忘",
+  LocaleKeys.salesMemoRemarks: "銷售備註",
 };
