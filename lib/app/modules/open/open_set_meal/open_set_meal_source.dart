@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../../model/set_meal_model.dart';
+import '../../../model/set_meal/set_meal_data.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../widgets/custom_cell.dart';
 import 'open_set_meal_controller.dart';

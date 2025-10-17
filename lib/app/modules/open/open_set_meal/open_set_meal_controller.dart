@@ -4,7 +4,8 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../config.dart';
 import '../../../mixin/loading_state_mixin.dart';
-import '../../../model/set_meal_model.dart';
+import '../../../model/set_meal/set_meal_data.dart';
+import '../../../model/set_meal/set_meal_page_model.dart';
 import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
@@ -68,9 +69,9 @@ class OpenSetMealController extends GetxController with LoadingStateMixin {
         CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;
       }
-      final SetMealModel = setMealModelFromJson(dioApiResult.data!);
-      if (SetMealModel.status == 200) {
-        final SetMealResult? apiResult = SetMealModel.apiResult;
+      final SetMealPageModel setMealPageModel = setMealPageModelFromJson(dioApiResult.data!);
+      if (setMealPageModel.status == 200) {
+        final SetMealResult? apiResult = setMealPageModel.apiResult;
         DataList
           ..clear()
           ..addAll(apiResult?.data ?? []);
