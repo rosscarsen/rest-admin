@@ -23,6 +23,11 @@ class DashboardController extends GetxController with LoadingStateMixin {
     getChartData();
   }
 
+  @override
+  onClose() {
+    super.onClose();
+  }
+
   Future<void> getChartData() async {
     isLoading = true;
     apiResult.value = ChartResult();
