@@ -104,7 +104,7 @@ class Config {
   // ==========================================================================
 
   // 打印机列表
-  // static String printer = "/Master/printer";
+  static String printer = "/Master/printer";
   // 打印机添加或编辑
   static String printerAddOrEdit = "/Master/printerAddOrEdit";
   // 打印机保存
@@ -161,6 +161,7 @@ class Config {
   // ==========================================================================
   // 供应商管理模块
   // ==========================================================================
+
   // 供应商列表
   static String supplier = "/Master/supplier";
   // 供应商添加或编辑
@@ -177,6 +178,7 @@ class Config {
   // ==========================================================================
   // 店铺管理模块
   // ==========================================================================
+
   // 店铺列表
   static String stock = "/Master/stock";
   // 店铺添加或编辑
@@ -187,8 +189,22 @@ class Config {
   static String stockDelete = "/Master/stockDelete";
 
   // ==========================================================================
-  // 供应商商品发票
+  // 货币管理模块
   // ==========================================================================
+
+  // 货币列表
+  static String currency = "/Master/currency";
+  // 货币添加或编辑
+  static String currencyAddOrEdit = "/Master/currencyAddOrEdit";
+  // 货币保存
+  static String currencySave = "/Master/currencySave";
+  // 货币删除
+  static String currencyDelete = "/Master/currencyDelete";
+
+  // **************************************************************************
+  // 供应商商品发票
+  // **************************************************************************
+
   // 发票列表
   static String supplierInvoice = "/SupplierInvoice/invoice";
   // 发票添加或编辑
@@ -202,9 +218,9 @@ class Config {
   // 打印PDf
   static String getSupplierInvoicePdf = "/SupplierInvoice/invoicePrintPdf";
 
-  // ==========================================================================
+  // **************************************************************************
   // 打开选择
-  // ==========================================================================
+  // **************************************************************************
 
   // 供应商
   static String openSupplier = "/Open/supplier";

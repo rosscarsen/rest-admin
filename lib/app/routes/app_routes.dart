@@ -62,6 +62,8 @@ abstract class Routes {
   static const SUPPLIER_EDIT =
       _Paths.MASTER + _Paths.SUPPLIER + _Paths.SUPPLIER_EDIT;
   static const STOCK_EDIT = _Paths.MASTER + _Paths.STOCK + _Paths.STOCK_EDIT;
+  static const CURRENCY_EDIT =
+      _Paths.MASTER + _Paths.CURRENCY + _Paths.CURRENCY_EDIT;
 }
 
 abstract class _Paths {
@@ -109,4 +111,5 @@ abstract class _Paths {
   static const SCREEN_MODE_CATEGORY = '/screen-mode-category';
   static const SUPPLIER_EDIT = '/supplier-edit';
   static const STOCK_EDIT = '/stock-edit';
+  static const CURRENCY_EDIT = '/currency-edit';
 }

@@ -57,7 +57,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
     Tab(text: LocaleKeys.product.tr),
     Tab(text: LocaleKeys.detail.tr),
     Tab(text: LocaleKeys.barcode.tr),
-    Tab(text: LocaleKeys.shop.tr),
+    Tab(text: LocaleKeys.stock.tr),
   ];
   final tabIndex = 0.obs;
   // 类目

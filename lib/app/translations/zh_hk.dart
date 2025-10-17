@@ -107,7 +107,7 @@ Map<String, String> zhHK = {
   LocaleKeys.nonEnable: "非啟用",
   LocaleKeys.enable: "啟用",
   LocaleKeys.nonStock: "非庫存",
-  LocaleKeys.stock: "倉庫",
+  LocaleKeys.stock: "店鋪",
   LocaleKeys.startCreateDate: "開始創建日期",
   LocaleKeys.endCreateDate: "結束創建日期",
   LocaleKeys.notDiscount: "不具折上折",
@@ -210,7 +210,6 @@ Map<String, String> zhHK = {
   LocaleKeys.editProduct: "編輯商品",
   LocaleKeys.detail: "詳細",
   LocaleKeys.setMealLimit: "套餐限制",
-  LocaleKeys.shop: "店鋪",
   LocaleKeys.createDate: "創建日期",
   LocaleKeys.modifyDate: "修改日期",
   LocaleKeys.selectProductRemarks: "選擇食品備註",
@@ -387,4 +386,5 @@ Map<String, String> zhHK = {
   LocaleKeys.kitchenLabel: "廚房標籤",
   LocaleKeys.salesMemoFooter: "銷售備忘",
   LocaleKeys.salesMemoRemarks: "銷售備註",
+  LocaleKeys.defaultSet: "默認",
 };

@@ -70,7 +70,7 @@ class CustomScaffold extends StatelessWidget {
                 //供应商
                 AdminMenuItem(title: LocaleKeys.supplier.tr, route: Routes.SUPPLIER, icon: Icons.support),
                 //店铺
-                AdminMenuItem(title: LocaleKeys.shop.tr, route: Routes.STOCK, icon: FontAwesomeIcons.store),
+                AdminMenuItem(title: LocaleKeys.stock.tr, route: Routes.STOCK, icon: FontAwesomeIcons.store),
                 //货币
                 AdminMenuItem(title: LocaleKeys.currency.tr, route: Routes.CURRENCY, icon: Icons.monetization_on),
                 //单位

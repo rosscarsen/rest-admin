@@ -1,8 +1,6 @@
 import 'package:get/get.dart';
 
 class DeccaController extends GetxController {
-  //TODO: Implement DeccaController
-
   final count = 0.obs;
   @override
   void onInit() {

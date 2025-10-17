@@ -14,6 +14,8 @@ import '../modules/master/category/category_edit/category_edit_binding.dart';
 import '../modules/master/category/category_edit/category_edit_view.dart';
 import '../modules/master/category/category_view.dart';
 import '../modules/master/currency/currency_binding.dart';
+import '../modules/master/currency/currency_edit/currency_edit_binding.dart';
+import '../modules/master/currency/currency_edit/currency_edit_view.dart';
 import '../modules/master/currency/currency_view.dart';
 import '../modules/master/customer/customer_binding.dart';
 import '../modules/master/customer/customer_edit/customer_edit_binding.dart';
@@ -92,7 +94,10 @@ class AppPages {
   AppPages._();
 
   static final routes = [
-    GetPage(name: _Paths.SIGNIN, page: () => const SigninView(), binding: SigninBinding()),
+    GetPage(
+        name: _Paths.SIGNIN,
+        page: () => const SigninView(),
+        binding: SigninBinding()),
     GetPage(
       name: _Paths.DASHBOARD,
       page: () => const DashboardView(),
@@ -148,7 +153,11 @@ class AppPages {
         ),
       ],
     ),
-    GetPage(name: _Paths.PDF, page: () => const PdfView(), binding: PdfBinding(), middlewares: [AuthMiddleware()]),
+    GetPage(
+        name: _Paths.PDF,
+        page: () => const PdfView(),
+        binding: PdfBinding(),
+        middlewares: [AuthMiddleware()]),
     GetPage(
       name: _Paths.MASTER,
       page: () => const MasterView(),
@@ -271,6 +280,13 @@ class AppPages {
           page: () => const CurrencyView(),
           binding: CurrencyBinding(),
           middlewares: [AuthMiddleware()],
+          children: [
+            GetPage(
+              name: _Paths.CURRENCY_EDIT,
+              page: () => const CurrencyEditView(),
+              binding: CurrencyEditBinding(),
+            ),
+          ],
         ),
         GetPage(
           name: _Paths.UNIT,

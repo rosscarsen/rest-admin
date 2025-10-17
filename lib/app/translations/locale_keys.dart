@@ -211,7 +211,6 @@ abstract class LocaleKeys {
   static const String editProduct = "editProduct";
   static const String detail = "detail";
   static const String setMealLimit = "setMealLimit";
-  static const String shop = "shop";
   static const String createDate = "createDate";
   static const String modifyDate = "modifyDate";
   static const String selectProductRemarks = "selectProductRemarks";
@@ -387,4 +386,5 @@ abstract class LocaleKeys {
   static const String kitchenLabel = "kitchenLabel";
   static const String salesMemoFooter = "salesMemoFooter";
   static const String salesMemoRemarks = "salesMemoRemarks";
+  static const String defaultSet = "defaultSet";
 }

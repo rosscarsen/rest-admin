@@ -1,8 +1,6 @@
 import 'package:get/get.dart';
 
 class MesaController extends GetxController {
-  //TODO: Implement MesaController
-
   final count = 0.obs;
   @override
   void onInit() {

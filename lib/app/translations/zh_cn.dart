@@ -107,7 +107,7 @@ Map<String, String> get zhCN => {
   LocaleKeys.nonEnable: "非启用",
   LocaleKeys.enable: "启用",
   LocaleKeys.nonStock: "非库存",
-  LocaleKeys.stock: "仓库",
+  LocaleKeys.stock: "店铺",
   LocaleKeys.startCreateDate: "开始创建日期",
   LocaleKeys.endCreateDate: "结束创建日期",
   LocaleKeys.notDiscount: "不具折上折",
@@ -210,7 +210,6 @@ Map<String, String> get zhCN => {
   LocaleKeys.editProduct: "编辑食品",
   LocaleKeys.detail: "详细",
   LocaleKeys.setMealLimit: "套餐限制",
-  LocaleKeys.shop: "店铺",
   LocaleKeys.createDate: "创建日期",
   LocaleKeys.modifyDate: "修改日期",
   LocaleKeys.selectProductRemarks: "选择食品备注",
@@ -387,4 +386,5 @@ Map<String, String> get zhCN => {
   LocaleKeys.kitchenLabel: "厨房标签",
   LocaleKeys.salesMemoFooter: "销售备忘",
   LocaleKeys.salesMemoRemarks: "销售备注",
+  LocaleKeys.defaultSet: "默认",
 };

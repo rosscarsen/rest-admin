@@ -210,7 +210,6 @@ Map<String, String> get enUS => {
   LocaleKeys.editProduct: "Edit Product",
   LocaleKeys.detail: "Detail",
   LocaleKeys.setMealLimit: "SetMeal Limit",
-  LocaleKeys.shop: "Shop",
   LocaleKeys.createDate: "Create Date",
   LocaleKeys.modifyDate: "Modify Date",
   LocaleKeys.selectProductRemarks: "Select Product Remarks",
@@ -387,4 +386,5 @@ Map<String, String> get enUS => {
   LocaleKeys.kitchenLabel: "Kitchen Label",
   LocaleKeys.salesMemoFooter: "Sales Memo Footer",
   LocaleKeys.salesMemoRemarks: "Sales Memo Remarks",
+  LocaleKeys.defaultSet: "Default",
 };
