@@ -25,21 +25,6 @@ mixin LoadingStateMixin<T> on GetxController {
     super.onInit();
   }
 
-  @override
-  onClose() {
-    _title.close();
-    _isLoading.close();
-    _totalPages.close();
-    _currentPage.close();
-    _totalRecords.close();
-    _hasPermission.close();
-    _error.close();
-    _success.close();
-    _data.value = null;
-    _data.close();
-    super.onClose();
-  }
-
   //  ===== Getter & Setter =====
   String get title => _title.value;
   set title(String value) => _title.value = value;
