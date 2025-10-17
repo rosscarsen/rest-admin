@@ -214,6 +214,23 @@ class Config {
   // 单位删除
   static String unitDelete = "/Master/unitDelete";
 
+  // ==========================================================================
+  // 套餐管理模块
+  // ==========================================================================
+
+  // 套餐列表
+  static String setMeal = "/Master/setMeal";
+  // 套餐添加或编辑
+  static String setMealAddOrEdit = "/Master/setMealAddOrEdit";
+  // 套餐保存
+  static String setMealSave = "/Master/setMealSave";
+  // 套餐删除
+  static String setMealDelete = "/Master/setMealDelete";
+  // 导出套餐
+  static String exportSetMea = "/Excel/setMealExport";
+  // 导入套餐
+  static String importSetMeal = "/Excel/setMealImport";
+
   // **************************************************************************
   // 供应商商品发票
   // **************************************************************************
