@@ -192,6 +192,7 @@ class FormHelper {
     TextEditingController? controller,
     bool? enabled, // 可空
     bool readOnly = true,
+    void Function()? onClear,
   }) {
     return Builder(
       builder: (context) {
@@ -238,6 +239,7 @@ class FormHelper {
                                     onPressed: () {
                                       effectiveController.clear();
                                       field.didChange("");
+                                      if (onClear != null) onClear();
                                     },
                                     icon: const Icon(Icons.clear),
                                   )
