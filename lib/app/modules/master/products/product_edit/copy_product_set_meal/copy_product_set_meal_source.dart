@@ -51,7 +51,7 @@ class CopyProductSetMealDataSource extends DataGridSource {
             child: FittedBox(
               child: FilledButton(
                 onPressed: () {
-                  Get.closeDialog(result: e.value);
+                  Get.back(result: e.value);
                 },
                 child: Text(LocaleKeys.select.tr),
               ),
