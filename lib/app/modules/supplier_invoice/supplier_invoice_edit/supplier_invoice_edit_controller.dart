@@ -58,6 +58,11 @@ class SupplierInvoiceEditController extends GetxController with LoadingStateMixi
     updateDataGridSource();
   }
 
+  @override
+  void onClose() {
+    super.onClose();
+  }
+
   /// 更新数据源
   void updateDataGridSource() {
     addOrEdit().then((_) {
@@ -93,11 +98,6 @@ class SupplierInvoiceEditController extends GetxController with LoadingStateMixi
   void onReady() {
     getCacheUser();
     super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 
   /// 添加或编辑
