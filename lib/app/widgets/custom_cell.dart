@@ -34,8 +34,8 @@ class CustomCell extends StatelessWidget {
 
         final textWidget = Text(text, textAlign: TextAlign.center, overflow: ellipsis ? TextOverflow.ellipsis : null);
 
-        return InkWell(
-          onLongPress: isOverflowing
+        return GestureDetector(
+          onDoubleTap: isOverflowing
               ? () async {
                   await Clipboard.setData(ClipboardData(text: text));
                   CustomDialog.showToast(LocaleKeys.itHasBeenCopiedToTheClipboard.tr);
