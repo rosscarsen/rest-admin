@@ -45,6 +45,7 @@ class OpenMultipleProductsDataSource extends DataGridSource {
     );
   }
 
+  ///根据商品编码查找商品行
   DataGridRow? findRowByCode(String code) {
     return _dataGridRows.firstWhereOrNull(
       (row) => row.getCells().any((cell) => cell.columnName == 'code' && cell.value == code),
