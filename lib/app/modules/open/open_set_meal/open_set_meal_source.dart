@@ -45,7 +45,7 @@ class OpenSetMealSource extends DataGridSource {
             child: FittedBox(
               child: FilledButton(
                 onPressed: () {
-                  Get.closeDialog(result: e.value.toString());
+                  Get.back(result: e.value.toString());
                 },
                 child: Text(LocaleKeys.select.tr),
               ),
