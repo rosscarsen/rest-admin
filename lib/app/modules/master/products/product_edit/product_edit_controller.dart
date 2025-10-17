@@ -9,7 +9,7 @@ import '../../../../config.dart';
 import '../../../../model/category/category_model.dart';
 import '../../../../model/product/product_add_or_edit_model.dart';
 import '../../../../model/product/products_model.dart';
-import '../../../../model/unit_model.dart';
+import '../../../../model/unit/unit_data.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../service/dio_api_client.dart';
 import '../../../../service/dio_api_result.dart';
@@ -66,7 +66,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
   // 权限
   final hasPermission = true.obs;
   // 单位
-  final units = <UnitModel>[].obs;
+  final units = <UnitData>[].obs;
   // 全部类目用于多选类目
   final categories = <CategoryModel>[].obs;
 

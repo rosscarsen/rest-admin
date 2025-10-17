@@ -6,7 +6,7 @@
 import 'dart:convert';
 
 import '../category/category_model.dart';
-import '../unit_model.dart';
+import '../unit/unit_data.dart';
 
 ProductAddOrEditModel productAddOrEditModelFromJson(String str) => ProductAddOrEditModel.fromJson(json.decode(str));
 
@@ -31,7 +31,7 @@ class ProductAddOrEditModel {
 class ProductAddOrEditResult {
   ProductInfo? productInfo;
   List<CategoryModel>? category;
-  List<UnitModel>? units;
+  List<UnitData>? units;
   List<ProductBarcode>? productBarcode;
   List<ProductSetMeal>? setMeal;
   List<ProductStock>? productStock;
@@ -53,7 +53,7 @@ class ProductAddOrEditResult {
     category: json["category"] == null
         ? []
         : List<CategoryModel>.from(json["category"]!.map((x) => CategoryModel.fromJson(x))),
-    units: json["units"] == null ? [] : List<UnitModel>.from(json["units"]!.map((x) => UnitModel.fromJson(x))),
+    units: json["units"] == null ? [] : List<UnitData>.from(json["units"]!.map((x) => UnitData.fromJson(x))),
     productBarcode: json["barcode"] == null
         ? []
         : List<ProductBarcode>.from(json["barcode"]!.map((x) => ProductBarcode.fromJson(x))),

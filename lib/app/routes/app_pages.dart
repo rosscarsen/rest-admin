@@ -62,6 +62,8 @@ import '../modules/master/supplier/supplier_view.dart';
 import '../modules/master/time_sales/time_sales_binding.dart';
 import '../modules/master/time_sales/time_sales_view.dart';
 import '../modules/master/unit/unit_binding.dart';
+import '../modules/master/unit/unit_edit/unit_edit_binding.dart';
+import '../modules/master/unit/unit_edit/unit_edit_view.dart';
 import '../modules/master/unit/unit_view.dart';
 import '../modules/open/open_binding.dart';
 import '../modules/open/open_customer/open_customer_binding.dart';
@@ -94,10 +96,7 @@ class AppPages {
   AppPages._();
 
   static final routes = [
-    GetPage(
-        name: _Paths.SIGNIN,
-        page: () => const SigninView(),
-        binding: SigninBinding()),
+    GetPage(name: _Paths.SIGNIN, page: () => const SigninView(), binding: SigninBinding()),
     GetPage(
       name: _Paths.DASHBOARD,
       page: () => const DashboardView(),
@@ -153,11 +152,7 @@ class AppPages {
         ),
       ],
     ),
-    GetPage(
-        name: _Paths.PDF,
-        page: () => const PdfView(),
-        binding: PdfBinding(),
-        middlewares: [AuthMiddleware()]),
+    GetPage(name: _Paths.PDF, page: () => const PdfView(), binding: PdfBinding(), middlewares: [AuthMiddleware()]),
     GetPage(
       name: _Paths.MASTER,
       page: () => const MasterView(),
@@ -281,11 +276,7 @@ class AppPages {
           binding: CurrencyBinding(),
           middlewares: [AuthMiddleware()],
           children: [
-            GetPage(
-              name: _Paths.CURRENCY_EDIT,
-              page: () => const CurrencyEditView(),
-              binding: CurrencyEditBinding(),
-            ),
+            GetPage(name: _Paths.CURRENCY_EDIT, page: () => const CurrencyEditView(), binding: CurrencyEditBinding()),
           ],
         ),
         GetPage(
@@ -293,6 +284,14 @@ class AppPages {
           page: () => const UnitView(),
           binding: UnitBinding(),
           middlewares: [AuthMiddleware()],
+          children: [
+            GetPage(
+              name: _Paths.UNIT_EDIT,
+              page: () => const UnitEditView(),
+              binding: UnitEditBinding(),
+              middlewares: [AuthMiddleware()],
+            ),
+          ],
         ),
         GetPage(
           name: _Paths.SET_MENU,

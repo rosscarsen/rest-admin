@@ -201,6 +201,19 @@ class Config {
   // 货币删除
   static String currencyDelete = "/Master/currencyDelete";
 
+  // ==========================================================================
+  // 单位管理模块
+  // ==========================================================================
+
+  // 单位列表
+  static String unit = "/Master/unit";
+  // 单位添加或编辑
+  static String unitAddOrEdit = "/Master/unitAddOrEdit";
+  // 单位保存
+  static String unitSave = "/Master/unitSave";
+  // 单位删除
+  static String unitDelete = "/Master/unitDelete";
+
   // **************************************************************************
   // 供应商商品发票
   // **************************************************************************
