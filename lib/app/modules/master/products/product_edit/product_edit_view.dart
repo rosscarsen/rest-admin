@@ -18,8 +18,6 @@ import '../../../../widgets/custom_cell.dart';
 import '../../../../theme/data_grid_theme.dart';
 import '../../../../widgets/no_record.dart';
 import '../../../../theme/table_input_theme.dart';
-import '../../../open/open_set_meal/open_set_meal_view.dart';
-import 'copy_product_set_meal/copy_product_set_meal_view.dart';
 import 'product_edit_controller.dart';
 import 'product_edit_fields.dart';
 
@@ -1007,7 +1005,7 @@ class ProductEditView extends GetView<ProductEditController> {
 
   // 复制（食品）function
   void copySetMeal() async {
-    final ret = await Get.dialog(Dialog(child: CopyProductSetMealView()));
+    final ret = await Get.toNamed(Routes.COPY_PRODUCT_SET_MEAL);
     final selectProductID = ret != null ? int.parse(ret.toString()) : 0;
     final currentProductID = controller.productID;
     if (selectProductID == 0) {
@@ -1024,7 +1022,7 @@ class ProductEditView extends GetView<ProductEditController> {
 
   // 打开套餐
   void openSetMeal() async {
-    final ret = await Get.dialog(Dialog(child: OpenSetMealView()));
+    final ret = await Get.toNamed(Routes.OPEN_SET_MEAL);
     final selectCode = (ret?.toString() ?? "").trim();
     if (selectCode.isEmpty) {
       return;
