@@ -128,8 +128,10 @@ class ProductsController extends GetxController with LoadingStateMixin {
     try {
       CustomDialog.showLoading(LocaleKeys.generating.trArgs(["excel"]));
       final Map<String, dynamic> param = {"productCode": productCode};
-      final DioApiResult dioApiResult = await apiClient.generateExcel(Config.exportSetMealExcel, data: param);
-      logger.e(dioApiResult);
+      final DioApiResult dioApiResult = await apiClient.generateExcel(
+        Config.exportSetMealExcel,
+        data: param..putIfAbsent("isProductExport", () => true),
+      );
       if (!dioApiResult.success) {
         CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.noPermission.tr);
         return;
