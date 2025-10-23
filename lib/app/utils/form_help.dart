@@ -190,84 +190,81 @@ class FormHelper {
     required String labelText,
     required void Function()? onPressed,
     TextEditingController? controller,
-    bool? enabled, // 可空
+    bool? enabled,
     bool readOnly = true,
     void Function()? onClear,
     int? maxLines = 1,
+    TextInputType? keyboardType,
+    String? Function(String?)? validator,
+    String? hintText,
   }) {
-    return Builder(
-      builder: (context) {
-        final formEnabled = FormBuilder.of(context)?.enabled ?? true;
-        final effectiveEnabled = enabled ?? formEnabled;
+    final effectiveController = controller ?? TextEditingController();
 
-        return FormBuilderField<String>(
-          name: name,
+    return FormBuilderField<String>(
+      name: name,
+      validator: validator,
+      enabled: enabled ?? true,
+      builder: (field) {
+        final effectiveEnabled = enabled ?? (FormBuilder.of(field.context)?.enabled ?? true);
+
+        // 保证 controller 与 field.value 同步，同时保留光标
+        if (effectiveController.text != (field.value ?? '')) {
+          final oldSelection = effectiveController.selection;
+          effectiveController.value = TextEditingValue(
+            text: field.value ?? '',
+            selection: oldSelection.isValid
+                ? oldSelection
+                : TextSelection.collapsed(offset: (field.value ?? '').length),
+          );
+        }
+
+        final hasValue = (field.value ?? '').isNotEmpty;
+        final iconColor = !effectiveEnabled
+            ? Colors.grey
+            : hasValue
+            ? null
+            : Colors.blue;
+
+        void handleSuffixPressed() {
+          if (hasValue) {
+            // 清空
+            field.didChange('');
+            effectiveController.clear();
+            onClear?.call();
+          } else {
+            onPressed?.call();
+          }
+        }
+
+        return TextField(
+          controller: effectiveController,
+          readOnly: readOnly,
           enabled: effectiveEnabled,
-          valueTransformer: (value) => (value?.toString() ?? "").trim(),
-          builder: (FormFieldState<String?> field) {
-            final effectiveController = controller ?? TextEditingController(text: field.value ?? "");
-
-            if (controller != null) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                if (controller.text != (field.value ?? '')) {
-                  if (context.mounted) {
-                    controller.text = field.value ?? '';
-                  }
-                }
-              });
-            }
-
-            return Shortcuts(
-              shortcuts: <LogicalKeySet, Intent>{
-                LogicalKeySet(LogicalKeyboardKey.altLeft): DoNothingIntent(),
-                LogicalKeySet(LogicalKeyboardKey.altRight): DoNothingIntent(),
-              },
-              child: ValueListenableBuilder<TextEditingValue>(
-                valueListenable: effectiveController,
-                builder: (context, value, child) {
-                  return TextField(
-                    controller: effectiveController,
-                    readOnly: readOnly || !effectiveEnabled,
-                    enableInteractiveSelection: !(readOnly || !effectiveEnabled),
-                    style: displayTextStyle,
-                    onTap: effectiveEnabled ? onPressed : null,
-                    maxLines: maxLines,
-                    keyboardType: (maxLines == null || maxLines > 1) ? TextInputType.multiline : TextInputType.text,
-                    decoration: InputDecoration(
-                      labelText: labelText,
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(color: Color(0xFFBDBDBD), width: 1.0),
-                        borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-                      ),
-                      suffixIcon: !effectiveEnabled
-                          ? null // ❌ 禁用时完全不显示任何图标
-                          : (value.text.isNotEmpty
-                                ? IconButton(
-                                    tooltip: LocaleKeys.clearContent.tr,
-                                    onPressed: () {
-                                      effectiveController.clear();
-                                      field.didChange("");
-                                      if (onClear != null) onClear();
-                                    },
-                                    icon: const Icon(Icons.clear),
-                                  )
-                                : IconButton(
-                                    tooltip: LocaleKeys.openChoice.tr,
-                                    onPressed: onPressed,
-                                    icon: Icon(Icons.file_open, color: AppColors.openColor),
-                                  )),
-                      fillColor: !effectiveEnabled ? const Color(0xFFEEEEEE) : null,
-                      filled: !effectiveEnabled,
-                    ),
-                    onChanged: (v) {
-                      if (effectiveEnabled) field.didChange(v);
-                    },
-                  );
-                },
-              ),
-            );
+          maxLines: maxLines,
+          keyboardType:
+              keyboardType ?? ((maxLines == null || maxLines > 1) ? TextInputType.multiline : TextInputType.text),
+          onTap: onPressed,
+          onChanged: (v) {
+            field.didChange(v);
           },
+          decoration: InputDecoration(
+            label: Text(labelText),
+            hintText: hintText,
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFFBDBDBD), width: 1.0),
+              borderRadius: BorderRadius.all(Radius.circular(8.0)),
+            ),
+            fillColor: !effectiveEnabled ? const Color(0xFFEEEEEE) : null,
+            filled: !effectiveEnabled,
+            suffixIcon: effectiveEnabled
+                ? IconButton(
+                    tooltip: hasValue ? LocaleKeys.clearContent.tr : LocaleKeys.openChoice.tr,
+                    onPressed: handleSuffixPressed,
+                    icon: Icon(hasValue ? Icons.clear : Icons.file_open, color: iconColor),
+                  )
+                : null,
+          ),
         );
       },
     );
