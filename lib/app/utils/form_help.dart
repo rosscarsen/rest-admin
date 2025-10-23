@@ -13,7 +13,6 @@ import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 import 'package:responsive_grid/responsive_grid.dart';
 
 import '../translations/locale_keys.dart';
-import 'constants.dart';
 import 'functions.dart';
 
 enum DateInputType { time, date, dateAndTime }
@@ -94,10 +93,37 @@ class FormHelper {
   }) {
     assert(maxLines >= 1, 'maxLines不能小于1');
     assert(!(controller != null && initialValue != null), 'controller 和 initialValue 不能同时设置');
+
+    // 数字正则，提前创建
+    final RegExp integerRegex = RegExp(r'^-?\d+$');
+    final RegExp decimalRegex = RegExp(r'^-?\d+(\.\d{0,' + maxDecimalDigits.toString() + r'})?$');
+
+    List<TextInputFormatter>? finalInputFormatters = inputFormatters;
+
+    if (keyboardType == TextInputType.number && finalInputFormatters == null) {
+      finalInputFormatters = [
+        TextInputFormatter.withFunction((oldValue, newValue) {
+          final text = newValue.text;
+
+          if (text.isEmpty) return newValue;
+          if (maxDecimalDigits == 0) {
+            if (text == '-') return newValue;
+            return integerRegex.hasMatch(text) ? newValue : oldValue;
+          }
+
+          if (text == '-' || text == '-.' || text == '.') return newValue;
+
+          return decimalRegex.hasMatch(text) ? newValue : oldValue;
+        }),
+      ];
+    }
+
+    // 保留 Builder 取 FormBuilder 状态，但只包裹状态计算
     return Builder(
       builder: (context) {
         final formEnabled = FormBuilder.of(context)?.enabled ?? true;
         final effectiveEnabled = enabled ?? formEnabled;
+
         return FormBuilderTextField(
           controller: controller,
           onSubmitted: onSubmitted,
@@ -110,9 +136,13 @@ class FormHelper {
           maxLines: maxLines,
           validator: validator,
           onChanged: onChanged,
-          valueTransformer: (value) {
-            return (value ?? "").trim();
-            //return raw.replaceAll(RegExp(r'[,\s]'), '');
+          valueTransformer: (value) => (value ?? "").trim(),
+          keyboardType: keyboardType ?? (maxLines > 1 ? TextInputType.multiline : TextInputType.text),
+          inputFormatters: finalInputFormatters,
+          enableSuggestions: true,
+          enableInteractiveSelection: true,
+          contextMenuBuilder: (context, editableTextState) {
+            return AdaptiveTextSelectionToolbar.editableText(editableTextState: editableTextState);
           },
           decoration: InputDecoration(
             labelText: labelText,
@@ -130,55 +160,6 @@ class FormHelper {
             filled: !effectiveEnabled || readOnly,
             errorText: errorText,
           ),
-          keyboardType: keyboardType ?? (maxLines > 1 ? TextInputType.multiline : TextInputType.text),
-          inputFormatters: keyboardType == TextInputType.number
-              ? inputFormatters ??
-                    [
-                      TextInputFormatter.withFunction((oldValue, newValue) {
-                        final text = newValue.text;
-
-                        // 允许删除
-                        if (text.isEmpty) return newValue;
-
-                        // 当不允许小数时
-                        if (maxDecimalDigits == 0) {
-                          // 允许单独负号
-                          if (text == '-') return newValue;
-
-                          // 不允许小数点
-                          final regex = RegExp(r'^-?\d+$'); // 只允许整数(含负数)
-                          if (regex.hasMatch(text)) {
-                            return newValue;
-                          }
-                          return oldValue;
-                        }
-
-                        // 当允许小数时
-                        // 允许单独输入负号
-                        if (text == '-') return newValue;
-
-                        // 允许 "-." 输入后再补数字
-                        if (text == '-.') return newValue;
-
-                        // 允许单独小数点（仅限正数输入）
-                        if (text == '.') return newValue;
-
-                        // 允许负数带小数
-                        final regex = RegExp(r'^-?\d+(\.\d{0,' + maxDecimalDigits.toString() + r'})?$');
-                        if (regex.hasMatch(text)) {
-                          return newValue;
-                        }
-
-                        return oldValue;
-                      }),
-                    ]
-              : null,
-          //textInputAction: maxLines > 1 ? TextInputAction.newline : TextInputAction.done,
-          enableSuggestions: true,
-          enableInteractiveSelection: true,
-          contextMenuBuilder: (context, editableTextState) {
-            return AdaptiveTextSelectionToolbar.editableText(editableTextState: editableTextState);
-          },
         );
       },
     );
