@@ -187,8 +187,19 @@ class Functions {
 
   /// 格式化金额
   static String formatAmount(Object? value) {
-    final str = (asString(value) ?? "0").replaceAll(RegExp(r'[,\s]'), '');
+    final raw = asString(value)?.trim() ?? "";
+    if (raw.isEmpty) return "0.00";
+
+    // 去掉逗号和空格
+    final str = raw.replaceAll(RegExp(r'[,\s]'), '');
+
+    // 安全地解析
+    final amount = double.tryParse(str);
+    if (amount == null || amount.isNaN || amount.isInfinite) {
+      return "0.00";
+    }
+
     final formatter = NumberFormat("#,##0.00", "en_US");
-    return formatter.format(double.parse(str.toString()));
+    return formatter.format(amount);
   }
 }
