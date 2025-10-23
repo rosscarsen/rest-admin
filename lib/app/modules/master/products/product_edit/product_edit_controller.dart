@@ -147,7 +147,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
   Future<void> productAddOrEdit() async {
     isLoading(true);
     try {
-      final DioApiResult dioApiResult = await apiClient.post(Config.productAddOrEdit, data: {'id': productID});
+      final DioApiResult dioApiResult = await apiClient.get(Config.productAddOrEdit, data: {'id': productID});
 
       if (!dioApiResult.success) {
         if (!dioApiResult.hasPermission) {
