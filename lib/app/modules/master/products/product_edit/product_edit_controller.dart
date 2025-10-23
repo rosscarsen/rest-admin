@@ -441,17 +441,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
                         labelText: LocaleKeys.code.tr,
                         initialValue: row.mBarcode,
                         name: "mBarcode",
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            Get.closeDialog();
-                            Get.toNamed(
-                              Routes.OPEN_MULTIPLE_PRODUCT,
-                              parameters: {"productId": row.tProductId?.toString() ?? ""},
-                            );
-                          },
-                          tooltip: LocaleKeys.selectProduct.tr,
-                          icon: Icon(Icons.file_open, color: AppColors.openColor),
-                        ),
+                        readOnly: true,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return LocaleKeys.thisFieldIsRequired.tr;
