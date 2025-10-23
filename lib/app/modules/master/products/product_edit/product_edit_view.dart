@@ -835,12 +835,13 @@ class ProductEditView extends GetView<ProductEditController> {
                       spacing: 5.0,
                       children: [
                         Expanded(
-                          child: FormHelper.buildGridCol(
-                            child: FormHelper.openInput(
-                              name: ProductEditFields.setMenu,
-                              labelText: LocaleKeys.copySetMeal.tr,
-                              onPressed: openSetMeal,
-                            ),
+                          child: FormHelper.openInput(
+                            name: ProductEditFields.setMenu,
+                            labelText: LocaleKeys.copySetMeal.tr,
+                            onPressed: openSetMeal,
+                            onClear: () async {
+                              await controller.updateSetMenu("");
+                            },
                           ),
                         ),
                         //更新套餐
