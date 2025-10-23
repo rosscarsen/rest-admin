@@ -26,7 +26,6 @@ import 'product_stock_source.dart';
 
 class ProductEditController extends GetxController with GetSingleTickerProviderStateMixin {
   final GlobalKey<FormBuilderState> productEditFormKey = GlobalKey<FormBuilderState>();
-  final setMealController = TextEditingController();
   // 产品条码
   final DataGridController barcodeDataGridController = DataGridController();
   late ProductBarcodeSource productBarcodeSource;
@@ -130,7 +129,6 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
     stockDataGridController.dispose();
     setMealLimitDataGridController.dispose();
     setMealDataGridController.dispose();
-    setMealController.dispose();
     super.onClose();
   }
 
@@ -692,12 +690,12 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
       message: LocaleKeys.areYouSureToUpdate.tr,
       showCancel: true,
       onConfirm: () async {
-        final String setMenu = setMealController.text;
+        final String setMenu = productEditFormKey.currentState?.fields[ProductEditFields.setMenu]?.value ?? "";
         if (setMenu.isEmpty) {
           CustomDialog.errorMessages(LocaleKeys.dataIsEmptyDoNotOperation.tr);
           return;
         }
-        final Map<String, dynamic> query = {"productID": productID, "setMenu": setMealController.text};
+        final Map<String, dynamic> query = {"productID": productID, "setMenu": setMenu};
         try {
           final DioApiResult dioApiResult = await apiClient.post(Config.updateProductSetMeal, data: query);
           if (dioApiResult.success) {
