@@ -42,14 +42,12 @@ class AdvancedSearchController extends GetxController {
           generateCategory3(selectCate2);
         }
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          final fields = formKey.currentState?.fields;
-          if (fields != null) {
-            fields.forEach((fieldName, fieldState) {
-              if (oldFormData.containsKey(fieldName)) {
-                fieldState.didChange(oldFormData[fieldName]);
-              }
-            });
-          }
+          final filteredMap = Map.fromEntries(
+            oldFormData.entries
+                .where((e) => (e.value?.toString() ?? "").trim().isNotEmpty)
+                .map((e) => MapEntry(e.key, e.value is String ? e.value.toString() : e.value)),
+          );
+          formKey.currentState?.patchValue(filteredMap);
         });
       }
     });
