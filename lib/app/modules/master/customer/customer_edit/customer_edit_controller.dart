@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
@@ -18,6 +19,7 @@ import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/functions.dart';
 import '../../../../utils/logger.dart';
 import '../customer_controller.dart';
+import '../customer_fields.dart';
 import 'contact_add_or_edit_view.dart';
 import 'contact_data_source.dart';
 import 'point_add_or_edit_view.dart';
@@ -175,7 +177,7 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
       }
 
       hasPermission = true;
-
+      logger.f(customerResult.data);
       final resultModel = customerEditModelFromJson(customerResult.data);
       customerRet = resultModel.apiResult;
       customerTypeList.addAll(customerRet?.customerType ?? []);
@@ -185,9 +187,6 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
       setInvoiceAmount = customerRet?.invoiceAmount ?? "";
       setCustomerPoint = customerRet?.customerPoint ?? "";
       final customerInfo = customerRet?.customerInfo;
-
-      logger.f(customerInfo?.toJson());
-
       WidgetsBinding.instance.addPostFrameCallback((_) {
         formKey.currentState?.patchValue(customerInfo?.toJson() ?? {});
       });
@@ -204,11 +203,19 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
     FocusManager.instance.primaryFocus?.unfocus();
     if (formKey.currentState?.saveAndValidate() ?? false) {
       CustomDialog.showLoading(LocaleKeys.saving.tr);
-      final formData = Map<String, dynamic>.from(formKey.currentState?.value ?? {})
+      final formData = Map<String, dynamic>.from(formKey.currentState?.value ?? {});
+      if (GetUtils.isMD5(formData[CustomerFields.mPassword]?.toString() ?? "")) {
+        formData.remove(CustomerFields.mPassword);
+      } else {
+        formData[CustomerFields.mPassword] = md5
+            .convert(utf8.encode(formData[CustomerFields.mPassword]?.toString() ?? ""))
+            .toString();
+      }
+      formData
         ..addAll({"T_Customer_ID": id})
         ..addAll({"customerContact": customerContactList})
         ..addAll({"customerDiscount": customerDiscountList});
-      logger.f(formData);
+
       try {
         final DioApiResult dioApiResult = await apiClient.post(Config.customerSave, data: formData);
         if (!dioApiResult.success) {
