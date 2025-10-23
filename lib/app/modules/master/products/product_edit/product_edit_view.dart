@@ -838,7 +838,6 @@ class ProductEditView extends GetView<ProductEditController> {
                         Expanded(
                           child: FormHelper.buildGridCol(
                             child: FormHelper.openInput(
-                              controller: controller.setMealController,
                               name: ProductEditFields.setMenu,
                               labelText: LocaleKeys.copySetMeal.tr,
                               onPressed: openSetMeal,
