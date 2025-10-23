@@ -53,6 +53,7 @@ class OpenMultipleProductController extends GetxController with LoadingStateMixi
   void onClose() {
     dataGridController.dispose();
     selectedItems.clear();
+    DataList.clear();
     super.onClose();
   }
 
@@ -209,6 +210,7 @@ class OpenMultipleProductController extends GetxController with LoadingStateMixi
         await joinSupplierInvoiceAddItem();
         break;
       default:
+        await joinDefaultSelectedItems();
         break;
     }
   }
@@ -230,6 +232,12 @@ class OpenMultipleProductController extends GetxController with LoadingStateMixi
     } else {
       selectedItems.removeWhere((e) => selectCodes.contains(e.mCode));
     }
+  }
+
+  /// 默認加入选中的产品
+  Future<void> joinDefaultSelectedItems() async {
+    final selectCodes = selectedItems.map((e) => e.mCode).toSet();
+    Get.back(result: selectCodes.join(","));
   }
 
   /// 加入供应商发票项目
