@@ -828,6 +828,7 @@ class ProductEditView extends GetView<ProductEditController> {
                       ),
                     ),
                   ),
+
                   // 复制（套餐）
                   FormHelper.buildGridCol(
                     child: Row(
@@ -835,34 +836,13 @@ class ProductEditView extends GetView<ProductEditController> {
                       spacing: 5.0,
                       children: [
                         Expanded(
-                          child: ValueListenableBuilder(
-                            valueListenable: controller.setMealController,
-                            builder: (BuildContext context, TextEditingValue value, Widget? child) {
-                              final hasText = value.text.isNotEmpty;
-                              return FormHelper.textInput(
-                                name: ProductEditFields.setMenu,
-                                labelText: LocaleKeys.copySetMeal.tr,
-                                controller: controller.setMealController,
-                                readOnly: true,
-                                suffixIcon: OverflowBar(
-                                  children: [
-                                    // 从套餐复制
-                                    IconButton(
-                                      onPressed: openSetMeal,
-                                      tooltip: LocaleKeys.copySetMeal.tr,
-                                      icon: Icon(Icons.file_open, color: AppColors.openColor),
-                                    ),
-                                    // 清除产品表setMenu栏位
-                                    if (hasText)
-                                      IconButton(
-                                        tooltip: LocaleKeys.clearText.tr,
-                                        onPressed: () => controller.updateSetMenu(""),
-                                        icon: Icon(Icons.cancel),
-                                      ),
-                                  ],
-                                ),
-                              );
-                            },
+                          child: FormHelper.buildGridCol(
+                            child: FormHelper.openInput(
+                              controller: controller.setMealController,
+                              name: ProductEditFields.setMenu,
+                              labelText: LocaleKeys.copySetMeal.tr,
+                              onPressed: openSetMeal,
+                            ),
                           ),
                         ),
                         //更新套餐
@@ -873,6 +853,7 @@ class ProductEditView extends GetView<ProductEditController> {
                       ],
                     ),
                   ),
+
                   // 批量刪除套餐 && 添加套餐
                   FormHelper.buildGridCol(
                     sm: 12,
