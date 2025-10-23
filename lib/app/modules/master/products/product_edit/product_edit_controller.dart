@@ -709,12 +709,15 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
                 }
                 CustomDialog.successMessages(LocaleKeys.operationSuccess.tr);
                 final apiResult = data['apiResult'] as Map<String, dynamic>;
-                final productSetMealLimitRet = apiResult['productSetMealLimit'] as List<dynamic>;
+                final productSetMealLimitRet = apiResult['productSetMealLimit'] is List<dynamic>
+                    ? apiResult['productSetMealLimit'] as List<dynamic>
+                    : [];
                 productSetMealLimit
                   ..clear()
                   ..addAll(productSetMealLimitRet.map((e) => SetMealLimit.fromJson(e)).toList());
-                productSetMealSource.updateDataSource();
-                final productSetMealRet = apiResult['productSetMeal'] as List<dynamic>;
+                final productSetMealRet = apiResult['productSetMeal'] is List<dynamic>
+                    ? apiResult['productSetMeal'] as List<dynamic>
+                    : [];
                 productSetMeal
                   ..clear()
                   ..addAll(productSetMealRet.map((e) => ProductSetMeal.fromJson(e)).toList());
