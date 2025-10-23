@@ -207,8 +207,14 @@ class FormHelper {
           builder: (FormFieldState<String?> field) {
             final effectiveController = controller ?? TextEditingController(text: field.value ?? "");
 
-            if (effectiveController.text != (field.value ?? "")) {
-              effectiveController.text = field.value ?? "";
+            if (controller != null) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (controller.text != (field.value ?? '')) {
+                  if (context.mounted) {
+                    controller.text = field.value ?? '';
+                  }
+                }
+              });
             }
 
             return Shortcuts(
