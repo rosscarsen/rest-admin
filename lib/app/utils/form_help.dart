@@ -193,6 +193,7 @@ class FormHelper {
     bool? enabled, // 可空
     bool readOnly = true,
     void Function()? onClear,
+    int? maxLines = 1,
   }) {
     return Builder(
       builder: (context) {
@@ -224,6 +225,8 @@ class FormHelper {
                     enableInteractiveSelection: !(readOnly || !effectiveEnabled),
                     style: displayTextStyle,
                     onTap: effectiveEnabled ? onPressed : null,
+                    maxLines: maxLines,
+                    keyboardType: (maxLines == null || maxLines > 1) ? TextInputType.multiline : TextInputType.text,
                     decoration: InputDecoration(
                       labelText: labelText,
                       floatingLabelBehavior: FloatingLabelBehavior.always,
