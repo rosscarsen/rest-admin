@@ -1,28 +1,20 @@
 import 'package:get/get.dart';
 
 mixin LoadingStateMixin<T> on GetxController {
-  late final RxString _title;
-  late final RxBool _isLoading;
-  late final RxInt _totalPages;
-  late final RxInt _currentPage;
-  late final RxInt _totalRecords;
-  late final RxBool _hasPermission;
-  late final RxString _error;
-  late final RxBool _success;
-  late final Rxn<T> _data;
+  final RxString _title = ''.obs;
+  final RxBool _isLoading = false.obs;
+  final RxInt _totalPages = 0.obs;
+  final RxInt _currentPage = 1.obs;
+  final RxInt _totalRecords = 0.obs;
+  final RxBool _hasPermission = true.obs;
+  final RxString _error = ''.obs;
+  final RxBool _success = false.obs;
+  final Rxn<T> _data = Rxn<T>();
 
   @override
-  void onInit() {
-    _title = ''.obs;
-    _isLoading = false.obs;
-    _totalPages = 0.obs;
-    _currentPage = 1.obs; // 默认 1-based
-    _totalRecords = 0.obs;
-    _hasPermission = true.obs;
-    _error = ''.obs;
-    _success = false.obs;
-    _data = Rxn<T>();
-    super.onInit();
+  void onClose() {
+    _data.value = null;
+    super.onClose();
   }
 
   //  ===== Getter & Setter =====
