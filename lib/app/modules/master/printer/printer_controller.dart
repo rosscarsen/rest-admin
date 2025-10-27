@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 class PrinterController extends GetxController {
-  //TODO: Implement PrinterController
+  //
 
   final count = 0.obs;
   @override

@@ -1,8 +1,6 @@
 import 'package:get/get.dart';
 
 class TimeSalesController extends GetxController {
-  //TODO: Implement TimeSalesController
-
   final count = 0.obs;
   @override
   void onInit() {

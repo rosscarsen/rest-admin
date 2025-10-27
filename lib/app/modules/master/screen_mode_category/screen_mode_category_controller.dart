@@ -1,8 +1,6 @@
 import 'package:get/get.dart';
 
 class ScreenModeCategoryController extends GetxController {
-  //TODO: Implement ScreenModeCategoryController
-
   final count = 0.obs;
   @override
   void onInit() {

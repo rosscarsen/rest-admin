@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -8,10 +7,8 @@ import 'package:skeletonizer/skeletonizer.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../../../model/supplier/supplier_data.dart';
 import '../../../../routes/app_pages.dart';
 import '../../../../translations/locale_keys.dart';
-import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/form_help.dart';
 import '../../../../utils/logger.dart';
 import '../../../../utils/progress_hub.dart';
@@ -365,23 +362,6 @@ class SetMenuEditView extends GetView<SetMenuEditController> {
         ),
       ],
     );
-  }
-
-  // 复制（食品）function
-  void copySetMeal() async {
-    final ret = await Get.toNamed(Routes.COPY_PRODUCT_SET_MEAL);
-    /* final selectProductID = ret != null ? int.parse(ret.toString()) : 0;
-    final currentProductID = controller.productID;
-    if (selectProductID == 0) {
-      return;
-    }
-    if (selectProductID == currentProductID) {
-      return CustomDialog.errorMessages(LocaleKeys.copySameProduct.tr);
-    }
-    if (ret != null) {
-      final Map<String, dynamic> query = {"selectProductID": selectProductID, "currentProductID": currentProductID};
-      await controller.copyProductSetMeal(query);
-    } */
   }
 
   // 打开套餐
