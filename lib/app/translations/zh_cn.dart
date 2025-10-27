@@ -387,4 +387,7 @@ Map<String, String> get zhCN => {
   LocaleKeys.salesMemoFooter: "销售备忘",
   LocaleKeys.salesMemoRemarks: "销售备注",
   LocaleKeys.defaultSet: "默认",
+  LocaleKeys.update: "更新",
+  LocaleKeys.updateOtherProduct: "为其他产品选择并更新套餐，空白则更新现有已选择该套餐产品",
+  LocaleKeys.copyParam: "复制%s",
 };

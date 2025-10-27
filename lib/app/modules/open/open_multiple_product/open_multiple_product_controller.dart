@@ -19,6 +19,8 @@ import '../../../utils/custom_alert.dart';
 import '../../../utils/custom_dialog.dart';
 import '../../../utils/logger.dart';
 import '../../master/products/product_edit/product_edit_controller.dart';
+import '../../master/set_menu/set_menu_edit/model/set_menu_edit_model.dart';
+import '../../master/set_menu/set_menu_edit/set_menu_edit_controller.dart';
 import '../../supplier_invoice/supplier_invoice_edit/supplier_invoice_edit_controller.dart';
 import 'open_multiple_products_data_source.dart';
 
@@ -209,6 +211,9 @@ class OpenMultipleProductController extends GetxController with LoadingStateMixi
       case "supplierInvoiceAddItem": //加入发票项目
         await joinSupplierInvoiceAddItem();
         break;
+      case "addSetMenu": //加入菜单
+        await joinSetMenu();
+        break;
       default:
         await joinDefaultSelectedItems();
         break;
@@ -352,6 +357,78 @@ class OpenMultipleProductController extends GetxController with LoadingStateMixi
               ..clear()
               ..assignAll(apiProductList.map((e) => ProductSetMeal.fromJson(e)).toList());
             productCtl.productSetMealSource.updateDataSource();
+            CustomDialog.successMessages(LocaleKeys.joinSuccess.tr);
+            Get.back();
+          } else {
+            CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
+          }
+        } else {
+          CustomDialog.errorMessages(LocaleKeys.joinFailed.tr);
+        }
+      } else {
+        CustomDialog.showToast(LocaleKeys.joinFailed.tr);
+      }
+    } catch (e) {
+      CustomDialog.errorMessages(LocaleKeys.joinFailed.tr);
+    } finally {
+      CustomDialog.dismissDialog();
+    }
+  }
+
+  /// 加入套餐
+  Future<void> joinSetMenu() async {
+    final preCtl = Get.find<SetMenuEditController>();
+    final oldSetMealCodes = (preCtl.data?.setMenuDetail ?? []).map((e) => e.mBarcode).toSet().toList();
+    final commonCodes = selectedItems.map((e) => e.mCode).toSet().intersection(oldSetMealCodes.toSet()).toList();
+    final lastSelectProductCodes = List.from(selectedItems.map((e) => e.mCode));
+    if (commonCodes.isNotEmpty) {
+      await CustomAlert.iosAlert(
+        message: "${LocaleKeys.theSelectedContentAlreadyExists.tr}:${commonCodes.join(",")}",
+        showCancel: true,
+        cancelText: LocaleKeys.ignore.tr,
+        confirmText: LocaleKeys.skip.tr,
+        onConfirm: () {
+          lastSelectProductCodes.clear();
+          lastSelectProductCodes.addAll(
+            selectedItems.map((e) => e.mCode).toSet().difference(oldSetMealCodes.toSet()).toList(),
+          );
+        },
+      );
+    }
+    if (lastSelectProductCodes.isEmpty) {
+      Get.back();
+      return;
+    }
+    final parameters = Get.parameters;
+    if (parameters["id"] == null) {
+      CustomDialog.errorMessages(LocaleKeys.exception.tr);
+      return;
+    }
+    final query = {
+      "id": parameters["id"],
+      "mStep": mStep,
+      "selectProductCodes": lastSelectProductCodes.toSet().toList(),
+    };
+    CustomDialog.showLoading(LocaleKeys.joining.tr);
+    try {
+      final DioApiResult dioApiResult = await apiClient.post(Config.addSetMenuDetail, data: query);
+      if (!dioApiResult.success) {
+        CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
+        return;
+      }
+      if (dioApiResult.data == null) {
+        CustomDialog.errorMessages(LocaleKeys.dataException.tr);
+        return;
+      }
+      final Map<String, dynamic> data = jsonDecode(dioApiResult.data) ?? {};
+      if (data.isNotEmpty) {
+        if (data["status"] == 200) {
+          final List<dynamic>? apiProductList = data["apiResult"];
+          if (apiProductList != null) {
+            (preCtl.data?.setMenuDetail ?? [])
+              ..clear()
+              ..assignAll(apiProductList.map((e) => SetMenuDetail.fromJson(e)).toList());
+            preCtl.setMealDetailSource.updateDataSource();
             CustomDialog.successMessages(LocaleKeys.joinSuccess.tr);
             Get.back();
           } else {

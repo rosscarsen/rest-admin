@@ -65,6 +65,8 @@ abstract class Routes {
   static const CURRENCY_EDIT =
       _Paths.MASTER + _Paths.CURRENCY + _Paths.CURRENCY_EDIT;
   static const UNIT_EDIT = _Paths.MASTER + _Paths.UNIT + _Paths.UNIT_EDIT;
+  static const SET_MENU_EDIT =
+      _Paths.MASTER + _Paths.SET_MENU + _Paths.SET_MENU_EDIT;
 }
 
 abstract class _Paths {
@@ -114,4 +116,5 @@ abstract class _Paths {
   static const STOCK_EDIT = '/stock-edit';
   static const CURRENCY_EDIT = '/currency-edit';
   static const UNIT_EDIT = '/unit-edit';
+  static const SET_MENU_EDIT = '/set-menu-edit';
 }

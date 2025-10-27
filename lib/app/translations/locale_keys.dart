@@ -387,4 +387,7 @@ abstract class LocaleKeys {
   static const String salesMemoFooter = "salesMemoFooter";
   static const String salesMemoRemarks = "salesMemoRemarks";
   static const String defaultSet = "defaultSet";
+  static const String update = "update";
+  static const String updateOtherProduct = "updateOtherProduct";
+  static const String copyParam = "copyParam";
 }

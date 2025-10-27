@@ -50,6 +50,8 @@ import '../modules/master/products/products_view.dart';
 import '../modules/master/screen_mode_category/screen_mode_category_binding.dart';
 import '../modules/master/screen_mode_category/screen_mode_category_view.dart';
 import '../modules/master/set_menu/set_menu_binding.dart';
+import '../modules/master/set_menu/set_menu_edit/set_menu_edit_binding.dart';
+import '../modules/master/set_menu/set_menu_edit/set_menu_edit_view.dart';
 import '../modules/master/set_menu/set_menu_view.dart';
 import '../modules/master/stock/stock_binding.dart';
 import '../modules/master/stock/stock_edit/stock_edit_binding.dart';
@@ -298,6 +300,14 @@ class AppPages {
           page: () => const SetMenuView(),
           binding: SetMenuBinding(),
           middlewares: [AuthMiddleware()],
+          children: [
+            GetPage(
+              name: _Paths.SET_MENU_EDIT,
+              page: () => const SetMenuEditView(),
+              binding: SetMenuEditBinding(),
+              middlewares: [AuthMiddleware()],
+            ),
+          ],
         ),
         GetPage(
           name: _Paths.DEPARTMENT,

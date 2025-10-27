@@ -387,4 +387,8 @@ Map<String, String> get enUS => {
   LocaleKeys.salesMemoFooter: "Sales Memo Footer",
   LocaleKeys.salesMemoRemarks: "Sales Memo Remarks",
   LocaleKeys.defaultSet: "Default",
+  LocaleKeys.update: "Update",
+  LocaleKeys.updateOtherProduct:
+      "Select and update packages for other products. If blank, update existing products that have been selected with this package",
+  LocaleKeys.copyParam: "Copy %s",
 };

@@ -387,4 +387,7 @@ Map<String, String> zhHK = {
   LocaleKeys.salesMemoFooter: "銷售備忘",
   LocaleKeys.salesMemoRemarks: "銷售備註",
   LocaleKeys.defaultSet: "默認",
+  LocaleKeys.update: "更新",
+  LocaleKeys.updateOtherProduct: "為其他產品選擇並更新套餐，空白則更新現有已選擇該套餐產品",
+  LocaleKeys.copyParam: "複製%s",
 };
