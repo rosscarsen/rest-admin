@@ -219,17 +219,25 @@ class Config {
   // ==========================================================================
 
   // 套餐列表
-  static String setMeal = "/Master/setMeal";
+  static String setMenu = "/Master/setMenu";
   // 套餐添加或编辑
-  static String setMealAddOrEdit = "/Master/setMealAddOrEdit";
+  static String setMenuAddOrEdit = "/Master/setMenuAddOrEdit";
   // 套餐保存
-  static String setMealSave = "/Master/setMealSave";
+  static String setMenuSave = "/Master/setMenuSave";
   // 套餐删除
-  static String setMealDelete = "/Master/setMealDelete";
-  // 导出套餐
-  static String exportSetMea = "/Excel/setMealExport";
+  static String setMenuDelete = "/Master/setMenuDelete";
   // 导入套餐
-  static String importSetMeal = "/Excel/setMealImport";
+  static String importSetMenu = "/Excel/setMealImport";
+  // 套餐复制
+  static String setMenuCopy = "/Master/setMenuCopy";
+  // 删除套餐明细Item
+  static String deleteMenuDetail = "/Master/deleteMenuDetail";
+  // 套餐明细编辑
+  static String setMenuDetailSave = "/Master/setMenuDetailSave";
+  // 套餐明细复制
+  static String copySetMenuDetail = "/Master/copySetMenuDetail";
+  // 套餐明细添加或编辑
+  static String addSetMenuDetail = "/Master/addSetMenuDetail";
 
   // **************************************************************************
   // 供应商商品发票
