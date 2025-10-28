@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_file_saver/flutter_file_saver.dart';
 import 'package:get/get.dart';
@@ -20,6 +21,19 @@ class FileStorage {
     required String fileName,
     required DownloadFileType fileType,
   }) async {
+    if (kIsWeb) {
+      try {
+        await FlutterFileSaver().writeFileAsBytes(fileName: fileName, bytes: bytes);
+      } catch (e) {
+        final errStr = e.toString().toLowerCase();
+        if (errStr.contains('abort') || errStr.contains('file handle is null')) {
+          debugPrint("用户取消保存文件。");
+          return;
+        }
+        CustomDialog.showToast(LocaleKeys.operationWasCancelled.tr);
+      }
+      return;
+    }
     if (Platform.isWindows || Platform.isLinux) {
       final Directory? directory = await getDownloadsDirectory();
       if (directory == null) {
