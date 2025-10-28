@@ -126,9 +126,11 @@ class SetMenuController extends GetxController with LoadingStateMixin<List<SetMe
           ),
           ElevatedButton(
             onPressed: () async {
+              FocusManager.instance.primaryFocus?.unfocus();
               if (copyFormKey.currentState?.saveAndValidate() ?? false) {
                 final copyFormData = Map<String, dynamic>.from(copyFormKey.currentState?.value ?? {})..["id"] = id;
                 try {
+                  CustomDialog.showLoading(LocaleKeys.copying.tr);
                   final DioApiResult dioApiResult = await apiClient.post(Config.setMenuCopy, data: copyFormData);
                   if (!dioApiResult.success) {
                     CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
@@ -155,6 +157,7 @@ class SetMenuController extends GetxController with LoadingStateMixin<List<SetMe
                   CustomDialog.errorMessages(LocaleKeys.unknownError.tr);
                 } finally {
                   Get.closeDialog();
+                  CustomDialog.dismissDialog();
                 }
               }
             },

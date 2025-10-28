@@ -216,20 +216,16 @@ class SetMenuView extends GetView<SetMenuController> {
       ),
       cancel: ElevatedButton(
         onPressed: () {
-          startCtl.dispose();
-          endCtl.dispose();
           Get.closeDialog();
         },
         child: Text(LocaleKeys.cancel.tr),
       ),
       confirm: ElevatedButton(
         onPressed: () async {
-          startCtl.dispose();
-          endCtl.dispose();
-          Get.closeDialog();
           await controller.export(
             query: {'startCode': startCtl.text, 'endCode': endCtl.text, 'isProductExport': false},
           );
+          Get.closeDialog();
         },
         child: Text(LocaleKeys.confirm.tr),
       ),
