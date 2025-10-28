@@ -201,25 +201,6 @@ class CustomScaffold extends StatelessWidget {
                   }
                 }
               },
-
-              footer: Container(
-                height: 50,
-                width: double.infinity,
-                color: const Color(0xff444444),
-                child: Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Center(
-                    child: FittedBox(
-                      child: Text(
-                        '© 2023-${DateTime.now().year} [Pericles]. All rights reserved',
-                        style: const TextStyle(color: Colors.white),
-                        textAlign: TextAlign.center,
-                        maxLines: 2,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
             ),
             body: body,
           ),
