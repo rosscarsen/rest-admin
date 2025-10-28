@@ -390,4 +390,5 @@ Map<String, String> zhHK = {
   LocaleKeys.update: "更新",
   LocaleKeys.updateOtherProduct: "為其他產品選擇並更新套餐，空白則更新現有已選擇該套餐產品",
   LocaleKeys.copyParam: "複製%s",
+  LocaleKeys.confirmExitSystem: "確認退出系統嗎？",
 };

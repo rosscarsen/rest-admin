@@ -390,4 +390,5 @@ abstract class LocaleKeys {
   static const String update = "update";
   static const String updateOtherProduct = "updateOtherProduct";
   static const String copyParam = "copyParam";
+  static const String confirmExitSystem = "confirmExitSystem";
 }
