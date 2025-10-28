@@ -182,18 +182,14 @@ class CustomerView extends GetView<CustomerController> {
       ),
       cancel: ElevatedButton(
         onPressed: () {
-          startCtl.dispose();
-          endCtl.dispose();
           Get.closeDialog();
         },
         child: Text(LocaleKeys.cancel.tr),
       ),
       confirm: ElevatedButton(
         onPressed: () async {
-          startCtl.dispose();
-          endCtl.dispose();
-          Get.closeDialog();
           await controller.exportExcel(query: {'startCode': startCtl.text, 'endCode': endCtl.text});
+          Get.closeDialog();
         },
         child: Text(LocaleKeys.confirm.tr),
       ),
