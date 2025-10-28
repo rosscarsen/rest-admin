@@ -21,10 +21,12 @@ class SigninView extends GetView<SigninController> {
         systemNavigationBarDividerColor: Colors.transparent,
         statusBarIconBrightness: Brightness.dark,
         systemNavigationBarIconBrightness: Brightness.dark,
+        systemNavigationBarContrastEnforced: false,
       ),
       child: Scaffold(
         extendBodyBehindAppBar: true,
         resizeToAvoidBottomInset: true,
+        extendBody: true,
         body: Container(
           width: double.infinity,
           height: double.infinity,
@@ -41,26 +43,13 @@ class SigninView extends GetView<SigninController> {
               children: [
                 // 装饰元素
                 Positioned(
-                  top: -100,
-                  left: -100,
+                  top: 0,
+                  left: 0,
                   child: Container(
-                    width: 200,
+                    width: context.width,
                     height: 200,
                     decoration: BoxDecoration(
                       gradient: RadialGradient(colors: [Color(0x304A90E2), Colors.transparent], stops: [0.2, 1.0]),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-
-                Positioned(
-                  bottom: -50,
-                  right: -50,
-                  child: Container(
-                    width: 150,
-                    height: 150,
-                    decoration: BoxDecoration(
-                      gradient: RadialGradient(colors: [Color(0x3050E3C2), Colors.transparent], stops: [0.2, 1.0]),
                       shape: BoxShape.circle,
                     ),
                   ),
