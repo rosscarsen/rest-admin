@@ -21,6 +21,7 @@ Future<void> main() async {
       systemNavigationBarDividerColor: Colors.transparent,
       statusBarIconBrightness: Brightness.dark,
       systemNavigationBarIconBrightness: Brightness.dark,
+      systemNavigationBarContrastEnforced: false,
     ),
   );
   await findSystemLocale(); //date_field使用
