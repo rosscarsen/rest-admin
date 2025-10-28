@@ -176,37 +176,27 @@ class ProductsView extends GetView<ProductsController> {
         child: Column(
           spacing: 10.0,
           children: <Widget>[
-            TextField(
+            FormHelper.openInput(
+              name: "startCode",
+              labelText: LocaleKeys.startCode.tr,
               controller: startCodeController,
-              decoration: InputDecoration(
-                labelText: LocaleKeys.startCode.tr,
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                suffixIcon: IconButton(
-                  onPressed: () async {
-                    var result = await Get.toNamed(Routes.OPEN_PRODUCT_BARCODE);
-                    if (result != null) {
-                      startCodeController.text = result;
-                    }
-                  },
-                  icon: Icon(Icons.file_open, color: AppColors.openColor),
-                ),
-              ),
+              onPressed: () async {
+                var result = await Get.toNamed(Routes.OPEN_PRODUCT_BARCODE);
+                if (result != null) {
+                  startCodeController.text = result;
+                }
+              },
             ),
-            TextField(
+            FormHelper.openInput(
+              name: "endCode",
+              labelText: LocaleKeys.endCode.tr,
               controller: endCodeController,
-              decoration: InputDecoration(
-                labelText: LocaleKeys.endCode.tr,
-                floatingLabelBehavior: FloatingLabelBehavior.always,
-                suffixIcon: IconButton(
-                  onPressed: () async {
-                    var result = await Get.toNamed(Routes.OPEN_PRODUCT_BARCODE);
-                    if (result != null) {
-                      endCodeController.text = result;
-                    }
-                  },
-                  icon: Icon(Icons.file_open, color: AppColors.openColor),
-                ),
-              ),
+              onPressed: () async {
+                var result = await Get.toNamed(Routes.OPEN_PRODUCT_BARCODE);
+                if (result != null) {
+                  endCodeController.text = result;
+                }
+              },
             ),
             StatefulBuilder(
               builder: (BuildContext context, setState) {
