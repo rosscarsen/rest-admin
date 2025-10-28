@@ -392,4 +392,6 @@ Map<String, String> get enUS => {
       "Select and update packages for other products. If blank, update existing products that have been selected with this package",
   LocaleKeys.copyParam: "Copy %s",
   LocaleKeys.confirmExitSystem: "Confirm exit system?",
+  LocaleKeys.pageNotFound: "Page not found",
+  LocaleKeys.back: "Back",
 };

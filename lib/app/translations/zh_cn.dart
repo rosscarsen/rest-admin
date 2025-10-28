@@ -391,4 +391,6 @@ Map<String, String> get zhCN => {
   LocaleKeys.updateOtherProduct: "为其他产品选择并更新套餐，空白则更新现有已选择该套餐产品",
   LocaleKeys.copyParam: "复制%s",
   LocaleKeys.confirmExitSystem: "确认退出系统吗？",
+  LocaleKeys.pageNotFound: "页面未找到",
+  LocaleKeys.back: "返回",
 };
