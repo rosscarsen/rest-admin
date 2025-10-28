@@ -83,6 +83,8 @@ import '../modules/open/open_set_meal/open_set_meal_view.dart';
 import '../modules/open/open_supplier/open_supplier_binding.dart';
 import '../modules/open/open_supplier/open_supplier_view.dart';
 import '../modules/open/open_view.dart';
+import '../modules/page_not_found/page_not_found_binding.dart';
+import '../modules/page_not_found/page_not_found_view.dart';
 import '../modules/pdf/pdf_binding.dart';
 import '../modules/pdf/pdf_view.dart';
 import '../modules/signin/signin_binding.dart';
@@ -98,7 +100,10 @@ class AppPages {
   AppPages._();
 
   static final routes = [
-    GetPage(name: _Paths.SIGNIN, page: () => const SigninView(), binding: SigninBinding()),
+    GetPage(
+        name: _Paths.SIGNIN,
+        page: () => const SigninView(),
+        binding: SigninBinding()),
     GetPage(
       name: _Paths.DASHBOARD,
       page: () => const DashboardView(),
@@ -154,7 +159,11 @@ class AppPages {
         ),
       ],
     ),
-    GetPage(name: _Paths.PDF, page: () => const PdfView(), binding: PdfBinding(), middlewares: [AuthMiddleware()]),
+    GetPage(
+        name: _Paths.PDF,
+        page: () => const PdfView(),
+        binding: PdfBinding(),
+        middlewares: [AuthMiddleware()]),
     GetPage(
       name: _Paths.MASTER,
       page: () => const MasterView(),
@@ -278,7 +287,10 @@ class AppPages {
           binding: CurrencyBinding(),
           middlewares: [AuthMiddleware()],
           children: [
-            GetPage(name: _Paths.CURRENCY_EDIT, page: () => const CurrencyEditView(), binding: CurrencyEditBinding()),
+            GetPage(
+                name: _Paths.CURRENCY_EDIT,
+                page: () => const CurrencyEditView(),
+                binding: CurrencyEditBinding()),
           ],
         ),
         GetPage(
@@ -377,6 +389,11 @@ class AppPages {
           binding: SupplierInvoiceEditBinding(),
         ),
       ],
+    ),
+    GetPage(
+      name: _Paths.PAGE_NOT_FOUND,
+      page: () => const PageNotFoundView(),
+      binding: PageNotFoundBinding(),
     ),
   ];
 }
