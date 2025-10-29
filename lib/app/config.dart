@@ -239,6 +239,19 @@ class Config {
   // 套餐明细添加或编辑
   static String addSetMenuDetail = "/Master/addSetMenuDetail";
 
+  // ==========================================================================
+  // 部門管理模块
+  // ==========================================================================
+
+  // 部门列表
+  static String department = "/Master/department";
+  // 部门添加或编辑
+  static String departmentAddOrEdit = "/Master/departmentAddOrEdit";
+  // 部门保存
+  static String departmentSave = "/Master/departmentSave";
+  // 部门删除
+  static String departmentDelete = "/Master/departmentDelete";
+
   // **************************************************************************
   // 供应商商品发票
   // **************************************************************************
