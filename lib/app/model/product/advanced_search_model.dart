@@ -5,7 +5,7 @@
 import 'dart:convert';
 
 import '../category/category_model.dart';
-import '../department_model.dart';
+import '../department/department_data.dart';
 
 AdvancedSearchModel advancedSearchModelFromJson(String str) => AdvancedSearchModel.fromJson(json.decode(str));
 
@@ -29,7 +29,7 @@ class AdvancedSearchModel {
 
 class AdvancedSearchResult {
   List<CategoryModel>? category;
-  List<DepartmentModel>? department;
+  List<DepartmentData>? department;
 
   AdvancedSearchResult({this.category, this.department});
 
@@ -39,7 +39,7 @@ class AdvancedSearchResult {
         : List<CategoryModel>.from(json["category"]!.map((x) => CategoryModel.fromJson(x))),
     department: json["department"] == null
         ? []
-        : List<DepartmentModel>.from(json["department"]!.map((x) => DepartmentModel.fromJson(x))),
+        : List<DepartmentData>.from(json["department"]!.map((x) => DepartmentData.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {

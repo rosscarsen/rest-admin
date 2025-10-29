@@ -3,9 +3,9 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
 
 import '../../../../config.dart';
+import '../../../../model/department/department_data.dart';
 import '../../../../model/product/advanced_search_model.dart';
 import '../../../../model/category/category_model.dart';
-import '../../../../model/department_model.dart';
 import '../../../../service/dio_api_client.dart';
 import '../../../../service/dio_api_result.dart';
 import '../../../../translations/locale_keys.dart';
@@ -19,7 +19,7 @@ class AdvancedSearchController extends GetxController {
   final category1 = <CategoryModel>[].obs;
   final category2 = <CategoryModel>[].obs;
   final category3 = <CategoryModel>[].obs;
-  final department = <DepartmentModel>[].obs;
+  final department = <DepartmentData>[].obs;
 
   @override
   void onInit() {
