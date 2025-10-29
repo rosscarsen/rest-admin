@@ -68,6 +68,8 @@ abstract class Routes {
   static const SET_MENU_EDIT =
       _Paths.MASTER + _Paths.SET_MENU + _Paths.SET_MENU_EDIT;
   static const PAGE_NOT_FOUND = _Paths.PAGE_NOT_FOUND;
+  static const DEPARTMENT_EDIT =
+      _Paths.MASTER + _Paths.DEPARTMENT + _Paths.DEPARTMENT_EDIT;
 }
 
 abstract class _Paths {
@@ -119,4 +121,5 @@ abstract class _Paths {
   static const UNIT_EDIT = '/unit-edit';
   static const SET_MENU_EDIT = '/set-menu-edit';
   static const PAGE_NOT_FOUND = '/page-not-found';
+  static const DEPARTMENT_EDIT = '/department-edit';
 }

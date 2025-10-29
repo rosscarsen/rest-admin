@@ -24,6 +24,8 @@ import '../modules/master/customer/customer_view.dart';
 import '../modules/master/decca/decca_binding.dart';
 import '../modules/master/decca/decca_view.dart';
 import '../modules/master/department/department_binding.dart';
+import '../modules/master/department/department_edit/department_edit_binding.dart';
+import '../modules/master/department/department_edit/department_edit_view.dart';
 import '../modules/master/department/department_view.dart';
 import '../modules/master/master_binding.dart';
 import '../modules/master/master_view.dart';
@@ -100,10 +102,7 @@ class AppPages {
   AppPages._();
 
   static final routes = [
-    GetPage(
-        name: _Paths.SIGNIN,
-        page: () => const SigninView(),
-        binding: SigninBinding()),
+    GetPage(name: _Paths.SIGNIN, page: () => const SigninView(), binding: SigninBinding()),
     GetPage(
       name: _Paths.DASHBOARD,
       page: () => const DashboardView(),
@@ -159,11 +158,7 @@ class AppPages {
         ),
       ],
     ),
-    GetPage(
-        name: _Paths.PDF,
-        page: () => const PdfView(),
-        binding: PdfBinding(),
-        middlewares: [AuthMiddleware()]),
+    GetPage(name: _Paths.PDF, page: () => const PdfView(), binding: PdfBinding(), middlewares: [AuthMiddleware()]),
     GetPage(
       name: _Paths.MASTER,
       page: () => const MasterView(),
@@ -287,10 +282,7 @@ class AppPages {
           binding: CurrencyBinding(),
           middlewares: [AuthMiddleware()],
           children: [
-            GetPage(
-                name: _Paths.CURRENCY_EDIT,
-                page: () => const CurrencyEditView(),
-                binding: CurrencyEditBinding()),
+            GetPage(name: _Paths.CURRENCY_EDIT, page: () => const CurrencyEditView(), binding: CurrencyEditBinding()),
           ],
         ),
         GetPage(
@@ -326,6 +318,14 @@ class AppPages {
           page: () => const DepartmentView(),
           binding: DepartmentBinding(),
           middlewares: [AuthMiddleware()],
+          children: [
+            GetPage(
+              name: _Paths.DEPARTMENT_EDIT,
+              page: () => const DepartmentEditView(),
+              binding: DepartmentEditBinding(),
+              middlewares: [AuthMiddleware()],
+            ),
+          ],
         ),
         GetPage(
           name: _Paths.PAY_METHOD,
@@ -390,10 +390,6 @@ class AppPages {
         ),
       ],
     ),
-    GetPage(
-      name: _Paths.PAGE_NOT_FOUND,
-      page: () => const PageNotFoundView(),
-      binding: PageNotFoundBinding(),
-    ),
+    GetPage(name: _Paths.PAGE_NOT_FOUND, page: () => const PageNotFoundView(), binding: PageNotFoundBinding()),
   ];
 }
