@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
+import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 
 import '../../../../config.dart';
 import '../../../../model/department/department_data.dart';
@@ -45,7 +46,7 @@ class AdvancedSearchController extends GetxController {
           final filteredMap = Map.fromEntries(
             oldFormData.entries
                 .where((e) => (e.value?.toString() ?? "").trim().isNotEmpty)
-                .map((e) => MapEntry(e.key, e.value is String ? e.value.toString() : e.value)),
+                .map((e) => MapEntry(e.key, e.value is PhoneNumber ? e.value : e.value.toString())),
           );
           formKey.currentState?.patchValue(filteredMap);
         });
