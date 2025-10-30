@@ -14,8 +14,8 @@ class Config {
   static String noPermission = "__NO_PERMISSION__";
 
   ///网络请求地址
-  static String baseurl = "https://api.friendsclub.com/restAdmin";
-  //static String baseurl = "http://www.api.cn/restAdmin";
+  //static String baseurl = "https://api.friendsclub.com/restAdmin";
+  static String baseurl = "http://www.api.cn/restAdmin";
 
   // **************************************************************************
   // 登录模块
