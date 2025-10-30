@@ -88,7 +88,7 @@ class CurrencyEditController extends GetxController with LoadingStateMixin<Curre
           final filteredMap = Map.fromEntries(
             jsonMap.entries
                 .where((e) => (e.value?.toString() ?? "").trim().isNotEmpty)
-                .map((e) => MapEntry(e.key, e.value is String ? e.value.toString() : e.value)),
+                .map((e) => MapEntry(e.key, e.value is PhoneNumber ? e.value : e.value.toString())),
           );
           formKey.currentState?.patchValue(filteredMap);
         });
