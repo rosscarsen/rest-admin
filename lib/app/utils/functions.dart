@@ -140,7 +140,12 @@ class Functions {
 
     // 3. 比较
     const eq = DeepCollectionEquality();
-    return eq.equals(normalizedSource, normalizedTarget);
+    final bool isSame = eq.equals(normalizedSource, normalizedTarget);
+    sourceMap.clear();
+    sourceRowFiltered.clear();
+    normalizedSource.clear();
+    normalizedTarget.clear();
+    return isSame;
   }
 
   static bool deepEqual(dynamic a, dynamic b) {
