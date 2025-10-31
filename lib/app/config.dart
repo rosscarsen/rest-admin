@@ -252,6 +252,32 @@ class Config {
   // 部门删除
   static String departmentDelete = "/Master/departmentDelete";
 
+  // ==========================================================================
+  // 支付方式管理模块
+  // ==========================================================================
+
+  // 支付方式列表
+  static String paymentMethod = "/Master/paymentMethod";
+  // 支付方式添加或编辑
+  static String paymentMethodAddOrEdit = "/Master/paymentMethodAddOrEdit";
+  // 支付方式保存
+  static String paymentMethodSave = "/Master/paymentMethodSave";
+  // 支付方式删除
+  static String paymentMethodDelete = "/Master/paymentMethodDelete";
+
+  // ==========================================================================
+  // 网上支付方式管理模块
+  // ==========================================================================
+
+  // 网上支付方式列表
+  static String networkPaymentMethod = "/Master/networkPaymentMethod";
+  // 网上支付方式添加或编辑
+  static String networkPaymentMethodAddOrEdit = "/Master/networkPaymentMethodAddOrEdit";
+  // 网上支付方式保存
+  static String networkPaymentMethodSave = "/Master/networkPaymentMethodSave";
+  // 网上支付方式删除
+  static String networkPaymentMethodDelete = "/Master/networkPaymentMethodDelete";
+
   // **************************************************************************
   // 供应商商品发票
   // **************************************************************************
