@@ -6,7 +6,6 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../model/network_pay_method/network_pay_method_data.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/constants.dart';
-import '../../../utils/logger.dart';
 import '../../../widgets/custom_cell.dart';
 import 'network_pay_method_controller.dart';
 
