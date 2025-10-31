@@ -31,6 +31,8 @@ import '../modules/master/master_binding.dart';
 import '../modules/master/master_view.dart';
 import '../modules/master/mesa/mesa_binding.dart';
 import '../modules/master/mesa/mesa_view.dart';
+import '../modules/master/network_pay_method/net_work_pay_method_edit/net_work_pay_method_edit_binding.dart';
+import '../modules/master/network_pay_method/net_work_pay_method_edit/net_work_pay_method_edit_view.dart';
 import '../modules/master/network_pay_method/network_pay_method_binding.dart';
 import '../modules/master/network_pay_method/network_pay_method_view.dart';
 import '../modules/master/pay_method/pay_method_binding.dart';
@@ -338,6 +340,13 @@ class AppPages {
           page: () => const NetworkPayMethodView(),
           binding: NetworkPayMethodBinding(),
           middlewares: [AuthMiddleware()],
+          children: [
+            GetPage(
+              name: _Paths.NET_WORK_PAY_METHOD_EDIT,
+              page: () => const NetWorkPayMethodEditView(),
+              binding: NetWorkPayMethodEditBinding(),
+            ),
+          ],
         ),
         GetPage(
           name: _Paths.MESA,

@@ -70,6 +70,9 @@ abstract class Routes {
   static const PAGE_NOT_FOUND = _Paths.PAGE_NOT_FOUND;
   static const DEPARTMENT_EDIT =
       _Paths.MASTER + _Paths.DEPARTMENT + _Paths.DEPARTMENT_EDIT;
+  static const NET_WORK_PAY_METHOD_EDIT = _Paths.MASTER +
+      _Paths.NETWORK_PAY_METHOD +
+      _Paths.NET_WORK_PAY_METHOD_EDIT;
 }
 
 abstract class _Paths {
@@ -122,4 +125,5 @@ abstract class _Paths {
   static const SET_MENU_EDIT = '/set-menu-edit';
   static const PAGE_NOT_FOUND = '/page-not-found';
   static const DEPARTMENT_EDIT = '/department-edit';
+  static const NET_WORK_PAY_METHOD_EDIT = '/net-work-pay-method-edit';
 }
