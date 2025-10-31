@@ -571,7 +571,7 @@ class FormHelper {
   }
 
   /// 自动完成输入框
-  static FormBuilderTypeAhead<String> autoCompleteInput({
+  static Widget autoCompleteInput({
     required String name,
     required String labelText,
     required List<String> items,
@@ -583,59 +583,72 @@ class FormHelper {
     TextEditingController? controller,
   }) {
     final effectiveController = controller ?? TextEditingController(text: initialValue ?? '');
-    return FormBuilderTypeAhead<String>(
-      name: name,
-      enabled: enabled,
-      initialValue: initialValue,
-      validator: validator,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      valueTransformer: (value) => (value?.toString() ?? "").trim(),
-      onChanged: (value) {
-        effectiveController.text = value ?? '';
-        onChanged?.call(value);
-      },
-      decoration: InputDecoration(
-        labelText: labelText,
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: ValueListenableBuilder<TextEditingValue>(
-          valueListenable: effectiveController,
-          builder: (context, value, child) {
-            return value.text.isNotEmpty
-                ? IconButton(
-                    icon: const Icon(Icons.clear),
-                    onPressed: () {
-                      effectiveController.clear();
-                      final field = FormBuilder.of(context)?.fields[name];
-                      field?.didChange(null);
-                      onChanged?.call(null);
-                    },
-                  )
-                : const SizedBox.shrink();
+    return Builder(
+      builder: (context) {
+        return FormBuilderTypeAhead<String>(
+          name: name,
+          enabled: enabled,
+          initialValue: initialValue,
+          validator: validator,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          valueTransformer: (value) => (value?.toString() ?? "").trim(),
+          onChanged: (value) {
+            effectiveController.text = value ?? '';
+            onChanged?.call(value);
           },
-        ),
-      ),
-      itemBuilder: (context, item) {
-        return ListTile(title: Text(item));
-      },
-      emptyBuilder: (context) {
-        return !showNoItem
-            ? const SizedBox.shrink()
-            : SizedBox(
-                height: 50,
-                child: Center(
-                  child: Text(LocaleKeys.noDataFound.tr, style: const TextStyle(color: Colors.grey)),
-                ),
+          customTextField: TextField(
+            controller: effectiveController,
+            onChanged: (value) {
+              final formState = FormBuilder.of(context);
+              final field = formState?.fields[name];
+              field?.didChange(value);
+              onChanged?.call(value);
+            },
+          ),
+          decoration: InputDecoration(
+            labelText: labelText,
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            suffixIcon: ValueListenableBuilder<TextEditingValue>(
+              valueListenable: effectiveController,
+              builder: (context, value, child) {
+                return value.text.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          effectiveController.clear();
+                          final field = FormBuilder.of(context)?.fields[name];
+                          field?.didChange(null);
+                          onChanged?.call(null);
+                        },
+                      )
+                    : const SizedBox.shrink();
+              },
+            ),
+          ),
+          itemBuilder: (context, item) {
+            return ListTile(title: Text(item));
+          },
+          emptyBuilder: (context) {
+            return !showNoItem
+                ? const SizedBox.shrink()
+                : SizedBox(
+                    height: 50,
+                    child: Center(
+                      child: Text(LocaleKeys.noDataFound.tr, style: const TextStyle(color: Colors.grey)),
+                    ),
+                  );
+          },
+          suggestionsCallback: (query) {
+            if (query.isNotEmpty) {
+              final lowercaseQuery = query.toLowerCase();
+              return items.where((item) => item.toLowerCase().contains(lowercaseQuery)).toList(growable: false)..sort(
+                (a, b) => a.toLowerCase().indexOf(lowercaseQuery).compareTo(b.toLowerCase().indexOf(lowercaseQuery)),
               );
-      },
-      suggestionsCallback: (query) {
-        if (query.isNotEmpty) {
-          final lowercaseQuery = query.toLowerCase();
-          return items.where((item) => item.toLowerCase().contains(lowercaseQuery)).toList(growable: false)..sort(
-            (a, b) => a.toLowerCase().indexOf(lowercaseQuery).compareTo(b.toLowerCase().indexOf(lowercaseQuery)),
-          );
-        } else {
-          return items;
-        }
+            } else {
+              return items;
+            }
+          },
+        );
       },
     );
   }
