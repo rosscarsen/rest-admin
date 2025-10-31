@@ -50,6 +50,6 @@ class PayMethodEditResult extends PayMethodData {
   });
 
   factory PayMethodEditResult.fromJson(Map<String, dynamic> json) => _$PayMethodEditResultFromJson(json);
-
+  @override
   Map<String, dynamic> toJson() => _$PayMethodEditResultToJson(this);
 }
