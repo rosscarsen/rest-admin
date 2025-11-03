@@ -168,6 +168,7 @@ class CurrencyEditController extends GetxController with LoadingStateMixin<Curre
       } catch (e) {
         CustomDialog.errorMessages(e.toString());
       } finally {
+        requestData.clear();
         CustomDialog.dismissDialog();
       }
     }
