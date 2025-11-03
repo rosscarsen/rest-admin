@@ -19,8 +19,9 @@ PayMethodData _$PayMethodDataFromJson(Map<String, dynamic> json) =>
           ? '0'
           : Functions.asString(json['mCardType']),
       mCom: Functions.asString(json['mCom']),
-      mNoDrawer:
-          json['mNoDrawer'] as String? ?? '0, fromJson: Functions.asString',
+      mNoDrawer: json['mNoDrawer'] == null
+          ? '0'
+          : Functions.asString(json['mNoDrawer']),
       tPaytypeOnline: Functions.asString(json['t_paytype_online']),
       mHide: json['mHide'] == null ? '0' : Functions.asString(json['mHide']),
     );
