@@ -168,6 +168,7 @@ class UnitEditController extends GetxController with LoadingStateMixin<UnitData>
       } catch (e) {
         CustomDialog.errorMessages(e.toString());
       } finally {
+        requestData.clear();
         CustomDialog.dismissDialog();
       }
     }
