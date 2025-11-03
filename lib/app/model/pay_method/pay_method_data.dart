@@ -19,7 +19,7 @@ class PayMethodData {
   final String? mCardType;
   @JsonKey(name: "mCom", fromJson: Functions.asString)
   final String? mCom;
-  @JsonKey(name: "mNoDrawer", defaultValue: "0, fromJson: Functions.asString")
+  @JsonKey(name: "mNoDrawer", defaultValue: "0", fromJson: Functions.asString)
   final String? mNoDrawer;
   @JsonKey(name: "t_paytype_online", fromJson: Functions.asString)
   final String? tPaytypeOnline;
