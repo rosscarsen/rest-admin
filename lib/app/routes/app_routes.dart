@@ -52,11 +52,9 @@ abstract class Routes {
   static const DEPARTMENT = _Paths.MASTER + _Paths.DEPARTMENT;
   static const PAY_METHOD = _Paths.MASTER + _Paths.PAY_METHOD;
   static const NETWORK_PAY_METHOD = _Paths.MASTER + _Paths.NETWORK_PAY_METHOD;
-  static const MESA = _Paths.MASTER + _Paths.MESA;
   static const CALENDAR = _Paths.MASTER + _Paths.CALENDAR;
   static const PRINTER = _Paths.MASTER + _Paths.PRINTER;
   static const TIME_SALES = _Paths.MASTER + _Paths.TIME_SALES;
-  static const DECCA = _Paths.MASTER + _Paths.DECCA;
   static const SCREEN_MODE_CATEGORY =
       _Paths.MASTER + _Paths.SCREEN_MODE_CATEGORY;
   static const SUPPLIER_EDIT =
@@ -75,6 +73,11 @@ abstract class Routes {
       _Paths.NET_WORK_PAY_METHOD_EDIT;
   static const PAY_METHOD_EDIT =
       _Paths.MASTER + _Paths.PAY_METHOD + _Paths.PAY_METHOD_EDIT;
+  static const TABLES = _Paths.MASTER + _Paths.TABLES;
+  static const TABLE_EDIT = _Paths.MASTER + _Paths.TABLES + _Paths.TABLE_EDIT;
+  static const TABLE_CARD = _Paths.MASTER + _Paths.TABLE_CARD;
+  static const TABLE_CARD_EDIT =
+      _Paths.MASTER + _Paths.TABLE_CARD + _Paths.TABLE_CARD_EDIT;
 }
 
 abstract class _Paths {
@@ -114,11 +117,9 @@ abstract class _Paths {
   static const DEPARTMENT = '/department';
   static const PAY_METHOD = '/pay-method';
   static const NETWORK_PAY_METHOD = '/network-pay-method';
-  static const MESA = '/mesa';
   static const CALENDAR = '/calendar';
   static const PRINTER = '/printer';
   static const TIME_SALES = '/time-sales';
-  static const DECCA = '/decca';
   static const SCREEN_MODE_CATEGORY = '/screen-mode-category';
   static const SUPPLIER_EDIT = '/supplier-edit';
   static const STOCK_EDIT = '/stock-edit';
@@ -129,4 +130,8 @@ abstract class _Paths {
   static const DEPARTMENT_EDIT = '/department-edit';
   static const NET_WORK_PAY_METHOD_EDIT = '/net-work-pay-method-edit';
   static const PAY_METHOD_EDIT = '/pay-method-edit';
+  static const TABLES = '/tables';
+  static const TABLE_EDIT = '/table-edit';
+  static const TABLE_CARD = '/table-card';
+  static const TABLE_CARD_EDIT = '/table-card-edit';
 }
