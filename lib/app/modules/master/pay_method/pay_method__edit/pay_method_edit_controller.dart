@@ -7,8 +7,6 @@ import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 
 import '../../../../config.dart';
 import '../../../../mixin/loading_state_mixin.dart';
-import '../../../../model/network_pay_method/network_pay_method_data.dart';
-import '../../../../model/network_pay_method/network_pay_method_edit_model.dart';
 import '../../../../model/pay_method/pay_method_data.dart';
 import '../../../../model/pay_method/pay_method_edit_model.dart';
 import '../../../../service/dio_api_client.dart';
@@ -16,7 +14,6 @@ import '../../../../service/dio_api_result.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/functions.dart';
-import '../../../../utils/logger.dart';
 import '../../../../utils/storage_manage.dart';
 import '../pay_method_controller.dart';
 
