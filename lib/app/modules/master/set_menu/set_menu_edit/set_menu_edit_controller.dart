@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:get/get.dart';
-import 'package:rest_admin/app/modules/master/set_menu/set_menu_edit/model/set_menu_edit_model.dart';
+
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../config.dart';
@@ -16,6 +16,7 @@ import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/form_help.dart';
 import '../../../../utils/logger.dart';
 import '../set_menu_controller.dart';
+import 'model/set_menu_edit_model.dart';
 import 'set_menu_detail_source.dart';
 import 'set_menu_limit_source.dart';
 
