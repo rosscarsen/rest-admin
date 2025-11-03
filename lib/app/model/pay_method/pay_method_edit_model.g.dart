@@ -26,25 +26,31 @@ Map<String, dynamic> _$PayMethodEditModelToJson(PayMethodEditModel instance) =>
 
 PayMethodEditResult _$PayMethodEditResultFromJson(Map<String, dynamic> json) =>
     PayMethodEditResult(
-      mPayType: Functions.asString(json['mPayType']),
-      tPayTypeId: Functions.asString(json['T_PayType_ID']),
-      mSort: Functions.asString(json['mSort']),
-      mPrePaid: json['mPrePaid'] == null
-          ? '0'
-          : Functions.asString(json['mPrePaid']),
-      mCreditCart: Functions.asString(json['mCreditCart']),
-      mCardType: json['mCardType'] == null
-          ? '0'
-          : Functions.asString(json['mCardType']),
-      mCom: Functions.asString(json['mCom']),
-      mNoDrawer:
-          json['mNoDrawer'] as String? ?? '0, fromJson: Functions.asString',
-      tPaytypeOnline: Functions.asString(json['t_paytype_online']),
-      mHide: json['mHide'] == null ? '0' : Functions.asString(json['mHide']),
-      networkPayMethod: (json['networkPayMethod'] as List<dynamic>?)
-          ?.map((e) => NetworkPayMethodData.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
+        mPayType: Functions.asString(json['mPayType']),
+        tPayTypeId: Functions.asString(json['T_PayType_ID']),
+        mSort: Functions.asString(json['mSort']),
+        mPrePaid: json['mPrePaid'] == null
+            ? '0'
+            : Functions.asString(json['mPrePaid']),
+        mCreditCart: Functions.asString(json['mCreditCart']),
+        mCardType: json['mCardType'] == null
+            ? '0'
+            : Functions.asString(json['mCardType']),
+        mCom: Functions.asString(json['mCom']),
+        mNoDrawer: json['mNoDrawer'] == null
+            ? '0'
+            : Functions.asString(json['mNoDrawer']),
+        tPaytypeOnline: Functions.asString(json['t_paytype_online']),
+        mHide: json['mHide'] == null ? '0' : Functions.asString(json['mHide']),
+        networkPayMethod: (json['networkPayMethod'] as List<dynamic>?)
+            ?.map(
+              (e) => NetworkPayMethodData.fromJson(e as Map<String, dynamic>),
+            )
+            .toList(),
+      )
+      ..connectList = (json['connectList'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, e as String),
+      );
 
 Map<String, dynamic> _$PayMethodEditResultToJson(
   PayMethodEditResult instance,
@@ -62,4 +68,5 @@ Map<String, dynamic> _$PayMethodEditResultToJson(
   'networkPayMethod': instance.networkPayMethod
       ?.map((e) => e.toJson())
       .toList(),
+  'connectList': instance.connectList,
 };
