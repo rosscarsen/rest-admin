@@ -21,16 +21,12 @@ import '../modules/master/customer/customer_binding.dart';
 import '../modules/master/customer/customer_edit/customer_edit_binding.dart';
 import '../modules/master/customer/customer_edit/customer_edit_view.dart';
 import '../modules/master/customer/customer_view.dart';
-import '../modules/master/decca/decca_binding.dart';
-import '../modules/master/decca/decca_view.dart';
 import '../modules/master/department/department_binding.dart';
 import '../modules/master/department/department_edit/department_edit_binding.dart';
 import '../modules/master/department/department_edit/department_edit_view.dart';
 import '../modules/master/department/department_view.dart';
 import '../modules/master/master_binding.dart';
 import '../modules/master/master_view.dart';
-import '../modules/master/mesa/mesa_binding.dart';
-import '../modules/master/mesa/mesa_view.dart';
 import '../modules/master/network_pay_method/net_work_pay_method_edit/net_work_pay_method_edit_binding.dart';
 import '../modules/master/network_pay_method/net_work_pay_method_edit/net_work_pay_method_edit_view.dart';
 import '../modules/master/network_pay_method/network_pay_method_binding.dart';
@@ -67,6 +63,14 @@ import '../modules/master/supplier/supplier_binding.dart';
 import '../modules/master/supplier/supplier_edit/supplier_edit_binding.dart';
 import '../modules/master/supplier/supplier_edit/supplier_edit_view.dart';
 import '../modules/master/supplier/supplier_view.dart';
+import '../modules/master/table_card/table_card_binding.dart';
+import '../modules/master/table_card/table_card_edit/table_card_edit_binding.dart';
+import '../modules/master/table_card/table_card_edit/table_card_edit_view.dart';
+import '../modules/master/table_card/table_card_view.dart';
+import '../modules/master/tables/table_edit/table_edit_binding.dart';
+import '../modules/master/tables/table_edit/table_edit_view.dart';
+import '../modules/master/tables/tables_binding.dart';
+import '../modules/master/tables/tables_view.dart';
 import '../modules/master/time_sales/time_sales_binding.dart';
 import '../modules/master/time_sales/time_sales_view.dart';
 import '../modules/master/unit/unit_binding.dart';
@@ -359,12 +363,6 @@ class AppPages {
           ],
         ),
         GetPage(
-          name: _Paths.MESA,
-          page: () => const MesaView(),
-          binding: MesaBinding(),
-          middlewares: [AuthMiddleware()],
-        ),
-        GetPage(
           name: _Paths.CALENDAR,
           page: () => const CalendarView(),
           binding: CalendarBinding(),
@@ -383,16 +381,28 @@ class AppPages {
           middlewares: [AuthMiddleware()],
         ),
         GetPage(
-          name: _Paths.DECCA,
-          page: () => const DeccaView(),
-          binding: DeccaBinding(),
-          middlewares: [AuthMiddleware()],
-        ),
-        GetPage(
           name: _Paths.SCREEN_MODE_CATEGORY,
           page: () => const ScreenModeCategoryView(),
           binding: ScreenModeCategoryBinding(),
           middlewares: [AuthMiddleware()],
+        ),
+        GetPage(
+          name: _Paths.TABLES,
+          page: () => const TablesView(),
+          binding: TablesBinding(),
+          children: [GetPage(name: _Paths.TABLE_EDIT, page: () => const TableEditView(), binding: TableEditBinding())],
+        ),
+        GetPage(
+          name: _Paths.TABLE_CARD,
+          page: () => const TableCardView(),
+          binding: TableCardBinding(),
+          children: [
+            GetPage(
+              name: _Paths.TABLE_CARD_EDIT,
+              page: () => const TableCardEditView(),
+              binding: TableCardEditBinding(),
+            ),
+          ],
         ),
       ],
     ),
