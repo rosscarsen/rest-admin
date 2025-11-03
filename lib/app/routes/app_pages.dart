@@ -35,6 +35,8 @@ import '../modules/master/network_pay_method/net_work_pay_method_edit/net_work_p
 import '../modules/master/network_pay_method/net_work_pay_method_edit/net_work_pay_method_edit_view.dart';
 import '../modules/master/network_pay_method/network_pay_method_binding.dart';
 import '../modules/master/network_pay_method/network_pay_method_view.dart';
+import '../modules/master/pay_method/pay_method__edit/pay_method_edit_binding.dart';
+import '../modules/master/pay_method/pay_method__edit/pay_method_edit_view.dart';
 import '../modules/master/pay_method/pay_method_binding.dart';
 import '../modules/master/pay_method/pay_method_view.dart';
 import '../modules/master/printer/printer_binding.dart';
@@ -334,6 +336,14 @@ class AppPages {
           page: () => const PayMethodView(),
           binding: PayMethodBinding(),
           middlewares: [AuthMiddleware()],
+          children: [
+            GetPage(
+              name: _Paths.PAY_METHOD_EDIT,
+              page: () => const PayMethodEditView(),
+              binding: PayMethodEditBinding(),
+              middlewares: [AuthMiddleware()],
+            ),
+          ],
         ),
         GetPage(
           name: _Paths.NETWORK_PAY_METHOD,

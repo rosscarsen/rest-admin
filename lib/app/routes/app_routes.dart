@@ -73,6 +73,8 @@ abstract class Routes {
   static const NET_WORK_PAY_METHOD_EDIT = _Paths.MASTER +
       _Paths.NETWORK_PAY_METHOD +
       _Paths.NET_WORK_PAY_METHOD_EDIT;
+  static const PAY_METHOD_EDIT =
+      _Paths.MASTER + _Paths.PAY_METHOD + _Paths.PAY_METHOD_EDIT;
 }
 
 abstract class _Paths {
@@ -126,4 +128,5 @@ abstract class _Paths {
   static const PAGE_NOT_FOUND = '/page-not-found';
   static const DEPARTMENT_EDIT = '/department-edit';
   static const NET_WORK_PAY_METHOD_EDIT = '/net-work-pay-method-edit';
+  static const PAY_METHOD_EDIT = '/pay-method-edit';
 }
