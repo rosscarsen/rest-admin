@@ -423,4 +423,5 @@ Map<String, String> zhHK = {
   LocaleKeys.sun: "周日",
   LocaleKeys.serviceFeeStartTime: "服务费開始時間",
   LocaleKeys.serviceFeeEndTime: "服务费結束時間",
+  LocaleKeys.floorPlan: "平面图",
 };

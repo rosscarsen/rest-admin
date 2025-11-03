@@ -423,4 +423,5 @@ Map<String, String> get zhCN => {
   LocaleKeys.sun: "周日",
   LocaleKeys.serviceFeeStartTime: "服务费开始时间",
   LocaleKeys.serviceFeeEndTime: "服务费结束时间",
+  LocaleKeys.floorPlan: "平面图",
 };

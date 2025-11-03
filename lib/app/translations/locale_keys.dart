@@ -423,4 +423,5 @@ abstract class LocaleKeys {
   static const String sun = "sun";
   static const String serviceFeeStartTime = "serviceFeeStartTime";
   static const String serviceFeeEndTime = "serviceFeeEndTime";
+  static const String floorPlan = "floorPlan";
 }

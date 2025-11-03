@@ -424,4 +424,5 @@ Map<String, String> get enUS => {
   LocaleKeys.sun: "Sun.",
   LocaleKeys.serviceFeeStartTime: "Service Fee Start Time",
   LocaleKeys.serviceFeeEndTime: "Service Fee End Time",
+  LocaleKeys.floorPlan: "Floor Plan",
 };
