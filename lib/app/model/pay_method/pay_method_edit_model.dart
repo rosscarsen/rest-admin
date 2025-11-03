@@ -35,6 +35,8 @@ class PayMethodEditModel {
 class PayMethodEditResult extends PayMethodData {
   @JsonKey(name: "networkPayMethod")
   List<NetworkPayMethodData>? networkPayMethod;
+  @JsonKey(name: "connectList")
+  Map<String, String>? connectList;
   PayMethodEditResult({
     super.mPayType,
     super.tPayTypeId,
