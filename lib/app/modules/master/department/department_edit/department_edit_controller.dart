@@ -168,6 +168,7 @@ class DepartmentEditController extends GetxController with LoadingStateMixin<Dep
       } catch (e) {
         CustomDialog.errorMessages(e.toString());
       } finally {
+        requestData.clear();
         CustomDialog.dismissDialog();
       }
     }
