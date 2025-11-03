@@ -113,7 +113,7 @@ class Category2EditController extends GetxController {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             formKey.currentState?.patchValue(
               Map.fromEntries(
-                category2Model.toJson().entries.where((e) => (e.value?.toString() ?? "").trim().isNotEmpty).map((e) {
+                category2Model.toJson().entries.map((e) {
                   final key = e.key;
                   var value = e.value;
                   if (['mNonContinue', 'mContinue'].contains(key)) {

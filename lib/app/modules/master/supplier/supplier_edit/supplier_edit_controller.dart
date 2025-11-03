@@ -95,6 +95,7 @@ class SupplierEditController extends GetxController with LoadingStateMixin<Suppl
           );
           logger.f(filteredMap);
           formKey.currentState?.patchValue(filteredMap);
+          filteredMap.clear();
         });
       }
     } catch (e) {

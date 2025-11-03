@@ -78,16 +78,13 @@ class CategoryEditController extends GetxController with LoadingStateMixin {
       }
       final CategoryModel resultModel = CategoryModel.fromJson(apiResult);
 
-      formKey.currentState?.patchValue(
-        Map.fromEntries(
-          resultModel
-              .toJson()
-              .entries
-              .where((e) => (e.value?.toString() ?? "").trim().isNotEmpty)
-              .map((e) => MapEntry(e.key, e.value.toString())),
-        ),
+      final filteredMap = Map.fromEntries(
+        resultModel.toJson().entries
+        //.where((e) => (e.value?.toString() ?? "").trim().isNotEmpty)
+        .map((e) => MapEntry(e.key, e.value.toString())),
       );
-      FocusManager.instance.primaryFocus?.unfocus();
+      formKey.currentState?.patchValue(filteredMap);
+      filteredMap.clear();
     } catch (e) {
       logger.i(e.toString());
       CustomDialog.errorMessages(LocaleKeys.getDataException.tr);

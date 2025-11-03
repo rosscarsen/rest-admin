@@ -91,6 +91,7 @@ class StockEditController extends GetxController with LoadingStateMixin<StockDat
                 .map((e) => MapEntry(e.key, e.value is PhoneNumber ? e.value : e.value.toString())),
           );
           formKey.currentState?.patchValue(filteredMap);
+          filteredMap.clear();
         });
       }
     } catch (e) {

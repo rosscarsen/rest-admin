@@ -49,6 +49,7 @@ class AdvancedSearchController extends GetxController {
                 .map((e) => MapEntry(e.key, e.value is PhoneNumber ? e.value : e.value.toString())),
           );
           formKey.currentState?.patchValue(filteredMap);
+          filteredMap.clear();
         });
       }
     });
