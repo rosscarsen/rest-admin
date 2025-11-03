@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
-import 'package:rest_admin/app/modules/master/supplier/supplier_table_fields.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/form_help.dart';
 import '../../../../widgets/no_record.dart';
+import '../supplier_table_fields.dart';
 import 'supplier_edit_controller.dart';
 
 class SupplierEditView extends GetView<SupplierEditController> {
