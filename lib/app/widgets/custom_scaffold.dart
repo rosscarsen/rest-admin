@@ -113,7 +113,7 @@ class CustomScaffold extends StatelessWidget {
                       icon: FontAwesomeIcons.networkWired,
                     ),
                     //台面
-                    AdminMenuItem(title: LocaleKeys.mesa.tr, route: Routes.MESA, icon: FontAwesomeIcons.table),
+                    AdminMenuItem(title: LocaleKeys.tables.tr, route: Routes.TABLES, icon: FontAwesomeIcons.table),
                     //日历
                     AdminMenuItem(
                       title: LocaleKeys.calendar.tr,
@@ -127,7 +127,11 @@ class CustomScaffold extends StatelessWidget {
                       icon: FontAwesomeIcons.clock,
                     ),
                     //台卡
-                    AdminMenuItem(title: LocaleKeys.decca.tr, route: Routes.DECCA, icon: FontAwesomeIcons.creditCard),
+                    AdminMenuItem(
+                      title: LocaleKeys.tableCard.tr,
+                      route: Routes.TABLE_CARD,
+                      icon: FontAwesomeIcons.creditCard,
+                    ),
                     //画面模式 类目
                     AdminMenuItem(
                       title: LocaleKeys.screenModeCategory.tr,
