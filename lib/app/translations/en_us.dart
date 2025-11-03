@@ -394,4 +394,8 @@ Map<String, String> get enUS => {
   LocaleKeys.confirmExitSystem: "Confirm exit system?",
   LocaleKeys.pageNotFound: "Page not found",
   LocaleKeys.back: "Back",
+  LocaleKeys.interfaceAddress: "Interface Address",
+  LocaleKeys.connect: "Connect",
+  LocaleKeys.unOpenDrawer: "unOpen Drawer",
+  LocaleKeys.manualDrawer: "Manual Drawer",
 };

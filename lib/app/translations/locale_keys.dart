@@ -393,4 +393,8 @@ abstract class LocaleKeys {
   static const String confirmExitSystem = "confirmExitSystem";
   static const String pageNotFound = "pageNotFound";
   static const String back = "back";
+  static const String interfaceAddress = "interfaceAddress";
+  static const String connect = "connect";
+  static const String unOpenDrawer = "unOpenDrawer";
+  static const String manualDrawer = "manualDrawer";
 }

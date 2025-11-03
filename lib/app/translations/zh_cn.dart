@@ -393,4 +393,8 @@ Map<String, String> get zhCN => {
   LocaleKeys.confirmExitSystem: "确认退出系统吗？",
   LocaleKeys.pageNotFound: "页面未找到",
   LocaleKeys.back: "返回",
+  LocaleKeys.interfaceAddress: "接口地址",
+  LocaleKeys.connect: "连接",
+  LocaleKeys.unOpenDrawer: "不弹柜",
+  LocaleKeys.manualDrawer: "手动弹柜",
 };

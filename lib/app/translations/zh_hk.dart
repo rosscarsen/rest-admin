@@ -393,4 +393,8 @@ Map<String, String> zhHK = {
   LocaleKeys.confirmExitSystem: "確認退出系統嗎？",
   LocaleKeys.pageNotFound: "頁面未找到",
   LocaleKeys.back: "返回",
+  LocaleKeys.interfaceAddress: "接口地址",
+  LocaleKeys.connect: "連接",
+  LocaleKeys.unOpenDrawer: "不彈柜",
+  LocaleKeys.manualDrawer: "手動彈柜",
 };
