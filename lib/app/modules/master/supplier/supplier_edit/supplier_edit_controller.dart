@@ -172,6 +172,7 @@ class SupplierEditController extends GetxController with LoadingStateMixin<Suppl
       } catch (e) {
         CustomDialog.errorMessages(e.toString());
       } finally {
+        requestData.clear();
         CustomDialog.dismissDialog();
       }
     }
