@@ -168,6 +168,7 @@ class NetWorkPayMethodEditController extends GetxController with LoadingStateMix
       } catch (e) {
         CustomDialog.errorMessages(e.toString());
       } finally {
+        requestData.clear();
         CustomDialog.dismissDialog();
       }
     }
