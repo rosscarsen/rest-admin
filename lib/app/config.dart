@@ -278,6 +278,25 @@ class Config {
   // 网上支付方式删除
   static String networkPaymentMethodDelete = "/Master/networkPaymentMethodDelete";
 
+  // ==========================================================================
+  // 台面管理模块
+  // ==========================================================================
+
+  // 食品备注列表
+  static String tables = "/Master/tables";
+  // 台面添加或编辑
+  static String tablesAddOrEdit = "/Master/tablesAddOrEdit";
+  // 台面保存
+  static String tablesSave = "/Master/tablesSave";
+  // 台面删除
+  static String tablesDelete = "/Master/tablesDelete";
+  // 台面复制
+  static String tablesCopy = "/Master/tablesCopy";
+  // 导出台面
+  static String exportTablesExcel = "/Excel/tablesExport";
+  // 导入台面
+  static String importTablesExcel = "/Excel/tablesImport";
+
   // **************************************************************************
   // 供应商商品发票
   // **************************************************************************
@@ -317,6 +336,8 @@ class Config {
   static String openCustomer = "/open/customer";
   // 打开类目
   static String openCategory = "/open/category";
+  // 打开用户
+  static String openUser = "/open/user";
 
   // **************************************************************************
   // excel
