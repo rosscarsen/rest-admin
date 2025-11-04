@@ -240,7 +240,7 @@ class FormHelper {
             filled: !effectiveEnabled,
             suffixIcon: effectiveEnabled
                 ? IconButton(
-                    tooltip: hasValue ? LocaleKeys.clearContent.tr : LocaleKeys.openChoice.tr,
+                    tooltip: hasValue ? LocaleKeys.clearContent.tr : LocaleKeys.openSelect.tr,
                     onPressed: handleSuffixPressed,
                     icon: Icon(hasValue ? Icons.clear : Icons.file_open, color: iconColor),
                   )
