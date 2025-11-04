@@ -333,9 +333,9 @@ abstract class LocaleKeys {
   static const String to = "to";
   static const String exportParam = "exportParam";
   static const String importParam = "importParam";
-  static const String openChoice = "openChoice";
+  static const String openSelect = "openSelect";
   static const String clearContent = "clearContent";
-  static const String choiceParam = "choiceParam";
+  static const String paramSelect = "paramSelect";
   static const String invoiceNo = "invoiceNo";
   static const String noDataFound = "noDataFound";
   static const String invalidMobileNumber = "invalidMobileNumber";
@@ -424,4 +424,10 @@ abstract class LocaleKeys {
   static const String serviceFeeStartTime = "serviceFeeStartTime";
   static const String serviceFeeEndTime = "serviceFeeEndTime";
   static const String floorPlan = "floorPlan";
+  static const String square = "square";
+  static const String circle = "circle";
+  static const String rhombus = "rhombus";
+  static const String fastFood = "fastFood";
+  static const String appOrder = "appOrder";
+  static const String none = "none";
 }
