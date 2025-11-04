@@ -19,7 +19,7 @@ class OpenCustomerView extends GetView<OpenCustomerController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(LocaleKeys.choiceParam.trArgs([LocaleKeys.customer.tr])), centerTitle: true),
+      appBar: AppBar(title: Text(LocaleKeys.paramSelect.trArgs([LocaleKeys.customer.tr])), centerTitle: true),
       body: Obx(() {
         return Column(
           spacing: Config.defaultGap,
