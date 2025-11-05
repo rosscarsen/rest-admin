@@ -78,6 +78,8 @@ abstract class Routes {
   static const TABLE_CARD = _Paths.MASTER + _Paths.TABLE_CARD;
   static const TABLE_CARD_EDIT =
       _Paths.MASTER + _Paths.TABLE_CARD + _Paths.TABLE_CARD_EDIT;
+  static const OPEN_USER = _Paths.OPEN + _Paths.OPEN_USER;
+  static const OPEN_DEPARTMENT = _Paths.OPEN + _Paths.OPEN_DEPARTMENT;
 }
 
 abstract class _Paths {
@@ -134,4 +136,6 @@ abstract class _Paths {
   static const TABLE_EDIT = '/table-edit';
   static const TABLE_CARD = '/table-card';
   static const TABLE_CARD_EDIT = '/table-card-edit';
+  static const OPEN_USER = '/open-user';
+  static const OPEN_DEPARTMENT = '/open-department';
 }

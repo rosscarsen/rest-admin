@@ -80,6 +80,8 @@ import '../modules/master/unit/unit_view.dart';
 import '../modules/open/open_binding.dart';
 import '../modules/open/open_customer/open_customer_binding.dart';
 import '../modules/open/open_customer/open_customer_view.dart';
+import '../modules/open/open_department/open_department_binding.dart';
+import '../modules/open/open_department/open_department_view.dart';
 import '../modules/open/open_multiple_product/open_multiple_product_binding.dart';
 import '../modules/open/open_multiple_product/open_multiple_product_view.dart';
 import '../modules/open/open_product/open_product_binding.dart';
@@ -92,6 +94,8 @@ import '../modules/open/open_set_meal/open_set_meal_binding.dart';
 import '../modules/open/open_set_meal/open_set_meal_view.dart';
 import '../modules/open/open_supplier/open_supplier_binding.dart';
 import '../modules/open/open_supplier/open_supplier_view.dart';
+import '../modules/open/open_user/open_user_binding.dart';
+import '../modules/open/open_user/open_user_view.dart';
 import '../modules/open/open_view.dart';
 import '../modules/page_not_found/page_not_found_binding.dart';
 import '../modules/page_not_found/page_not_found_view.dart';
@@ -162,6 +166,18 @@ class AppPages {
           name: _Paths.OPEN_CUSTOMER,
           page: () => const OpenCustomerView(),
           binding: OpenCustomerBinding(),
+          middlewares: [AuthMiddleware()],
+        ),
+        GetPage(
+          name: _Paths.OPEN_USER,
+          page: () => const OpenUserView(),
+          binding: OpenUserBinding(),
+          middlewares: [AuthMiddleware()],
+        ),
+        GetPage(
+          name: _Paths.OPEN_DEPARTMENT,
+          page: () => const OpenDepartmentView(),
+          binding: OpenDepartmentBinding(),
           middlewares: [AuthMiddleware()],
         ),
       ],

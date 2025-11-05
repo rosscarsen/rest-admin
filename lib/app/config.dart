@@ -338,6 +338,8 @@ class Config {
   static String openCategory = "/open/category";
   // 打开用户
   static String openUser = "/open/user";
+  // 打开部门
+  static String openDepartment = "/open/department";
 
   // **************************************************************************
   // excel
