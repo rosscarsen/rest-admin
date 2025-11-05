@@ -57,6 +57,7 @@ dependencies:
   syncfusion_localizations: ^31.2.3
   cached_network_image: ^3.4.1
   crypto: ^3.0.6
+  expandable: ^5.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
