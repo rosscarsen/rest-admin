@@ -1,8 +1,5 @@
 {
   "commentTranslate.source": "Bing",
-  "cSpell.words": [
-    "Getx",
-    "noto",
-    "pushinfo"
-  ]
+  "cSpell.words": ["Getx", "noto", "pushinfo"],
+  "commentTranslate.multiLineMerge": false
 }
