@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -85,82 +86,145 @@ class ProductsView extends GetView<ProductsController> {
           md: 8,
           lg: 9,
           xl: 10,
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: 44),
-            child: Align(
-              alignment: context.isPhoneOrLess ? Alignment.centerLeft : Alignment.centerRight,
-
-              child: Wrap(
-                crossAxisAlignment: WrapCrossAlignment.center,
-                alignment: context.isPhoneOrLess ? WrapAlignment.start : WrapAlignment.end,
-                spacing: 5,
-                runSpacing: 5,
-                children: [
-                  //进阶搜索
-                  ElevatedButton(
-                    onPressed: controller.hasPermission
-                        ? () async {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                            Map<String, dynamic>? advancedSearch = await Get.toNamed(
-                              Routes.ADVANCED_SEARCH,
-                              arguments: controller.advancedSearch,
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              if (context.isPhoneOrWider) {
+                return ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: 44),
+                  child: Align(
+                    alignment: context.isPhoneOrLess ? Alignment.centerLeft : Alignment.centerRight,
+                    child: Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      alignment: context.isPhoneOrLess ? WrapAlignment.start : WrapAlignment.end,
+                      spacing: 5,
+                      runSpacing: 5,
+                      children: _createButtonGroup(),
+                    ).paddingSymmetric(vertical: 2.0).paddingOnly(left: context.isPhoneOrLess ? 0 : 5),
+                  ),
+                );
+              } else {
+                return ExpandableNotifier(
+                  child: ScrollOnExpand(
+                    scrollOnExpand: true,
+                    scrollOnCollapse: false,
+                    child: ExpandablePanel(
+                      controller: controller.expandableController,
+                      collapsed: SizedBox.shrink(),
+                      header: ValueListenableBuilder<bool>(
+                        valueListenable: controller.expandableController,
+                        builder: (BuildContext context, bool value, Widget? child) {
+                          if (value) {
+                            return SizedBox(
+                              height: 44,
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  LocaleKeys.moreOperation.tr,
+                                  style: TextStyle(fontSize: 14.0, color: Colors.grey.shade600),
+                                ),
+                              ),
                             );
-                            if (advancedSearch != null && advancedSearch.isNotEmpty) {
-                              controller.advancedSearch.clear();
-                              controller.advancedSearch.addAll(advancedSearch);
-                              controller.reloadData();
-                            }
+                          } else {
+                            return SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 3.0),
+                                child: Row(spacing: 5.0, children: _createButtonGroup()),
+                              ),
+                            );
                           }
-                        : null,
-                    child: Text(LocaleKeys.advancedSearch.tr),
+                        },
+                      ),
+                      expanded: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 3.0),
+                        child: Wrap(
+                          spacing: 5,
+                          runSpacing: 5,
+                          children: _createButtonGroup()
+                              .map(
+                                (button) => ElevatedButton(
+                                  onPressed: () {
+                                    controller.expandableController.toggle();
+                                    button.onPressed?.call();
+                                  },
+                                  child: button.child,
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ),
+                    ),
                   ),
-                  //依编号
-                  ElevatedButton(
-                    onPressed: controller.hasPermission ? () => controller.sortButton(isByCode: true) : null,
-                    child: Text(LocaleKeys.byCode.tr),
-                  ),
-                  //依排序
-                  ElevatedButton(
-                    onPressed: controller.hasPermission ? () => controller.sortButton(isByCode: false) : null,
-                    child: Text(LocaleKeys.bySort.tr),
-                  ),
-                  //批量删除食品
-                  ElevatedButton(
-                    onPressed: controller.hasPermission ? () => controller.deleteSelectedRows() : null,
-                    child: Text(LocaleKeys.batchDeleteProduct.tr),
-                  ),
-                  //批量删除套餐
-                  ElevatedButton(
-                    onPressed: controller.hasPermission ? () => controller.deleteSelectedSetMeal() : null,
-                    child: Text(LocaleKeys.batchDeleteSetMeal.tr),
-                  ),
-                  //打印条码
-                  ElevatedButton(
-                    onPressed: controller.hasPermission ? () => _printBarcode() : null,
-                    child: Text(LocaleKeys.printBarcode.tr),
-                  ),
-                  //导入
-                  ElevatedButton(
-                    onPressed: controller.hasPermission ? () => _importProduct() : null,
-                    child: Text(LocaleKeys.import.tr),
-                  ),
-                  //导出
-                  ElevatedButton(
-                    onPressed: controller.hasPermission ? () => controller.exportProduct() : null,
-                    child: Text(LocaleKeys.export.tr),
-                  ),
-                  //新增
-                  ElevatedButton(
-                    onPressed: controller.hasPermission ? () => controller.edit() : null,
-                    child: Text(LocaleKeys.add.tr),
-                  ),
-                ],
-              ).paddingSymmetric(vertical: 2.0).paddingOnly(left: context.isPhoneOrLess ? 0 : 5),
-            ),
+                );
+              }
+            },
           ),
         ),
       ],
     );
+  }
+
+  List<ElevatedButton> _createButtonGroup() {
+    return [
+      //进阶搜索
+      ElevatedButton(
+        onPressed: controller.hasPermission
+            ? () async {
+                FocusManager.instance.primaryFocus?.unfocus();
+                Map<String, dynamic>? advancedSearch = await Get.toNamed(
+                  Routes.ADVANCED_SEARCH,
+                  arguments: controller.advancedSearch,
+                );
+                if (advancedSearch != null && advancedSearch.isNotEmpty) {
+                  controller.advancedSearch.clear();
+                  controller.advancedSearch.addAll(advancedSearch);
+                  controller.reloadData();
+                }
+              }
+            : null,
+        child: Text(LocaleKeys.advancedSearch.tr),
+      ),
+      //依编号
+      ElevatedButton(
+        onPressed: controller.hasPermission ? () => controller.sortButton(isByCode: true) : null,
+        child: Text(LocaleKeys.byCode.tr),
+      ),
+      //依排序
+      ElevatedButton(
+        onPressed: controller.hasPermission ? () => controller.sortButton(isByCode: false) : null,
+        child: Text(LocaleKeys.bySort.tr),
+      ),
+      //批量删除食品
+      ElevatedButton(
+        onPressed: controller.hasPermission ? () => controller.deleteSelectedRows() : null,
+        child: Text(LocaleKeys.batchDeleteProduct.tr),
+      ),
+      //批量删除套餐
+      ElevatedButton(
+        onPressed: controller.hasPermission ? () => controller.deleteSelectedSetMeal() : null,
+        child: Text(LocaleKeys.batchDeleteSetMeal.tr),
+      ),
+      //打印条码
+      ElevatedButton(
+        onPressed: controller.hasPermission ? () => _printBarcode() : null,
+        child: Text(LocaleKeys.printBarcode.tr),
+      ),
+      //导入
+      ElevatedButton(
+        onPressed: controller.hasPermission ? () => _importProduct() : null,
+        child: Text(LocaleKeys.import.tr),
+      ),
+      //导出
+      ElevatedButton(
+        onPressed: controller.hasPermission ? () => controller.exportProduct() : null,
+        child: Text(LocaleKeys.export.tr),
+      ),
+      //新增
+      ElevatedButton(
+        onPressed: controller.hasPermission ? () => controller.edit() : null,
+        child: Text(LocaleKeys.add.tr),
+      ),
+    ];
   }
 
   ///打印条码
