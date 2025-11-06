@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,7 +26,6 @@ class ProductsController extends GetxController with LoadingStateMixin {
   final TextEditingController searchController = TextEditingController();
   final copyNewCodeCtl = TextEditingController();
   static ProductsController get to => Get.find();
-  final expandableController = ExpandableController(initialExpanded: false);
 
   List<ProductData> dataList = [];
   final ApiClient apiClient = ApiClient();
@@ -45,7 +43,6 @@ class ProductsController extends GetxController with LoadingStateMixin {
     dataGridController.dispose();
     searchController.dispose();
     copyNewCodeCtl.dispose();
-    expandableController.dispose();
     super.onClose();
   }
 

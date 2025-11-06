@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -16,6 +15,7 @@ import '../../../utils/progress_hub.dart';
 import '../../../widgets/custom_cell.dart';
 import '../../../widgets/custom_scaffold.dart';
 import '../../../widgets/data_pager.dart';
+import '../../../widgets/expandable_button_group.dart';
 import '../../../widgets/no_record.dart';
 import 'products_controller.dart';
 
@@ -103,59 +103,7 @@ class ProductsView extends GetView<ProductsController> {
                   ),
                 );
               } else {
-                return ExpandableNotifier(
-                  child: ScrollOnExpand(
-                    scrollOnExpand: true,
-                    scrollOnCollapse: false,
-                    child: ExpandablePanel(
-                      controller: controller.expandableController,
-                      collapsed: SizedBox.shrink(),
-                      header: ValueListenableBuilder<bool>(
-                        valueListenable: controller.expandableController,
-                        builder: (BuildContext context, bool value, Widget? child) {
-                          if (value) {
-                            return SizedBox(
-                              height: 44,
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  LocaleKeys.moreOperation.tr,
-                                  style: TextStyle(fontSize: 14.0, color: Colors.grey.shade600),
-                                ),
-                              ),
-                            );
-                          } else {
-                            return SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 3.0),
-                                child: Row(spacing: 5.0, children: _createButtonGroup()),
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                      expanded: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 3.0),
-                        child: Wrap(
-                          spacing: 5,
-                          runSpacing: 5,
-                          children: _createButtonGroup()
-                              .map(
-                                (button) => ElevatedButton(
-                                  onPressed: () {
-                                    controller.expandableController.toggle();
-                                    button.onPressed?.call();
-                                  },
-                                  child: button.child,
-                                ),
-                              )
-                              .toList(),
-                        ),
-                      ),
-                    ),
-                  ),
-                );
+                return ExpandableButtonGroup(buttons: _createButtonGroup(), moreText: LocaleKeys.moreOperation.tr);
               }
             },
           ),
