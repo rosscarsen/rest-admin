@@ -1,0 +1,35 @@
+class TablesTableFields {
+  static const String mTableNo = "mTableNo";
+  static const String mTableName = "mTableName";
+  static const String mLimitcost = "mLimitcost";
+  static const String mServCharge = "mServCharge";
+  static const String mServer = "mServer";
+  static const String mMaxNum = "mMaxNum";
+  static const String mLeft = "mLeft";
+  static const String mTop = "mTop";
+  static const String mWidth = "mWidth";
+  static const String mHeight = "mHeight";
+  static const String mShape = "mShape";
+  static const String mLayer = "mLayer";
+  static const String mTables = "mTables";
+  static const String mStockCode = "mStockCode";
+  static const String mId = "mId";
+  static const String mToGo = "mToGo";
+  static const String mDiscount = "mDiscount";
+  static const String mCustomerCode = "mCustomerCode";
+  static const String mNoColor = "mNoColor";
+  static const String mUpdateTime = "mUpdateTime";
+  static const String mByPerson = "mByPerson";
+  static const String mProduct_Code = "mProduct_Code";
+  static const String mDept = "mDept";
+  static const String mType = "mType";
+  static const String day1 = "day1";
+  static const String day2 = "day2";
+  static const String day3 = "day3";
+  static const String day4 = "day4";
+  static const String day5 = "day5";
+  static const String day6 = "day6";
+  static const String day7 = "day7";
+  static const String mDateTimeStart = "mDateTimeStart";
+  static const String mDateTimeEnd = "mDateTimeEnd";
+}
