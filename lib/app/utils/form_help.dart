@@ -185,6 +185,7 @@ class FormHelper {
       name: name,
       validator: validator,
       enabled: enabled ?? true,
+      valueTransformer: (value) => (value ?? "").trim(),
       builder: (field) {
         final effectiveEnabled = enabled ?? (FormBuilder.of(field.context)?.enabled ?? true);
 
@@ -580,6 +581,7 @@ class FormHelper {
       enabled: enabled,
       decoration: decoration,
       onChanged: onChanged,
+      valueTransformer: (value) => value?.toString() ?? "",
       autovalidateMode: AutovalidateMode.onUserInteraction,
     );
   }
