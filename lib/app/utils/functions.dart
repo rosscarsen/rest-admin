@@ -154,10 +154,13 @@ class Functions {
   }
 
   /// 转换为字符串
-  static String? asString(Object? value) {
+  static String asString(Object? value) {
     if (value == null) return "";
-    if (value is String && value.trim().isEmpty) return "";
-    return value.toString();
+    if (value is String) {
+      final trimmed = value.trim();
+      return trimmed.isEmpty ? "" : trimmed;
+    }
+    return value.toString().trim();
   }
 
   static String colorToHex(Color color) {
@@ -191,20 +194,32 @@ class Functions {
   }
 
   /// 格式化金额
-  static String formatAmount(Object? value) {
-    final raw = asString(value)?.trim() ?? "";
+  static String formatAmount(Object? value, {String locale = 'en_US'}) {
+    final raw = asString(value);
     if (raw.isEmpty) return "0.00";
 
-    // 去掉逗号和空格
-    final str = raw.replaceAll(RegExp(r'[,\s]'), '');
+    // 去掉逗号、空格、货币符号等
+    final cleaned = raw.replaceAll(RegExp(r'[,\s\$¥₩₱€£￥]'), '');
 
-    // 安全地解析
-    final amount = double.tryParse(str);
+    // 安全解析
+    final amount = double.tryParse(cleaned);
     if (amount == null || amount.isNaN || amount.isInfinite) {
       return "0.00";
     }
 
-    final formatter = NumberFormat("#,##0.00", "en_US");
+    // 数字格式化
+    final formatter = NumberFormat("#,##0.00", locale);
     return formatter.format(amount);
+  }
+
+  /// 格式化字符串为bool
+  static bool formatStringToBool(Object? value) {
+    if (value == null) return false;
+
+    if (value is bool) return value;
+    if (value is num) return value != 0;
+
+    final raw = asString(value).toLowerCase();
+    return raw == "1" || raw == "true" || raw == "yes" || raw == "on";
   }
 }
