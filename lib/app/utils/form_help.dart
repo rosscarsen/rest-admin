@@ -441,8 +441,10 @@ class FormHelper {
     List<String>? initialValue,
     void Function(List<String>?)? onChanged,
     InputDecoration decoration = const InputDecoration(),
+    OptionsOrientation orientation = OptionsOrientation.wrap,
   }) {
     return FormBuilderCheckboxGroup<String>(
+      orientation: orientation,
       name: name,
       enabled: enabled,
       initialValue: initialValue,
