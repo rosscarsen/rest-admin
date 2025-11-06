@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class ExpandableButtonGroup extends StatefulWidget {
   final List<Widget> buttons;
 
-  /// “更多操作”的文字（支持国际化）
+  /// “更多操作”的文字
   final String moreText;
 
   /// 按钮间距
@@ -18,7 +18,6 @@ class ExpandableButtonGroup extends StatefulWidget {
 
   /// header 高度
   final double headerHeight;
-
   const ExpandableButtonGroup({
     super.key,
     required this.buttons,
