@@ -34,16 +34,44 @@ class ExpandableButtonGroup extends StatefulWidget {
 
 class _ExpandableButtonGroupState extends State<ExpandableButtonGroup> {
   late final ExpandableController _controller;
+  late final ScrollController _scrollController;
+  bool hasIcon = false;
 
   @override
   void initState() {
     super.initState();
     _controller = ExpandableController(initialExpanded: false);
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkOverflow());
+  }
+
+  @override
+  void didUpdateWidget(covariant ExpandableButtonGroup oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkOverflow());
+  }
+
+  void _checkOverflow() {
+    if (!_scrollController.hasClients) return;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final shouldHaveIcon = maxScroll > 0; // 内容比可视宽度更宽
+
+    if (shouldHaveIcon != hasIcon) {
+      setState(() {
+        hasIcon = shouldHaveIcon;
+      });
+    }
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -60,7 +88,7 @@ class _ExpandableButtonGroupState extends State<ExpandableButtonGroup> {
             tapHeaderToExpand: true,
             tapBodyToExpand: false,
             tapBodyToCollapse: false,
-            hasIcon: true,
+            hasIcon: hasIcon,
             useInkWell: false,
             iconColor: Color(0xFF1890FF),
           ),
@@ -73,12 +101,18 @@ class _ExpandableButtonGroupState extends State<ExpandableButtonGroup> {
               if (expanded) {
                 return Text(widget.moreText, style: TextStyle(fontSize: 14.0, color: Colors.grey.shade600));
               } else {
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 3.0),
-                    child: Row(spacing: widget.spacing, children: widget.buttons),
-                  ),
+                return LayoutBuilder(
+                  builder: (BuildContext context, BoxConstraints constraints) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) => _checkOverflow());
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      controller: _scrollController,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 3.0),
+                        child: Row(spacing: widget.spacing, children: widget.buttons),
+                      ),
+                    );
+                  },
                 );
               }
             },
