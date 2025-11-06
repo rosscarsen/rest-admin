@@ -290,8 +290,6 @@ class Config {
   static String tablesSave = "/Master/tablesSave";
   // 台面删除
   static String tablesDelete = "/Master/tablesDelete";
-  // 台面复制
-  static String tablesCopy = "/Master/tablesCopy";
   // 导出台面
   static String exportTablesExcel = "/Excel/tablesExport";
   // 导入台面
