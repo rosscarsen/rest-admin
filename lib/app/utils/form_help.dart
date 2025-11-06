@@ -480,6 +480,7 @@ class FormHelper {
     bool? initialValue,
     ListTileControlAffinity controlAffinity = ListTileControlAffinity.leading,
     void Function(bool?)? onChanged,
+    bool showBorder = false,
   }) {
     return FormBuilderField<bool?>(
       name: name,
@@ -488,17 +489,28 @@ class FormHelper {
       valueTransformer: (value) => value == true ? "1" : "0",
       autovalidateMode: AutovalidateMode.onUserInteraction,
       builder: (FormFieldState<bool?> field) {
-        return CheckboxListTile(
-          controlAffinity: controlAffinity,
-          contentPadding: EdgeInsets.zero,
-          dense: true,
-          isThreeLine: false,
-          title: Text(labelText),
-          value: field.value,
-          onChanged: (value) {
-            field.didChange(value);
-            onChanged?.call(value);
-          },
+        return InputDecorator(
+          decoration: showBorder
+              ? InputDecoration(contentPadding: EdgeInsets.zero)
+              : const InputDecoration(
+                  border: InputBorder.none,
+                  focusedBorder: InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none,
+                ),
+          child: CheckboxListTile(
+            controlAffinity: controlAffinity,
+            contentPadding: EdgeInsets.zero,
+            dense: true,
+            isThreeLine: false,
+            title: Text(labelText),
+            value: field.value,
+            onChanged: (value) {
+              field.didChange(value);
+              onChanged?.call(value);
+            },
+          ),
         );
       },
     );
