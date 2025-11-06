@@ -213,7 +213,7 @@ class Functions {
   }
 
   /// 格式化字符串为bool
-  static bool formatStringToBool(Object? value) {
+  static bool toBool(Object? value) {
     if (value == null) return false;
 
     if (value is bool) return value;
