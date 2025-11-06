@@ -17,15 +17,15 @@ class TablesData {
   String? mServer;
   @JsonKey(name: "mMaxNum", fromJson: Functions.asString)
   String? mMaxNum;
-  @JsonKey(name: "mLeft", fromJson: Functions.asString)
+  @JsonKey(name: "mLeft", defaultValue: "0", fromJson: Functions.asString)
   String? mLeft;
-  @JsonKey(name: "mTop", fromJson: Functions.asString)
+  @JsonKey(name: "mTop", defaultValue: "0", fromJson: Functions.asString)
   String? mTop;
-  @JsonKey(name: "mWidth", fromJson: Functions.asString)
+  @JsonKey(name: "mWidth", defaultValue: "500", fromJson: Functions.asString)
   String? mWidth;
-  @JsonKey(name: "mHeight", fromJson: Functions.asString)
+  @JsonKey(name: "mHeight", defaultValue: "500", fromJson: Functions.asString)
   String? mHeight;
-  @JsonKey(name: "mShape", fromJson: Functions.asString)
+  @JsonKey(name: "mShape", defaultValue: "1", fromJson: Functions.asString)
   String? mShape;
   @JsonKey(name: "mLayer", fromJson: Functions.asString)
   String? mLayer;
@@ -35,37 +35,37 @@ class TablesData {
   String? mStockCode;
   @JsonKey(name: "mId", fromJson: Functions.asString)
   String? mId;
-  @JsonKey(name: "mToGo", fromJson: Functions.asString)
+  @JsonKey(name: "mToGo", defaultValue: "0", fromJson: Functions.asString)
   String? mToGo;
   @JsonKey(name: "mDiscount", fromJson: Functions.asString)
   String? mDiscount;
   @JsonKey(name: "mCustomerCode", fromJson: Functions.asString)
   String? mCustomerCode;
-  @JsonKey(name: "mNoColor", fromJson: Functions.asString)
+  @JsonKey(name: "mNoColor", defaultValue: "0", fromJson: Functions.asString)
   String? mNoColor;
   @JsonKey(name: "mUpdateTime", fromJson: Functions.asString)
   String? mUpdateTime;
-  @JsonKey(name: "mByPerson", fromJson: Functions.asString)
+  @JsonKey(name: "mByPerson", defaultValue: "0", fromJson: Functions.asString)
   String? mByPerson;
   @JsonKey(name: "mProduct_Code", fromJson: Functions.asString)
   String? mProductCode;
   @JsonKey(name: "mDept", fromJson: Functions.asString)
   String? mDept;
-  @JsonKey(name: "mType", fromJson: Functions.asString)
+  @JsonKey(name: "mType", defaultValue: "0", fromJson: Functions.asString)
   String? mType;
-  @JsonKey(name: "day1", fromJson: Functions.asString)
+  @JsonKey(name: "day1", fromJson: Functions.asString, toJson: Functions.toBool)
   String? day1;
-  @JsonKey(name: "day2", fromJson: Functions.asString)
+  @JsonKey(name: "day2", fromJson: Functions.asString, toJson: Functions.toBool)
   String? day2;
-  @JsonKey(name: "day3", fromJson: Functions.asString)
+  @JsonKey(name: "day3", fromJson: Functions.asString, toJson: Functions.toBool)
   String? day3;
-  @JsonKey(name: "day4", fromJson: Functions.asString)
+  @JsonKey(name: "day4", fromJson: Functions.asString, toJson: Functions.toBool)
   String? day4;
-  @JsonKey(name: "day5", fromJson: Functions.asString)
+  @JsonKey(name: "day5", fromJson: Functions.asString, toJson: Functions.toBool)
   String? day5;
-  @JsonKey(name: "day6", fromJson: Functions.asString)
+  @JsonKey(name: "day6", fromJson: Functions.asString, toJson: Functions.toBool)
   String? day6;
-  @JsonKey(name: "day7", fromJson: Functions.asString)
+  @JsonKey(name: "day7", fromJson: Functions.asString, toJson: Functions.toBool)
   String? day7;
   @JsonKey(name: "mDateTimeStart", fromJson: Functions.asString)
   String? mDateTimeStart;
