@@ -46,6 +46,7 @@ class SigninController extends GetxController with GetSingleTickerProviderStateM
     var loginUserJson = storageManage.read(Config.localStorageLoginInfo);
     LoginResult? loginUser = loginUserJson != null ? LoginResult.fromJson(loginUserJson) : null;
     bool rememberMe = storageManage.read(Config.rememberMe) ?? false;
+    logger.f(rememberMe);
     if (rememberMe && loginUser != null && _formKey.currentState != null) {
       _formKey.currentState!.fields['company']?.didChange(loginUser.company);
       _formKey.currentState!.fields['user']?.didChange(loginUser.user);
@@ -81,7 +82,7 @@ class SigninController extends GetxController with GetSingleTickerProviderStateM
             logger.f(loginModel.apiResult?.toJson());
             await storageManage.write(Config.localStorageLoginInfo, loginModel.apiResult?.toJson());
             await storageManage.write(Config.localStorageHasLogin, true);
-            if (loginFormData['remember'] == true) {
+            if (loginFormData['rememberMe'] == true) {
               await storageManage.write(Config.rememberMe, true);
             } else {
               await storageManage.write(Config.rememberMe, false);
