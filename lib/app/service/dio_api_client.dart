@@ -18,6 +18,7 @@ import '../utils/custom_alert.dart';
 import '../utils/custom_dialog.dart';
 import '../utils/local_cache.dart';
 import '../utils/logger.dart';
+import '../utils/storage_manage.dart';
 import 'dio_api_result.dart';
 
 class ApiClient {
@@ -105,7 +106,6 @@ class ApiClient {
         queryParameters: queryParameters,
         onSendProgress: onSendProgress,
       );
-      //logger.i(response);
       return _handleResponse(response);
     } catch (e) {
       return _handleError(e);
@@ -225,31 +225,48 @@ class ApiClient {
 
   // 处理响应
   DioApiResult _handleResponse(Response response) {
-    if (response.statusCode != 200) {
-      CustomDialog.dismissDialog();
-      return DioApiResult(success: false, error: 'HTTP ${response.statusCode} ${response.statusMessage}');
+    final statusCode = response.statusCode;
+    if (statusCode != 200) {
+      return DioApiResult(success: false, error: 'HTTP $statusCode ${response.statusMessage}');
     }
+
     final responseData = response.data;
-    String dataJson = responseData.toString();
-    final Map<String, dynamic> dataMap = jsonDecode(dataJson) ?? {};
 
-    if (dataMap.isNotEmpty && dataMap["status"].toString() == _noPermission.toString()) {
-      return DioApiResult(success: false, hasPermission: false, error: LocaleKeys.noPermission.tr);
-    }
+    final String dataJson = responseData?.toString() ?? '';
 
-    if (dataJson.isEmpty || dataJson == "null" || dataJson == "[]") {
+    if (dataJson.isEmpty || dataJson == 'null' || dataJson == '[]') {
       return DioApiResult(success: false, error: _dataException);
     }
-    if (dataJson.contains('"apiResult":[]')) {
-      dataJson = dataJson.replaceFirst('"apiResult":[]', '"apiResult":null');
+
+    try {
+      final decoded = jsonDecode(dataJson);
+      if (decoded is Map<String, dynamic>) {
+        final Map<String, dynamic> dataMap = Map.from(decoded);
+
+        if (dataMap.containsKey('apiResult') &&
+            dataMap['apiResult'] is List &&
+            (dataMap['apiResult'] as List).isEmpty) {
+          dataMap['apiResult'] = null;
+        }
+        return DioApiResult(success: true, data: jsonEncode(dataMap));
+      }
+      return DioApiResult(success: true, data: dataJson);
+    } catch (err) {
+      return DioApiResult(success: false, error: _dataException);
     }
-    return DioApiResult(success: true, data: dataJson);
   }
 
   // 处理错误
   DioApiResult _handleError(Object e) {
     if (e is DioException && e.response?.statusCode == _loginInvalidCode) {
-      CustomAlert.iosAlert(message: LocaleKeys.loginInvalid.tr, onConfirm: () => Get.offAllNamed(Routes.SIGNIN));
+      CustomAlert.iosAlert(
+        message: LocaleKeys.loginInvalid.tr,
+        onConfirm: () {
+          final StorageManage storageManage = StorageManage();
+          storageManage.remove(Config.localStorageHasLogin);
+          Get.offAllNamed(Routes.SIGNIN);
+        },
+      );
       return DioApiResult(success: false, error: LocaleKeys.loginInvalid.tr);
     } else {
       return DioApiResult(
@@ -278,12 +295,16 @@ class AuthInterceptor extends Interceptor {
         ),
       );
     }
-
-    final String plaintext = jsonEncode(loginInfo.toJson());
+    final loginMap = loginInfo.toJson();
+    loginMap.removeWhere((key, value) => key == "aesKey");
+    final String plaintext = jsonEncode(loginMap);
     final encryptedData = await AesGcmCrypto.encrypt(plaintext, loginInfo.aesKey ?? "");
     final String encryptedString = base64Encode(utf8.encode(jsonEncode(encryptedData)));
 
-    options.headers.addAll({"Authorization": "Bearer $encryptedString"});
+    options.headers.addAll({
+      "Authorization": "Bearer $encryptedString",
+      "X-Company-Key": "${loginInfo.company}_${loginInfo.user}",
+    });
     return handler.next(options);
   }
 }
@@ -296,7 +317,7 @@ class ErrorHandlerInterceptor extends Interceptor {
     if (err.response?.statusCode == ApiClient._loginInvalidCode) {
       CustomAlert.iosAlert(message: LocaleKeys.loginInvalid.tr, onConfirm: () => Get.offAllNamed(Routes.SIGNIN));
 
-      return handler.resolve(err.response!);
+      return handler.reject(err);
     }
     // 使用定义的超时错误常量
     if (err.type == DioExceptionType.connectionTimeout) {
