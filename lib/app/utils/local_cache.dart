@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import '../config.dart';
-import '../model/login_model.dart';
+import '../model/login/login_model.dart';
 import 'storage_manage.dart';
 
 class LocalCache {
