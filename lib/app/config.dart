@@ -10,6 +10,8 @@ class Config {
   static String localStorageHasLogin = "localStorageHasLogin";
   //本地语言
   static String localStorageLanguage = "localStorageLanguage";
+  //记住密码
+  static String rememberMe = "rememberMe";
   //没有权限标识
   static String noPermission = "__NO_PERMISSION__";
 
