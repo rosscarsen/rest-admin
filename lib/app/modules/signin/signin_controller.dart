@@ -4,13 +4,14 @@ import 'package:get/get.dart';
 import 'package:rounded_loading_button_plus/rounded_loading_button.dart';
 
 import '../../config.dart';
-import '../../model/login_model.dart';
+import '../../model/login/login_model.dart';
 import '../../routes/app_pages.dart';
 import '../../service/dio_api_client.dart';
 import '../../service/dio_api_result.dart';
 import '../../translations/locale_keys.dart';
 import '../../utils/custom_alert.dart';
 import '../../utils/custom_dialog.dart';
+import '../../utils/logger.dart';
 import '../../utils/storage_manage.dart';
 
 class SigninController extends GetxController with GetSingleTickerProviderStateMixin {
@@ -44,8 +45,8 @@ class SigninController extends GetxController with GetSingleTickerProviderStateM
   void getLoginInfo() {
     var loginUserJson = storageManage.read(Config.localStorageLoginInfo);
     LoginResult? loginUser = loginUserJson != null ? LoginResult.fromJson(loginUserJson) : null;
-
-    if (loginUser != null && _formKey.currentState != null) {
+    bool rememberMe = storageManage.read(Config.rememberMe) ?? false;
+    if (rememberMe && loginUser != null && _formKey.currentState != null) {
       _formKey.currentState!.fields['company']?.didChange(loginUser.company);
       _formKey.currentState!.fields['user']?.didChange(loginUser.user);
       _formKey.currentState!.fields['password']?.didChange(loginUser.pwd);
@@ -77,8 +78,14 @@ class SigninController extends GetxController with GetSingleTickerProviderStateM
         switch (loginModel.status) {
           case 200:
             final storageManage = StorageManage();
+            logger.f(loginModel.apiResult?.toJson());
             await storageManage.write(Config.localStorageLoginInfo, loginModel.apiResult?.toJson());
             await storageManage.write(Config.localStorageHasLogin, true);
+            if (loginFormData['remember'] == true) {
+              await storageManage.write(Config.rememberMe, true);
+            } else {
+              await storageManage.write(Config.rememberMe, false);
+            }
             signInController.success();
             await Future.delayed(const Duration(seconds: 1), () => Get.offAndToNamed(Routes.DASHBOARD));
             break;

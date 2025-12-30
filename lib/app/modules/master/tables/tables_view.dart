@@ -17,6 +17,7 @@ import '../../../utils/progress_hub.dart';
 import '../../../widgets/custom_cell.dart';
 import '../../../widgets/custom_scaffold.dart';
 import '../../../widgets/data_pager.dart';
+import '../../../widgets/expandable_button_group.dart';
 import '../../../widgets/no_record.dart';
 import 'tables_controller.dart';
 
@@ -98,22 +99,36 @@ class TablesView extends GetView<TablesController> {
                 onSubmitted: (value) => controller.reloadData(),
               ),
             ),
+
             //按钮
             FormHelper.buildGridCol(
               sm: 12,
               md: 12,
               lg: 12,
               xl: 12,
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.centerRight,
-                child: Wrap(
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  alignment: WrapAlignment.end,
-                  spacing: 5,
-                  runSpacing: 5,
-                  children: _buildButtonChildren(controller.hasPermission),
-                ).paddingSymmetric(vertical: 2.0).paddingOnly(left: context.isPhoneOrLess ? 0 : 5),
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  if (context.isPhoneOrWider) {
+                    return ConstrainedBox(
+                      constraints: BoxConstraints(minHeight: 44),
+                      child: Align(
+                        alignment: context.isPhoneOrLess ? Alignment.centerLeft : Alignment.centerRight,
+                        child: Wrap(
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          alignment: context.isPhoneOrLess ? WrapAlignment.start : WrapAlignment.end,
+                          spacing: 5,
+                          runSpacing: 5,
+                          children: _buildButtonChildren(controller.hasPermission),
+                        ).paddingSymmetric(vertical: 2.0).paddingOnly(left: context.isPhoneOrLess ? 0 : 5),
+                      ),
+                    );
+                  } else {
+                    return ExpandableButtonGroup(
+                      buttons: _buildButtonChildren(controller.hasPermission),
+                      moreText: LocaleKeys.moreOperation.tr,
+                    );
+                  }
+                },
               ),
             ),
           ],
@@ -142,6 +157,12 @@ class TablesView extends GetView<TablesController> {
         onPressed: hasPermission ? () => controller.export() : null,
         style: ElevatedButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0)),
         child: Text(LocaleKeys.export.tr),
+      ),
+      //平面图
+      ElevatedButton(
+        onPressed: hasPermission ? () => {} : null,
+        style: ElevatedButton.styleFrom(padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0)),
+        child: Text(LocaleKeys.floorPlan.tr),
       ),
       //新增
       ElevatedButton(

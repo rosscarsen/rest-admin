@@ -25,7 +25,7 @@ class AuthMiddleware extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     final localInfo = LocalCache.cacheInfo();
-    if (localInfo.isEmpty && route != Routes.SIGNIN) {
+    if (localInfo == null && route != Routes.SIGNIN) {
       return const RouteSettings(name: Routes.SIGNIN);
     }
     return null; // 正常放行

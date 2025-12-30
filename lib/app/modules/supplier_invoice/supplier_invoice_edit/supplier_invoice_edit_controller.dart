@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 import '../../../config.dart';
 import '../../../mixin/loading_state_mixin.dart';
 import '../../../model/currency/currency_data.dart';
-import '../../../model/login_model.dart';
+import '../../../model/login/login_model.dart';
 import '../../../model/stock/stock_data.dart';
 import '../../../model/supplierInvoice/supplier_invoice_api_model.dart';
 import '../../../service/dio_api_client.dart';

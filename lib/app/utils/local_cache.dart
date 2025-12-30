@@ -1,21 +1,20 @@
-import 'dart:convert';
-
 import '../config.dart';
 import '../model/login/login_model.dart';
 import 'storage_manage.dart';
 
 class LocalCache {
-  static Map<String, dynamic> cacheInfo() {
+  static LoginResult? cacheInfo() {
     final StorageManage storageManage = StorageManage();
-    Map<String, dynamic> loginInfo = storageManage.read(Config.localStorageLoginInfo) ?? {};
+    final loginInfo = storageManage.read(Config.localStorageLoginInfo);
     bool isLogin = storageManage.read(Config.localStorageHasLogin) ?? false;
 
-    if (!isLogin || loginInfo.isEmpty) return {};
+    if (!isLogin || loginInfo == null) return null;
 
-    LoginResult apiResult = LoginResult.fromJson(loginInfo);
-    if ((apiResult.company ?? "").isEmpty || apiResult.dsn == null) {
-      return {};
+    final LoginResult apiResult = LoginResult.fromJson(loginInfo);
+
+    if ((apiResult.company?.isEmpty ?? true) || apiResult.dsn == null) {
+      return null;
     }
-    return {"Auth": base64.encode(utf8.encode(json.encode(loginInfo)))};
+    return apiResult;
   }
 }

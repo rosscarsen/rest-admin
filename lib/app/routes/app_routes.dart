@@ -7,8 +7,7 @@ abstract class Routes {
   static const SIGNIN = _Paths.SIGNIN;
   static const DASHBOARD = _Paths.DASHBOARD;
   static const PRODUCTS = _Paths.MASTER + _Paths.PRODUCTS;
-  static const ADVANCED_SEARCH =
-      _Paths.MASTER + _Paths.PRODUCTS + _Paths.ADVANCED_SEARCH;
+  static const ADVANCED_SEARCH = _Paths.MASTER + _Paths.PRODUCTS + _Paths.ADVANCED_SEARCH;
   static const OPEN = _Paths.OPEN;
   static const OPEN_PRODUCT = _Paths.OPEN + _Paths.OPEN_PRODUCT;
   static const OPEN_SUPPLIER = _Paths.OPEN + _Paths.OPEN_SUPPLIER;
@@ -19,31 +18,20 @@ abstract class Routes {
   static const PRODUCT_REMARKS = _Paths.MASTER + _Paths.PRODUCT_REMARKS;
   static const SUPPLIER_INVOICE = _Paths.SUPPLIER_INVOICE;
   static const REFRESH_TEMP = _Paths.REFRESH_TEMP;
-  static const PRODUCT_EDIT =
-      _Paths.MASTER + _Paths.PRODUCTS + _Paths.PRODUCT_EDIT;
+  static const PRODUCT_EDIT = _Paths.MASTER + _Paths.PRODUCTS + _Paths.PRODUCT_EDIT;
   static const OPEN_PRODUCT_REMARKS = _Paths.OPEN + _Paths.OPEN_PRODUCT_REMARKS;
-  static const OPEN_MULTIPLE_PRODUCT =
-      _Paths.OPEN + _Paths.OPEN_MULTIPLE_PRODUCT;
+  static const OPEN_MULTIPLE_PRODUCT = _Paths.OPEN + _Paths.OPEN_MULTIPLE_PRODUCT;
   static const OPEN_SET_MEAL = _Paths.OPEN + _Paths.OPEN_SET_MEAL;
-  static const COPY_PRODUCT_SET_MEAL = _Paths.MASTER +
-      _Paths.PRODUCTS +
-      _Paths.PRODUCT_EDIT +
-      _Paths.COPY_PRODUCT_SET_MEAL;
-  static const CATEGORY_EDIT =
-      _Paths.MASTER + _Paths.CATEGORY + _Paths.CATEGORY_EDIT;
+  static const COPY_PRODUCT_SET_MEAL =
+      _Paths.MASTER + _Paths.PRODUCTS + _Paths.PRODUCT_EDIT + _Paths.COPY_PRODUCT_SET_MEAL;
+  static const CATEGORY_EDIT = _Paths.MASTER + _Paths.CATEGORY + _Paths.CATEGORY_EDIT;
   static const CATEGORY2 = _Paths.MASTER + _Paths.CATEGORY + _Paths.CATEGORY2;
-  static const CATEGORY2_EDIT = _Paths.MASTER +
-      _Paths.CATEGORY +
-      _Paths.CATEGORY2 +
-      _Paths.CATEGORY2_EDIT;
-  static const PRODUCT_REMARKS_EDIT =
-      _Paths.MASTER + _Paths.PRODUCT_REMARKS + _Paths.PRODUCT_REMARKS_EDIT;
+  static const CATEGORY2_EDIT = _Paths.MASTER + _Paths.CATEGORY + _Paths.CATEGORY2 + _Paths.CATEGORY2_EDIT;
+  static const PRODUCT_REMARKS_EDIT = _Paths.MASTER + _Paths.PRODUCT_REMARKS + _Paths.PRODUCT_REMARKS_EDIT;
   static const CUSTOMER = _Paths.MASTER + _Paths.CUSTOMER;
-  static const CUSTOMER_EDIT =
-      _Paths.MASTER + _Paths.CUSTOMER + _Paths.CUSTOMER_EDIT;
+  static const CUSTOMER_EDIT = _Paths.MASTER + _Paths.CUSTOMER + _Paths.CUSTOMER_EDIT;
   static const OPEN_CUSTOMER = _Paths.OPEN + _Paths.OPEN_CUSTOMER;
-  static const SUPPLIER_INVOICE_EDIT =
-      _Paths.SUPPLIER_INVOICE + _Paths.SUPPLIER_INVOICE_EDIT;
+  static const SUPPLIER_INVOICE_EDIT = _Paths.SUPPLIER_INVOICE + _Paths.SUPPLIER_INVOICE_EDIT;
   static const SUPPLIER = _Paths.MASTER + _Paths.SUPPLIER;
   static const STOCK = _Paths.MASTER + _Paths.STOCK;
   static const CURRENCY = _Paths.MASTER + _Paths.CURRENCY;
@@ -55,31 +43,23 @@ abstract class Routes {
   static const CALENDAR = _Paths.MASTER + _Paths.CALENDAR;
   static const PRINTER = _Paths.MASTER + _Paths.PRINTER;
   static const TIME_SALES = _Paths.MASTER + _Paths.TIME_SALES;
-  static const SCREEN_MODE_CATEGORY =
-      _Paths.MASTER + _Paths.SCREEN_MODE_CATEGORY;
-  static const SUPPLIER_EDIT =
-      _Paths.MASTER + _Paths.SUPPLIER + _Paths.SUPPLIER_EDIT;
+  static const SCREEN_MODE_CATEGORY = _Paths.MASTER + _Paths.SCREEN_MODE_CATEGORY;
+  static const SUPPLIER_EDIT = _Paths.MASTER + _Paths.SUPPLIER + _Paths.SUPPLIER_EDIT;
   static const STOCK_EDIT = _Paths.MASTER + _Paths.STOCK + _Paths.STOCK_EDIT;
-  static const CURRENCY_EDIT =
-      _Paths.MASTER + _Paths.CURRENCY + _Paths.CURRENCY_EDIT;
+  static const CURRENCY_EDIT = _Paths.MASTER + _Paths.CURRENCY + _Paths.CURRENCY_EDIT;
   static const UNIT_EDIT = _Paths.MASTER + _Paths.UNIT + _Paths.UNIT_EDIT;
-  static const SET_MENU_EDIT =
-      _Paths.MASTER + _Paths.SET_MENU + _Paths.SET_MENU_EDIT;
+  static const SET_MENU_EDIT = _Paths.MASTER + _Paths.SET_MENU + _Paths.SET_MENU_EDIT;
   static const PAGE_NOT_FOUND = _Paths.PAGE_NOT_FOUND;
-  static const DEPARTMENT_EDIT =
-      _Paths.MASTER + _Paths.DEPARTMENT + _Paths.DEPARTMENT_EDIT;
-  static const NET_WORK_PAY_METHOD_EDIT = _Paths.MASTER +
-      _Paths.NETWORK_PAY_METHOD +
-      _Paths.NET_WORK_PAY_METHOD_EDIT;
-  static const PAY_METHOD_EDIT =
-      _Paths.MASTER + _Paths.PAY_METHOD + _Paths.PAY_METHOD_EDIT;
+  static const DEPARTMENT_EDIT = _Paths.MASTER + _Paths.DEPARTMENT + _Paths.DEPARTMENT_EDIT;
+  static const NET_WORK_PAY_METHOD_EDIT = _Paths.MASTER + _Paths.NETWORK_PAY_METHOD + _Paths.NET_WORK_PAY_METHOD_EDIT;
+  static const PAY_METHOD_EDIT = _Paths.MASTER + _Paths.PAY_METHOD + _Paths.PAY_METHOD_EDIT;
   static const TABLES = _Paths.MASTER + _Paths.TABLES;
   static const TABLE_EDIT = _Paths.MASTER + _Paths.TABLES + _Paths.TABLE_EDIT;
   static const TABLE_CARD = _Paths.MASTER + _Paths.TABLE_CARD;
-  static const TABLE_CARD_EDIT =
-      _Paths.MASTER + _Paths.TABLE_CARD + _Paths.TABLE_CARD_EDIT;
+  static const TABLE_CARD_EDIT = _Paths.MASTER + _Paths.TABLE_CARD + _Paths.TABLE_CARD_EDIT;
   static const OPEN_USER = _Paths.OPEN + _Paths.OPEN_USER;
   static const OPEN_DEPARTMENT = _Paths.OPEN + _Paths.OPEN_DEPARTMENT;
+  static const TABLE_FLOOR_PLAN = _Paths.MASTER + _Paths.TABLES + _Paths.TABLE_FLOOR_PLAN;
 }
 
 abstract class _Paths {
@@ -138,4 +118,5 @@ abstract class _Paths {
   static const TABLE_CARD_EDIT = '/table-card-edit';
   static const OPEN_USER = '/open-user';
   static const OPEN_DEPARTMENT = '/open-department';
+  static const TABLE_FLOOR_PLAN = '/table-floor-plan';
 }

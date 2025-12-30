@@ -13,6 +13,7 @@ import 'package:path/path.dart' as path;
 import '../config.dart';
 import '../routes/app_pages.dart';
 import '../translations/locale_keys.dart';
+import '../utils/aes_gcm_crypto.dart';
 import '../utils/custom_alert.dart';
 import '../utils/custom_dialog.dart';
 import '../utils/local_cache.dart';
@@ -247,7 +248,6 @@ class ApiClient {
 
   // 处理错误
   DioApiResult _handleError(Object e) {
-    //logger.d("===>${e.toString()}");
     if (e is DioException && e.response?.statusCode == _loginInvalidCode) {
       CustomAlert.iosAlert(message: LocaleKeys.loginInvalid.tr, onConfirm: () => Get.offAllNamed(Routes.SIGNIN));
       return DioApiResult(success: false, error: LocaleKeys.loginInvalid.tr);
@@ -268,8 +268,8 @@ class AuthInterceptor extends Interceptor {
       return handler.next(options);
     }
 
-    final dsn = LocalCache.cacheInfo();
-    if (dsn.isEmpty) {
+    final loginInfo = LocalCache.cacheInfo();
+    if (loginInfo == null) {
       return handler.reject(
         DioException(
           requestOptions: options,
@@ -279,7 +279,11 @@ class AuthInterceptor extends Interceptor {
       );
     }
 
-    options.headers.addAll(dsn);
+    final String plaintext = jsonEncode(loginInfo.toJson());
+    final encryptedData = await AesGcmCrypto.encrypt(plaintext, loginInfo.aesKey ?? "");
+    final String encryptedString = base64Encode(utf8.encode(jsonEncode(encryptedData)));
+
+    options.headers.addAll({"Authorization": "Bearer $encryptedString"});
     return handler.next(options);
   }
 }

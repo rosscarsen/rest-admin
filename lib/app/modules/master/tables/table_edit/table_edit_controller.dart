@@ -16,13 +16,11 @@ import '../../../../translations/locale_keys.dart';
 import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/functions.dart';
 import '../../../../utils/logger.dart';
-import '../../../../utils/storage_manage.dart';
 import '../tables_controller.dart';
 import '../tables_table_fields.dart';
 
 class TableEditController extends GetxController with LoadingStateMixin<TablesData> {
   final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
-  final StorageManage storageManage = StorageManage();
 
   /// Dio客户端
   final ApiClient apiClient = ApiClient();
