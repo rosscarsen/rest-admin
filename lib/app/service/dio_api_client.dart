@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import 'package:get/get.dart' hide Response, MultipartFile, FormData;
 import 'package:http_parser/http_parser.dart';
 import 'package:image_picker/image_picker.dart';
@@ -58,7 +59,17 @@ class ApiClient {
         error: true,
       ),
     ); */
-
+    // 忽略 HTTPS 证书验证
+    (_dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
+      final client = HttpClient();
+      client.findProxy = (uri) {
+        return "DIRECT";
+      };
+      client.badCertificateCallback = (X509Certificate cert, String host, int port) {
+        return true;
+      };
+      return client;
+    };
     // 添加认证拦截器
     _dio.interceptors.add(AuthInterceptor());
     // 添加错误处理拦截器
