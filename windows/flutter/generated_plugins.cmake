@@ -7,6 +7,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   permission_handler_windows
   printing
   screen_retriever_windows
+  webcrypto
   window_manager
 )
 
