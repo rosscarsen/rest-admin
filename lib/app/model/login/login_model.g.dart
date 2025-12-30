@@ -28,7 +28,7 @@ LoginResult _$LoginResultFromJson(Map<String, dynamic> json) => LoginResult(
   dsn: json['dsn'] == null
       ? null
       : Dsn.fromJson(json['dsn'] as Map<String, dynamic>),
-  aesKey: json['aesKey'] as String,
+  aesKey: json['aesKey'] as String?,
 );
 
 Map<String, dynamic> _$LoginResultToJson(LoginResult instance) =>

@@ -41,9 +41,9 @@ class LoginResult {
   @JsonKey(name: "dsn")
   final Dsn? dsn;
   @JsonKey(name: "aesKey")
-  final String aesKey;
+  final String? aesKey;
 
-  LoginResult({this.company, this.pwd, this.user, this.dsn, required this.aesKey});
+  LoginResult({this.company, this.pwd, this.user, this.dsn, this.aesKey});
 
   LoginResult copyWith({String? company, String? pwd, String? user, Dsn? dsn, String? aesKey}) => LoginResult(
     company: company ?? this.company,
