@@ -312,14 +312,46 @@ class AuthInterceptor extends Interceptor {
 // 错误处理拦截器
 class ErrorHandlerInterceptor extends Interceptor {
   @override
+  Future onResponse(Response response, ResponseInterceptorHandler handler) async {
+    final dataMap = response.data is Map
+        ? response.data as Map<String, dynamic>
+        : json.decode(response.data.toString());
+
+    if (dataMap['status'] == ApiClient._loginInvalidCode) {
+      // 登录失效时拒绝响应，后续不会进入 _handleResponse
+      return handler.reject(
+        DioException(
+          requestOptions: response.requestOptions,
+          response: Response(
+            requestOptions: response.requestOptions,
+            statusCode: ApiClient._loginInvalidCode,
+            data: response.data,
+          ),
+          error: LocaleKeys.loginInvalid.tr,
+        ),
+      );
+    }
+
+    // 如果状态码不是登录失效，继续执行后续操作
+    return handler.next(response);
+  }
+
+  @override
   Future onError(DioException err, ErrorInterceptorHandler handler) async {
     // 登录失效
     if (err.response?.statusCode == ApiClient._loginInvalidCode) {
-      CustomAlert.iosAlert(message: LocaleKeys.loginInvalid.tr, onConfirm: () => Get.offAllNamed(Routes.SIGNIN));
+      CustomAlert.iosAlert(
+        message: LocaleKeys.loginInvalid.tr,
+        onConfirm: () {
+          final StorageManage storageManage = StorageManage();
+          storageManage.remove(Config.localStorageHasLogin);
+          Get.offAllNamed(Routes.SIGNIN);
+        },
+      );
 
       return handler.reject(err);
     }
-    // 使用定义的超时错误常量
+    // 超时处理
     if (err.type == DioExceptionType.connectionTimeout) {
       CustomDialog.errorMessages(ApiClient._connectionTimeout);
       return handler.resolve(err.response!);
