@@ -26,7 +26,7 @@ class ApiClient {
   static late Dio _dio;
 
   // 错误代码常量
-  static const int _loginInvalidCode = 10001;
+  static const int _loginInvalidCode = 401;
   static const int _noPermission = 10002;
 
   // 错误消息
@@ -124,11 +124,9 @@ class ApiClient {
         queryParameters: finalQuery,
         options: Options(responseType: ResponseType.bytes),
       );
+      // 检查状态码
       if (response.statusCode != 200) {
-        // 检查状态码
-        if (response.statusCode != 200) {
-          return DioApiResult(success: false, error: 'HTTP ${response.statusCode}');
-        }
+        return DioApiResult(success: false, error: 'HTTP ${response.statusCode}');
       }
       // 检查响应内容类型
       final Headers headers = response.headers;
@@ -313,12 +311,7 @@ class AuthInterceptor extends Interceptor {
 class ErrorHandlerInterceptor extends Interceptor {
   @override
   Future onResponse(Response response, ResponseInterceptorHandler handler) async {
-    final dataMap = response.data is Map
-        ? response.data as Map<String, dynamic>
-        : json.decode(response.data.toString());
-
-    if (dataMap['status'] == ApiClient._loginInvalidCode) {
-      // 登录失效时拒绝响应，后续不会进入 _handleResponse
+    if (response.statusCode == 401) {
       return handler.reject(
         DioException(
           requestOptions: response.requestOptions,
@@ -332,7 +325,16 @@ class ErrorHandlerInterceptor extends Interceptor {
       );
     }
 
-    // 如果状态码不是登录失效，继续执行后续操作
+    ///  文件流 / bytes，直接跳过
+    if (response.requestOptions.responseType == ResponseType.bytes || response.data is Uint8List) {
+      return handler.next(response);
+    }
+
+    ///  非 JSON 跳过
+    final contentType = response.headers.value('content-type')?.toLowerCase();
+    if (contentType != null && !contentType.contains('application/json')) {
+      return handler.next(response);
+    }
     return handler.next(response);
   }
 
