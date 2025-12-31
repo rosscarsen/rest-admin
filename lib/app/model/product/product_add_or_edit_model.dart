@@ -5,7 +5,9 @@
 
 import 'dart:convert';
 
+import '../../utils/functions.dart';
 import '../category/category_model.dart';
+import '../printer/printer_data.dart';
 import '../unit/unit_data.dart';
 
 ProductAddOrEditModel productAddOrEditModelFromJson(String str) => ProductAddOrEditModel.fromJson(json.decode(str));
@@ -36,6 +38,7 @@ class ProductAddOrEditResult {
   List<ProductSetMeal>? setMeal;
   List<ProductStock>? productStock;
   List<SetMealLimit>? setMealLimit;
+  List<PrinterData>? printers;
 
   ProductAddOrEditResult({
     this.productInfo,
@@ -45,6 +48,7 @@ class ProductAddOrEditResult {
     this.setMeal,
     this.productStock,
     this.setMealLimit,
+    this.printers,
   });
 
   factory ProductAddOrEditResult.fromJson(Map<String, dynamic> json) => ProductAddOrEditResult(
@@ -66,6 +70,9 @@ class ProductAddOrEditResult {
     setMealLimit: json["setMealLimit"] == null
         ? []
         : List<SetMealLimit>.from(json["setMealLimit"]!.map((x) => SetMealLimit.fromJson(x))),
+    printers: json["printers"] == null
+        ? []
+        : List<PrinterData>.from(json["printers"]!.map((x) => PrinterData.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -76,6 +83,7 @@ class ProductAddOrEditResult {
     "setMeal": setMeal == null ? [] : List<dynamic>.from(setMeal!.map((x) => x.toJson())),
     "stock": productStock == null ? [] : List<dynamic>.from(productStock!.map((x) => x.toJson())),
     "setMealLimit": setMealLimit == null ? [] : List<dynamic>.from(setMealLimit!.map((x) => x.toJson())),
+    "printers": printers == null ? [] : List<dynamic>.from(printers!.map((x) => x.toJson())),
   };
 }
 
@@ -132,6 +140,11 @@ class ProductInfo {
   String? mSpecials;
   dynamic mIsStandPrice;
   String? setmenu;
+  String? mPrinter;
+  String? mBdlPrinter;
+  String? mContinue;
+  String? mNonContinue;
+  String? mPrintType;
 
   ProductInfo({
     this.mCode,
@@ -186,6 +199,11 @@ class ProductInfo {
     this.mSpecials,
     this.mIsStandPrice,
     this.setmenu,
+    this.mPrinter,
+    this.mBdlPrinter,
+    this.mContinue,
+    this.mNonContinue,
+    this.mPrintType,
   });
 
   factory ProductInfo.fromJson(Map<String, dynamic> json) => ProductInfo(
@@ -241,6 +259,11 @@ class ProductInfo {
     mSpecials: json["mSpecials"]?.toString() ?? "",
     mIsStandPrice: json["mIsStandPrice"],
     setmenu: json["setmenu"],
+    mPrinter: Functions.asString(json["mPrinter"]),
+    mBdlPrinter: Functions.asString(json["mBDLPrinter"]),
+    mContinue: Functions.asString(json["mContinue"]),
+    mNonContinue: Functions.asString(json["mNonContinue"]),
+    mPrintType: Functions.asString(json["mPrintType"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -296,6 +319,11 @@ class ProductInfo {
     "mSpecials": mSpecials,
     "mIsStandPrice": mIsStandPrice,
     "setmenu": setmenu,
+    "mPrinter": mPrinter,
+    "mBdlPrinter": mBdlPrinter,
+    "mContinue": mContinue,
+    "mNonContinue": mNonContinue,
+    "mPrintType": mPrintType,
   };
 }
 
