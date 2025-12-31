@@ -51,4 +51,9 @@ class ProductEditFields {
   static const mSpecials = "mSpecials";
   static const mIsStandPrice = "mIsStandPrice";
   static const setMenu = "setmenu";
+  static const mPrinter = "mPrinter";
+  static const mBDLPrinter = "mBDLPrinter";
+  static const mContinue = "mContinue";
+  static const mPrintType = "mPrintType";
+  static const mNonContinue = "mNonContinue";
 }
