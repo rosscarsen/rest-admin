@@ -125,18 +125,7 @@ class Category2EditView extends GetView<Category2EditController> {
                   ],
                 ),
               ),
-              //打印类型
-              FormHelper.buildGridCol(
-                child: FormHelper.selectInput(
-                  initialValue: "0",
-                  name: CategoryFields.mPrintType,
-                  labelText: LocaleKeys.printType.tr,
-                  items: [
-                    DropdownMenuItem(value: "0", child: Text(LocaleKeys.general.tr)),
-                    DropdownMenuItem(value: "1", child: Text(LocaleKeys.takeaway.tr)),
-                  ],
-                ),
-              ),
+
               //客戶自助隐藏
               FormHelper.buildGridCol(
                 child: FormHelper.selectInput(
@@ -146,68 +135,6 @@ class Category2EditView extends GetView<Category2EditController> {
                   items: [
                     DropdownMenuItem(value: "0", child: Text(LocaleKeys.no.tr)),
                     DropdownMenuItem(value: "1", child: Text(LocaleKeys.yes.tr)),
-                  ],
-                ),
-              ),
-              //厨房/水吧打印机
-              FormHelper.buildGridCol(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: FormHelper.selectInput(
-                        name: CategoryFields.mPrinter,
-                        labelText: LocaleKeys.kitchenBarPrinter.tr,
-                        items: [
-                          DropdownMenuItem(value: "", child: Text("")),
-                          ...controller.printerList.map(
-                            (e) => DropdownMenuItem(
-                              value: e.mName,
-                              child: FittedBox(child: Text(e.mName ?? "")),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    //连续打印
-                    Expanded(
-                      child: FormHelper.checkbox(
-                        initialValue: false,
-                        name: CategoryFields.mContinue,
-                        labelText: LocaleKeys.continuePrint.tr,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              //班地尼打印机
-              FormHelper.buildGridCol(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: FormHelper.selectInput(
-                        name: CategoryFields.mBDLPrinter,
-                        labelText: LocaleKeys.BDLPrinter.tr,
-                        items: [
-                          DropdownMenuItem(value: "", child: Text("")),
-                          ...controller.printerList.map(
-                            (e) => DropdownMenuItem(
-                              value: e.mName,
-                              child: FittedBox(child: Text(e.mName ?? "")),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    //连续打印
-                    Expanded(
-                      child: FormHelper.checkbox(
-                        initialValue: false,
-                        name: CategoryFields.mNonContinue,
-                        labelText: LocaleKeys.disContinuePrint.tr,
-                      ),
-                    ),
                   ],
                 ),
               ),
