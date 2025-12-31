@@ -17,7 +17,6 @@ import '../../../../translations/locale_keys.dart';
 import '../../../../utils/custom_alert.dart';
 import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/form_help.dart';
-import '../../../../utils/logger.dart';
 import '../products_controller.dart';
 import 'product_barcode_source.dart';
 import 'product_edit_fields.dart';
@@ -189,7 +188,6 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
                 return MapEntry(key, value);
               }),
             );
-            logger.f(filteredMap);
             productEditFormKey.currentState?.patchValue(filteredMap);
             FocusManager.instance.primaryFocus?.unfocus();
           }
@@ -235,7 +233,6 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
       formData.addAll({'productBarcode': productBarcode});
       // 套餐限制
       formData.addAll({'productSetMealLimit': productSetMealLimit});
-      logger.f(formData);
       try {
         CustomDialog.showLoading(LocaleKeys.saving.tr);
         final DioApiResult dioApiResult = await apiClient.post(Config.productAddOrEditSave, data: formData);
@@ -419,7 +416,6 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
                     if (dioApiResult.success) {
                       if (dioApiResult.data != null) {
                         final data = jsonDecode(dioApiResult.data) as Map<String, dynamic>;
-                        //logger.e([data["status"], data["status"].runtimeType]);
                         if (data["status"] == 200) {
                           CustomDialog.successMessages(LocaleKeys.editSuccess.tr);
                           productSetMealSource.updateDataSource();
