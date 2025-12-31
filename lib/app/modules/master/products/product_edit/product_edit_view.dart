@@ -306,6 +306,80 @@ class ProductEditView extends GetView<ProductEditController> {
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   ),
                 ),
+                //打印类型
+                FormHelper.buildGridCol(
+                  child: FormHelper.selectInput(
+                    initialValue: "0",
+                    name: ProductEditFields.mPrintType,
+                    labelText: LocaleKeys.printType.tr,
+                    items: [
+                      DropdownMenuItem(value: "0", child: Text(LocaleKeys.general.tr)),
+                      DropdownMenuItem(value: "1", child: Text(LocaleKeys.takeaway.tr)),
+                    ],
+                  ),
+                ),
+                //厨房/水吧打印机
+                FormHelper.buildGridCol(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: FormHelper.selectInput(
+                          name: ProductEditFields.mPrinter,
+                          labelText: LocaleKeys.kitchenBarPrinter.tr,
+                          items: [
+                            DropdownMenuItem(value: "", child: Text("")),
+                            ...controller.printerList.map(
+                              (e) => DropdownMenuItem(
+                                value: e.mName,
+                                child: FittedBox(child: Text(e.mName ?? "")),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      //连续打印
+                      Expanded(
+                        child: FormHelper.checkbox(
+                          initialValue: false,
+                          name: ProductEditFields.mContinue,
+                          labelText: LocaleKeys.continuePrint.tr,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                //班地尼打印机
+                FormHelper.buildGridCol(
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: FormHelper.selectInput(
+                          name: ProductEditFields.mBDLPrinter,
+                          labelText: LocaleKeys.BDLPrinter.tr,
+                          items: [
+                            DropdownMenuItem(value: "", child: Text("")),
+                            ...controller.printerList.map(
+                              (e) => DropdownMenuItem(
+                                value: e.mName,
+                                child: FittedBox(child: Text(e.mName ?? "")),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      //连续打印
+                      Expanded(
+                        child: FormHelper.checkbox(
+                          initialValue: true,
+                          name: ProductEditFields.mNonContinue,
+                          labelText: LocaleKeys.continuePrint.tr,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
