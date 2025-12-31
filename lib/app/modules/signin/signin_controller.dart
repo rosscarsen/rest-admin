@@ -78,7 +78,6 @@ class SigninController extends GetxController with GetSingleTickerProviderStateM
         switch (loginModel.status) {
           case 200:
             final storageManage = StorageManage();
-            logger.f(loginModel.apiResult?.toJson());
             await storageManage.write(Config.localStorageLoginInfo, loginModel.apiResult?.toJson());
             await storageManage.write(Config.localStorageHasLogin, true);
             if (loginFormData['rememberMe'] == true) {
