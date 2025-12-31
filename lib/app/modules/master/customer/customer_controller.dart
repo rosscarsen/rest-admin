@@ -17,7 +17,6 @@ import '../../../translations/locale_keys.dart';
 import '../../../utils/custom_alert.dart';
 import '../../../utils/custom_dialog.dart';
 import '../../../utils/file_storage.dart';
-import '../../../utils/logger.dart';
 import 'customer_data_source.dart';
 
 class CustomerController extends GetxController with LoadingStateMixin {
@@ -168,7 +167,6 @@ class CustomerController extends GetxController with LoadingStateMixin {
         );
       }
     } catch (e) {
-      logger.i(e);
       CustomDialog.errorMessages(LocaleKeys.generateFileFailed.tr);
     } finally {
       CustomDialog.dismissDialog();

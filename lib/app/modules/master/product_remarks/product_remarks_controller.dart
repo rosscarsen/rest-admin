@@ -18,7 +18,6 @@ import '../../../utils/custom_alert.dart';
 import '../../../utils/custom_dialog.dart';
 import '../../../utils/file_storage.dart';
 import '../../../utils/form_help.dart';
-import '../../../utils/logger.dart';
 import 'product_remarks_data_source.dart';
 
 class ProductRemarksController extends GetxController with LoadingStateMixin {
@@ -154,7 +153,6 @@ class ProductRemarksController extends GetxController with LoadingStateMixin {
         );
       }
     } catch (e) {
-      logger.i(e);
       CustomDialog.errorMessages(LocaleKeys.generateFileFailed.tr);
     } finally {
       CustomDialog.dismissDialog();

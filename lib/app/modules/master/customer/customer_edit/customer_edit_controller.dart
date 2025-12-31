@@ -17,7 +17,6 @@ import '../../../../service/dio_api_result.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/functions.dart';
-import '../../../../utils/logger.dart';
 import '../customer_controller.dart';
 import '../customer_fields.dart';
 import 'contact_add_or_edit_view.dart';
@@ -177,7 +176,6 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
       }
 
       hasPermission = true;
-      logger.f(customerResult.data);
       final resultModel = customerEditModelFromJson(customerResult.data);
       customerRet = resultModel.apiResult;
       customerTypeList.addAll(customerRet?.customerType ?? []);
@@ -191,7 +189,6 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
         formKey.currentState?.patchValue(customerInfo?.toJson() ?? {});
       });
     } catch (e) {
-      logger.i(e.toString());
       CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
     } finally {
       isLoading = false;
@@ -284,7 +281,6 @@ class CustomerEditController extends GetxController with GetSingleTickerProvider
     FocusManager.instance.primaryFocus?.unfocus();
     try {
       final DioApiResult dioApiResult = await apiClient.post(Config.customerPointSave, data: row.toJson());
-      logger.f(dioApiResult);
       if (!dioApiResult.success) {
         CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
         return;

@@ -14,7 +14,6 @@ import '../../../../translations/locale_keys.dart';
 import '../../../../utils/custom_alert.dart';
 import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/form_help.dart';
-import '../../../../utils/logger.dart';
 import '../set_menu_controller.dart';
 import 'model/set_menu_edit_model.dart';
 import 'set_menu_detail_source.dart';
@@ -128,7 +127,6 @@ class SetMenuEditController extends GetxController
         });
       }
     } catch (e) {
-      logger.i(e.toString());
       CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
     } finally {
       isLoading = false;
@@ -440,7 +438,6 @@ class SetMenuEditController extends GetxController
             })
             .whereType<String>()
             .toList();
-        logger.i("删除套餐明细ID: $selectedIds");
         await deleteItems(selectedIds);
       },
     );

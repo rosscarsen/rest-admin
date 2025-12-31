@@ -15,7 +15,6 @@ import '../../../../service/dio_api_result.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/functions.dart';
-import '../../../../utils/logger.dart';
 import '../tables_controller.dart';
 import '../tables_table_fields.dart';
 
@@ -140,7 +139,6 @@ class TableEditController extends GetxController with LoadingStateMixin<TablesDa
           if (copy != null) {
             filteredMap.remove(TablesTableFields.mTableNo);
           }
-          logger.f(filteredMap);
           formKey.currentState?.patchValue(filteredMap);
           filteredMap.clear();
         });
@@ -206,7 +204,6 @@ class TableEditController extends GetxController with LoadingStateMixin<TablesDa
       }
       try {
         final DioApiResult dioApiResult = await apiClient.post(Config.tablesSave, data: requestData);
-        logger.f(dioApiResult);
         if (!dioApiResult.success) {
           CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
           return;

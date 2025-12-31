@@ -18,7 +18,6 @@ import '../../../translations/locale_keys.dart';
 import '../../../utils/custom_alert.dart';
 import '../../../utils/custom_dialog.dart';
 import '../../../utils/file_storage.dart';
-import '../../../utils/logger.dart';
 import 'tables_data_source.dart';
 
 class TablesController extends GetxController with LoadingStateMixin<List<TablesData>?> {
@@ -163,7 +162,6 @@ class TablesController extends GetxController with LoadingStateMixin<List<Tables
         );
       }
     } catch (e) {
-      logger.i(e);
       CustomDialog.errorMessages(LocaleKeys.generateFileFailed.tr);
     } finally {
       CustomDialog.dismissDialog();

@@ -17,7 +17,6 @@ import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/custom_alert.dart';
 import '../../../utils/custom_dialog.dart';
-import '../../../utils/logger.dart';
 import '../../master/products/product_edit/product_edit_controller.dart';
 import '../../master/set_menu/set_menu_edit/model/set_menu_edit_model.dart';
 import '../../master/set_menu/set_menu_edit/set_menu_edit_controller.dart';
@@ -97,7 +96,6 @@ class OpenMultipleProductController extends GetxController with LoadingStateMixi
       if (openMultipleProductFormKey.currentState?.value != null) {
         search.addAll(openMultipleProductFormKey.currentState?.value ?? {});
       }
-      logger.f(search);
       final DioApiResult dioApiResult = await apiClient.get(Config.openProduct, data: search);
 
       if (!dioApiResult.success) {
@@ -260,7 +258,6 @@ class OpenMultipleProductController extends GetxController with LoadingStateMixi
         confirmText: LocaleKeys.skip.tr,
         onConfirm: () {
           selectedItems.removeWhere((e) => commonCodes.contains(e.mCode));
-          logger.f(selectedItems);
         },
       );
     }

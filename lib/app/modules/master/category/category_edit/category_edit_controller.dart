@@ -12,7 +12,6 @@ import '../../../../service/dio_api_result.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/functions.dart';
-import '../../../../utils/logger.dart';
 import '../category_controller.dart';
 import 'category_fields.dart';
 
@@ -86,7 +85,6 @@ class CategoryEditController extends GetxController with LoadingStateMixin {
       formKey.currentState?.patchValue(filteredMap);
       filteredMap.clear();
     } catch (e) {
-      logger.i(e.toString());
       CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
     } finally {
       isLoading = false;

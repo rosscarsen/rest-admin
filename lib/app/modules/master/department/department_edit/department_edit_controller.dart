@@ -14,7 +14,6 @@ import '../../../../service/dio_api_result.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/functions.dart';
-import '../../../../utils/logger.dart';
 import '../../../../utils/storage_manage.dart';
 import '../department_controller.dart';
 
@@ -130,7 +129,6 @@ class DepartmentEditController extends GetxController with LoadingStateMixin<Dep
       final requestData = {...formData, "id": id};
       try {
         final DioApiResult dioApiResult = await apiClient.post(Config.departmentSave, data: requestData);
-        logger.f(dioApiResult);
         if (!dioApiResult.success) {
           CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
           return;

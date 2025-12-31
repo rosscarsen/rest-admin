@@ -12,7 +12,6 @@ import 'package:phone_numbers_parser/phone_numbers_parser.dart' show PhoneNumber
 
 import '../config.dart';
 import '../translations/locale_keys.dart';
-import 'logger.dart';
 
 class Functions {
   static double mmToPoints(double mm) => mm * 2.83464567; //毫米转点
@@ -122,7 +121,6 @@ class Functions {
         return compressedFile; // 返回压缩后的 File
       }
     } catch (e) {
-      logger.e("图片压缩失败: $e");
       return null;
     }
   }

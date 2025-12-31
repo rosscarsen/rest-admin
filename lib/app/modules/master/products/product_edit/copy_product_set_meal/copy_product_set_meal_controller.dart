@@ -11,7 +11,6 @@ import '../../../../../service/dio_api_client.dart';
 import '../../../../../service/dio_api_result.dart';
 import '../../../../../translations/locale_keys.dart';
 import '../../../../../utils/custom_dialog.dart';
-import '../../../../../utils/logger.dart';
 import 'copy_product_set_meal_source.dart';
 
 class CopyProductSetMealController extends GetxController with LoadingStateMixin {
@@ -72,7 +71,6 @@ class CopyProductSetMealController extends GetxController with LoadingStateMixin
       if (formKey.currentState?.validate() ?? false) {
         search.addAll(formKey.currentState?.value ?? {});
       }
-      logger.f(search);
       final DioApiResult dioApiResult = await apiClient.post(Config.openProductSetMeal, data: search);
 
       if (!dioApiResult.success) {

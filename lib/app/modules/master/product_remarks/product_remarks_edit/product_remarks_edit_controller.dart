@@ -13,7 +13,6 @@ import '../../../../translations/locale_keys.dart';
 import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/form_help.dart';
 import '../../../../utils/functions.dart';
-import '../../../../utils/logger.dart';
 import '../product_remarks_controller.dart';
 import 'product_remarks_detail_data_source.dart';
 import 'product_remarks_fields.dart';
@@ -112,7 +111,6 @@ class ProductRemarksEditController extends GetxController with GetSingleTickerPr
         );
       });
     } catch (e) {
-      logger.i(e.toString());
       CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
     } finally {
       isLoading(false);

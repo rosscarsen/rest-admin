@@ -14,7 +14,6 @@ import '../../../service/dio_api_client.dart';
 import '../../../service/dio_api_result.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/custom_dialog.dart';
-import '../../../utils/logger.dart';
 import '../../../utils/storage_manage.dart';
 import '../model/supplier_invoice_edit_model.dart';
 import '../supplier_invoice_controller.dart';
@@ -150,7 +149,6 @@ class SupplierInvoiceEditController extends GetxController with LoadingStateMixi
         );
       });
     } catch (e) {
-      logger.i(e.toString());
       CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
     } finally {
       isLoading = false;
@@ -165,10 +163,8 @@ class SupplierInvoiceEditController extends GetxController with LoadingStateMixi
       final formData = Map<String, dynamic>.from(formKey.currentState?.value ?? {})
         ..addAll({"id": id})
         ..addAll({"detail": invoiceDetail.map((e) => e.toJson()).toList()});
-      logger.f(formData);
       try {
         final DioApiResult dioApiResult = await apiClient.post(Config.supplierInvoiceSave, data: formData);
-        logger.f(dioApiResult);
         if (!dioApiResult.success) {
           CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
           return;

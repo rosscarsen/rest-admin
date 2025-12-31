@@ -13,7 +13,6 @@ import '../../../../../service/dio_api_result.dart';
 import '../../../../../translations/locale_keys.dart';
 import '../../../../../utils/custom_dialog.dart';
 import '../../../../../utils/functions.dart';
-import '../../../../../utils/logger.dart';
 import '../../category_edit/category_fields.dart';
 import '../category2_controller.dart';
 
@@ -130,7 +129,6 @@ class Category2EditController extends GetxController {
         }
       }
     } catch (e) {
-      logger.i(e.toString());
       CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
     } finally {
       isLoading(false);

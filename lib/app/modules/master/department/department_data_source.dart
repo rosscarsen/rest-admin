@@ -6,7 +6,6 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import '../../../model/department/department_data.dart';
 import '../../../translations/locale_keys.dart';
 import '../../../utils/constants.dart';
-import '../../../utils/logger.dart';
 import '../../../widgets/custom_cell.dart';
 import 'department_controller.dart';
 
@@ -17,7 +16,6 @@ class DepartmentDataSource extends DataGridSource with WidgetsBindingObserver {
   final DepartmentController controller;
 
   void updateDataSource() {
-    logger.i(controller.data?.map((e) => e.toJson()).toList());
     _dataGridRows = (controller.data ?? []).map(_createDataRow).toList();
     notifyListeners();
   }

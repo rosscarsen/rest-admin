@@ -200,7 +200,6 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
         }
       }
     } catch (e) {
-      print("===>$e");
       CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
     } finally {
       isLoading(false);

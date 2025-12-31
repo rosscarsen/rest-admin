@@ -18,7 +18,6 @@ import '../../../utils/custom_alert.dart';
 import '../../../utils/custom_dialog.dart';
 import '../../../utils/file_storage.dart';
 import '../../../utils/form_help.dart';
-import '../../../utils/logger.dart';
 
 import 'set_meal_data_source.dart';
 
@@ -293,7 +292,6 @@ class SetMenuController extends GetxController with LoadingStateMixin<List<SetMe
   /// 导出
   Future<void> export({required Map<String, dynamic> query}) async {
     CustomDialog.showLoading(LocaleKeys.generating.trArgs(["excel"]));
-    logger.f(query);
 
     try {
       final DioApiResult dioApiResult = await apiClient.generateExcel(
@@ -312,7 +310,6 @@ class SetMenuController extends GetxController with LoadingStateMixin<List<SetMe
         );
       }
     } catch (e) {
-      logger.i(e);
       CustomDialog.errorMessages(LocaleKeys.generateFileFailed.tr);
     } finally {
       CustomDialog.dismissDialog();

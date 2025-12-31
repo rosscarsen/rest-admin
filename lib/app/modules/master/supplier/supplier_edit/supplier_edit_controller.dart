@@ -13,7 +13,6 @@ import '../../../../service/dio_api_result.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/custom_dialog.dart';
 import '../../../../utils/functions.dart';
-import '../../../../utils/logger.dart';
 import '../../../../utils/storage_manage.dart';
 import '../supplier_controller.dart';
 import '../supplier_table_fields.dart';
@@ -93,7 +92,6 @@ class SupplierEditController extends GetxController with LoadingStateMixin<Suppl
                 .where((e) => (e.value?.toString() ?? "").trim().isNotEmpty)
                 .map((e) => MapEntry(e.key, e.value is PhoneNumber ? e.value : e.value.toString())),
           );
-          logger.f(filteredMap);
           formKey.currentState?.patchValue(filteredMap);
           filteredMap.clear();
         });
@@ -134,7 +132,6 @@ class SupplierEditController extends GetxController with LoadingStateMixin<Suppl
       final requestData = {...formData, "id": id};
       try {
         final DioApiResult dioApiResult = await apiClient.post(Config.supplierSave, data: requestData);
-        logger.f(dioApiResult);
         if (!dioApiResult.success) {
           CustomDialog.errorMessages(dioApiResult.error ?? LocaleKeys.unknownError.tr);
           return;

@@ -16,7 +16,6 @@ import '../../../translations/locale_keys.dart';
 import '../../../utils/custom_alert.dart';
 import '../../../utils/custom_dialog.dart';
 import '../../../utils/file_storage.dart';
-import '../../../utils/logger.dart';
 import 'category_data_source.dart';
 import '../../../model/category/category_page_model.dart';
 
@@ -154,7 +153,6 @@ class CategoryController extends GetxController with LoadingStateMixin {
         );
       }
     } catch (e) {
-      logger.i(e);
       CustomDialog.errorMessages(LocaleKeys.generateFileFailed.tr);
     } finally {
       CustomDialog.dismissDialog();

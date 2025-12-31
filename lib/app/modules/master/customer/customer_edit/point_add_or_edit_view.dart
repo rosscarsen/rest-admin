@@ -7,7 +7,6 @@ import '../../../../model/customer/point_list.dart';
 import '../../../../translations/locale_keys.dart';
 import '../../../../utils/form_help.dart';
 import '../../../../utils/functions.dart';
-import '../../../../utils/logger.dart';
 import 'customer_edit_controller.dart';
 
 class PointAddOrEditView extends StatelessWidget {
@@ -97,7 +96,6 @@ class PointAddOrEditView extends StatelessWidget {
                   }
                 }
                 //网络请求
-                logger.f(newRow.toJson());
                 CustomerEditController.to.saveCustomerPoint(row: newRow, isAdd: isAdd);
               }
             }
