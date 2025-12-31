@@ -7,6 +7,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 import '../../../../config.dart';
 import '../../../../model/category/category_model.dart';
+import '../../../../model/printer/printer_data.dart';
 import '../../../../model/product/product_add_or_edit_model.dart';
 import '../../../../model/product/products_model.dart';
 import '../../../../model/unit/unit_data.dart';
@@ -66,6 +67,8 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
   final units = <UnitData>[].obs;
   // 全部类目用于多选类目
   final categories = <CategoryModel>[].obs;
+
+  final printerList = <PrinterData>[].obs;
 
   //产品ID
   int? productID;
@@ -173,15 +176,21 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
           final productInfo = apiResult.productInfo;
           if (productInfo != null) {
             productCategory3.value = productInfo.mCategory3?.split(",") ?? [];
-            productEditFormKey.currentState?.patchValue(
-              Map.fromEntries(
-                productInfo
-                    .toJson()
-                    .entries
-                    .where((e) => (e.value?.toString() ?? "").trim().isNotEmpty)
-                    .map((e) => MapEntry(e.key, e.value.toString())),
-              ),
+            final filteredMap = Map.fromEntries(
+              productInfo.toJson().entries.where((e) => (e.value?.toString() ?? "").trim().isNotEmpty).map((e) {
+                final key = e.key;
+                var value = e.value;
+                if (key == ProductEditFields.mContinue) {
+                  value = value.toString() == "1";
+                }
+                if (key == ProductEditFields.mNonContinue) {
+                  value = value.toString() == "0";
+                }
+                return MapEntry(key, value);
+              }),
             );
+            logger.f(filteredMap);
+            productEditFormKey.currentState?.patchValue(filteredMap);
             FocusManager.instance.primaryFocus?.unfocus();
           }
           productBarcode = apiResult.productBarcode ?? [];
@@ -189,10 +198,11 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
           productSetMealLimit = apiResult.setMealLimit ?? [];
           productSetMeal = apiResult.setMeal ?? [];
           units.assignAll(apiResult.units ?? []);
+          printerList.assignAll(apiResult.printers ?? []);
         }
       }
     } catch (e) {
-      logger.i(e.toString());
+      print("===>$e");
       CustomDialog.errorMessages(LocaleKeys.getDataException.tr);
     } finally {
       isLoading(false);
@@ -207,6 +217,12 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
 
       final formData = Map<String, dynamic>.from(productEditFormKey.currentState!.value);
 
+      formData.forEach((key, value) {
+        if (key == ProductEditFields.mNonContinue) {
+          formData[key] = value.toString() == "1" ? "0" : "1";
+        }
+      });
+
       final selectedMultipleCategory = formData.entries
           .where((e) => e.key.startsWith('multipleCategory_'))
           .expand((e) => e.value ?? [])
@@ -219,6 +235,7 @@ class ProductEditController extends GetxController with GetSingleTickerProviderS
       formData.addAll({'productBarcode': productBarcode});
       // 套餐限制
       formData.addAll({'productSetMealLimit': productSetMealLimit});
+      logger.f(formData);
       try {
         CustomDialog.showLoading(LocaleKeys.saving.tr);
         final DioApiResult dioApiResult = await apiClient.post(Config.productAddOrEditSave, data: formData);
