@@ -267,7 +267,7 @@ class ProductsView extends GetView<ProductsController> {
     try {
       await Get.defaultDialog(
         barrierDismissible: false,
-        title: LocaleKeys.importParam.trArgs([LocaleKeys.productRemarks.tr]),
+        title: LocaleKeys.importParam.trArgs([LocaleKeys.product.tr]),
         content: Column(
           spacing: 8.0,
           children: <Widget>[
