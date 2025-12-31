@@ -11,7 +11,6 @@ import '../../service/dio_api_result.dart';
 import '../../translations/locale_keys.dart';
 import '../../utils/custom_alert.dart';
 import '../../utils/custom_dialog.dart';
-import '../../utils/logger.dart';
 import '../../utils/storage_manage.dart';
 
 class SigninController extends GetxController with GetSingleTickerProviderStateMixin {
