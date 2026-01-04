@@ -82,7 +82,7 @@ class ApiClient {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) {
-          logger.d(
+          log.d(
             '原始请求信息: ${["method:${options.method}", "uri:${options.uri}", "queryParameters:${options.queryParameters}", "data:${options.data}", "headers:${options.headers}", "contentType:${options.contentType}", "responseType:${options.responseType}"]}',
           );
           return handler.next(options);
@@ -183,7 +183,7 @@ class ApiClient {
       final imageData = await image.readAsBytes();
       final extension = path.extension(image.path);
       final finalFileName = code != null ? "$code$extension" : path.basename(image.path);
-      logger.i("Uploading image to $uploadUrl with filename $finalFileName");
+      log.i("Uploading image to $uploadUrl with filename $finalFileName");
       final mimeType = lookupMimeType(image.path) ?? 'image/jpeg';
       final mediaType = MediaType.parse(mimeType);
       final imageFile = MultipartFile.fromBytes(imageData, filename: finalFileName, contentType: mediaType);
@@ -206,11 +206,11 @@ class ApiClient {
     try {
       final extension = path.extension(file.path);
       final finalFileName = code != null ? "$code$extension" : path.basename(file.path);
-      logger.i("Uploading file to $uploadUrl with filename $finalFileName");
+      log.i("Uploading file to $uploadUrl with filename $finalFileName");
       final mimeType = lookupMimeType(file.path);
       // 由于 mimeType 是 String? 类型，而 MediaType.parse 要求 String 类型，因此需要处理 null 值
       final mediaType = mimeType != null ? MediaType.parse(mimeType) : MediaType('application', 'octet-stream');
-      logger.f(mediaType);
+      log.f(mediaType);
       final formData = FormData.fromMap({
         "file": await MultipartFile.fromFile(file.path, filename: finalFileName, contentType: mediaType),
         if (extraData != null) ...extraData,
