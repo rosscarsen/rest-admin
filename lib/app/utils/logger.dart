@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
-final logger = AppLogger();
+final log = AppLogger();
 
 class AppLogger {
   /// 单例实例
@@ -14,7 +14,7 @@ class AppLogger {
 
   AppLogger._internal() {
     _logger = Logger(
-      /// 只在【生产模式】输出
+      /// 只在【非生产模式】输出
       filter: _ReleaseOnlyFilter(),
 
       /// 输出格式
@@ -26,6 +26,7 @@ class AppLogger {
         printEmojis: true,
         dateTimeFormat: DateTimeFormat.dateAndTime,
       ),
+      output: ConsoleOutput(),
     );
   }
 
